@@ -1,17 +1,38 @@
-.Container {
-  margin: auto;
-  max-width: 460px;
-  padding: 56px 20px 54px;
-}
 
-.LoginT {
+/* 로그인테이블 */
+
+.LoginT 
+{
   position:relative;
 }
 
-.login-input {
+.login-input 
+{
   display: inline-block;
 }
 
+.login-top .LOGO 
+{
+  width: 192px;
+  height: 102px;
+}
+
+.checkT 
+{
+  font-size: 15px;
+  margin-top: 14px;
+  margin-left: 4px;
+  font-weight: 400;
+}
+
+.login-top {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+/*--------------*/
+
+/* 인풋 */
 
 .login-input .ID:focus
 {
@@ -63,23 +84,8 @@
   background-color: #f5f5f5;
 }
 
-.BTNT .btn:active {
-  width: 460px;
-  padding: 10px;
-  background: linear-gradient( 45deg, #55aaff , #6767ff );;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  color:white;
-  font-size: 90%;
-  margin-bottom: 30px;
-  opacity: 90%;
-}
-
-.CONPRE {
-  display: none;
-}
-
-input[id="check"] {
+input[id="check"] 
+{
   accent-color: #6767ff;
   zoom: 1.5;
   margin-top: 3px;
@@ -92,13 +98,6 @@ input[id="check"]:checked
   margin-top: -2px;
 }
 
-.checkT {
-  font-size: 15px;
-  margin-top: 14px;
-  margin-left: 4px;
-  font-weight: 400;
-}
-
 input[id="check"]:checked ~ .CONPRE
 {
   display: block;
@@ -107,7 +106,48 @@ input[id="check"]:checked ~ .CONPRE
   color:gray;
 }
 
-.BTNT .btn {
+input::placeholder 
+{
+  color:gray;
+  font-weight:bolder;
+  opacity: 50%;
+  font-size: 15px;
+}
+
+/*-------------------------*/
+
+/*로그인 유지*/
+
+.LOGINCON 
+{
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.CONPRE 
+{
+  display: none;
+}
+
+/*----------*/
+
+/* 버튼 */
+
+.BTNT .btn:active 
+{
+  width: 460px;
+  padding: 10px;
+  background: linear-gradient( 45deg, #55aaff , #6767ff );;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  color:white;
+  font-size: 90%;
+  margin-bottom: 30px;
+  opacity: 90%;
+}
+
+.BTNT .btn 
+{
   width: 460px;
   height: 44px;
   padding: 0px 16px;
@@ -118,26 +158,12 @@ input[id="check"]:checked ~ .CONPRE
   color:white;
   font-size: 100%;
   margin-bottom: 30px;
-  }
-
-.login-top {
-  text-align: center;
-  margin-bottom: 50px;
 }
 
-.LOGINCON {
-  margin-bottom: 15px;
-  display: flex;
-}
+/* ------또는------ */
 
-input::placeholder {
-  color:gray;
-  font-weight:bolder;
-  opacity: 50%;
-  font-size: 15px;
-}
-
-.line {
+.line 
+{
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -147,7 +173,8 @@ input::placeholder {
   font-size: 13px;
 }
 
-.lineT::after {
+.lineT::after 
+{
  display: inline-block;
  content: "";
  border-top: solid 1px gray;
@@ -157,7 +184,8 @@ input::placeholder {
  opacity: 20%;
 }
 
-.lineT::before {
+.lineT::before 
+{
   content: "";
   display: inline-block;
   border-top: solid 1px gray;
@@ -166,6 +194,10 @@ input::placeholder {
   margin-right: 20px;
   opacity: 20%;
  }
+
+ /****************/
+
+ /* API */
 
 .API 
 {
@@ -216,6 +248,10 @@ input::placeholder {
   background-color: #1da1f2;
 }
 
+/*----------------------*/
+
+/* 이메일/비밀번호찾기 , 회원가입 */
+
 .SIGN
 {
   display: flex;
@@ -260,12 +296,6 @@ input::placeholder {
   opacity: 20%;
 }
 
-.login-top .LOGO 
-{
-  width: 192px;
-  height: 102px;
-}
-
 .Allmessage
 {
   margin: -20px 10px 20px 10px;
@@ -290,3 +320,4 @@ input::placeholder {
   color: red;
 }
 
+/*-----------------------------*/

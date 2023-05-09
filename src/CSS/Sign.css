@@ -1,4 +1,31 @@
-<!-- -->
+button 
+{
+    position: relative;
+    font-size: 0;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+    border: none;
+    background: none;
+    overflow: visible;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 0;
+    padding: 0;
+    border: 0;
+    user-select: none;
+}
+
+label 
+{
+    font-weight: bold;
+}
+
+/*회원가입 테이블 */
+
 .SignT {
     position:relative;
 }
@@ -13,14 +40,15 @@
     margin-bottom: 50px;
 }
 
-
 .LOGO
 {
     width: 192px;
     height: 102px;
 }
 
+/*---------------*/
 
+/*성공여부*/
 
 .email.success
 {
@@ -56,17 +84,17 @@
     border: solid 2px red;
 }
 
+.emailCertMessage.success
+{
+   display: none;
+}
+
 .emailCertMessage.error
 {
     margin: 0px;
     padding: 0px;
     color:red;
     font-size: 15px;
-}
-
-.emailCertMessage.success
-{
-   display: none;
 }
 
 .Pw.success
@@ -79,17 +107,17 @@
     border: solid 2px red;
 }
 
+.PwMessage.success
+{
+    display: none;
+}
+
 .PwMessage.error
 {
     margin: 0px;
     padding: 0px;
     color:red;
     font-size: 15px;
-}
-
-.PwMessage.success
-{
-    display: none;
 }
 
 .PwConfirm.success
@@ -102,6 +130,11 @@
     border: solid 2px red;
 }
 
+.PwConfirmMessage.success
+{
+   display: none;
+}
+
 .PwConfirmMessage.error
 {
     margin: 0px;
@@ -109,12 +142,6 @@
     color:red;
     font-size: 15px;
 }
-
-.PwConfirmMessage.success
-{
-   display: none;
-}
-
 
 .Nickname.success
 {
@@ -126,6 +153,11 @@
     border: solid 2px red;
 }
 
+.NicknameMessage.success
+{
+    display: none;
+}
+
 .NicknameMessage.error
 {
     margin: 0px;
@@ -134,10 +166,49 @@
     font-size: 15px;
 }
 
-.NicknameMessage.success
+.emailCertBtnMessage.success
 {
     display: none;
 }
+
+.emailCertBtnMessage.error
+{
+    margin: 0px;
+    padding: 0px;
+    color:red;
+    font-size: 15px;
+}
+
+.CertCheck.success
+{
+    margin-left: 10px;
+    width: 100px;
+    height: 55px;
+    border: solid 1px #dddddd;
+    background: #aaaaaa;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    color:white;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.CertCheck.error
+{
+    margin-left: 10px;
+    width: 100px;
+    height: 55px;
+    background: linear-gradient( 45deg, #55aaff , #6767ff );;
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    color:white;
+    font-size: 15px;
+}
+
+/*-------------------------*/
+
+/* 인풋 */
 
 input[id="email"]
 {
@@ -212,12 +283,9 @@ input:focus
     border-radius: 10px;
 }
 
-.emailcheck
-{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-}
+/*-----------------------------------*/
+
+/*인증*/
 
 .Cert:active
 {
@@ -246,46 +314,6 @@ input:focus
     font-size: 15px;
 }
 
-.CertCheck.success
-{
-    margin-left: 10px;
-    width: 100px;
-    height: 55px;
-    border: solid 1px #dddddd;
-    background: #aaaaaa;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    color:white;
-    font-size: 15px;
-    pointer-events: none;
-}
-
-.CertCheck.error
-{
-    margin-left: 10px;
-    width: 100px;
-    height: 55px;
-    background: linear-gradient( 45deg, #55aaff , #6767ff );;
-    border: none;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    color:white;
-    font-size: 15px;
-}
-
-.emailCertBtnMessage.error
-{
-    margin: 0px;
-    padding: 0px;
-    color:red;
-    font-size: 15px;
-}
-
-.emailCertBtnMessage.success
-{
-    display: none;
-}
-
 .CertCheck:active
 {
     margin-left: 10px;
@@ -307,6 +335,35 @@ input:focus
     flex-wrap: nowrap;
 }
 
+/*-------------*/
+
+/*값확인*/
+
+.PwCheck
+{
+    margin-top: 15px;
+}
+
+.PwConfirmCheck
+{
+    margin-top: 15px;
+}
+
+.NicknameCheck
+{
+    margin-top: 15px;
+}
+
+.emailcheck
+{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+/*----------*/
+
+/* 버튼 */
 .SIGNbtn
 {
     position: absolute;
@@ -318,26 +375,6 @@ input:focus
     cursor: pointer;
     color:white;
     font-size: 100%;
-}
-
-button {
-    position: relative;
-    font-size: 0;
-    cursor: pointer;
-    display: inline-block;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
-    white-space: nowrap;
-    border: none;
-    background: none;
-    overflow: visible;
-    text-align: center;
-    background-color: #fff;
-    border-radius: 0;
-    padding: 0;
-    border: 0;
-    user-select: none;
 }
 
 .SIGNbtn:active 
@@ -369,11 +406,6 @@ button {
     pointer-events: none;
 }
 
-label 
-{
-    font-weight: bold;
-}
-
 .Cert.enabled
 {
     margin-left: 10px;
@@ -401,6 +433,7 @@ label
     pointer-events: none;
 }
 
+/*------------*/
 
 .emailCheckT.disibled
 {
@@ -412,21 +445,6 @@ label
     display:block;
     margin-top: 15px;
 
-}
-
-.PwCheck
-{
-    margin-top: 15px;
-}
-
-.PwConfirmCheck
-{
-    margin-top: 15px;
-}
-
-.NicknameCheck
-{
-    margin-top: 15px;
 }
 
 .title
@@ -444,12 +462,4 @@ label
     padding: 10px;
     text-align: center;
     border-radius: 20px;
-}
-
-input[id='Email']:focus
-{
-  border: none;
-  outline: none;
-  border: solid 2px #6767ff;
-  border-radius: 10px;
 }

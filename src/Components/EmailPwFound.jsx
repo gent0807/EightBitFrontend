@@ -1,64 +1,135 @@
 import React from 'react';
 import '../CSS/EmailPwFound.css';
 import { Link } from "react-router-dom";
+import {RiErrorWarningFill} from "react-icons/ri";
 
 const EmailPwFound = () => 
 {
+
+    const [Email, setEmail] = React.useState("");
+    const [Emailauth, setEmailauth] = React.useState("");
+    const [PasswordChangeE, setPasswordChange ] = React.useState("");
+    const [PasswordChangeConfirmM, setPasswordChangeConfirm ] = React.useState("");
+
+    const [EmailMessage, setEmailMessage] = React.useState("");
+    const [EmailauthMessage, setEmailauthMessage] = React.useState("");
+    const [PasswordChangeMessage, setPasswordChangeMessage ] = React.useState("");
+    const [PasswordChangeConfirmMessage, setPasswordChangeConfirmMessage ] = React.useState("");
+    const [ButtonText, setButtonText] = React.useState("");
+
+    const [isEmail, setIsEmail] = React.useState(false);
+    const [isEmailBtn, setIsEmailBtn] = React.useState(false);
+    const [isEmailauthBtn, setIsEmailauthBtn] = React.useState(false);
+    const [isInputCheck, setIsInputCheck] = React.useState(true);
+    const [isButtonCheck, setIsButtonCheck] = React.useState(false);
+    const [isPasswordChange, setIsPasswordChange ] = React.useState(false);
+    const [isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = React.useState(false);
+
+    const [changeVisibled, setchangeVisibled] = React.useState(false);
+
     const Emailuser = (e) =>
     {
-        const currentId = e.target.value;
-        setEmail(currentId)
+      const EmailCheck = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      const currentEmail = e.target.value;
+      setEmail(currentEmail);
+
+    if (!EmailCheck.test(currentEmail)) 
+      {
+        setEmailMessage([<div style={{margin: "-13px 5px 6px" , display: "flex"  }}>
+                        <i style={{margin: "0px 5px 6px"}}><RiErrorWarningFill/></i>
+                        <span style={{margin:"-2px 5px 6px"}}>올바른 이메일을 작성해 주세요!</span>
+                        </div>]);
+        setIsEmail(false);
+      }
+      else
+      {
+        setEmailMessage("");
+        setIsEmail(true);
+      }
     }
 
     const EmailAuth = (e) =>
     {
-        const currentId = e.target.value;
-        setEmailauth(currentId)
+        const currentEmailCert = e.target.value;
+        const onlynumber = currentEmailCert.replace(/[^0-9]/g, '');
+        setEmailauth(onlynumber)
     }
 
     const PasswordChange = (e) =>
     {
         const currentId = e.target.value;
         setPasswordChange(currentId)
+        const PwCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
+        if(!PwCheck.test(currentId))
+        {
+          setPasswordChangeMessage([<div style={{display: "flex" , position: "absolute" , margin: "-13px 5px 6px"}}>
+          <i style={{margin: "0px 5px 6px"}}><RiErrorWarningFill/></i>
+          <span style={{margin:"-2px 5px 6px"}}>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</span>
+          </div>])
+          setIsPasswordChange(false)
+        }
+        else
+        {
+          setPasswordChangeMessage("")
+          setIsPasswordChange(true)
+        }
     }
 
     const PasswordChangeConfirm = (e) =>
     {
-        const currentId = e.target.value;
+        const currentId = e.target.value
         setPasswordChangeConfirm(currentId)
+
+        if(PasswordChangeE !== currentId)
+        {
+          setPasswordChangeConfirmMessage([<div style={{display: "flex" , position: "absolute" , margin: "-13px 5px 6px"}}>
+          <i style={{margin: "0px 5px 6px"}}><RiErrorWarningFill/></i>
+          <span style={{margin:"-2px 5px 6px"}}>비밀번호가 일치하지 않습니다!</span>
+          </div>])
+          setIsPasswordChangeConfirm(false)
+        }
+        else
+        {
+          setPasswordChangeConfirmMessage("")
+          setIsPasswordChangeConfirm(true)
+        }
     }
 
     const EmailCheck = () =>
     {
-    }
+        setIsEmailBtn(true)
 
-    const EmailAuthCheck = () =>
+
+    }
+  
+
+    const EmailAuthCheck = ({text}) =>
     {
+      setIsInputCheck(false)
+
+      if(Emailauth === "123456")
+        {   
+          setButtonText("인증완료")
+          setIsEmailauthBtn(true)
+          setIsButtonCheck(true)
+          setchangeVisibled(true)
+        }
+        else
+        {
+          setIsButtonCheck(false)
+          setIsEmailauthBtn(false)
+          setchangeVisibled(false)
+          setEmailauthMessage([<div style={{margin: "-13px 5px 6px", display: "flex" , position: "absolute" }}>
+          <i style={{margin: "0px 5px 6px"}}
+          ><RiErrorWarningFill/></i>
+          <span style={{margin:"-2px 5px 6px"}}>인증번호가 일치하지 않습니다.</span>
+          </div>])
+        }
+       
     }
 
-    const ChangeBtn = () =>
-    {
-    }
-
-    const [Email, setEmail] = React.useState("");
-    const [Emailauth, setEmailauth] = React.useState("");
-    const [passwordChange, setPasswordChange ] = React.useState("");
-    const [passwordChangeConfirm, setPasswordChangeConfirm ] = React.useState("");
-
-    const [EmailMessage, setEmailMessage] = React.useState("");
-    const [EmailauthMessage, setEmailauthMessage] = React.useState("");
-    const [passwordChangeMessage, setPasswordChangeMessage ] = React.useState("");
-    const [passwordChangeConfirmMessage, setPasswordChangeConfirmMessage ] = React.useState("");
-
-    const [isEmail, setIsEmail] = React.useState(false);
-    const [isEmailauth, setIsEmailauth] = React.useState(false);
-    const [ispasswordChange, setIsPasswordChange ] = React.useState("");
-    const [ispasswordChangeConfirm, setIsPasswordChangeConfirm ] = React.useState("");
-
-    const [authVisibled, setauthVisibled] = React.useState(false);
-    const [changeVisibled, setchangeVisibled] = React.useState(false);
-
-    return(
+    return (
         <div className='EmPwFoundT'>
             <div className='EmPwFound-Top'>
             <Link to='/'><img className='LOGO' src='img/8bit.png' alt='로고'/></Link>
@@ -72,61 +143,66 @@ const EmailPwFound = () =>
                 <input 
                 id='EmailCheck'
                 type="text"
-                className='EmailInput'
+                className={Email.length > 0 && `EmailInput ${isEmail ? 'success' : `error`}`}
                 placeholder='이메일을 입력해 주세요!'
                 value={Email}
                 onChange={Emailuser}
                 />
               <button 
-                className={`Send ${Email ? 'enabled' : 'disabled'}`}
-                disabled={!Email}
+                className={`Send ${isEmail ? 'enabled' : 'disabled'}`}
                 onClick={EmailCheck}
                 >
                 <span style={{fontWeight: "bold", fontSize: "17px"}}>전송</span>
               </button>
-              <div className='EmallAuthInputT'>
+              {Email.length > 0 && (<p className={`emailMessage ${isEmail ? 'success' : 'error'}`}>{EmailMessage}</p>)}
+              <div className={`EmallAuthInputT ${isEmailBtn ? 'success' : 'error'}`}>
                 <input 
                 id='EmailCheck'
                 type="text"
-                className='EmailAuthInput'
+                className={isInputCheck ? 'EmailAuthInput' : `EmailAuthInput ${isEmailauthBtn ? 'success' : 'error'}`}
                 placeholder='인증번호를 입력해 주세요!'
                 value={Emailauth}
                 onChange={EmailAuth}
+                maxLength={6}
                 />
               <button 
-                className={`Send ${Emailauth ? 'enabled' : 'disabled'}`}
-                disabled={!Emailauth}
+                className={`EmailAuthInputBtn ${isEmailauthBtn ? 'success' : 'error'}`}
                 onClick={EmailAuthCheck}
                 >
-                <span style={{fontWeight: "bold", fontSize: "17px"}}>인증확인</span>
+                <span style={{fontWeight: "bold", fontSize: "17px"}}>{isButtonCheck ? ButtonText : "인증확인"}</span>
               </button>
+              <p className={`emailMessage ${isEmailauthBtn ? 'success' : 'error'}`}>{EmailauthMessage}</p>
               </div>
-              <div className='PasswordChangeT'>
+              <div className={`PasswordChangeT ${changeVisibled ? 'success' : 'error'}`}>
                 <input 
                 id='EmailPasswordChange'
-                type="text"
-                className='PasswordChangeInput'
+                type="password"
+                className={PasswordChangeE.length > 0 && `PasswordChange ${isPasswordChange ? 'success' : 'error'}`}
                 placeholder='새 비밀번호를 입력해 주세요!'
-                value={passwordChange}
+                value={PasswordChangeE}
                 onChange={PasswordChange}
                 />
               </div>
-              <div className='PasswordChangeConfirmT'>
+              {PasswordChangeE.length > 0 && (<p className={`emailMessage ${isPasswordChange ? 'success' : 'error'}`}>{PasswordChangeMessage}</p>)}
+              <div className={`PasswordChangeConfirmT ${changeVisibled ? 'success' : 'error'}`}>
                 <input 
                 id='EmailPasswordChange'
-                type="text"
-                className='PasswordChangeConfirmInput'
+                type="password"
+                className={PasswordChangeConfirmM.length > 0 && `PasswordChangeConfirm ${isPasswordChangeConfirm ? 'success' : 'error'}`}
                 placeholder='새 비밀번호를 다시 입력해 주세요!'
-                value={passwordChangeConfirm}
+                value={PasswordChangeConfirmM}
                 onChange={PasswordChangeConfirm}
                 />
               </div>
+              {PasswordChangeConfirmM.length > 0 && (<p className={`emailMessage ${isPasswordChangeConfirm ? 'success' : 'error'}`}>{PasswordChangeConfirmMessage}</p>)}
               </div>
             </div>
             <div className='EmailPwChangeBtn'>
                 <button 
                 type="submit" 
-                className='ChangeBtn'>
+                className='ChangeBtn'
+                disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}
+                >
                     <span>완료</span>
                 </button>
             </div>

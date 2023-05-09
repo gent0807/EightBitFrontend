@@ -29,7 +29,7 @@ const Signinput = () =>
 
   const [isVisibled, setVisibled] = React.useState(false);
 
-  const OnEmailCertCheckBtn = ({text="인증하기"}) =>
+  const OnEmailCertCheckBtn = () =>
   {
     setIsInputCheck(false)
 
@@ -46,7 +46,6 @@ const Signinput = () =>
     setIsEmailCertCheck(false);
     setIsEmailCertCheckBtn(false);
     setIsConfirmCheck(false);
-    setEmailCertCheckBtnMessage("인증하기");
     setEmailCertCheckMessage([<div style={{margin: "-13px 5px 6px", display: "flex" , position: "absolute" }}>
     <i style={{margin: "0px 5px 6px"}}
     ><RiErrorWarningFill/></i>
