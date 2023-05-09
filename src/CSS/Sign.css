@@ -241,6 +241,46 @@ input:focus
     font-size: 15px;
 }
 
+.CertCheck.success
+{
+    margin-left: 10px;
+    width: 100px;
+    height: 55px;
+    border: solid 1px #dddddd;
+    background: #aaaaaa;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    color:white;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.CertCheck.error
+{
+    margin-left: 10px;
+    width: 100px;
+    height: 55px;
+    background: linear-gradient( 45deg, #55aaff , #6767ff );;
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    color:white;
+    font-size: 15px;
+}
+
+.emailCertBtnMessage.error
+{
+    margin: 0px;
+    padding: 0px;
+    color:red;
+    font-size: 15px;
+}
+
+.emailCertBtnMessage.success
+{
+    display: none;
+}
+
 .CertCheck:active
 {
     margin-left: 10px;

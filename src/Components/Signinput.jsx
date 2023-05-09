@@ -16,14 +16,40 @@ const Signinput = () =>
   const [EmailCertMessage, setEmailCertMessage] = React.useState("");
   const [PwConfirmMessage, setPwConfirmMessage] = React.useState("");
   const [NicknameMessage, setNicknameMessage] = React.useState("");
+  const [EmailCertCheckMessage, setEmailCertCheckMessage] = React.useState("");
+  const [EmailCertCheckBtnMessage, setEmailCertCheckBtnMessage] = React.useState("");
 
   const [isPw, setIsPw] = React.useState(false);
   const [isPwConfirm, setIsPwConfirm] = React.useState(false);
   const [isEmail, setIsEmail] = React.useState(false);
   const [isEmailCert, setIsEmailCert] = React.useState(false);
   const [isNickname, setIsNickname] = React.useState(false);
+  const [isEmailCertCheck, setIsEmailCertCheck] = React.useState(false);
+  const [isEmailCertCheckBtn, setIsEmailCertCheckBtn] = React.useState(true);
 
   const [isVisibled, setVisibled] = React.useState(false);
+
+  const OnEmailCertCheckBtn = ({text="인증하기"}) =>
+  {
+    if(EmailCert === "123456")
+    {
+    setIsEmailCertCheck(true);
+    setIsEmailCertCheckBtn(true);
+    setEmailCertCheckBtnMessage("인증완료");
+    setEmailCertCheckMessage("");
+    }
+    else
+    {
+    setIsEmailCertCheck(false);
+    setIsEmailCertCheckBtn(false);
+    setEmailCertCheckBtnMessage("인증하기");
+    setEmailCertCheckMessage([<div style={{margin: "-13px 5px 6px", display: "flex" , position: "absolute" }}>
+    <i style={{margin: "0px 5px 6px"}}
+    ><RiErrorWarningFill/></i>
+    <span style={{margin:"-2px 5px 6px"}}>인증번호가 일치하지 않습니다.</span>
+    </div>]);
+    }
+  }
 
 
   const OnChangeEmail = (e) => {
@@ -157,19 +183,19 @@ const Signinput = () =>
           <div className='Input-EmailCheck'>
             <input 
             id='emailCert'
-            className={EmailCert.length > 0 && `emailCert ${isEmailCert ? 'success' : 'error'}`}
+            className={`emailCert ${isEmailCertCheckBtn ? 'success' : 'error'}`}
             type="text"
             value={EmailCert}
             onChange={OnChangeEmailCert}
             />
              <button 
-            className='CertCheck'
-            ><span>인증확인</span></button>
+            className={`CertCheck ${isEmailCertCheck ? 'success' : 'error' }`}
+            onClick={OnEmailCertCheckBtn}
+            ><span>{isEmailCertCheck ? EmailCertCheckBtnMessage : "인증하기"}</span>
+            </button>
             </div>
             </div>
-            {EmailCert.length > 0 && (
-            <p className={`emailCertMessage ${isEmailCert ? 'success' : 'error'}`}>{EmailCertMessage}</p>
-          )}
+            <p className={`emailCertBtnMessage ${isEmailCertCheckBtn ? 'success' : 'error'}`}>{EmailCertCheckMessage}</p>
           </div>
           <div className='PwCheck'>
           <label htmlFor="Pw">비밀번호</label>
