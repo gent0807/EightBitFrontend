@@ -13,7 +13,6 @@ const Signinput = () =>
 
   const [PwMessage, setPwMessage] = React.useState("");
   const [EmailMessage, setEmailMessage] = React.useState("");
-  const [EmailCertMessage, setEmailCertMessage] = React.useState("");
   const [PwConfirmMessage, setPwConfirmMessage] = React.useState("");
   const [NicknameMessage, setNicknameMessage] = React.useState("");
   const [EmailCertCheckMessage, setEmailCertCheckMessage] = React.useState("");
@@ -22,19 +21,23 @@ const Signinput = () =>
   const [isPw, setIsPw] = React.useState(false);
   const [isPwConfirm, setIsPwConfirm] = React.useState(false);
   const [isEmail, setIsEmail] = React.useState(false);
-  const [isEmailCert, setIsEmailCert] = React.useState(false);
   const [isNickname, setIsNickname] = React.useState(false);
   const [isEmailCertCheck, setIsEmailCertCheck] = React.useState(false);
   const [isEmailCertCheckBtn, setIsEmailCertCheckBtn] = React.useState(true);
+  const [isInputCheck, setIsInputCheck] = React.useState(true);
+  const [isConfirmCheck, setIsConfirmCheck] = React.useState(false);
 
   const [isVisibled, setVisibled] = React.useState(false);
 
   const OnEmailCertCheckBtn = ({text="인증하기"}) =>
   {
+    setIsInputCheck(false)
+
     if(EmailCert === "123456")
     {
     setIsEmailCertCheck(true);
     setIsEmailCertCheckBtn(true);
+    setIsConfirmCheck(true);
     setEmailCertCheckBtnMessage("인증완료");
     setEmailCertCheckMessage("");
     }
@@ -42,6 +45,7 @@ const Signinput = () =>
     {
     setIsEmailCertCheck(false);
     setIsEmailCertCheckBtn(false);
+    setIsConfirmCheck(false);
     setEmailCertCheckBtnMessage("인증하기");
     setEmailCertCheckMessage([<div style={{margin: "-13px 5px 6px", display: "flex" , position: "absolute" }}>
     <i style={{margin: "0px 5px 6px"}}
@@ -72,20 +76,8 @@ const Signinput = () =>
 
   const OnChangeEmailCert = (e) => {
     const currentEmailCert = e.target.value;
-    setEmailCert(currentEmailCert)
-    
-    if(currentEmailCert.length < 6)
-    {
-        setEmailCertMessage([<div style={{margin: "-13px 5px 6px", display: "flex" , position: "absolute" }}>
-        <i style={{margin: "0px 5px 6px"}}
-        ><RiErrorWarningFill/></i>
-        <span style={{margin:"-2px 5px 6px"}}>인증번호를 입력해주세요!</span>
-        </div>]);
-        setIsEmailCert(false);
-    }else{
-        setEmailCertMessage("");
-        setIsEmailCert(true);
-    }
+    const onlynumber = currentEmailCert.replace(/[^0-9]/g, '');
+    setEmailCert(onlynumber)
   };
 
   const OnChangePw = (e) => {
@@ -183,7 +175,8 @@ const Signinput = () =>
           <div className='Input-EmailCheck'>
             <input 
             id='emailCert'
-            className={`emailCert ${isEmailCertCheckBtn ? 'success' : 'error'}`}
+            className={isInputCheck ? 'emailCert' : `emailCert ${isEmailCertCheckBtn ? 'success' : 'error'}`}
+            maxLength={6}
             type="text"
             value={EmailCert}
             onChange={OnChangeEmailCert}
@@ -241,7 +234,7 @@ const Signinput = () =>
           <button 
           className='SIGNbtn'
           type='submit'
-          disabled={!(isEmail && isEmailCert && isPw && isPwConfirm && isNickname)}
+          disabled={!(isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}
           >
           <span>회원가입</span>
           </button>

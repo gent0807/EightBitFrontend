@@ -1,3 +1,4 @@
+<!-- -->
 .SignT {
     position:relative;
 }
@@ -6,17 +7,20 @@
     display: inline-block;
 }
 
-.LOGO 
-{
-    width: 192px;
-    height: 102px;
-}
-
 .Sign-Top 
 {
     text-align: center;
     margin-bottom: 50px;
 }
+
+
+.LOGO
+{
+    width: 192px;
+    height: 102px;
+}
+
+
 
 .email.success
 {
@@ -44,6 +48,7 @@
 .emailCert.success
 {
     border: solid 2px green;
+    pointer-events: none;
 }
 
 .emailCert.error
