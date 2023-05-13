@@ -5,6 +5,7 @@ import {SiNaver} from "react-icons/si";
 import {AiOutlineTwitter} from "react-icons/ai";
 import {RiErrorWarningFill} from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const Logininput = () => 
 {
@@ -36,7 +37,7 @@ const Logininput = () =>
       }else{
         setAllMessage("");
         setIsAll(true);
-        fetch(`http://localhost:8033/EightBitBackend/user/loginCheck/`, {
+        /*fetch(`http://localhost:8033/EightBitBackend/user/loginCheck/`, {
           method:"POST",
           headers:{
             "Content-Type":"application/json",
@@ -51,7 +52,22 @@ const Logininput = () =>
         })
         .then(data=>{
           setLoginCheck(data);
+        })*/
+        axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
+          headers:{
+            'Content-Type':'application/json'
+          },
+          data:{
+            email:Email,
+            password:Pw
+          },
         })
+        .then(res=>{
+          return res.data;
+        })
+        .then(data=>{
+          setLoginCheck(data);
+        });
         if(loginCheck=="allok"){
           console.log("로그인 가능");
           navigate("/");
