@@ -1,33 +1,59 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {RiErrorWarningFill} from "react-icons/ri";
 import { Link } from "react-router-dom";
 
 
 const Signinput = () => 
 {
-  const [Email, setEmail] = React.useState("");
-  const [EmailCert, setEmailCert] = React.useState("");
-  const [Pw, setPw] = React.useState("");
-  const [PwConfirm, setPwConfirm] = React.useState("");
-  const [Nickname, setNickname] = React.useState("");
+  const [Email, setEmail] = useState("");
+  const [EmailCert, setEmailCert] = useState("");
+  const [Pw, setPw] = useState("");
+  const [PwConfirm, setPwConfirm] = useState("");
+  const [Nickname, setNickname] = useState("");
+  const [SelectValue, setSelectValue] = useState("naver.com");
 
-  const [PwMessage, setPwMessage] = React.useState("");
-  const [EmailMessage, setEmailMessage] = React.useState("");
-  const [PwConfirmMessage, setPwConfirmMessage] = React.useState("");
-  const [NicknameMessage, setNicknameMessage] = React.useState("");
-  const [EmailCertCheckMessage, setEmailCertCheckMessage] = React.useState("");
-  const [EmailCertCheckBtnMessage, setEmailCertCheckBtnMessage] = React.useState("");
+  const [PwMessage, setPwMessage] = useState("");
+  const [EmailMessage, setEmailMessage] = useState("");
+  const [PwConfirmMessage, setPwConfirmMessage] = useState("");
+  const [NicknameMessage, setNicknameMessage] = useState("");
+  const [EmailCertCheckMessage, setEmailCertCheckMessage] = useState("");
+  const [EmailCertCheckBtnMessage, setEmailCertCheckBtnMessage] = useState("");
 
-  const [isPw, setIsPw] = React.useState(false);
-  const [isPwConfirm, setIsPwConfirm] = React.useState(false);
-  const [isEmail, setIsEmail] = React.useState(false);
-  const [isNickname, setIsNickname] = React.useState(false);
-  const [isEmailCertCheck, setIsEmailCertCheck] = React.useState(false);
-  const [isEmailCertCheckBtn, setIsEmailCertCheckBtn] = React.useState(true);
-  const [isInputCheck, setIsInputCheck] = React.useState(true);
-  const [isConfirmCheck, setIsConfirmCheck] = React.useState(false);
+  const [isPw, setIsPw] = useState(false);
+  const [isPwConfirm, setIsPwConfirm] = useState(false);
+  const [isEmail, setIsEmail] = useState(false);
+  const [isNickname, setIsNickname] = useState(false);
+  const [isEmailCertCheck, setIsEmailCertCheck] = useState(false);
+  const [isEmailCertCheckBtn, setIsEmailCertCheckBtn] = useState(true);
+  const [isInputCheck, setIsInputCheck] = useState(true);
+  const [isConfirmCheck, setIsConfirmCheck] = useState(false);
+  const [isSelectBtnCheck, setIsSelectBtnCheck] = useState(true);
 
-  const [isVisibled, setVisibled] = React.useState(false);
+  const [isVisibled, setVisibled] = useState(false);
+
+  let textRef = useRef(null);
+  
+    useEffect(() => {
+      function handleOuside(e) {
+        if (textRef.current && !textRef.current.contains(e.target)) {
+            setIsSelectBtnCheck(true);
+        }
+      };
+
+      if(isSelectBtnCheck) {
+      document.addEventListener("mousedown", handleOuside);
+      }
+      return () => {
+        document.removeEventListener("mousedown", handleOuside);
+      };
+    }, [textRef])
+
+  const OnSelectValue = (e) =>
+  {
+      const {innerText} = e.target;
+    
+      setSelectValue(innerText);
+  }
 
   const OnEmailCertCheckBtn = () =>
   {
@@ -57,20 +83,18 @@ const Signinput = () =>
 
   const OnChangeEmail = (e) => {
     const currentEmail = e.target.value;
-    setEmail(currentEmail);
-    const EmailCheck = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-
-    if (!EmailCheck.test(currentEmail)) 
+    const onlytext = currentEmail.replace(/[~!@#$%^&*()_+|<>?:{}]/g, '');
+    setEmail(onlytext);
+    const Check = /^([0-9a-zA-Z_\.-]+)/;
+    if(!Check.test(currentEmail))
     {
-        setEmailMessage([<div style={{margin: "-13px 5px 6px" , display: "flex" , position: "absolute" }}>
-                        <i style={{margin: "0px 5px 6px"}}><RiErrorWarningFill/></i>
-                        <span style={{margin:"-2px 5px 6px"}}>올바른 이메일을 작성해 주세요!</span>
-                        </div>]);
-        setIsEmail(false);
-    }else{
-        setEmailMessage("");
-        setIsEmail(true);
+      setIsEmail(false);
     }
+    else
+    {
+      setIsEmail(true);
+    }
+
   };
 
   const OnChangeEmailCert = (e) => {
@@ -134,14 +158,47 @@ const Signinput = () =>
 
   const Visibled = () => 
   {
-    setVisibled(true);
+    const EmailTotal = Email + "@" + SelectValue;
+
+    const test = "khs64101014@gmail.com"
+
+    if(EmailTotal === test )
+    {
+      setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "10px 5px 6px"}}>
+      <i style={{margin: "-19px 5px 6px"}}><RiErrorWarningFill/></i>
+      <span style={{margin:"-19px 5px 6px"}}>이미 존재하는 이메일 입니다.</span>
+      </div>])
+      setVisibled(false);
+    }
+    else
+    {
+      setVisibled(true);
+    }
+      
+    
+
   }
+
+  const OnSumbit = (e) =>
+    {
+      e.preventDefault();
+      if ( Email === "" || EmailCert === "" || Pw === "" || PwConfirm === "" || Nickname === "" )
+      {
+        return;
+      }
+      setEmail("");
+      setEmailCert("");
+      Pw("");
+      PwConfirm("");
+      Nickname("");
+    }
 
   return (
   <div className='SignT'>
           <div className='Sign-Top'>
             <Link to='/'><img className='LOGO' src='img/8bit.png' alt='로고'/></Link>
           </div>
+          <form onSubmit={OnSumbit}>
           <div className='SignInput'>
             <div className='infor'>
             <span className='title'>회원가입</span>
@@ -151,11 +208,24 @@ const Signinput = () =>
             <div className='Input-Email'>
             <input 
             id='email'
-            className={Email.length > 0 && `email ${isEmail ? 'success' : 'error'}`}
+            className="email"
             type="text"
             value={Email}
             onChange={OnChangeEmail}
             />
+            <span className='emailtext'>@</span>
+            <div ref={textRef} className={`selectbox ${isSelectBtnCheck ? 'empty' : 'full'}`} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}>
+              <ul className={`optionlist ${isSelectBtnCheck ? "empty" : "full"}`}>
+                <li value="naver.com" onClick={OnSelectValue}>naver.com</li>
+                <li value="gmail.com" onClick={OnSelectValue}>gmail.com</li>
+                <li value="hanmail.net" onClick={OnSelectValue}>hanmail.net</li>
+                <li value="nate.com" onClick={OnSelectValue}>nate.com</li>
+                <li value="daum.net" onClick={OnSelectValue}>daum.net</li>
+                <li value="outlook.com" onClick={OnSelectValue}>outlook.com</li>
+              </ul>
+              <span className='Value'>{SelectValue}</span>
+              {isSelectBtnCheck ? <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▼</div> : <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▲</div>}
+            </div>
             <button 
             className={`Cert ${isEmail ? 'enabled' : 'disabled'}`}
             disabled={!isEmail}
@@ -164,9 +234,7 @@ const Signinput = () =>
             <span>인증요청</span>
             </button>
             </div>
-            {Email.length > 0 && (
-            <p className={`emailMessage ${isEmail ? 'success' : 'error'}`}>{EmailMessage}</p>
-          )}
+            <p className={`emailMessage ${isVisibled ? 'success' : 'error'}`}>{EmailMessage}</p>
           <div 
           className={`emailCheckT ${isVisibled ? 'visibled' : 'disibled' }`}
           >
@@ -238,6 +306,7 @@ const Signinput = () =>
           <span>회원가입</span>
           </button>
         </div>
+        </form>
     </div>
   );
 }

@@ -212,7 +212,8 @@ label
 
 input[id="email"]
 {
-    width: 320px;
+    width: 140px;
+    height: 20px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -408,7 +409,8 @@ input:focus
 
 .Cert.enabled
 {
-    margin-left: 10px;
+    margin-left: 162px;
+    margin-top: -4px;
     width: 100px;
     height: 55px;
     background: linear-gradient( 45deg, #55aaff , #6767ff );
@@ -421,7 +423,8 @@ input:focus
 
 .Cert.disabled
 {
-    margin-left: 10px;
+    margin-left: 162px;
+    margin-top: -4px;
     width: 100px;
     height: 55px;
     border: solid 1px #dddddd;
@@ -462,4 +465,132 @@ input:focus
     padding: 10px;
     text-align: center;
     border-radius: 20px;
+}
+
+.selectbox.empty
+{
+    display: inline-block;
+    position: absolute;
+    width: 130px;
+    height: 20px;
+    border: none;
+    background-color: #f5f5f5;
+    font-size:15px;
+    border-radius: 10px;
+    outline: none;
+    padding: 20px 5px 20px 20px;
+    margin: 20px 0px 20px 0px;
+    cursor: pointer;
+}
+
+.selectbox.full
+{
+    display: inline-block;
+    position: absolute;
+    width: 130px;
+    height: 20px;
+    border: none;
+    background-color: #f5f5f5;
+    font-size:15px;
+    border: solid 2px #6767ff;
+    border-radius: 10px;
+    outline: none;
+    padding: 20px 5px 20px 20px;
+    margin: 20px 0px 20px 0px;
+    cursor: pointer;
+}
+
+.optionlist li
+{
+    padding: 10px 0px 10px 0px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.optionlist li:hover
+{
+    background-color: #6767ff;
+    border-radius: 5px;
+}
+
+
+.emailtext
+{
+    font-size: 25px;
+    margin: 0px 10px 0px 10px;
+}
+
+.Allow.empty
+{
+    position: absolute;
+    margin-left: 110px;
+}
+
+.Allow
+{
+    position: absolute;
+    margin-left: 110px;
+    margin-top: -2px;
+}
+
+.Value
+{
+    position: absolute;
+    margin-top: 3px;
+}
+
+.optionlist.empty
+{
+    display: block;
+    position: absolute;
+    background: #f5f5f5;
+    margin: 53px 0px 0px -14px;
+    list-style: none;
+    padding: 0px 0px 0px 0px;
+    width: 145px;
+    height: 0px;
+    z-index: 1;
+    border-radius: 10px;
+    animation-name: slide_up;
+    animation-duration: 0.5s;
+    overflow: hidden;
+}
+
+.optionlist.full
+{
+    display: block;
+    position: absolute;
+    background: #f5f5f5;
+    margin: 41px 0px 0px -21px;
+    list-style: none;
+    padding: 0px 0px 0px 0px;
+    width: 155px;
+    z-index: 1;
+    border-radius: 10px;
+    border: solid 1px #6767ff;
+    animation-name: slide_down;
+    animation-duration: 0.5s;
+    overflow: hidden;
+}
+
+@keyframes slide_up
+{
+    0%{
+        height: 210px;
+        border: solid 1px #6767ff;
+    }
+    100%{
+        height: 0px;
+        border: solid 0px #6767ff;
+    }
+}
+
+@keyframes slide_down
+{
+    0%{
+        height: 0px;
+    }
+    100%{
+        height: 210px;
+    }
 }
