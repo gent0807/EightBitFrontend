@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {FcGoogle} from "react-icons/fc";
 import {FaFacebookF} from "react-icons/fa";
 import {SiNaver} from "react-icons/si";
@@ -9,15 +9,24 @@ import axios from 'axios';
 
 const Logininput = () => 
 {
+<<<<<<< HEAD
     const [Email, setEmail] = React.useState("");
     const [Pw, setPw] = React.useState("");
     const [loginCheck,setLoginCheck]=React.useState("");
+=======
+    const [Email, setEmail] = useState("");
+    const [Pw, setPw] = useState("");
+>>>>>>> upstream/lanto
   
-    const [Allmessage, setAllMessage] = React.useState("");
+    const [Allmessage, setAllMessage] = useState("");
   
+<<<<<<< HEAD
     const [isAll, setIsAll] = React.useState(false);
     
     const navigate=useNavigate();
+=======
+    const [isAll, setIsAll] = useState(false);
+>>>>>>> upstream/lanto
   
     const OnChangeEmail = (e) => {
       const currentId = e.target.value;
@@ -76,13 +85,26 @@ const Logininput = () =>
         }
       }
     }
+
+    const OnSubmit = (e) =>
+    {
+      e.preventDefault();
+      if(Email === "" || Pw === "")
+      {
+        return;
+      }
+    }
   
-    let textRef = React.useRef(null);
+    let textRef = useRef(null);
   
-    React.useEffect(() => {
+    useEffect(() => {
       function handleOuside(e) {
         if (textRef.current && !textRef.current.contains(e.target)) {
+          console.log(textRef);
+          console.log(e.target);
           setIsAll(true);
+        }else{
+          setIsAll(false);
         }
       }
       document.addEventListener("mousedown", handleOuside);
@@ -96,6 +118,7 @@ const Logininput = () =>
           <div className="login-top">
           <Link to='/'><img className='LOGO' src='img/8bit.png' alt='로고'/></Link>
           </div>
+          <form onSubmit={OnSubmit}>
           <div className="login-input">
           <div className='loginT'>
           <input 
@@ -149,6 +172,7 @@ const Logininput = () =>
           </ul>
           </div>
         </div>
+        </form>
       </div>
     );
 }
