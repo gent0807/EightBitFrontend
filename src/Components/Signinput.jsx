@@ -246,8 +246,8 @@ const Signinput = () =>
             onChange={OnInputDirect}
             />
             <span className='emailtext'>@</span>
-            <div ref={textRef} style={isEmailCertCheck ? {pointerEvents:'none'} : {}} className={`selectbox ${isSelectBtnCheck ? 'empty' : 'full'}`} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}>
-              <ul className={`optionlist ${isSelectBtnCheck ? "empty" : "full"}`}>
+            <div ref={textRef} style={isEmailCertCheck ? {border: "none"} : {}} className={`selectbox ${isSelectBtnCheck ? 'empty' : 'full'}`} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}>
+              <ul style={isEmailCertCheck ? {pointerEvents:'none' , display:'none'} : {}}  className={`optionlist ${isSelectBtnCheck ? "empty" : "full"}`}>
                 <li value="naver.com" onClick={OnSelectValue}>naver.com</li>
                 <li value="gmail.com" onClick={OnSelectValue}>gmail.com</li>
                 <li value="hanmail.net" onClick={OnSelectValue}>hanmail.net</li>
@@ -257,7 +257,7 @@ const Signinput = () =>
                 <li onClick={VisibleDirect}><span className="InputDirect">직접입력</span></li>
               </ul>
               <span className='Value'>{SelectValue}</span>
-              {isSelectBtnCheck ? <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▼</div> : <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▲</div>}
+              {isSelectBtnCheck ? <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▼</div> : isEmailCertCheck ? <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▼</div> : <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▲</div>}
             </div>
             <button 
             className={`Cert ${isEmail ? 'enabled' : 'disabled'}`}
