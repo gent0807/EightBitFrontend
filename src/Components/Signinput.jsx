@@ -71,7 +71,8 @@ const Signinput = () =>
   const OnInputDirect = (e) =>
   {
     const InputDirect = e.target.value;
-    setInputDirect(InputDirect)
+    const onlytext = InputDirect.replace(/[~!@#$%^&*()_+|<>?:{}]/g, '');
+    setInputDirect(onlytext)
     setSelectValue(InputDirect)
   }
 

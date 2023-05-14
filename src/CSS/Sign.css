@@ -481,6 +481,7 @@ input:focus
     padding: 20px 5px 20px 20px;
     margin: 20px 0px 20px 0px;
     cursor: pointer;
+    z-index: 0;
 }
 
 .selectbox.full
@@ -498,6 +499,7 @@ input:focus
     padding: 20px 5px 20px 20px;
     margin: 20px 0px 20px 0px;
     cursor: pointer;
+    z-index: 0;
 }
 
 .optionlist li
@@ -637,5 +639,4 @@ input:focus
     cursor: pointer;
     border: solid 2px #6767ff;
     z-index: 1;
-    caret-color: #03ab95;
 }
