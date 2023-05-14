@@ -44,8 +44,6 @@ const Logininput = () =>
       {
         return;
       }
-      setEmail("");
-      setPw("");
     }
   
     let textRef = useRef(null);

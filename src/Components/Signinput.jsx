@@ -11,6 +11,7 @@ const Signinput = () =>
   const [PwConfirm, setPwConfirm] = useState("");
   const [Nickname, setNickname] = useState("");
   const [SelectValue, setSelectValue] = useState("naver.com");
+  const [InputDirect, setInputDirect] = useState("");
 
   const [PwMessage, setPwMessage] = useState("");
   const [EmailMessage, setEmailMessage] = useState("");
@@ -28,9 +29,12 @@ const Signinput = () =>
   const [isInputCheck, setIsInputCheck] = useState(true);
   const [isConfirmCheck, setIsConfirmCheck] = useState(false);
   const [isSelectBtnCheck, setIsSelectBtnCheck] = useState(true);
+  const [isInputDirect, setIsInputDirect] = useState(false);
+
 
   const [isVisibled, setVisibled] = useState(false);
 
+  let inputFocus = useRef(null);
   let textRef = useRef(null);
   
     useEffect(() => {
@@ -48,11 +52,27 @@ const Signinput = () =>
       };
     }, [textRef])
 
+
   const OnSelectValue = (e) =>
   {
       const {innerText} = e.target;
-    
+
       setSelectValue(innerText);
+      setIsInputDirect(false);
+  }
+
+  const VisibleDirect = () =>
+  {
+    setInputDirect("");
+    setIsInputDirect(true);
+    return inputFocus.current.focus();
+  }
+
+  const OnInputDirect = (e) =>
+  {
+    const InputDirect = e.target.value;
+    setInputDirect(InputDirect)
+    setSelectValue(InputDirect)
   }
 
   const OnEmailCertCheckBtn = () =>
@@ -101,6 +121,10 @@ const Signinput = () =>
     const currentEmailCert = e.target.value;
     const onlynumber = currentEmailCert.replace(/[^0-9]/g, '');
     setEmailCert(onlynumber)
+    if(!EmailCert)
+    {
+      setIsEmailCertCheckBtn(false);
+    }
   };
 
   const OnChangePw = (e) => {
@@ -186,11 +210,6 @@ const Signinput = () =>
       {
         return;
       }
-      setEmail("");
-      setEmailCert("");
-      Pw("");
-      PwConfirm("");
-      Nickname("");
     }
 
   return (
@@ -213,6 +232,15 @@ const Signinput = () =>
             value={Email}
             onChange={OnChangeEmail}
             />
+            <input 
+            id='InputDirect'
+            onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}
+            className={`InputDirectT ${isInputDirect ? "ON" : "OFF"}`}
+            type="text"
+            value={InputDirect}
+            ref={inputFocus}
+            onChange={OnInputDirect}
+            />
             <span className='emailtext'>@</span>
             <div ref={textRef} className={`selectbox ${isSelectBtnCheck ? 'empty' : 'full'}`} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}>
               <ul className={`optionlist ${isSelectBtnCheck ? "empty" : "full"}`}>
@@ -222,6 +250,7 @@ const Signinput = () =>
                 <li value="nate.com" onClick={OnSelectValue}>nate.com</li>
                 <li value="daum.net" onClick={OnSelectValue}>daum.net</li>
                 <li value="outlook.com" onClick={OnSelectValue}>outlook.com</li>
+                <li onClick={VisibleDirect}><span className="InputDirect">직접입력</span></li>
               </ul>
               <span className='Value'>{SelectValue}</span>
               {isSelectBtnCheck ? <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▼</div> : <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▲</div>}
