@@ -9,24 +9,15 @@ import axios from 'axios';
 
 const Logininput = () => 
 {
-<<<<<<< HEAD
     const [Email, setEmail] = React.useState("");
     const [Pw, setPw] = React.useState("");
     const [loginCheck,setLoginCheck]=React.useState("");
-=======
-    const [Email, setEmail] = useState("");
-    const [Pw, setPw] = useState("");
->>>>>>> upstream/lanto
   
     const [Allmessage, setAllMessage] = useState("");
   
-<<<<<<< HEAD
     const [isAll, setIsAll] = React.useState(false);
     
     const navigate=useNavigate();
-=======
-    const [isAll, setIsAll] = useState(false);
->>>>>>> upstream/lanto
   
     const OnChangeEmail = (e) => {
       const currentId = e.target.value;
