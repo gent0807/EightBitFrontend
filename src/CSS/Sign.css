@@ -551,7 +551,6 @@ input:focus
     padding: 0px 0px 0px 0px;
     width: 145px;
     height: 0px;
-    z-index: 0;
     border-radius: 10px;
 }
 
@@ -569,7 +568,6 @@ input:focus
     border: solid 2px #6767ff;
     animation-name: slide_down;
     animation-duration: 0.5s;
-    z-index: 0;
     overflow: hidden;
 }
 

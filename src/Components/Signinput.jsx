@@ -87,6 +87,7 @@ const Signinput = () =>
     setIsConfirmCheck(true);
     setEmailCertCheckBtnMessage("인증완료");
     setEmailCertCheckMessage("");
+    setIsEmail(false);
     }
     else
     {
@@ -185,6 +186,7 @@ const Signinput = () =>
   {
     const EmailTotal = Email + "@" + SelectValue;
 
+    console.log(EmailTotal);
     const test = "khs64101014@gmail.com"
 
     if(EmailTotal === test )
@@ -228,6 +230,7 @@ const Signinput = () =>
             <div className='Input-Email'>
             <input 
             id='email'
+            disabled={isEmailCertCheck}
             className="email"
             type="text"
             value={Email}
@@ -243,7 +246,7 @@ const Signinput = () =>
             onChange={OnInputDirect}
             />
             <span className='emailtext'>@</span>
-            <div ref={textRef} className={`selectbox ${isSelectBtnCheck ? 'empty' : 'full'}`} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}>
+            <div ref={textRef} style={isEmailCertCheck ? {pointerEvents:'none'} : {}} className={`selectbox ${isSelectBtnCheck ? 'empty' : 'full'}`} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}>
               <ul className={`optionlist ${isSelectBtnCheck ? "empty" : "full"}`}>
                 <li value="naver.com" onClick={OnSelectValue}>naver.com</li>
                 <li value="gmail.com" onClick={OnSelectValue}>gmail.com</li>
@@ -258,7 +261,7 @@ const Signinput = () =>
             </div>
             <button 
             className={`Cert ${isEmail ? 'enabled' : 'disabled'}`}
-            disabled={!isEmail}
+            disabled={isEmailCertCheck}
             onClick={Visibled}
             >
             <span>인증요청</span>
@@ -331,7 +334,7 @@ const Signinput = () =>
           <button 
           className='SIGNbtn'
           type='submit'
-          disabled={!(isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}
+          disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}
           >
           <span>회원가입</span>
           </button>
