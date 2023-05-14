@@ -264,7 +264,7 @@ const Signinput = () =>
             disabled={isEmailCertCheck}
             onClick={Visibled}
             >
-            <span>인증요청</span>
+            <span>{isVisibled ? "재요청" : "인증요청"}</span>
             </button>
             </div>
             <p className={`emailMessage ${isVisibled ? 'success' : 'error'}`}>{EmailMessage}</p>
