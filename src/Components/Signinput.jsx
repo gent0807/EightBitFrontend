@@ -191,7 +191,7 @@ const Signinput = () =>
     {
       setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "10px 5px 6px"}}>
       <i style={{margin: "-19px 5px 6px"}}><RiErrorWarningFill/></i>
-      <span style={{margin:"-19px 5px 6px"}}>이미 존재하는 이메일 입니다.</span>
+      <span style={{margin:"-19px 5px 6px", zIndex:-1}}>이미 존재하는 이메일 입니다.</span>
       </div>])
       setVisibled(false);
     }
