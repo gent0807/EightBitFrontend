@@ -54,13 +54,8 @@ const Logininput = () =>
           setLoginCheck(data);
         })*/
         axios.post('http://localhost:8033/EightBitBackend/user/loginCheck/',{
-          headers:{
-            "Content-Type":"application/json",
-          },
-          data:{
             email:Email,
             password:Pw
-          }
         }).
         then(res=>{
           return res.data;
