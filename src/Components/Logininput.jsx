@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import {React, useState, useEffect, useRef } from 'react';
 import {FcGoogle} from "react-icons/fc";
 import {FaFacebookF} from "react-icons/fa";
 import {SiNaver} from "react-icons/si";
@@ -53,7 +53,7 @@ const Logininput = () =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-        axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
+        axios.post("http://localhost:8080/EightBitBackend/user/loginCheck/",{
             email:Email,
             password:Pw
           }
