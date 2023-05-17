@@ -12,10 +12,7 @@ const Logininput = () =>
     const [Email, setEmail] = React.useState("");
     const [Pw, setPw] = React.useState("");
     const [loginCheck,setLoginCheck]=React.useState("");
-  
-    const [Allmessage, setAllMessage] = useState("");
-  
-    const [isAll, setIsAll] = React.useState(false);
+    const [message,setMessage]=React.useState(""); 
     
     const navigate=useNavigate();
   
@@ -30,13 +27,16 @@ const Logininput = () =>
     }
     const OnCheckSubmit = () =>
     {
-      if ((Email === "" && Pw === "") || (Email === "" && Pw !== "") || (Email !== "" && Pw === ""))
-      { 
-        setAllMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>이메일과 비밀번호를 입력해 주세요!</span></div>]);
-        setIsAll(false);
-      }else{
-        setAllMessage("");
-        setIsAll(true);
+        if(Email==""&&Pw==""){
+          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>이메일과 패스워드를 입력하세요!</span></div>])
+        }
+        else if(Email!=""&&Pw==""){
+          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>패스워드를 입력하세요!</span></div>])
+        }
+        else if(Email==""&&Pw!=""){
+          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>이메일을 입력하세요!</span></div>])
+        }
+        else{
         /*fetch(`http://localhost:8033/EightBitBackend/user/loginCheck/`, {
           method:"POST",
           headers:{
@@ -53,7 +53,7 @@ const Logininput = () =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-        axios.post("http://localhost:8080/EightBitBackend/user/loginCheck/",{
+        axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
             email:Email,
             password:Pw
           }
@@ -66,15 +66,19 @@ const Logininput = () =>
         });
         if(loginCheck=="allok"){
           console.log("로그인 가능");
+          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>로그인 가능</span></div>])
           navigate("/");
         }
         else if(loginCheck=="emailok"){
           console.log("비밀번호가 틀렸습니다.");
+          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>비밀번호가 틀렸습니다!</span></div>])
         }
         else if(loginCheck=="no"){
           console.log("가입되지 않은 이메일입니다.");
+          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>가입되지 않은 이메일입니다!</span></div>])
         }
       }
+      
     }
 
     const OnSubmit = (e) =>
@@ -86,24 +90,9 @@ const Logininput = () =>
       }
     }
   
-    let textRef = useRef(null);
+   
   
-    useEffect(() => {
-      function handleOuside(e) {
-        if (textRef.current && !textRef.current.contains(e.target)) {
-          console.log(textRef);
-          console.log(e.target);
-          setIsAll(true);
-        }else{
-          setIsAll(false);
-        }
-      }
-      document.addEventListener("mousedown", handleOuside);
-      return () => {
-        document.removeEventListener("mousedown", handleOuside);
-      };
-    }, [textRef])
-  
+   
     return(
       <div className="LoginT"> 
           <div className="login-top">
@@ -128,7 +117,7 @@ const Logininput = () =>
             className="PW"
             onChange={OnChangePw}
           />
-         {((!Email && !Pw) || (Email && !Pw) || (!Email && Pw)) && (<p ref={textRef} onClick={() => {setIsAll(true)}} className={`Allmessage ${isAll ? 'success' : 'error'}`}>{Allmessage}</p>)}
+          <p className='message'>{message}</p>
           <div className="LOGINCON">
           <input
             id="check"
