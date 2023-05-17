@@ -8,25 +8,35 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const Logininput = () => 
-{
-    const [Email, setEmail] = React.useState("");
-    const [Pw, setPw] = React.useState("");
-    const [loginCheck,setLoginCheck]=React.useState("");
-    const [message,setMessage]=React.useState(""); 
-    
+{                 
+    const [Email, setEmail] = React.useState('');
+    const [Pw, setPw] = React.useState('');
+    //const [loginCheck,setLoginCheck]=React.useState('');
+    const [message,setMessage]=React.useState(''); 
     const navigate=useNavigate();
-  
+    let loginCheck;
+    
+
+    console.log(Email);
+    console.log(Pw);
+    console.log(loginCheck);
+    console.log(message);
+
     const OnChangeEmail = (e) => {
-      const currentId = e.target.value;
-      setEmail(currentId);
+      const currentEmail = e.target.value;
+      setEmail(currentEmail);
+      console.log(Email);
     }
   
     const OnChangePw = (e) => {
       const currentPw = e.target.value;
       setPw(currentPw);
+      console.log(Pw);
     }
-    const OnCheckSubmit = () =>
-    {
+
+    const OnCheckSubmit = (e) =>
+    {   
+        e.preventDefault();
         if(Email==""&&Pw==""){
           setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>이메일과 패스워드를 입력하세요!</span></div>])
         }
@@ -56,55 +66,50 @@ const Logininput = () =>
         axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
             email:Email,
             password:Pw
-          }
+          } 
         )
         .then(res=>{
           return res.data;
         })
         .then(data=>{
-          setLoginCheck(data);
+          
+          loginCheck=data;
+          if(loginCheck=="allok"){
+            console.log("로그인 가능");
+            setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>로그인 가능</span></div>])
+            //navigate("/");
+          }
+          else if(loginCheck=="emailok"){
+            console.log("비밀번호가 틀렸습니다.");
+            setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>비밀번호가 틀렸습니다!</span></div>])
+          }
+          else if(loginCheck=="no"){
+            console.log("가입되지 않은 이메일입니다.");
+            setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>가입되지 않은 이메일입니다!</span></div>])
+          }            
         });
-        if(loginCheck=="allok"){
-          console.log("로그인 가능");
-          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>로그인 가능</span></div>])
-          navigate("/");
-        }
-        else if(loginCheck=="emailok"){
-          console.log("비밀번호가 틀렸습니다.");
-          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>비밀번호가 틀렸습니다!</span></div>])
-        }
-        else if(loginCheck=="no"){
-          console.log("가입되지 않은 이메일입니다.");
-          setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>가입되지 않은 이메일입니다!</span></div>])
-        }
+
+        /*if(loginCheck=="emailok"){   <- 위에 함수 호출로 인한 실행과 비동기적이기 때문에 위에서의 loginCheck와는 동기화되지 않는다. 즉 최초의 submit 이벤트 처리시에는 axios 함수에서의 loginCheck와 axios와 비동기적으로 실행되는 if문에서의 loginCheck는 다를 수 밖에 없다.
+            console.log('까비');           
+        }*/
+
+        
+        
       }
-      
+
     }
 
-    const OnSubmit = (e) =>
-    {
-      e.preventDefault();
-      if(Email === "" || Pw === "")
-      {
-        return;
-      }
-    }
-  
-   
-  
-   
     return(
       <div className="LoginT"> 
           <div className="login-top">
           <Link to='/'><img className='LOGO' src='img/8bit.png' alt='로고'/></Link>
           </div>
-          <form onSubmit={OnSubmit}>
           <div className="login-input">
           <div className='loginT'>
+          <form onSubmit={OnCheckSubmit}>
           <input 
             id="Email" 
             type="text" 
-            value={Email}
             placeholder="이메일" 
             className="ID"
             onChange={OnChangeEmail}
@@ -112,14 +117,13 @@ const Logininput = () =>
           <input 
             id="pw" 
             type="password" 
-            value={Pw}
             placeholder="비밀번호" 
             className="PW"
             onChange={OnChangePw}
           />
           <p className='message'>{message}</p>
           <div className="LOGINCON">
-          <input
+          <input    
             id="check"
             type="checkbox"
             className="checkbox"
@@ -133,10 +137,10 @@ const Logininput = () =>
           <button 
             type="submit" 
             className="btn"
-            onClick={OnCheckSubmit}
           ><span>로그인</span>
           </button>
           </div>
+          </form>
           </div>
           <div className='APIZONE'>
           <p className="line"><span className="lineT">또는</span></p>
@@ -152,7 +156,7 @@ const Logininput = () =>
           </ul>
           </div>
         </div>
-        </form>
+        
       </div>
     );
 }
