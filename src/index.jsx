@@ -7,15 +7,16 @@ import Sign from './Components/SignContainer';
 import EmailPwFound from './Components/EmailPwFoundContainer'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import "./fonts/font.css"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="Login" element={<Login />} />
-        <Route path="Sign" element={<Sign />} />
-        <Route path="EmailPwFound" element={<EmailPwFound />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Sign" element={<Sign />} />
+        <Route path="/EmailPwFound" element={<EmailPwFound />} />
     </Routes>
   </BrowserRouter>
 );

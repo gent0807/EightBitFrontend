@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../CSS/EmailPwFound.css';
 import { Link } from "react-router-dom";
 import {RiErrorWarningFill} from "react-icons/ri";
@@ -6,26 +6,26 @@ import {RiErrorWarningFill} from "react-icons/ri";
 const EmailPwFound = () => 
 {
 
-    const [Email, setEmail] = React.useState("");
-    const [Emailauth, setEmailauth] = React.useState("");
-    const [PasswordChangeE, setPasswordChange ] = React.useState("");
-    const [PasswordChangeConfirmM, setPasswordChangeConfirm ] = React.useState("");
+    const [Email, setEmail] = useState("");
+    const [Emailauth, setEmailauth] = useState("");
+    const [PasswordChangeE, setPasswordChange ] = useState("");
+    const [PasswordChangeConfirmM, setPasswordChangeConfirm ] = useState("");
 
-    const [EmailMessage, setEmailMessage] = React.useState("");
-    const [EmailauthMessage, setEmailauthMessage] = React.useState("");
-    const [PasswordChangeMessage, setPasswordChangeMessage ] = React.useState("");
-    const [PasswordChangeConfirmMessage, setPasswordChangeConfirmMessage ] = React.useState("");
-    const [ButtonText, setButtonText] = React.useState("");
+    const [EmailMessage, setEmailMessage] = useState("");
+    const [EmailauthMessage, setEmailauthMessage] = useState("");
+    const [PasswordChangeMessage, setPasswordChangeMessage ] = useState("");
+    const [PasswordChangeConfirmMessage, setPasswordChangeConfirmMessage ] = useState("");
+    const [ButtonText, setButtonText] = useState("");
 
-    const [isEmail, setIsEmail] = React.useState(false);
-    const [isEmailBtn, setIsEmailBtn] = React.useState(false);
-    const [isEmailauthBtn, setIsEmailauthBtn] = React.useState(false);
-    const [isInputCheck, setIsInputCheck] = React.useState(true);
-    const [isButtonCheck, setIsButtonCheck] = React.useState(false);
-    const [isPasswordChange, setIsPasswordChange ] = React.useState(false);
-    const [isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = React.useState(false);
+    const [isEmail, setIsEmail] = useState(false);
+    const [isEmailBtn, setIsEmailBtn] = useState(false);
+    const [isEmailauthBtn, setIsEmailauthBtn] = useState(false);
+    const [isInputCheck, setIsInputCheck] = useState(true);
+    const [isButtonCheck, setIsButtonCheck] = useState(false);
+    const [isPasswordChange, setIsPasswordChange ] = useState(false);
+    const [isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = useState(false);
 
-    const [changeVisibled, setchangeVisibled] = React.useState(false);
+    const [changeVisibled, setchangeVisibled] = useState(false);
 
     const Emailuser = (e) =>
     {
@@ -102,6 +102,20 @@ const EmailPwFound = () =>
 
 
     }
+    
+    const OnSumbit = (e) =>
+    {
+      e.preventDefault();
+      if ( Email === "" || Emailauth === "" || PasswordChangeE === "" || PasswordChangeConfirmM === "" )
+      {
+        return;
+      }
+      
+      setEmail("");
+      setEmailauth("");
+      PasswordChangeE("");
+      PasswordChangeConfirmM("");
+    }
   
 
     const EmailAuthCheck = ({text}) =>
@@ -134,6 +148,7 @@ const EmailPwFound = () =>
             <div className='EmPwFound-Top'>
             <Link to='/'><img className='LOGO' src='img/8bit.png' alt='로고'/></Link>
             </div>
+            <form onSubmit={OnSumbit}>
             <div className='EmPwFoundL'>
             <div className='inFor'>
             <span className='title'>이메일/비밀번호 찾기</span>
@@ -152,7 +167,7 @@ const EmailPwFound = () =>
                 className={`Send ${isEmail ? 'enabled' : 'disabled'}`}
                 onClick={EmailCheck}
                 >
-                <span style={{fontWeight: "bold", fontSize: "17px"}}>전송</span>
+                <span>전송</span>
               </button>
               {Email.length > 0 && (<p className={`emailMessage ${isEmail ? 'success' : 'error'}`}>{EmailMessage}</p>)}
               <div className={`EmallAuthInputT ${isEmailBtn ? 'success' : 'error'}`}>
@@ -207,6 +222,7 @@ const EmailPwFound = () =>
                 </button>
             </div>
             </div>
+            </form>
         </div>
     );
 }
