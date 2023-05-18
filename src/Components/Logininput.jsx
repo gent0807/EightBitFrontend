@@ -53,7 +53,7 @@ const Logininput = () =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-        axios.post("http://localhost:8080/EightBitBackend/user/loginCheck/",{
+        axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
             email:Email,
             password:Pw
           }
