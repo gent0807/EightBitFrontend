@@ -307,12 +307,7 @@ input::placeholder
   margin: 20px;
 }
 
-.Allmessage.success
-{
-  display: none;
-}
-
-.Allmessage.error
+.message
 {
   display: inline-block;
   margin: 0px;
