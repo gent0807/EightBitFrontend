@@ -17,10 +17,10 @@ const Logininput = () =>
     let loginCheck;
     
 
-    console.log(Email);
-    console.log(Pw);
-    console.log(loginCheck);
-    console.log(message);
+    //console.log(Email);
+    //console.log(Pw);
+    //console.log(loginCheck);
+    //console.log(message);
 
     const OnChangeEmail = (e) => {
       const currentEmail = e.target.value;
