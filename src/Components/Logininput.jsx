@@ -5,11 +5,7 @@ import {SiNaver} from "react-icons/si";
 import {AiOutlineTwitter} from "react-icons/ai";
 import {RiErrorWarningFill} from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import axios from "axios";
-=======
 import axios from 'axios';
->>>>>>> lanto_fetch-test
 
 const Logininput = () => 
 {                 
@@ -37,17 +33,6 @@ const Logininput = () =>
       setPw(currentPw);
       console.log(Pw);
     }
-<<<<<<< HEAD
-    const OnCheckSubmit = () =>
-    {
-      if ((Email === "" && Pw === "") || (Email === "" && Pw !== "") || (Email !== "" && Pw === ""))
-      { 
-        setAllMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>이메일과 비밀번호를 입력해 주세요!</span></div>]);
-        setIsAll(false);
-      }else{
-        setAllMessage("");
-        setIsAll(true);
-=======
 
     const OnCheckSubmit = (e) =>
     {   
@@ -62,7 +47,6 @@ const Logininput = () =>
           setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>이메일을 입력하세요!</span></div>])
         }
         else{
->>>>>>> lanto_fetch-test
         /*fetch(`http://localhost:8033/EightBitBackend/user/loginCheck/`, {
           method:"POST",
           headers:{
@@ -79,17 +63,6 @@ const Logininput = () =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-<<<<<<< HEAD
-        axios.post('http://localhost:8033/EightBitBackend/user/loginCheck/',{
-            email:Email,
-            password:Pw
-        }).
-        then(res=>{
-          return res.data;
-        })
-        .then(data=>{
-          setLoginCheck(data);
-=======
         axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
             email:Email,
             password:Pw
@@ -97,7 +70,6 @@ const Logininput = () =>
         )
         .then(res=>{
           return res.data;
->>>>>>> lanto_fetch-test
         })
         .then(data=>{
           
