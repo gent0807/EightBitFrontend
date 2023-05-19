@@ -9,41 +9,41 @@ import axios from 'axios';
 
 const Logininput = () => 
 {                 
-    const [Email, setEmail] = React.useState('');
-    const [Pw, setPw] = React.useState('');
+    const [email, setemail] = React.useState('');
+    const [pw, setpw] = React.useState('');
     //const [loginCheck,setLoginCheck]=React.useState('');
     const [message,setMessage]=React.useState(''); 
     const navigate=useNavigate();
     let loginCheck;
     
 
-    //console.log(Email);
-    //console.log(Pw);
+    //console.log(email);
+    //console.log(pw);
     //console.log(loginCheck);
     //console.log(message);
 
-    const OnChangeEmail = (e) => {
-      const currentEmail = e.target.value;
-      setEmail(currentEmail);
-      console.log(Email);
+    const OnChangeemail = (e) => {
+      const currentemail = e.target.value;
+      setemail(currentemail);
+      console.log(email);
     }
   
-    const OnChangePw = (e) => {
-      const currentPw = e.target.value;
-      setPw(currentPw);
-      console.log(Pw);
+    const OnChangepw = (e) => {
+      const currentpw = e.target.value;
+      setpw(currentpw);
+      console.log(pw);
     }
 
     const OnCheckSubmit = (e) =>
     {   
         e.preventDefault();
-        if(Email==""&&Pw==""){
+        if(email==""&&pw==""){
           setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>이메일과 패스워드를 입력하세요!</span></div>])
         }
-        else if(Email!=""&&Pw==""){
+        else if(email!=""&&pw==""){
           setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>패스워드를 입력하세요!</span></div>])
         }
-        else if(Email==""&&Pw!=""){
+        else if(email==""&&pw!=""){
           setMessage([<div style={{display: "flex"}}><i style={{margin: "1px 9px 0px"}}><RiErrorWarningFill/></i><span style={{margin : "0px 0px 0px 0px"}}>이메일을 입력하세요!</span></div>])
         }
         else{
@@ -53,8 +53,8 @@ const Logininput = () =>
             "Content-Type":"application/json",
           },
           body: JSON.stringify({
-            email:Email,
-            password:Pw
+            email:email,
+            password:pw
           })
         }).
         then(res=>{
@@ -64,8 +64,8 @@ const Logininput = () =>
           setLoginCheck(data);
         })*/
         axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
-            email:Email,
-            password:Pw
+            email:email,
+            password:pw
           } 
         )
         .then(res=>{
@@ -108,18 +108,18 @@ const Logininput = () =>
           <div className='loginT'>
           <form onSubmit={OnCheckSubmit}>
           <input 
-            id="Email" 
+            id="email" 
             type="text" 
             placeholder="이메일" 
             className="ID"
-            onChange={OnChangeEmail}
+            onChange={OnChangeemail}
           />
           <input 
             id="pw" 
             type="password" 
             placeholder="비밀번호" 
-            className="PW"
-            onChange={OnChangePw}
+            className="pw"
+            onChange={OnChangepw}
           />
           <p className='message'>{message}</p>
           <div className="LOGINCON">
@@ -151,7 +151,7 @@ const Logininput = () =>
             <li><a href='#' className='twitter'><AiOutlineTwitter color='white'/></a></li>
           </ul>
           <ul className='SIGN'>
-            <li><Link to='/EmailPwFound' className='F' >이메일/비밀번호 찾기</Link></li>
+            <li><Link to='/emailpwFound' className='F' >이메일/비밀번호 찾기</Link></li>
             <li><Link to='/SIGN' className='F2'>회원가입</Link></li>
           </ul>
           </div>
