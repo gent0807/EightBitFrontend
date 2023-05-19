@@ -25,13 +25,11 @@ const Logininput = () =>
     const OnChangeemail = (e) => {
       const currentemail = e.target.value;
       setemail(currentemail);
-      console.log(email);
     }
   
     const OnChangepw = (e) => {
       const currentpw = e.target.value;
       setpw(currentpw);
-      console.log(pw);
     }
 
     const OnCheckSubmit = (e) =>
@@ -118,7 +116,7 @@ const Logininput = () =>
             id="pw" 
             type="password" 
             placeholder="비밀번호" 
-            className="pw"
+            className="PW"
             onChange={OnChangepw}
           />
           <p className='message'>{message}</p>
