@@ -109,7 +109,7 @@ const Logininput = () =>
           <InputT>
           <Sumbit onSubmit={OnCheckSubmit}>
           <InputBox placeholder="이메일" onChange={OnChangeEmail}/>
-          <InputBox placeholder="비밀번호" onChange={OnChangePw}/>
+          <InputBox placeholder="비밀번호" type="password" onChange={OnChangePw}/>
           <ErrorMessageShow>{message}</ErrorMessageShow>
           <LoginMaintainT>
           <LoginMaintainCheckBox type='checkbox' onClick={Show}/>
