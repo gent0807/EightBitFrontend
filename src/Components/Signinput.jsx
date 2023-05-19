@@ -219,14 +219,14 @@ const Signinput = () =>
   return (
   <SignT>
           <SignTop>
-            <Link to='/'><img className='LOGO' src='img/8bit.png' alt='로고'/></Link>
+            <Link to='/'><SignTopLogo src='img/8bit.png' alt='로고'/></Link>
           </SignTop>
-          <form onSubmit={OnSumbit}>
+          <SubmitT onSubmit={OnSumbit}>
           <SignInputT>
-            <div className='infor'>
+            <Information>
             <span className='title'>회원가입</span>
-            </div>
-            <div className='emailcheck'>
+            </Information>
+            <EmailCheckT>
             <Title htmlFor="email">이메일</Title>
             <div className='Input-Email'>
             <input 
@@ -290,7 +290,7 @@ const Signinput = () =>
             </div>
             </div>
             <p className={`emailCertBtnMessage ${isEmailCertCheckBtn ? 'success' : 'error'}`}>{EmailCertCheckMessage}</p>
-          </div>
+          </EmailCheckT>
           <div className='PwCheck'>
           <Title htmlFor="Pw">비밀번호</Title>
             <input 
@@ -340,7 +340,7 @@ const Signinput = () =>
           <span>회원가입</span>
           </button>
         </div>
-        </form>
+        </SubmitT>
     </SignT>
   );
 }
@@ -364,6 +364,33 @@ const SignTop = styled.div
 `
     text-align: center;
     margin-bottom: 50px;
+`
+
+const SignTopLogo = styled.img
+`
+    width: 192px;
+    height: 102px;
+`
+
+const EmailCheckT = styled.div
+`
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+`
+
+const SubmitT = styled.form
+`
+`
+
+const Information = styled.div
+`
+    margin: 0px 154px 45px 154px;
+    width: 130px;
+    border: solid 3px #6767ff;
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px;
 `
 
 
