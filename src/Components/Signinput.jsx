@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {RiErrorWarningFill} from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { styled } from 'styled-components';
 
 
 const Signinput = () => 
@@ -216,17 +217,17 @@ const Signinput = () =>
     }
 
   return (
-  <div className='SignT'>
-          <div className='Sign-Top'>
+  <SignT>
+          <SignTop>
             <Link to='/'><img className='LOGO' src='img/8bit.png' alt='로고'/></Link>
-          </div>
+          </SignTop>
           <form onSubmit={OnSumbit}>
-          <div className='SignInput'>
+          <SignInputT>
             <div className='infor'>
             <span className='title'>회원가입</span>
             </div>
             <div className='emailcheck'>
-            <label htmlFor="email">이메일</label>
+            <Title htmlFor="email">이메일</Title>
             <div className='Input-Email'>
             <input 
             id='email'
@@ -271,7 +272,7 @@ const Signinput = () =>
           <div 
           className={`emailCheckT ${isVisibled ? 'visibled' : 'disibled' }`}
           >
-          <label htmlFor="emailCert">인증번호</label>
+          <Title htmlFor="emailCert">인증번호</Title>
           <div className='Input-EmailCheck'>
             <input 
             id='emailCert'
@@ -291,7 +292,7 @@ const Signinput = () =>
             <p className={`emailCertBtnMessage ${isEmailCertCheckBtn ? 'success' : 'error'}`}>{EmailCertCheckMessage}</p>
           </div>
           <div className='PwCheck'>
-          <label htmlFor="Pw">비밀번호</label>
+          <Title htmlFor="Pw">비밀번호</Title>
             <input 
             id='Pw'
             className={Pw.length > 0 && `Pw ${isPw ? 'success' : 'error'}`}
@@ -304,7 +305,7 @@ const Signinput = () =>
           )}
           </div>
           <div className='PwConfirmCheck'>
-          <label htmlFor="PwConfirm">비밀번호 확인</label>
+          <Title htmlFor="PwConfirm">비밀번호 확인</Title>
             <input 
             id='PwConfirm'
             className={PwConfirm.length > 0 && `PwConfirm ${isPwConfirm ? 'success' : 'error'}`}
@@ -317,7 +318,7 @@ const Signinput = () =>
           )}
           </div>
           <div className='NicknameCheck'>
-          <label htmlFor="Nickname">닉네임</label>
+          <Title htmlFor="Nickname">닉네임</Title>
             <input 
             id='Nickname'
             className={Nickname.length > 0 && `Nickname ${isNickname ? 'success' : 'error'}`}
@@ -329,7 +330,7 @@ const Signinput = () =>
             <p className={`NicknameMessage ${isNickname ? 'success' : 'error'}`}>{NicknameMessage}</p>
           )}
           </div>
-          </div>
+          </SignInputT>
           <div className='SIGNBTN'>
           <button 
           className='SIGNbtn'
@@ -340,8 +341,31 @@ const Signinput = () =>
           </button>
         </div>
         </form>
-    </div>
+    </SignT>
   );
 }
 
+const Title = styled.label
+`
+  font-weight: bold;
+`
+
+const SignT = styled.div
+`
+  position:relative;
+`
+
+const SignInputT = styled.div
+`
+    display: inline-block;
+`
+
+const SignTop = styled.div
+`
+    text-align: center;
+    margin-bottom: 50px;
+`
+
+
 export default Signinput;
+
