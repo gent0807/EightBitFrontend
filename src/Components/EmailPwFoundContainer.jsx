@@ -1,4 +1,3 @@
-import '../CSS/EmailPwFound.css';
 import styled from 'styled-components'
 import EmailPwFound from './EmailPwFound';
 

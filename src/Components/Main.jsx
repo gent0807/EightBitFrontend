@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from 'styled-components'
-import '../CSS/Main.css';
 
 let Containerbox = styled.div`
     margin: auto;
@@ -10,7 +9,10 @@ let Containerbox = styled.div`
 `
 
 const Main = () => {
+  const isloginChecked=useRef(false);
+  useEffect(()=>{
 
+  },[])
   return (
     <Containerbox>
       <Link to='/Login'>로그인</Link>

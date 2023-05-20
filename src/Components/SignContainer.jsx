@@ -1,4 +1,3 @@
-import '../CSS/Sign.css';
 import Signinput from './Signinput';
 import styled from 'styled-components'
 
