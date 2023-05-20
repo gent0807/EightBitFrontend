@@ -1,4 +1,3 @@
-import '../CSS/Login.css';
 import Logininput from './Logininput';
 import styled from 'styled-components'
 
