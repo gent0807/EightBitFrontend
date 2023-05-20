@@ -39,13 +39,13 @@ const Logininput = () =>
     {   
         e.preventDefault();
         if(Email==""&&Pw==""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><span>이메일과 패스워드를 입력하세요!</span></ErrorMessageBox>])
+          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일과 패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>])
         }
         else if(Email!=""&&Pw==""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><span>패스워드를 입력하세요!</span></ErrorMessageBox>])
+          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>])
         }
         else if(Email==""&&Pw!=""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><span>이메일을 입력하세요!</span></ErrorMessageBox>])
+          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 입력하세요!</ErrorMessageText></ErrorMessageBox>])
         }
         else{
         /*fetch(`http://localhost:8033/EightBitBackend/user/loginCheck/`, {
@@ -77,16 +77,16 @@ const Logininput = () =>
           loginCheck=data;
           if(loginCheck=="allok"){
             console.log("로그인 가능");
-            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><span>로그인 가능</span></ErrorMessageBox>])
+            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
             //navigate("/");
           }
           else if(loginCheck=="emailok"){
             console.log("비밀번호가 틀렸습니다.");
-            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><span>비밀번호가 틀렸습니다!</span></ErrorMessageBox>])
+            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 틀렸습니다!</ErrorMessageText></ErrorMessageBox>])
           }
           else if(loginCheck=="no"){
             console.log("가입되지 않은 이메일입니다.");
-            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><span>가입되지 않은 이메일입니다!</span></ErrorMessageBox>])
+            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입되지 않은 이메일입니다!</ErrorMessageText></ErrorMessageBox>])
           }            
         });
 
@@ -149,7 +149,7 @@ export const InputBox = styled.input
     border: none;
     border-radius: 10px;
     caret-color: #03ab95;
-    background-color: #f5f5f5;
+    background-color: #dee2e6;
     font-size:15px;
     &:focus
     {
@@ -375,5 +375,10 @@ const EmailPwFoundListLiBar = styled(EmailPwFoundListLI)
   margin: 4px 10px 0px 8px;
   opacity: 20%;
 }
+`
+
+const ErrorMessageText = styled.span
+`
+
 `
 export default Logininput;

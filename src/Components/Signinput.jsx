@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {RiErrorWarningFill} from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { styled } from 'styled-components';
+import { styled, keyframes } from 'styled-components';
 
 
 const Signinput = () => 
@@ -19,7 +19,6 @@ const Signinput = () =>
   const [PwConfirmMessage, setPwConfirmMessage] = useState("");
   const [NicknameMessage, setNicknameMessage] = useState("");
   const [EmailCertCheckMessage, setEmailCertCheckMessage] = useState("");
-  const [EmailCertCheckBtnMessage, setEmailCertCheckBtnMessage] = useState("");
 
   const [isPw, setIsPw] = useState(false);
   const [isPwConfirm, setIsPwConfirm] = useState(false);
@@ -31,6 +30,9 @@ const Signinput = () =>
   const [isConfirmCheck, setIsConfirmCheck] = useState(false);
   const [isSelectBtnCheck, setIsSelectBtnCheck] = useState(true);
   const [isInputDirect, setIsInputDirect] = useState(false);
+  const [isInputPwCheck, setIsInputPwCheck] = useState(false);
+  const [isInputPwConfirmCheck, setIsInputPwConfirmCheck] = useState(false);
+  const [isInputNicknameCheck, setIsInputNicknameCheck] = useState(false);
 
 
   const [isVisibled, setVisibled] = useState(false);
@@ -52,7 +54,6 @@ const Signinput = () =>
         document.removeEventListener("mousedown", handleOuside);
       };
     }, [textRef])
-
 
   const OnSelectValue = (e) =>
   {
@@ -86,7 +87,6 @@ const Signinput = () =>
     setIsEmailCertCheck(true);
     setIsEmailCertCheckBtn(true);
     setIsConfirmCheck(true);
-    setEmailCertCheckBtnMessage("인증완료");
     setEmailCertCheckMessage("");
     setIsEmail(false);
     }
@@ -95,11 +95,7 @@ const Signinput = () =>
     setIsEmailCertCheck(false);
     setIsEmailCertCheckBtn(false);
     setIsConfirmCheck(false);
-    setEmailCertCheckMessage([<div style={{margin: "-13px 5px 6px", display: "flex" , position: "absolute" }}>
-    <i style={{margin: "0px 5px 6px"}}
-    ><RiErrorWarningFill/></i>
-    <span style={{margin:"-2px 5px 6px"}}>인증번호가 일치하지 않습니다.</span>
-    </div>]);
+    setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
     }
   }
 
@@ -133,18 +129,34 @@ const Signinput = () =>
   const OnChangePw = (e) => {
     const currentPw = e.target.value;
     setPw(currentPw);
+
+    if(currentPw === "")
+    {
+      setIsInputPwCheck(false);
+    }
+    else
+    {
+     setIsInputPwCheck(true);
+    }
+
     const PwCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 
     if (!PwCheck.test(currentPw))
     {
-        setPwMessage([<div style={{display: "flex" , position: "absolute" , margin: "-13px 5px 6px"}}>
-        <i style={{margin: "0px 5px 6px"}}><RiErrorWarningFill/></i>
-        <span style={{margin:"-2px 5px 6px"}}>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</span>
-        </div>]);
+        setPwMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
         setIsPw(false);
     }else{
         setPwMessage("");
         setIsPw(true);
+    }
+
+    if(currentPw !== PwConfirm)
+    {
+        setPwConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
+        setIsPwConfirm(false);
+    }else{
+        setPwConfirmMessage("");
+        setIsPwConfirm(true);
     }
   };
 
@@ -152,12 +164,18 @@ const Signinput = () =>
     const currentPwConfirm = e.target.value;
     setPwConfirm(currentPwConfirm);
 
+    if(currentPwConfirm === "")
+    {
+      setIsInputPwConfirmCheck(false);
+    }
+    else
+    {
+      setIsInputPwConfirmCheck(true);
+    }
+
     if(Pw !== currentPwConfirm)
     {
-      setPwConfirmMessage([<div style={{display: "flex" , position: "absolute" , margin: "-13px 5px 6px"}}>
-      <i style={{margin: "0px 5px 6px"}}><RiErrorWarningFill/></i>
-      <span style={{margin:"-2px 5px 6px"}}>비밀번호가 일치하지 않습니다.</span>
-      </div>]);
+      setPwConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
       setIsPwConfirm(false);
     }else{
       setPwConfirmMessage("");
@@ -169,12 +187,18 @@ const Signinput = () =>
     const currentNickname = e.target.value;
     setNickname(currentNickname);
 
+    if(currentNickname === "")
+    {
+      setIsInputNicknameCheck(false);
+    }
+    else
+    {
+      setIsInputNicknameCheck(true);
+    }
+
     if(currentNickname.length > 6 || currentNickname.length < 2)
     {
-      setNicknameMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "10px 5px 6px"}}>
-      <i style={{margin: "0px 5px 6px"}}><RiErrorWarningFill/></i>
-      <span style={{margin:"-2px 5px 6px"}}>닉네임은 2자리에서 5자리 내로 작성해주세요!</span>
-      </div>])
+      setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>])
       setIsNickname(false);
     }else{
       setNicknameMessage("")
@@ -224,130 +248,93 @@ const Signinput = () =>
           <SubmitT onSubmit={OnSumbit}>
           <SignInputT>
             <Information>
-            <span className='title'>회원가입</span>
+            <SignTitle className='title'>회원가입</SignTitle>
             </Information>
             <EmailCheckT>
             <Title htmlFor="email">이메일</Title>
-            <div className='Input-Email'>
-            <input 
-            id='email'
-            disabled={isEmailCertCheck}
-            className="email"
-            type="text"
-            value={Email}
-            onChange={OnChangeEmail}
-            />
-            <input 
-            id='InputDirect'
-            onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}
-            className={`InputDirectT ${isInputDirect ? "ON" : "OFF"}`}
-            type="text"
-            value={InputDirect}
-            ref={inputFocus}
-            onChange={OnInputDirect}
-            />
-            <span className='emailtext'>@</span>
-            <div ref={textRef} style={isEmailCertCheck ? {border: "none"} : {}} className={`selectbox ${isSelectBtnCheck ? 'empty' : 'full'}`} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)}>
-              <ul style={isEmailCertCheck ? {pointerEvents:'none' , display:'none'} : {}}  className={`optionlist ${isSelectBtnCheck ? "empty" : "full"}`}>
-                <li value="naver.com" onClick={OnSelectValue}>naver.com</li>
-                <li value="gmail.com" onClick={OnSelectValue}>gmail.com</li>
-                <li value="hanmail.net" onClick={OnSelectValue}>hanmail.net</li>
-                <li value="nate.com" onClick={OnSelectValue}>nate.com</li>
-                <li value="daum.net" onClick={OnSelectValue}>daum.net</li>
-                <li value="outlook.com" onClick={OnSelectValue}>outlook.com</li>
-                <li onClick={VisibleDirect}><span className="InputDirect">직접입력</span></li>
-              </ul>
-              <span className='Value'>{SelectValue}</span>
-              {isSelectBtnCheck ? <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▼</div> : isEmailCertCheck ? <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▼</div> : <div className={`Allow ${isSelectBtnCheck ? "empty" : "full"}`}>▲</div>}
-            </div>
-            <button 
-            className={`Cert ${isEmail ? 'enabled' : 'disabled'}`}
-            disabled={isEmailCertCheck}
-            onClick={Visibled}
-            >
-            <span>{isVisibled ? "재요청" : "인증요청"}</span>
-            </button>
-            </div>
-            <p className={`emailMessage ${isVisibled ? 'success' : 'error'}`}>{EmailMessage}</p>
-          <div 
-          className={`emailCheckT ${isVisibled ? 'visibled' : 'disibled' }`}
-          >
+            <EmailBox>
+            <EmailInput disabled={isEmailCertCheck} value={Email} onChange={OnChangeEmail}/>
+            <SelectInput onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} disabled={isEmailCertCheck} ON={isInputDirect} value={InputDirect} ref={inputFocus} onChange={OnInputDirect}/>
+            <EmailText>@</EmailText>
+            <SelectBox ref={textRef} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} show={isSelectBtnCheck} event={isEmailCertCheck}>
+              <SelectOption showli={isSelectBtnCheck}>
+                <SelectOptionLI value="naver.com" onClick={OnSelectValue}>naver.com</SelectOptionLI>
+                <SelectOptionLI value="gmail.com" onClick={OnSelectValue}>gmail.com</SelectOptionLI>
+                <SelectOptionLI value="hanmail.net" onClick={OnSelectValue}>hanmail.net</SelectOptionLI>
+                <SelectOptionLI value="nate.com" onClick={OnSelectValue}>nate.com</SelectOptionLI>
+                <SelectOptionLI value="daum.net" onClick={OnSelectValue}>daum.net</SelectOptionLI>
+                <SelectOptionLI value="outlook.com" onClick={OnSelectValue}>outlook.com</SelectOptionLI>
+                <SelectOptionLI onClick={VisibleDirect}><span className="InputDirect">직접입력</span></SelectOptionLI>
+              </SelectOption>
+              <SelectValueText>{SelectValue}</SelectValueText>
+             <ArrowBox direction={isSelectBtnCheck}>{isSelectBtnCheck ? "▼" : "▲"}</ ArrowBox>
+            </SelectBox>
+            <CertBtn show={isEmail} disabled={isEmailCertCheck} onClick={Visibled}><span>{isVisibled ? "재요청" : "인증요청"}</span></CertBtn>
+            </EmailBox>
+            <ErrorMessage show = {isVisibled}>{EmailMessage}</ErrorMessage>
+          <EmailAuthCheckT show={isVisibled}>
           <Title htmlFor="emailCert">인증번호</Title>
-          <div className='Input-EmailCheck'>
-            <input 
-            id='emailCert'
-            className={isInputCheck ? 'emailCert' : `emailCert ${isEmailCertCheckBtn ? 'success' : 'error'}`}
-            maxLength={6}
-            type="text"
-            value={EmailCert}
-            onChange={OnChangeEmailCert}
-            />
-             <button 
-            className={`CertCheck ${isEmailCertCheck ? 'success' : 'error' }`}
-            onClick={OnEmailCertCheckBtn}
-            ><span>{isEmailCertCheck ? EmailCertCheckBtnMessage : "인증하기"}</span>
-            </button>
-            </div>
-            </div>
-            <p className={`emailCertBtnMessage ${isEmailCertCheckBtn ? 'success' : 'error'}`}>{EmailCertCheckMessage}</p>
+          <EmailCheckBtnT>
+            <EmailAuthInput show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>
+             <CertCheckBtn show={isEmailCertCheck} onClick={OnEmailCertCheckBtn}><span>{isEmailCertCheck ? "인증완료" : "인증하기"}</span></CertCheckBtn>
+            </EmailCheckBtnT>
+            </EmailAuthCheckT>
+            <ErrorMessage show = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
           </EmailCheckT>
-          <div className='PwCheck'>
+          <PwCofirmNicknameT>
           <Title htmlFor="Pw">비밀번호</Title>
-            <input 
-            id='Pw'
-            className={Pw.length > 0 && `Pw ${isPw ? 'success' : 'error'}`}
-            type="password"
-            value={Pw}
-            onChange={OnChangePw}
-            />
-            {Pw.length > 0 && (
-            <p className={`PwMessage ${isPw ? 'success' : 'error'}`}>{PwMessage}</p>
-          )}
-          </div>
-          <div className='PwConfirmCheck'>
+          <PwBox show={isPw} check={isInputPwCheck} type="password" value={Pw} onChange={OnChangePw}/>
+            {Pw.length > 0 && (<ErrorMessage show = {isPw}>{PwMessage}</ErrorMessage>)}
+          </PwCofirmNicknameT>
+          <PwCofirmNicknameT>
           <Title htmlFor="PwConfirm">비밀번호 확인</Title>
-            <input 
-            id='PwConfirm'
-            className={PwConfirm.length > 0 && `PwConfirm ${isPwConfirm ? 'success' : 'error'}`}
-            type="password"
-            value={PwConfirm}
-            onChange={OnChangePwConfirm}
-            />
-            {PwConfirm.length > 0 && (
-            <p className={`PwConfirmMessage ${isPwConfirm ? 'success' : 'error'}`}>{PwConfirmMessage}</p>
-          )}
-          </div>
-          <div className='NicknameCheck'>
+            <PwCofirmBox show={isPwConfirm} check={isInputPwConfirmCheck} type="password" value={PwConfirm} onChange={OnChangePwConfirm}/>
+            {PwConfirm.length > 0 && (<ErrorMessage show = {isPwConfirm}>{PwConfirmMessage}</ErrorMessage>)}
+          </PwCofirmNicknameT>
+          <PwCofirmNicknameT>
           <Title htmlFor="Nickname">닉네임</Title>
-            <input 
-            id='Nickname'
-            className={Nickname.length > 0 && `Nickname ${isNickname ? 'success' : 'error'}`}
-            type="text"
-            value={Nickname}
-            onChange={OnChangeNickname}
-            />
-            {Nickname.length > 0 && (
-            <p className={`NicknameMessage ${isNickname ? 'success' : 'error'}`}>{NicknameMessage}</p>
-          )}
-          </div>
+            <NicknameBox show={isNickname} check={isInputNicknameCheck} value={Nickname} onChange={OnChangeNickname}/>
+            {Nickname.length > 0 && (<ErrorMessage show = {isNickname}>{NicknameMessage}</ErrorMessage>)}
+          </PwCofirmNicknameT>
           </SignInputT>
-          <div className='SIGNBTN'>
-          <button 
-          className='SIGNbtn'
-          type='submit'
-          disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}
-          >
-          <span>회원가입</span>
-          </button>
-        </div>
+          <SumbitButtonBox>
+          <SumbitButton type='submit'disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
+        </SumbitButtonBox>
         </SubmitT>
     </SignT>
   );
 }
 
+const EmailInput = styled.input
+`
+    width: 140px;
+    height: 20px;
+    padding: 20px 5px 20px 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 10px;
+    caret-color: #03ab95;
+    background-color: #dee2e6;
+    font-size:15px;
+    &:focus
+    {
+        outline: none;
+        border: solid 2px #6767ff;
+        border-radius: 10px;
+    }
+`
+
 const Title = styled.label
 `
   font-weight: bold;
+`
+
+const SignTitle = styled.span
+`
+  color: #6767ff;
+  font-weight: bold;
+  font-size: 20px;
 `
 
 const SignT = styled.div
@@ -379,6 +366,10 @@ const EmailCheckT = styled.div
     flex-wrap: nowrap;
 `
 
+const EmailBox = styled.div
+`
+`
+
 const SubmitT = styled.form
 `
 `
@@ -393,6 +384,259 @@ const Information = styled.div
     border-radius: 20px;
 `
 
+const SelectInput = styled.input
+`
+    display: inline-block;
+    position: absolute;
+    width: 130px;
+    height: 20px;
+    border: none;
+    background-color: #dee2e6;
+    font-size:15px;
+    border-radius: 10px;
+    outline: none;
+    padding: 20px 5px 20px 20px;
+    margin: ${props => props.ON ? "20px -4px 21px 33px" : "20px -4px 21px 33px"};
+    cursor: pointer;
+    z-index: ${props => props.ON ? "1" : "0"};
+    caret-color: #03ab95;
+    &:focus
+    {
+        outline: none;
+        border: solid 2px #6767ff;
+        border-radius: 10px;
+    }
+`
 
+const SelectBox = styled.div
+`
+    display: inline-block;
+    position: absolute;
+    width: 130px;
+    height: 20px;
+    background-color: #dee2e6;
+    font-size:15px;
+    border: ${props => props.show ? "none" : "solid 2px #6767ff"};
+    border-radius: 10px;
+    outline: none;
+    padding: 20px 5px 20px 20px;
+    margin: 20px 0px 20px 0px;
+    cursor: ${props => props.event ? "none" : "pointer"};
+    z-index: 0;
+    pointer-events: ${props => props.event ? "none" : ""};
+`
+
+const EmailText = styled.span
+`
+    font-size: 25px;
+    margin: 0px 10px 0px 10px;
+`
+
+const slide = keyframes
+`
+  0%{
+    height: 0px;
+  }
+  100%{
+    height: 248px;
+  }
+`
+
+const SelectOptionLI = styled.li
+`
+  padding: 10px 0px 10px 0px;
+  text-align: center;
+  cursor: pointer;
+  &:hover
+  {
+        background-color: #6767ff;
+        border-radius: 5px;
+  }
+`
+
+const SelectOption = styled.ul
+`
+    display: ${props => props.showli ? "none" : "block"};
+    position: absolute;
+    background: #dee2e6;
+    margin: ${props => props.showli ? "53px 0px 0px -14px" : "41px 0px 0px -21px"};
+    list-style: none;
+    padding: 0px 0px 0px 0px;
+    width: ${props => props.showli ? "145px" : "155px"};
+    height:  ${props => props.showli ? "0px" : "248px"};
+    border-radius: 10px;
+    border: ${props => props.showli ? "none" : "solid 2px #6767ff"};
+    animation: ${slide} 0.5s;
+    overflow: hidden;
+`
+
+const SelectValueText = styled.span
+`
+    position: absolute;
+    margin-top: 3px;
+`
+
+const ArrowBox = styled.div
+`
+    position: absolute;
+    margin-left: 110px;
+    margin-top: ${props => props.direction ? "0px" : "-1px"};
+`
+
+const CertBtn = styled.button
+`
+    margin-left: 162px;
+    margin-top: -4px;
+    width: 100px;
+    height: 55px;
+    border: ${props => props.show ? "none" : "solid 1px #dddddd"};
+    background: ${props => props.show ? "#6767ff" : "#aaaaaa"};
+    border-radius: 0.4rem;
+    cursor: pointer;
+    color:white;
+    font-size: 15px;
+    pointer-events: ${props => props.show ? "true" : "none"};
+    &:active
+    {
+      opacity: 90%;
+    }
+`
+
+const ErrorMessage = styled.p                  
+`
+    display: ${props => props.show ? "none" : "block"};
+    margin: 0px;
+    padding: 0px;
+    color:red;
+    font-size: 15px;
+`
+
+const EmailAuthCheckT = styled.div
+`
+    display: ${props => props.show ? "block" : "none"};
+    margin-top: ${props => props.show ? "15px" : "0px"};
+`
+
+const PwCofirmNicknameT = styled.div
+`
+    margin-top: 15px;
+`
+
+const EmailAuthInput = styled.input
+`
+  width: 320px;
+  padding: 20px 5px 20px 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: ${props => props.show ? "none" : props.check ? "solid 2px green" : "solid 2px red"};
+  border-radius: 10px;
+  caret-color: #03ab95;
+  background-color: #dee2e6;
+  font-size:15px;
+  pointer-events: ${props => props.check ? "none" : "true"};
+  &:focus
+  {
+    outline: none;
+    border: solid 2px #6767ff;
+    border-radius: 10px;
+  }
+`
+
+const EmailCheckBtnT = styled.div
+`
+`
+
+const CertCheckBtn = styled.button
+`
+  margin-left: 10px;
+  width: 100px;
+  height: 55px;
+  border: ${props => props.show ? "solid 1px #dddddd" : "none"};
+  background: ${props => props.show ? "#aaaaaa" : "#6767ff"};
+  border-radius: 0.4rem;
+  cursor: pointer;
+  color:white;
+  font-size: 15px;
+  pointer-events: ${props => props.show ? "none" : "true"};
+  &:active
+  {
+    opacity: 90%;
+  }
+`
+
+const PwBox = styled.input
+`
+  width: 435px;
+  padding: 20px 5px 20px 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: ${props => props.check ? props => props.show ? "solid 2px green" : "solid 2px red" : "none"};
+  border-radius: 10px;
+  caret-color: #03ab95;
+  background-color: #dee2e6;
+  font-size:15px;
+  &:focus
+  {
+    outline: none;
+    border: solid 2px #6767ff;
+    border-radius: 10px;
+  }
+`
+
+const PwCofirmBox = styled(PwBox)
+`
+    border: ${props => props.check ? props => props.show ? "solid 2px green" : "solid 2px red" : "none"};
+`
+
+const NicknameBox = styled(PwBox)
+`
+    border: ${props => props.check ? props => props.show ? "solid 2px green" : "solid 2px red" : "none"};
+`
+
+const SumbitButton = styled.button
+`
+    position: absolute;
+    width: 460px;
+    padding: 15px;
+    background: #6767ff;
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    color:white;
+    font-size: 100%;
+    &:active
+    {
+      opacity: 90%;
+    }
+    &:disabled
+    {
+      padding: 16px;
+      border: solid 1px #dddddd;
+      background: #aaaaaa;
+      pointer-events: none;
+    }
+`
+
+const SumbitButtonBox = styled.div
+`
+    margin-top: 50px;
+`
+
+const ErrorMessageBox = styled.div
+`
+    margin: -13px 5px 6px;
+    display: flex;
+    position: absolute;
+`
+
+const ErrorMessageIcon = styled.i
+`
+    margin: -2px 5px 6px;
+`
+
+const ErrorMessageText = styled.span
+`
+    margin: -2px 5px 6px;
+`
 export default Signinput;
 
