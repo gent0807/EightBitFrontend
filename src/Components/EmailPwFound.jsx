@@ -5,6 +5,8 @@ import {RiErrorWarningFill} from "react-icons/ri";
 
 const EmailPwFound = () => 
 {
+    const [Pw1,setPw1]=useState("");
+    const [Pw2,setPw2]=useState("");
 
     const [Email, setEmail] = useState("");
     const [Emailauth, setEmailauth] = useState("");
@@ -26,6 +28,9 @@ const EmailPwFound = () =>
     const [isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = useState(false);
 
     const [changeVisibled, setchangeVisibled] = useState(false);
+
+    const pw1=useRef("");
+    const pw2=useRef("");
 
     const Emailuser = (e) =>
     {
@@ -76,9 +81,62 @@ const EmailPwFound = () =>
         }
     }
 
-    const PasswordChangeConfirm = (e) =>
-    {
-        const currentId = e.target.value
+    const PasswordChangeConfirm1 = (e) =>
+    {   
+        const pw=e.target.value;
+        pw1.current=e.target.value;
+        console.log(pw1.current);
+        console.log(pw2.current);
+        console.log(Pw1);                                 
+        console.log(Pw2);                    
+        setPw1(pw);                                                                                   
+        console.log(Pw1);                                                                                                                                                                                                                                                                                                                     
+        console.log(Pw2);                                                  
+        if(pw1.current==pw2.current){
+          console.log("두 수 일치");
+        }
+        else if(Pw1!=Pw2){
+          console.log("두 수 불일치");
+        }
+        
+        /*const currentId = e.target.value
+        setPasswordChangeConfirm(currentId)
+
+        if(PasswordChangeE !== currentId)
+        {
+          setPasswordChangeConfirmMessage([<div style={{display: "flex" , position: "absolute" , margin: "-13px 5px 6px"}}>
+          <i style={{margin: "0px 5px 6px"}}><RiErrorWarningFill/></i>
+          <span style={{margin:"-2px 5px 6px"}}>비밀번호가 일치하지 않습니다!</span>
+          </div>])
+          setIsPasswordChangeConfirm(false)
+        }
+        else
+        {                                                                                                       
+          setPasswordChangeConfirmMessage("")
+          setIsPasswordChangeConfirm(true)
+        }
+      */
+     }
+
+     const PasswordChangeConfirm2 = (e) =>
+    {   
+        const pw=e.target.value;
+        pw2.current=e.target.value;
+        console.log(pw1.current);
+        console.log(pw2.current);
+        console.log(Pw1);
+        console.log(Pw2);
+        setPw2(pw);
+        console.log(Pw1);
+        console.log(Pw2);
+        if(pw1.current==pw2.current){
+          console.log("두 수 일치");
+        }
+        else if(pw1.current!=pw2.current){
+          console.log("두 수 불일치");
+        }
+        
+        /*const currentId = e.target.value
         setPasswordChangeConfirm(currentId)
 
         if(PasswordChangeE !== currentId)
@@ -94,7 +152,10 @@ const EmailPwFound = () =>
           setPasswordChangeConfirmMessage("")
           setIsPasswordChangeConfirm(true)
         }
-    }
+      */
+     }
+
+     
 
     const EmailCheck = () =>
     {
@@ -194,8 +255,8 @@ const EmailPwFound = () =>
                 type="password"
                 className={PasswordChangeE.length > 0 && `PasswordChange ${isPasswordChange ? 'success' : 'error'}`}
                 placeholder='새 비밀번호를 입력해 주세요!'
-                value={PasswordChangeE}
-                onChange={PasswordChange}
+                value={Pw1}
+                onChange={PasswordChangeConfirm1}
                 />
               </div>
               {PasswordChangeE.length > 0 && (<p className={`emailMessage ${isPasswordChange ? 'success' : 'error'}`}>{PasswordChangeMessage}</p>)}
@@ -205,8 +266,8 @@ const EmailPwFound = () =>
                 type="password"
                 className={PasswordChangeConfirmM.length > 0 && `PasswordChangeConfirm ${isPasswordChangeConfirm ? 'success' : 'error'}`}
                 placeholder='새 비밀번호를 다시 입력해 주세요!'
-                value={PasswordChangeConfirmM}
-                onChange={PasswordChangeConfirm}
+                value={Pw2}
+                onChange={PasswordChangeConfirm2}
                 />
               </div>
               {PasswordChangeConfirmM.length > 0 && (<p className={`emailMessage ${isPasswordChangeConfirm ? 'success' : 'error'}`}>{PasswordChangeConfirmMessage}</p>)}
