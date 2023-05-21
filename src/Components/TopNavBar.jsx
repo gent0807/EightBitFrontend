@@ -172,7 +172,7 @@ const AllButtonBox = styled.div
 const ButtonBox = styled.div
 `
     display: flex;
-    margin-right: 40px;
+    margin-right: 10px;
 `
 
 const MenuBox = styled.div
