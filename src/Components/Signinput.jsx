@@ -463,7 +463,6 @@ const SelectOption = styled.ul
     list-style: none;
     padding: 0px 0px 0px 0px;
     width: ${props => props.showli ? "145px" : "155px"};
-    height:  ${props => props.showli ? "0px" : "248px"};
     border-radius: 10px;
     border: ${props => props.showli ? "none" : "solid 2px #6767ff"};
     animation: ${slide} 0.5s;

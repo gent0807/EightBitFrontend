@@ -1,12 +1,4 @@
-import { Link } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
-import styled from 'styled-components'
-
-let Containerbox = styled.div`
-    margin: auto;
-    max-width: 460px;
-    padding: 56px 20px 54px;
-`
+import Router from './Router';
 
 const Main = () => {
   const isloginChecked=useRef(false);
@@ -14,11 +6,9 @@ const Main = () => {
 
   },[])
   return (
-    <Containerbox>
-      <Link to='/Login'>로그인</Link>
-    </Containerbox>
+    <Router/>
   );
-  };
+}
 
 export default Main;
 
