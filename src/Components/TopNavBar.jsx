@@ -18,11 +18,19 @@ const HeaderBox = () =>
     const [Search, setSearch] = useState("");
     const [ProfileMenuShow, setProfileMenuShow] = useState(false);
     const [ProfileClickCheck, setProfileClickCheck] = useState(false);
+    const [isGameTabCheck, setIsGameTabCheck] = useState(false);
+    const [isShopTabCheck, setIsShopTabCheck] = useState(false);
+    const [isComunityTabCheck, setIsComunityTabCheck] = useState(false);
+    const [isSupprotTabCheck, setIsSupprotTabCheck] = useState(false);
+    const [isGameIconCheck, setIsGameIconCheck] = useState(true);
+    const [isShopIconCheck, setIsShopIconCheck] = useState(false);
+    const [isComunityIconCheck, setIsComunityIconCheck] = useState(false);
+    const [isSupprotIconCheck, setIsSupprotIconCheck] = useState(false);
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-
     let ALLRef = useRef(null);
+    let MouseOver = useRef(null);
   
     useEffect(() => {
       function handleOuside(e) {
@@ -53,17 +61,67 @@ const HeaderBox = () =>
         setProfileClickCheck(false);
     }
 
+    const GameliHover = () =>
+    {
+        setIsGameIconCheck(true);
+        setIsShopIconCheck(false);
+        setIsComunityIconCheck(false);
+        setIsSupprotIconCheck(false);
+        setIsShopTabCheck(false);
+        setIsComunityTabCheck(false);
+        setIsSupprotTabCheck(false);
+        setIsGameTabCheck(false);
+    }
+
+    const ComunityliHover = () =>
+    {
+        setIsGameIconCheck(false);
+        setIsShopIconCheck(false);
+        setIsComunityIconCheck(true);
+        setIsSupprotIconCheck(false);
+        setIsShopTabCheck(false);
+        setIsComunityTabCheck(true);
+        setIsSupprotTabCheck(false);
+        setIsGameTabCheck(true);
+    }
+
+    const ShopliHover = () =>
+    {
+        setIsGameIconCheck(false);
+        setIsShopIconCheck(true);
+        setIsComunityIconCheck(false);
+        setIsSupprotIconCheck(false);
+        setIsShopTabCheck(true);
+        setIsComunityTabCheck(false);
+        setIsSupprotTabCheck(false);
+        setIsGameTabCheck(true);
+    }
+
+    const SupportliHover = () =>
+    {
+        setIsGameIconCheck(false);
+        setIsShopIconCheck(false);
+        setIsComunityIconCheck(false);
+        setIsSupprotIconCheck(true);
+        setIsShopTabCheck(false);
+        setIsComunityTabCheck(false);
+        setIsSupprotTabCheck(true);
+        setIsGameTabCheck(true);
+    }
+
     return (
+        <ALLNavBox>
+        <BackgroudTopNav>
         <Topnav>
         <NavBox>
         <LogoBox>
             <Link to='/'><Logo src='img/8bit.png' alt='로고'/></Link>
         </LogoBox>
             <NavUl>
-                <NavLi><Link to='/'>게임</Link></NavLi>
-                <NavLi><Link to='/'>샵</Link></NavLi>
-                <NavLi><Link to='/'>커뮤니티</Link></NavLi>
-                <NavLi><Link to='/'>서포트</Link></NavLi>
+                <GameLi active = {isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
+                <ShopLi active = {isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
+                <ComunityLi active = {isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
+                <SupportLi active = {isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
             </NavUl>
         </NavBox>
         <AllButtonBox>
@@ -73,46 +131,167 @@ const HeaderBox = () =>
                 <SearchButton><HiOutlineSearch/></SearchButton>
                 </SearchInputIconBox>
             </SearchInputBox>
-        <ButtonBox ref={ALLRef}>
+        <ButtonBox>
             <MenuBox left={"20px"} size={"25px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
             <MenuBox left={"20px"} size={"25px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
             <>
             {user.data !== "" ? <Profile click={ProfileClickCheck} onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><Profieimg src="img/kakao.jpg"/></Profile> :
-            [<MenuBox left={"9px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></MenuBox>,
+            [<MenuBox left={"20px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></MenuBox>,
             <MenuBox left={"9px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>
-            <ProfileListBox show={ProfileMenuShow}>
+            <ProfileListBox show={ProfileMenuShow} ref={ALLRef}>
                 <ProfileUl>
-                    <Profileli padding="15px 0px 15px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><Link to='/Sign'><ProfileliText left="10px">마이페이지</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><Link to='/'><ProfileliText left="10px">개발자등록</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><Link to='/'><ProfileliText left="10px">굿즈샵 입점</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><Link to='/'><ProfileliText left="10px">회원정보수정</ProfileliText></Link></Profileli>
-                    <Profileli line="none" padding="15px 0px 15px 20px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText left="7px">로그아웃</ProfileliText></Profileli>
+                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><Link to='/Sign'><ProfileliText left="10px">마이페이지</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><Link to='/'><ProfileliText left="10px">개발자등록</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><Link to='/'><ProfileliText left="10px">굿즈샵 입점</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><Link to='/'><ProfileliText left="10px">회원정보수정</ProfileliText></Link></Profileli>
+                    <Profileli line="none" padding="15px 0px 15px 13px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText left={"7px"} top={"2px"}>로그아웃</ProfileliText></Profileli>
                 </ProfileUl>
             </ProfileListBox>
         </ButtonBox>
         </AllButtonBox>
         </Topnav>
+        </BackgroudTopNav>
+        <BackgroudSubNav>
+        <SubNavMenu>
+            <GameSubNav display={isGameTabCheck}>
+                <Link to='/'><SubNavText>홈</SubNavText></Link>
+                <Link to='/'><SubNavText>전체게임</SubNavText></Link>
+                <Link to='/'><SubNavText>공식게임</SubNavText></Link>
+                <Link to='/'><SubNavText>인디게임</SubNavText></Link>
+                <Link to='/'><SubNavText>추천게임</SubNavText></Link>
+            </GameSubNav>
+            <ShopSubNav display={isShopTabCheck}>
+                <Link to='/'><SubNavText>홈</SubNavText></Link>
+                <Link to='/'><SubNavText>쿠폰샵</SubNavText></Link>
+                <Link to='/'><SubNavText>굿즈샵</SubNavText></Link>
+                <Link to='/'><SubNavText>장바구니</SubNavText></Link>
+                <Link to='/'><SubNavText>위시리스트</SubNavText></Link>
+            </ShopSubNav>
+            <ComunitySubNav display={isComunityTabCheck}>
+                <Link to='/'><SubNavText>공지사항</SubNavText></Link>
+                <Link to='/'><SubNavText>이벤트</SubNavText></Link>
+                <Link to='/'><SubNavText>공략게시판</SubNavText></Link>
+                <Link to='/'><SubNavText>토론게시판</SubNavText></Link>
+                <Link to='/'><SubNavText>자유게시판</SubNavText></Link>
+            </ComunitySubNav>
+            <SupportSubNav display={isSupprotTabCheck}>
+                <Link to='/'><SubNavText>이용문의</SubNavText></Link>
+                <Link to='/'><SubNavText>회사정보</SubNavText></Link>
+            </SupportSubNav>
+        </SubNavMenu>
+        </BackgroudSubNav>
+        </ALLNavBox>
     );
 }
 
-const Topnav = styled.header
+const BackgroudTopNav = styled.div
 `
     background-color: #6767ff;
+`
+
+const BackgroudSubNav = styled.div
+`
+    border-bottom: solid 2px #6767ff;
+`
+
+const ALLNavBox = styled.div
+`
+
+`
+
+const GameSubNav = styled.div
+`
+    display: ${props => props.display ? "none" : "block"};
+    margin: 0px 0px 0px 70px;
+a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    &:hover
+    {
+        color: #55aaff;
+    }
+}
+`
+
+const ShopSubNav = styled(GameSubNav)
+`
+    display: ${props => props.display ? "block" : "none"};
+    &:hover
+    {
+        color: #55aaff;
+    }
+`
+const ComunitySubNav = styled(GameSubNav)
+`
+    display: ${props => props.display ? "block" : "none"};
+    &:hover
+    {
+        color: #55aaff;
+    }
+`
+const SupportSubNav = styled(GameSubNav)
+`
+    display: ${props => props.display ? "block" : "none"};
+    &:hover
+    {
+        color: #55aaff;
+    }
+`
+
+const SubNavText = styled.span
+`
+    padding: 0px 10px 0px 10px;
+`
+
+const GameLi = styled.li
+`
+    padding: 0px 20px 0px 20px;
+    list-style: none;
+    &
+    {
+        font-size: 15px;
+    }
+    a
+    {
+        color: ${props => props.active ? "#55aaff" : "white"};
+    }
+`
+
+const ShopLi = styled(GameLi)
+`
+`
+
+const ComunityLi = styled(GameLi)
+`
+`
+const SupportLi = styled(GameLi)
+`
+`
+
+const SubNavMenu = styled.div
+`
+    height: 55px;
+    justify-content: center;
+    display: flex;
+    margin: auto;
+    max-width: 1351px;
+    align-items: center;
+`
+
+const Topnav = styled.header
+`
     padding: 0px 48px;
     height: 55px;
     display: flex;
     margin: auto;
     max-width: 1256px;
+    color: white;
     justify-content: space-between;
     a{
         text-decoration: none;
-        color: white;
         font-weight: bold;
-        &:hover
-        {
-            color: #55aaff;
-        }
     }
 `
 
@@ -130,22 +309,13 @@ const NavBox = styled.div
 `
     display: flex;
     margin: 6px 0px 6px 0px;
+    color: white;
 `
 
 const NavUl = styled.ul
 `
     display: flex;
     margin: 12px 0px 12px 0px;
-`
-
-const NavLi = styled.li
-`
-    padding: 0px 20px 0px 20px;
-    list-style: none;
-    &
-    {
-        font-size: 15px;
-    }
 `
 
 const SearchInput = styled.input
@@ -167,6 +337,7 @@ const AllButtonBox = styled.div
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
 }
 `
 
@@ -183,6 +354,10 @@ const MenuBox = styled.div
     margin-left: ${props => props.left};
     padding: ${props => props.padding};
     cursor: pointer;
+    a
+    {
+        color: white;
+    }
     &:hover
     {
         color: #55aaff;
@@ -244,7 +419,7 @@ const slide = keyframes
         height: 0px;
     }
     100%{
-        height: 246px;
+        height: 284px;
     }
 `
 
@@ -255,7 +430,7 @@ const ProfileListBox = styled.div
     border: solid 2px #6767ff;
     margin: 35px 0px 0px -27px;
     background: white;
-    height: 246px;
+    height: 284px;
     border-radius: 10px;
     position: absolute;
     animation: ${slide} 0.5s;
@@ -266,6 +441,7 @@ const ProfileUl = styled.ul
 `
     margin: 0px;
     padding: 0px;
+    color: black;
 `
 
 const Profileli = styled.li
@@ -275,11 +451,13 @@ const Profileli = styled.li
     cursor:pointer;
     padding: ${props => props.padding};
     font-weight: bold;
+    font-size: 23px;
     display:flex;
     a{
         color: black;
-        font-size: 15px;
+        font-size: 18px;
         font-weight: bold;
+        margin: 2px 0px 0px 0px;
         &:hover
         {
             color: black;
@@ -300,48 +478,22 @@ const Profileli = styled.li
         height: 1px;
         transform: translateX(-50%);
         background: black;
-        margin: 32px 0px 0px -1px;
+        margin: 41px 0px 0px -1px;
     }
 `
-
-const ProfileliBox = styled.div
-`
-        width: 30px;
-        height: 30px;
-        border-radius: 20px;
-        border: solid 2px #55aaff;
-        margin: 17px 0px 14px 16px;
-        overflow: hidden;
-        cursor: pointer;
-        font-weight: bold;
-`
-
-const ProfileNickname = styled.span
-`
-        color: black;
-        font-weight: bold;
-        margin: 4px 0px 0px 23px;
-`
-
 const ProfileliText = styled.span
 `
         margin-left: ${props => props.left};
+        margin-top: ${props => props.top};
+        font-size: 18px;
 `
 
 const ProfileliIcon = styled.i
 `
         margin-left: ${props => props.left};
-`
-
-const ProfileliNickNameBox = styled.div
-`
-        display: flex;
-        align-items: center;
-        font-weight: bold;
-`
-
-const TabMenu = styled.div
-`
-        position: absolute;
+        a
+        {
+            margin: 4px 0px 0px 0px;
+        }
 `
 export default HeaderBox;
