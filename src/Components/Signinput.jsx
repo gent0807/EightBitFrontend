@@ -260,16 +260,14 @@ const Signinput = () =>
       else
       {
         setVisibled(true);
-        axios.post("http://localhost:8033/EightBitBackend/user/send_num_to_email/",{
+        axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
               email:EmailTotal
         })
         .then(res=>{
           return res.data;
         })
         .then(data=>{
-          alert("인증번호가 전송되었습니다.");
           authNum.current=data;
-          console.log(authNum.current);
         });
       }
         
