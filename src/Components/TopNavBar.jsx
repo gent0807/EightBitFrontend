@@ -74,8 +74,8 @@ const HeaderBox = () =>
                 </SearchInputIconBox>
             </SearchInputBox>
         <ButtonBox ref={ALLRef}>
-            <MenuBox left={"9px"} size={"25px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
-            <MenuBox left={"9px"} size={"25px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
+            <MenuBox left={"20px"} size={"25px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
+            <MenuBox left={"20px"} size={"25px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
             <>
             {user.data !== "" ? <Profile click={ProfileClickCheck} onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><Profieimg src="img/kakao.jpg"/></Profile> :
             [<MenuBox left={"9px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></MenuBox>,
@@ -83,12 +83,11 @@ const HeaderBox = () =>
             </>
             <ProfileListBox show={ProfileMenuShow}>
                 <ProfileUl>
-                    <ProfileliNickNameBox><ProfileliBox><Link to=""><Profieimg src="img/kakao.jpg"/></Link></ProfileliBox><ProfileNickname> 운영자</ProfileNickname></ProfileliNickNameBox>
-                    <Profileli padding="6px 0px 6px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><Link to='/Sign'><ProfileliText left="10px">마이페이지</ProfileliText></Link></Profileli>
-                    <Profileli padding="6px 0px 6px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><Link to='/'><ProfileliText left="10px">개발자등록</ProfileliText></Link></Profileli>
-                    <Profileli padding="6px 0px 6px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><Link to='/'><ProfileliText left="10px">굿즈샵 입점</ProfileliText></Link></Profileli>
-                    <Profileli padding="6px 0px 6px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><Link to='/'><ProfileliText left="10px">회원정보수정</ProfileliText></Link></Profileli>
-                    <Profileli line="none" padding="6px 0px 6px 20px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText left="6px">로그아웃</ProfileliText></Profileli>
+                    <Profileli padding="15px 0px 15px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><Link to='/Sign'><ProfileliText left="10px">마이페이지</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><Link to='/'><ProfileliText left="10px">개발자등록</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><Link to='/'><ProfileliText left="10px">굿즈샵 입점</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 20px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><Link to='/'><ProfileliText left="10px">회원정보수정</ProfileliText></Link></Profileli>
+                    <Profileli line="none" padding="15px 0px 15px 20px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText left="7px">로그아웃</ProfileliText></Profileli>
                 </ProfileUl>
             </ProfileListBox>
         </ButtonBox>
@@ -103,6 +102,8 @@ const Topnav = styled.header
     padding: 0px 48px;
     height: 55px;
     display: flex;
+    margin: auto;
+    max-width: 1256px;
     justify-content: space-between;
     a{
         text-decoration: none;
@@ -172,7 +173,7 @@ const AllButtonBox = styled.div
 const ButtonBox = styled.div
 `
     display: flex;
-    margin-right: 10px;
+    margin-right: 23px;
 `
 
 const MenuBox = styled.div
@@ -220,15 +221,14 @@ const Profile = styled.div
     height: 30px;
     border-radius: 20px;
     border: ${props => props.click ? "solid 2px #55aaff" : "none"};
-    margin: 3px 0px 0px 10px;
     overflow: hidden;
     cursor: pointer;
-    margin: ${props => props.click ? "1px 0px 0px 73px" : "3px 0px 0px 75px"};
+    margin: ${props => props.click ? "1px 0px 0px 105px" : "3px 0px 0px 107px"};
     position: absolute;
     &:hover
     {
         border: solid 2px #55aaff;
-        margin: 1px 0px 0px 73px;
+        margin: 1px 0px 0px 105px;
     }
 `
 
@@ -244,7 +244,7 @@ const slide = keyframes
         height: 0px;
     }
     100%{
-        height: 230px;
+        height: 246px;
     }
 `
 
@@ -253,9 +253,9 @@ const ProfileListBox = styled.div
     display: ${props => props.show ? "block" : "none"};
     width: 163px;
     border: solid 2px #6767ff;
-    margin: 35px 0px 0px -59px;
+    margin: 35px 0px 0px -27px;
     background: white;
-    height: 230px;
+    height: 246px;
     border-radius: 10px;
     position: absolute;
     animation: ${slide} 0.5s;
@@ -292,15 +292,15 @@ const Profileli = styled.li
     &::after
     {
         content: '';
-        clear: both;
         display: ${props => props.line};
+        clear: both;
         position: absolute;
         left: 50%;
-        width: calc(100% - 48px);
+        width: calc(100% - -1px);
         height: 1px;
-        transform: translateX(-51%);
+        transform: translateX(-50%);
         background: black;
-        margin: 24px 0px 0px -1px;
+        margin: 32px 0px 0px -1px;
     }
 `
 
