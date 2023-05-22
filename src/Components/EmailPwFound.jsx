@@ -215,7 +215,7 @@ const EmailPwFound = () =>
                 {Email.length > 0 && (<ErrorMessage show = {isEmail}>{EmailMessage}</ErrorMessage>)}
                 <EmailFoundErrorMessage show = {isEmailBtn} check={isEmailPoundCheck}>{EmailFoundCheckMessage}</EmailFoundErrorMessage>
                 <EmailAuthBox show={isEmailBtn}>
-                <Title position={"absolute"} marginTop={"-8px"}>인증번호</Title>
+                <Title position={"absolute"} marginTop={"12px"}>인증번호</Title>
                 <EmailAuthInput show={isInputCheck} check={isEmailauthBtn} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth} maxLength={6}/>
                 <EmailAuthBtn show={isEmailauthBtn} onClick={EmailAuthCheck} disabled={isEmailauthBtn}><span>{isButtonCheck ? "인증완료" : "인증확인"}</span></EmailAuthBtn>
                 <ErrorMessage show = {isEmailauthBtn}>{EmailauthMessage}</ErrorMessage>
@@ -380,6 +380,7 @@ const EmailAuthBox = styled.div
 const EmailAuthInput = styled(EmailInput)
 `
     border: ${props => props.show ? "none" : props.check ? "solid 2px green" : "solid 2px red"};
+    margin-top: 44px;
 `
 
 const EmailAuthBtn = styled.button
