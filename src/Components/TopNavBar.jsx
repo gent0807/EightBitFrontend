@@ -61,7 +61,7 @@ const HeaderBox = () =>
         </LogoBox>
             <NavUl>
                 <NavLi><Link to='/'>게임</Link></NavLi>
-                <NavLi><Link to='/'>샵</Link></NavLi>
+                <NavLi><Link to='/'>쇼핑</Link></NavLi>
                 <NavLi><Link to='/'>커뮤니티</Link></NavLi>
                 <NavLi><Link to='/'>서포트</Link></NavLi>
             </NavUl>
