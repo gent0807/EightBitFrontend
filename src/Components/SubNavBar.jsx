@@ -13,7 +13,8 @@ const SubNavMenu = styled.div
     height: 55px;
     justify-content: center;
     display: flex;
-    border-bottom: solid 1px #6767ff;
+    margin: auto;
+    max-width: 1256px;
     align-items: center;
 `
 
