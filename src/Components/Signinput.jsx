@@ -209,7 +209,7 @@ const Signinput = () =>
       setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>])
       setIsNickname(false);
     }else{
-      axios.post("http://localhost:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
+      axios.post("http://14.38.253.206:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
         nickname:currentNickname
       } 
       )
@@ -241,7 +241,7 @@ const Signinput = () =>
 
     finalEmail.current=EmailTotal;
     
-    axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
+    axios.post("http://14.38.253.206:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
         email:EmailTotal
       } 
     )
@@ -260,16 +260,14 @@ const Signinput = () =>
       else
       {
         setVisibled(true);
-        axios.post("http://localhost:8033/EightBitBackend/user/send_num_to_email/",{
+        axios.post("http://14.38.253.206:8033/EightBitBackend/user/send_auth_key_to_email/",{
               email:EmailTotal
         })
         .then(res=>{
           return res.data;
         })
         .then(data=>{
-          alert("인증번호가 전송되었습니다.");
           authNum.current=data;
-          console.log(authNum.current);
         });
       }
         
@@ -280,7 +278,7 @@ const Signinput = () =>
     {
       e.preventDefault();
       
-      axios.post("http://localhost:8033/EightBitBackend/user/insert/",{
+      axios.post("http://14.38.253.206:8033/EightBitBackend/user/insert/",{
         email:finalEmail.current,
         password:PwConfirm,
         nickname:Nickname
