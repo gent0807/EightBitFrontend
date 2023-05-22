@@ -197,7 +197,7 @@ const BackgroudSubNav = styled.div
 
 const ALLNavBox = styled.div
 `
-
+    font-size: 18px;
 `
 
 const GameSubNav = styled.div
@@ -292,6 +292,7 @@ const Topnav = styled.header
     a{
         text-decoration: none;
         font-weight: bold;
+        font-size: 18px;
     }
 `
 
