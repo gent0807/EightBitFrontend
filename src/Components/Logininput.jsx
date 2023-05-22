@@ -7,6 +7,8 @@ import {RiErrorWarningFill} from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';
+import { useDispatch } from "react-redux";
+import { loginUser } from './LoginUser';
 
 const Logininput = () => 
 {                 
@@ -15,8 +17,9 @@ const Logininput = () =>
     //const [loginCheck,setLoginCheck]=React.useState('');
     const [message,setMessage] = useState('');
     const [isShow, setIsShow] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     let loginCheck;
-
 
     const Show = () =>
     {
@@ -26,13 +29,11 @@ const Logininput = () =>
     const OnChangeEmail = (e) => {
       const currentEmail = e.target.value;
       setEmail(currentEmail);
-      console.log(Email);
     }
   
     const OnChangePw = (e) => {
       const currentPw = e.target.value;
       setPw(currentPw);
-      console.log(Pw);
     }
 
     const OnCheckSubmit = (e) =>
@@ -76,18 +77,16 @@ const Logininput = () =>
           
           loginCheck=data;
           if(loginCheck=="allok"){
-            console.log("로그인 가능");
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
-            //navigate("/");
+            dispatch(loginUser(loginCheck));
+            navigate("/");
           }
           else if(loginCheck=="emailok"){
-            console.log("비밀번호가 틀렸습니다.");
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 틀렸습니다!</ErrorMessageText></ErrorMessageBox>])
           }
           else if(loginCheck=="no"){
-            console.log("가입되지 않은 이메일입니다.");
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입되지 않은 이메일입니다!</ErrorMessageText></ErrorMessageBox>])
-          }            
+          }         
         });
 
         /*if(loginCheck=="emailok"){   <- 위에 함수 호출로 인한 실행과 비동기적이기 때문에 위에서의 loginCheck와는 동기화되지 않는다. 즉 최초의 submit 이벤트 처리시에는 axios 함수에서의 loginCheck와 axios와 비동기적으로 실행되는 if문에서의 loginCheck는 다를 수 밖에 없다.
@@ -109,7 +108,7 @@ const Logininput = () =>
           <InputT>
           <Sumbit onSubmit={OnCheckSubmit}>
           <InputBox placeholder="이메일" onChange={OnChangeEmail}/>
-          <InputBox placeholder="비밀번호" type="password" onChange={OnChangePw}/>
+          <InputBox placeholder="비밀번호" onChange={OnChangePw} type='password'/>
           <ErrorMessageShow>{message}</ErrorMessageShow>
           <LoginMaintainT>
           <LoginMaintainCheckBox type='checkbox' onClick={Show}/>
