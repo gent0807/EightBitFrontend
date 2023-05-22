@@ -132,12 +132,12 @@ const HeaderBox = () =>
                 </SearchInputIconBox>
             </SearchInputBox>
         <ButtonBox>
-            <MenuBox left={"20px"} size={"25px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
-            <MenuBox left={"20px"} size={"25px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
+            <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
+            <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
             <>
             {user.data !== "" ? <Profile click={ProfileClickCheck} onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><Profieimg src="img/kakao.jpg"/></Profile> :
-            [<MenuBox left={"20px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></MenuBox>,
-            <MenuBox left={"9px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
+            [<MenuBox left={"20px"} top={"4px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></MenuBox>,
+            <MenuBox left={"9px"} top={"4px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>
             <ProfileListBox show={ProfileMenuShow} ref={ALLRef}>
                 <ProfileUl>
@@ -192,18 +192,17 @@ const BackgroudTopNav = styled.div
 
 const BackgroudSubNav = styled.div
 `
-    border-bottom: solid 2px #6767ff;
+    border-bottom: solid 3px #6767ff;
 `
 
 const ALLNavBox = styled.div
 `
-    font-size: 18px;
+    font-size: 25px;
 `
 
 const GameSubNav = styled.div
 `
     display: ${props => props.display ? "none" : "block"};
-    margin: 0px 0px 0px 70px;
 a{
     text-decoration: none;
     color: black;
@@ -251,7 +250,7 @@ const GameLi = styled.li
     list-style: none;
     &
     {
-        font-size: 15px;
+        font-size: 25px;
     }
     a
     {
@@ -276,40 +275,41 @@ const SubNavMenu = styled.div
     justify-content: center;
     display: flex;
     margin: auto;
-    max-width: 1351px;
+    max-width: 1500px;
     align-items: center;
 `
 
 const Topnav = styled.header
 `
     padding: 0px 48px;
-    height: 55px;
+    height: 78px;
     display: flex;
     margin: auto;
-    max-width: 1256px;
+    max-width: 1500px;
     color: white;
     justify-content: space-between;
     a{
         text-decoration: none;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 25px;
     }
 `
 
 const Logo = styled.img
 `
-    width: 132px;
-    height: 42px;
+    width: 162px;
+    height: 72px;
 `
 
 const LogoBox = styled.div
 `
+    margin: -13px 0px 0px 0px;
 `
 
 const NavBox = styled.div
 `
     display: flex;
-    margin: 6px 0px 6px 0px;
+    margin: 15px 0px 15px 0px;
     color: white;
 `
 
@@ -324,11 +324,12 @@ const SearchInput = styled.input
     border: none;
     outline: none;
     height: 20px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
     padding: 0px 0.6rem;
-    font-size: 13px;
-    width: 150px;
+    font-size: 20px;
+    width: 200px;
+    height: 39px;
     caret-color: #6767ff;
     background: #dee2e6;
 `
@@ -353,6 +354,7 @@ const MenuBox = styled.div
     color: white;
     font-size: ${props => props.size};
     margin-left: ${props => props.left};
+    margin-top: ${props => props.top};
     padding: ${props => props.padding};
     cursor: pointer;
     a
@@ -367,15 +369,15 @@ const MenuBox = styled.div
 const SearchInputBox = styled.div
 `
     display: flex;
-    border: solid 2px #55aaff;
-    border-radius: 13px;
+    border: solid 3px #55aaff;
+    border-radius: 24px;
 }
 `
 
 const SearchInputIconBox = styled.div
 `
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
     background: #dee2e6;
 `
 
@@ -385,6 +387,7 @@ const SearchButton = styled.button
     background: transparent;
     padding: 3px 8px 0px 0px;
     cursor: pointer;
+    font-size: 29px;
     &:hover
     {
         color: #55aaff;
@@ -393,25 +396,25 @@ const SearchButton = styled.button
 
 const Profile = styled.div
 `
-    width: 30px;
-    height: 30px;
-    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 26px;
     border: ${props => props.click ? "solid 2px #55aaff" : "none"};
     overflow: hidden;
     cursor: pointer;
-    margin: ${props => props.click ? "1px 0px 0px 105px" : "3px 0px 0px 107px"};
+    margin: ${props => props.click ? "-1px 0px 0px 137px" : "1px 0px 0px 139px"};
     position: absolute;
     &:hover
     {
         border: solid 2px #55aaff;
-        margin: 1px 0px 0px 105px;
+        margin: -1px 0px 0px 137px;
     }
 `
 
 const Profieimg = styled.img
 `
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
 `
 
 const slide = keyframes
@@ -420,18 +423,18 @@ const slide = keyframes
         height: 0px;
     }
     100%{
-        height: 284px;
+        height: 300px;
     }
 `
 
 const ProfileListBox = styled.div
 `
     display: ${props => props.show ? "block" : "none"};
-    width: 163px;
+    width: 217px;
     border: solid 2px #6767ff;
-    margin: 35px 0px 0px -27px;
+    margin: 54px 0px 0px -30px;
     background: white;
-    height: 284px;
+    height: 300px;
     border-radius: 10px;
     position: absolute;
     animation: ${slide} 0.5s;
@@ -452,11 +455,11 @@ const Profileli = styled.li
     cursor:pointer;
     padding: ${props => props.padding};
     font-weight: bold;
-    font-size: 23px;
+    font-size: 25px;
     display:flex;
     a{
         color: black;
-        font-size: 18px;
+        font-size: 25px;
         font-weight: bold;
         margin: 2px 0px 0px 0px;
         &:hover
@@ -479,14 +482,14 @@ const Profileli = styled.li
         height: 1px;
         transform: translateX(-50%);
         background: black;
-        margin: 41px 0px 0px -1px;
+        margin: 44px 0px 0px -1px;
     }
 `
 const ProfileliText = styled.span
 `
         margin-left: ${props => props.left};
         margin-top: ${props => props.top};
-        font-size: 18px;
+        font-size: 25px;
 `
 
 const ProfileliIcon = styled.i
