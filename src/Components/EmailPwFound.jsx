@@ -193,7 +193,7 @@ const EmailPwFound = () =>
 
     const EmailCheck = () =>
     {   
-        axios.post("http://14.34.121.36:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
+        axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
           email:Email
         })
         .then(res=>{
@@ -210,7 +210,7 @@ const EmailPwFound = () =>
           {
             setIsEmailBtn(true);
             setEmailFoundCheckMessage("");
-            axios.post("http://14.34.121.36:8033/EightBitBackend/user/send_auth_key_to_email/",{
+            axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
                   email:Email
             })
             .then(res=>{
@@ -230,7 +230,7 @@ const EmailPwFound = () =>
     {
       e.preventDefault();
 
-      axios.put("http://14.34.121.36:8033/EightBitBackend/user/updateUserPw/",{
+      axios.put("http://localhost:8033/EightBitBackend/user/updateUserPw/",{
         email:Email,
         password:PasswordChangeConfirmM,
       } 
