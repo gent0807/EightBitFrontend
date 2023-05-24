@@ -241,7 +241,7 @@ const Signinput = () =>
 
     finalEmail.current=EmailTotal;
     
-    axios.post("http://14.38.253.206:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
+    axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
         email:EmailTotal
       } 
     )
@@ -260,7 +260,7 @@ const Signinput = () =>
       else
       {
         setVisibled(true);
-        axios.post("http://14.38.253.206:8033/EightBitBackend/user/send_auth_key_to_email/",{
+        axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
               email:EmailTotal
         })
         .then(res=>{
@@ -278,7 +278,7 @@ const Signinput = () =>
     {
       e.preventDefault();
       
-      axios.post("http://14.38.253.206:8033/EightBitBackend/user/insert/",{
+      axios.post("http://localhost:8033/EightBitBackend/user/insert/",{
         email:finalEmail.current,
         password:PwConfirm,
         nickname:Nickname
