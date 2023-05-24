@@ -209,7 +209,7 @@ const Signinput = () =>
       setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>])
       setIsNickname(false);
     }else{
-      axios.post("http://14.38.253.206:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
+      axios.post("http://localhost:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
         nickname:currentNickname
       } 
       )
@@ -328,7 +328,7 @@ const Signinput = () =>
               <Title htmlFor="emailCert">인증번호</Title>
               <EmailCheckBtnT>
                 {/*<EmailAuthInput show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>*/}
-                <EmailAuthInput show={isInputCheck} type="password" check={isEmailCertCheck} value={EmailCert} onChange={setAuthNumber}/>
+                <EmailAuthInput show={isInputCheck} check={isEmailCertCheck} value={EmailCert} onChange={setAuthNumber}/>
                 <CertCheckBtn show={isEmailCertCheck} type="button" onClick={checkAuthNumberRight}><span>{isEmailCertCheck ? "인증완료" : "인증하기"}</span></CertCheckBtn>
               </EmailCheckBtnT>
               </EmailAuthCheckT>
@@ -350,11 +350,18 @@ const Signinput = () =>
                 {Nickname.length > 0 && (<ErrorMessage show = {isNickname}>{NicknameMessage}</ErrorMessage>)}
               </PwCofirmNicknameT>
             </SignInputT>
-          <SumbitButtonBox>
-          <SumbitButton type='submit' disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
-          </SumbitButtonBox>
+            <SumbitButtonBox>
+                  <SumbitButton type='submit' disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
+                  <EmPwFoundT>
+                    <EmailPwFoundList>
+                      <EmailPwFoundListLiBar><Link to='/Login'>로그인</Link></EmailPwFoundListLiBar>
+                      <EmailPwFoundListLI><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLI>
+                    </EmailPwFoundList>
+                  </EmPwFoundT>
+            </SumbitButtonBox>
         </SubmitT>
       </SignT>
+      
   );
 }
 
@@ -649,7 +656,7 @@ const NicknameBox = styled(PwBox)
 
 const SumbitButton = styled.button
 `
-    position: absolute;
+   
     width: 460px;
     padding: 15px;
     background: #6767ff;
@@ -702,6 +709,47 @@ const SuccessMessageText = styled.span
 `
     margin: -2px 5px 6px;
     color:green;
+`
+
+const EmPwFoundT = styled.div
+` 
+  margin-top: 50px;
+`
+
+const EmailPwFoundListLI = styled.li
+`
+    margin: 0px 10px 0px 10px;
+    a
+    {
+      color:black;
+      text-decoration: none;
+      margin: 0px 15px 0px 15px;
+    }
+`
+
+const EmailPwFoundList = styled.ul
+`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0px;
+`
+
+
+const EmailPwFoundListLiBar = styled(EmailPwFoundListLI)
+`
+  &::after {
+  position: absolute;
+  content: "";
+  display: inline-block;
+  border-right: solid 1px gray;
+  width: 1px;
+  height: 11px;
+  margin: 4px 10px 0px 8px;
+  opacity: 20%;
+}
 `
 
 export default Signinput;

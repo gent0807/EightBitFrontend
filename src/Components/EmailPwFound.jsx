@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {RiErrorWarningFill} from "react-icons/ri";
 import { styled } from 'styled-components';
+import axios from 'axios';
 
 const EmailPwFound = () => 
 {
+    const [Pw1,setPw1]=useState("");
+    const [Pw2,setPw2]=useState("");
 
     const [Email, setEmail] = useState("");
     const [Emailauth, setEmailauth] = useState("");
@@ -31,6 +34,11 @@ const EmailPwFound = () =>
 
     const [changeVisibled, setchangeVisibled] = useState(false);
 
+    const navigate = useNavigate();
+
+    
+    let authNum=useRef(null);
+    let alreadyPasswordUsing=useRef("no");
     let checkRef = useRef(null);
   
     useEffect(() => {
@@ -81,8 +89,7 @@ const EmailPwFound = () =>
     const EmailAuth = (e) =>
     {
         const currentEmailCert = e.target.value;
-        const onlynumber = currentEmailCert.replace(/[^0-9]/g, '');
-        setEmailauth(onlynumber)
+        setEmailauth(currentEmailCert);
     }
 
     const PasswordChange = (e) =>
@@ -109,17 +116,23 @@ const EmailPwFound = () =>
         {
           setPasswordChangeMessage("")
           setIsPasswordChange(true)
-        }
-
-        if(PasswordChangeV !== PasswordChangeConfirmM)
-        {
-          setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
-          setIsPasswordChangeConfirm(false)
-        }
-        else
-        {
-          setPasswordChangeConfirmMessage("")
-          setIsPasswordChangeConfirm(true)
+          if(PasswordChangeV !== PasswordChangeConfirmM)
+          {
+            setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
+            setIsPasswordChangeConfirm(false)
+            if(PasswordChangeConfirmM=="")
+            {
+              setIsPasswordChange(true);
+            }
+            else if(PasswordChangeConfirmM!="")
+            {
+              setIsPasswordChange(false);
+            }
+          }
+          else if(PasswordChangeV == PasswordChangeConfirmM)
+          { 
+            userPasswordAlreadyUsingCheck(PasswordChangeV);
+          }
         }
     }
 
@@ -135,53 +148,108 @@ const EmailPwFound = () =>
         else
         {
             setIsInputPasswordChangeConfirmCheck(true);
+            if(isPasswordChange&&(PasswordChangeE !== PasswordChangeConfirmV))
+            {
+              setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
+              setIsPasswordChangeConfirm(false)
+            }
+            else if(isPasswordChange&&(PasswordChangeE == PasswordChangeConfirmV))
+            { 
+              userPasswordAlreadyUsingCheck(PasswordChangeConfirmV);
+            }
         }
 
-        if(PasswordChangeE !== PasswordChangeConfirmV)
-        {
-          setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
-          setIsPasswordChangeConfirm(false)
-        }
-        else
-        {
-          setPasswordChangeConfirmMessage("")
-          setIsPasswordChangeConfirm(true)
-        }
-    }
+        
+      
+     }
+
+     const userPasswordAlreadyUsingCheck=(password)=>
+     {  
+        axios.post("http://14.34.121.36:8033/EightBitBackend/user/alreadyPasswordUsingCheck/",{
+            email:Email,
+            password:password
+        })
+        .then(res=>{
+            return res.data;
+        })
+        .then(data=>{
+            alreadyPasswordUsing.current=data;
+            if(alreadyPasswordUsing.current=="no"){
+              setPasswordChangeConfirmMessage("")
+              setIsPasswordChangeConfirm(true)
+              setIsPasswordChange(true)
+            }
+            else if(alreadyPasswordUsing.current=="yes"){
+              setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>기존의 비밀번호와 일치합니다!</ErrorMessageText></ErrorMessageBox>])
+              setIsPasswordChangeConfirm(false)
+              setIsPasswordChange(false)
+            }
+        })
+
+
+     }
+
+     
 
     const EmailCheck = () =>
-    {
+    {   
+        axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
+          email:Email
+        })
+        .then(res=>{
+          return res.data;
+        })
+        .then(data=>{
+          if(data === "no" )
+          {
+            setIsEmailBtn(false);
+            setIsEmailPoundCheck(true);
+            setEmailFoundCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 찾을수 없습니다!</ErrorMessageText></ErrorMessageBox>]);
+          }
+          else if(data==="yes")
+          {
+            setIsEmailBtn(true);
+            setEmailFoundCheckMessage("");
+            axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
+                  email:Email
+            })
+            .then(res=>{
+              return res.data;
+            })
+            .then(data=>{
+              authNum.current=data;
+            });
+          }
+        });
 
-        const EmailFound = "khs641010@naver.com";
+       
 
-        if(EmailFound !== Email)
-        {
-          setIsEmailBtn(false);
-          setIsEmailPoundCheck(true);
-          setEmailFoundCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 찾을수 없습니다!</ErrorMessageText></ErrorMessageBox>])
-        }
-        else
-        {
-          setIsEmailBtn(true);
-          setEmailFoundCheckMessage("");
-        }
     }
     
-    const OnSumbit = (e) =>
+    const update = (e) =>
     {
       e.preventDefault();
-      if ( Email === "" || Emailauth === "" || PasswordChangeE === "" || PasswordChangeConfirmM === "" )
-      {
-        return;
-      }
+
+      axios.put("http://localhost:8033/EightBitBackend/user/updateUserPw/",{
+        email:Email,
+        password:PasswordChangeConfirmM,
+      } 
+      )
+      .then(res=>{
+        return res.data;
+      })
+      .then(data=>{
+        navigate("/Login");
+      });
+      
     }
   
 
     const EmailAuthCheck = () =>
     {
       setIsInputCheck(false)
-
-      if(Emailauth === "123456")
+      
+      if(Emailauth == authNum.current)
         {   
           setIsEmailauthBtn(true)
           setIsButtonCheck(true)
@@ -202,7 +270,7 @@ const EmailPwFound = () =>
             <EmPwFoundTop>
             <Link to='/'><EmPwLogo src='img/8bit.png' alt='로고'/></Link>
             </EmPwFoundTop>
-            <EmPwForm onSubmit={OnSumbit}>
+            <EmPwForm onSubmit={update}>
             <EmPwInputContainer>
             <Information>
             <EmPwFoundTitle>이메일/비밀번호 찾기</EmPwFoundTitle>
@@ -211,13 +279,13 @@ const EmailPwFound = () =>
             <Title>이메일</Title>
               <EmailInputT>
                 <EmailInput ref={checkRef} disabled={isEmailauthBtn} show = {isEmail} check = {isInputEmailCheck} placeholder='이메일을 입력해 주세요!' value={Email} onChange={Emailuser}/>
-                <SendButton show = {isEmail} onClick={EmailCheck} disabled={isEmailauthBtn}><span>{isEmailBtn ? "재전송" : "전송"}</span></SendButton>
+                <SendButton show = {isEmail} type="button" onClick={EmailCheck} disabled={isEmailauthBtn}><span>{isEmailBtn ? "재전송" : "전송"}</span></SendButton>
                 {Email.length > 0 && (<ErrorMessage show = {isEmail}>{EmailMessage}</ErrorMessage>)}
                 <EmailFoundErrorMessage show = {isEmailBtn} check={isEmailPoundCheck}>{EmailFoundCheckMessage}</EmailFoundErrorMessage>
                 <EmailAuthBox show={isEmailBtn}>
                 <Title position={"absolute"} marginTop={"-8px"}>인증번호</Title>
-                <EmailAuthInput show={isInputCheck} check={isEmailauthBtn} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth} maxLength={6}/>
-                <EmailAuthBtn show={isEmailauthBtn} onClick={EmailAuthCheck} disabled={isEmailauthBtn}><span>{isButtonCheck ? "인증완료" : "인증확인"}</span></EmailAuthBtn>
+                <EmailAuthInput show={isInputCheck} check={isEmailauthBtn} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth}/>
+                <EmailAuthBtn show={isEmailauthBtn} type="button" onClick={EmailAuthCheck} disabled={isEmailauthBtn}><span>{isButtonCheck ? "인증완료" : "인증확인"}</span></EmailAuthBtn>
                 <ErrorMessage show = {isEmailauthBtn}>{EmailauthMessage}</ErrorMessage>
                 </EmailAuthBox>
                 <PasswordChangeT show={changeVisibled}>
@@ -236,6 +304,12 @@ const EmailPwFound = () =>
                 <SumbitButton type="submit" disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}><span>완료</span></SumbitButton>
             </SubmitBtnBox>
             </EmPwInputContainer>
+            <AnotherRoute>
+            <AnotherList>
+              <Login><Link to='/Login'>로그인</Link></Login>
+              <Sign><Link to='/Sign'>회원가입</Link></Sign>
+            </AnotherList>
+            </AnotherRoute>
             </EmPwForm>
         </EmPwFoundT>
     );
@@ -470,5 +544,46 @@ const SumbitButton = styled.button
       background: #aaaaaa;
       pointer-events: none;
     }
+
 `
+const AnotherRoute = styled.div
+`
+`
+
+const AnotherList = styled.ul
+`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0px;
+`
+
+const Sign = styled.li
+`
+    margin: 0px 10px 0px 10px;
+    a
+    {
+      color:black;
+      text-decoration: none;
+      margin: 0px 15px 0px 15px;
+    }
+`
+
+const Login = styled(Sign)
+`
+  &::after {
+  position: absolute;
+  content: "";
+  display: inline-block;
+  border-right: solid 1px gray;
+  width: 1px;
+  height: 11px;
+  margin: 4px 10px 0px 8px;
+  opacity: 20%;
+}
+`
+
+
 export default EmailPwFound;
