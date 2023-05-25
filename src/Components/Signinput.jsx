@@ -44,12 +44,12 @@ const Signinput = () =>
       function handleOuside(e) {
         if (textRef.current && !textRef.current.contains(e.target)) {
             setIsSelectBtnCheck(true);
-        }
+        };
       };
 
       if(isSelectBtnCheck) {
       document.addEventListener("mousedown", handleOuside);
-      }
+      };
       return () => {
         document.removeEventListener("mousedown", handleOuside);
       };
@@ -57,8 +57,8 @@ const Signinput = () =>
 
   const OnSelectValue = (e) =>
   {
-      const {innerText} = e.target;
-
+      const { innerText } = e.target;
+      console.log(innerText);
       setSelectValue(innerText);
       setIsInputDirect(false);
   }
@@ -74,13 +74,13 @@ const Signinput = () =>
   {
     const InputDirect = e.target.value;
     const onlytext = InputDirect.replace(/[~!@#$%^&*()_+|<>?:{}]/g, '');
-    setInputDirect(onlytext)
-    setSelectValue(InputDirect)
+    setInputDirect(onlytext);
+    setSelectValue(InputDirect);
   }
 
   const OnEmailCertCheckBtn = () =>
   {
-    setIsInputCheck(false)
+    setIsInputCheck(false);
 
     if(EmailCert === "123456")
     {
@@ -210,8 +210,7 @@ const Signinput = () =>
   const Visibled = () => 
   {
     const EmailTotal = Email + "@" + SelectValue;
-
-    console.log(EmailTotal);
+    const EmailCheck = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     const test = "khs64101014@gmail.com"
 
     if(EmailTotal === test )
@@ -219,6 +218,13 @@ const Signinput = () =>
       setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "10px 5px 6px"}}>
       <i style={{margin: "-19px 5px 6px"}}><RiErrorWarningFill/></i>
       <span style={{margin:"-19px 5px 6px", zIndex:-1}}>이미 존재하는 이메일 입니다.</span>
+      </div>])
+      setVisibled(false);
+    } else if(!EmailCheck.test(EmailTotal))
+    {
+      setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "10px 5px 6px"}}>
+      <i style={{margin: "-19px 5px 6px"}}><RiErrorWarningFill/></i>
+      <span style={{margin:"-19px 5px 6px", zIndex:-1}}>올바른 이메일을 작성해 주세요!</span>
       </div>])
       setVisibled(false);
     }
@@ -258,13 +264,13 @@ const Signinput = () =>
             <EmailText>@</EmailText>
             <SelectBox ref={textRef} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} show={isSelectBtnCheck} event={isEmailCertCheck}>
               <SelectOption showli={isSelectBtnCheck}>
-                <SelectOptionLI value="naver.com" onClick={OnSelectValue}>naver.com</SelectOptionLI>
-                <SelectOptionLI value="gmail.com" onClick={OnSelectValue}>gmail.com</SelectOptionLI>
-                <SelectOptionLI value="hanmail.net" onClick={OnSelectValue}>hanmail.net</SelectOptionLI>
-                <SelectOptionLI value="nate.com" onClick={OnSelectValue}>nate.com</SelectOptionLI>
-                <SelectOptionLI value="daum.net" onClick={OnSelectValue}>daum.net</SelectOptionLI>
-                <SelectOptionLI value="outlook.com" onClick={OnSelectValue}>outlook.com</SelectOptionLI>
-                <SelectOptionLI onClick={VisibleDirect}><span className="InputDirect">직접입력</span></SelectOptionLI>
+                <SelectOptionLI onClick={OnSelectValue}>naver.com</SelectOptionLI>
+                <SelectOptionLI onClick={OnSelectValue}>gmail.com</SelectOptionLI>
+                <SelectOptionLI onClick={OnSelectValue}>hanmail.net</SelectOptionLI>
+                <SelectOptionLI onClick={OnSelectValue}>nate.com</SelectOptionLI>
+                <SelectOptionLI onClick={OnSelectValue}>daum.net</SelectOptionLI>
+                <SelectOptionLI onClick={OnSelectValue}>outlook.com</SelectOptionLI>
+                <SelectOptionLI onClick={VisibleDirect}><span>직접입력</span></SelectOptionLI>
               </SelectOption>
               <SelectValueText>{SelectValue}</SelectValueText>
              <ArrowBox direction={isSelectBtnCheck}>{isSelectBtnCheck ? "▼" : "▲"}</ ArrowBox>
@@ -275,7 +281,7 @@ const Signinput = () =>
           <EmailAuthCheckT show={isVisibled}>
           <Title htmlFor="emailCert">인증번호</Title>
           <EmailCheckBtnT>
-            <EmailAuthInput show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>
+            <EmailAuthInput type='password' show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>
              <CertCheckBtn show={isEmailCertCheck} onClick={OnEmailCertCheckBtn}><span>{isEmailCertCheck ? "인증완료" : "인증하기"}</span></CertCheckBtn>
             </EmailCheckBtnT>
             </EmailAuthCheckT>
