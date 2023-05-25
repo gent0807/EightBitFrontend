@@ -131,7 +131,7 @@ const HeaderBox = () =>
                 <SearchButton><HiOutlineSearch/></SearchButton>
                 </SearchInputIconBox>
             </SearchInputBox>
-        <ButtonBox>
+        <ButtonBox menucheck={user.data !== ""}>
             <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
             <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
             <>
@@ -188,11 +188,22 @@ const HeaderBox = () =>
 const BackgroudTopNav = styled.div
 `
     background-color: #6767ff;
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        width: 480px;
+        height: 232px;
+    }
 `
 
 const BackgroudSubNav = styled.div
 `
     border-bottom: solid 3px #6767ff;
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        width: 480px;
+    }
 `
 
 const ALLNavBox = styled.div
@@ -228,6 +239,17 @@ const ComunitySubNav = styled(GameSubNav)
     &:hover
     {
         color: #55aaff;
+    }
+
+    &::-webkit-scrollbar
+    {
+        display: none;
+    }
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        white-space: nowrap;
+        overflow: scroll;
     }
 `
 const SupportSubNav = styled(GameSubNav)
@@ -277,6 +299,12 @@ const SubNavMenu = styled.div
     margin: auto;
     max-width: 1500px;
     align-items: center;
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        font-size: 21px;
+    }
+    
 `
 
 const Topnav = styled.header
@@ -292,6 +320,11 @@ const Topnav = styled.header
         text-decoration: none;
         font-weight: bold;
         font-size: 25px;
+    }
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        flex-direction: column;
     }
 `
 
@@ -311,12 +344,25 @@ const NavBox = styled.div
     display: flex;
     margin: 15px 0px 15px 0px;
     color: white;
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        flex-direction: column;
+        margin: 12px 0px 0px 0px;
+        text-align: center;
+    }
 `
 
 const NavUl = styled.ul
 `
     display: flex;
     margin: 12px 0px 12px 0px;
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        margin: 12px 0px 12px -63px;
+        white-space: nowrap;
+    }
 `
 
 const SearchInput = styled.input
@@ -340,6 +386,11 @@ const AllButtonBox = styled.div
     align-items: center;
     justify-content: center;
     color: white;
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        flex-direction: column;
+    }
 }
 `
 
@@ -347,6 +398,12 @@ const ButtonBox = styled.div
 `
     display: flex;
     margin-right: 23px;
+
+    @media (min-width:300px) and (max-width:480px)
+    {
+        margin-left: ${props => props.menucheck ? "-61px" : "0px"};
+        margin-top: ${props => props.menucheck ? "5px" : "0px"};
+    }
 `
 
 const MenuBox = styled.div
@@ -365,6 +422,7 @@ const MenuBox = styled.div
     {
         color: #55aaff;
     }
+
 `
 const SearchInputBox = styled.div
 `
@@ -487,8 +545,8 @@ const Profileli = styled.li
 `
 const ProfileliText = styled.span
 `
-        margin-left: ${props => props.left};
-        margin-top: ${props => props.top};
+        margin-left: ${props => props.MediaLeft};
+        margin-top: ${props => props.MediaTop};
         font-size: 25px;
 `
 

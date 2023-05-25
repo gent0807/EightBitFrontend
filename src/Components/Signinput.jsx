@@ -57,7 +57,7 @@ const Signinput = () =>
 
   const OnSelectValue = (e) =>
   {
-      const { innerText } = e.target;
+      const { innerText }  = e.target;
       console.log(innerText);
       setSelectValue(innerText);
       setIsInputDirect(false);
