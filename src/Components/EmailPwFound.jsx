@@ -454,6 +454,7 @@ const EmailAuthBox = styled.div
 const EmailAuthInput = styled(EmailInput)
 `
     border: ${props => props.show ? "none" : props.check ? "solid 2px green" : "solid 2px red"};
+    margin-top: 44px;
 `
 
 const EmailAuthBtn = styled.button

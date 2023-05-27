@@ -49,12 +49,12 @@ const Signinput = () =>
       function handleOuside(e) {
         if (textRef.current && !textRef.current.contains(e.target)) {
             setIsSelectBtnCheck(true);
-        }
+        };
       };
 
       if(isSelectBtnCheck) {
       document.addEventListener("mousedown", handleOuside);
-      }
+      };
       return () => {
         document.removeEventListener("mousedown", handleOuside);
       };
@@ -62,8 +62,8 @@ const Signinput = () =>
 
   const setEmailDomain = (e) =>
   {
-      const {innerText} = e.target;
-
+      const { innerText }  = e.target;
+      console.log(innerText);
       setSelectValue(innerText);
       setIsInputDirect(false);
   }
@@ -79,8 +79,8 @@ const Signinput = () =>
   {
     const InputDirect = e.target.value;
     const onlytext = InputDirect.replace(/[~!@#$%^&*()_+|<>?:{}]/g, '');
-    setInputDirect(onlytext)
-    setSelectValue(InputDirect)
+    setInputDirect(onlytext);
+    setSelectValue(InputDirect);
   }
 
   const checkAuthNumberRight = () =>
