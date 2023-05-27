@@ -11,7 +11,6 @@ const Font = styled.body
 `
   font-family: "Dung Geun Mo";
   margin: 0px;
-
   input 
   {
     font-family: "Dung Geun Mo";
@@ -26,7 +25,6 @@ const Font = styled.body
     font-family: "Dung Geun Mo";
   }
 
-  
 `
 
 
