@@ -1,6 +1,7 @@
+import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import {RiErrorWarningFill} from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled, keyframes } from 'styled-components';
 
 
@@ -37,6 +38,10 @@ const Signinput = () =>
 
   const [isVisibled, setVisibled] = useState(false);
 
+  const navigate = useNavigate();
+
+  let finalEmail=useRef("");
+  let authNum=useRef(null);
   let inputFocus = useRef(null);
   let textRef = useRef(null);
   
@@ -55,7 +60,7 @@ const Signinput = () =>
       };
     }, [textRef])
 
-  const OnSelectValue = (e) =>
+  const setEmailDomain = (e) =>
   {
       const {innerText} = e.target;
 
@@ -63,14 +68,14 @@ const Signinput = () =>
       setIsInputDirect(false);
   }
 
-  const VisibleDirect = () =>
+  const readyToWirteInputDirect = () =>
   {
     setInputDirect("");
     setIsInputDirect(true);
     return inputFocus.current.focus();
   }
 
-  const OnInputDirect = (e) =>
+  const checkAndSetInputDirect = (e) =>
   {
     const InputDirect = e.target.value;
     const onlytext = InputDirect.replace(/[~!@#$%^&*()_+|<>?:{}]/g, '');
@@ -78,11 +83,12 @@ const Signinput = () =>
     setSelectValue(InputDirect)
   }
 
-  const OnEmailCertCheckBtn = () =>
+  const checkAuthNumberRight = () =>
   {
     setIsInputCheck(false)
-
-    if(EmailCert === "123456")
+    
+    
+    if(EmailCert == authNum.current)
     {
     setIsEmailCertCheck(true);
     setIsEmailCertCheckBtn(true);
@@ -100,7 +106,7 @@ const Signinput = () =>
   }
 
 
-  const OnChangeEmail = (e) => {
+  const checkEmail = (e) => {
     const currentEmail = e.target.value;
     const onlytext = currentEmail.replace(/[~!@#$%^&*()_+|<>?:{}]/g, '');
     setEmail(onlytext);
@@ -116,10 +122,10 @@ const Signinput = () =>
 
   };
 
-  const OnChangeEmailCert = (e) => {
+  const setAuthNumber = (e) => {
     const currentEmailCert = e.target.value;
-    const onlynumber = currentEmailCert.replace(/[^0-9]/g, '');
-    setEmailCert(onlynumber)
+    //const onlynumber = currentEmailCert.replace(/[^0-9]/g, '');
+    setEmailCert(currentEmailCert);
     if(!EmailCert)
     {
       setIsEmailCertCheckBtn(false);
@@ -157,6 +163,7 @@ const Signinput = () =>
     }else{
         setPwConfirmMessage("");
         setIsPwConfirm(true);
+      
     }
   };
 
@@ -180,10 +187,11 @@ const Signinput = () =>
     }else{
       setPwConfirmMessage("");
       setIsPwConfirm(true);
+
     }
   };
 
-  const OnChangeNickname = (e) => {
+  const checkAlreadyNickRegistered = (e) => {
     const currentNickname = e.target.value;
     setNickname(currentNickname);
 
@@ -201,107 +209,159 @@ const Signinput = () =>
       setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>])
       setIsNickname(false);
     }else{
-      setNicknameMessage("")
-      setIsNickname(true);
+      axios.post("http://localhost:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
+        nickname:currentNickname
+      } 
+      )
+      .then(res=>{
+        return res.data;
+      })  
+      .then(data=>{
+        console.log(data);
+        if(data === "yes" )
+        {
+          setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이미 등록된 닉네임입니다!</ErrorMessageText></ErrorMessageBox>]);
+          setIsNickname(false);
+        }
+        else if(data=== "no" )
+        { 
+          setNicknameMessage("");
+          setIsNickname(true);
+       
+        }
+          
+      });
     }
 
   }
 
-  const Visibled = () => 
+  const checkAlreadySigning = () => 
   {
     const EmailTotal = Email + "@" + SelectValue;
 
-    console.log(EmailTotal);
-    const test = "khs64101014@gmail.com"
-
-    if(EmailTotal === test )
-    {
-      setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "10px 5px 6px"}}>
-      <i style={{margin: "-19px 5px 6px"}}><RiErrorWarningFill/></i>
-      <span style={{margin:"-19px 5px 6px", zIndex:-1}}>이미 존재하는 이메일 입니다.</span>
-      </div>])
-      setVisibled(false);
-    }
-    else
-    {
-      setVisibled(true);
-    }
-      
+    finalEmail.current=EmailTotal;
     
-
+    axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
+        email:EmailTotal
+      } 
+    )
+    .then(res=>{
+      return res.data;
+    })
+    .then(data=>{
+      if(data === "yes" )
+      {
+        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "10px 5px 6px"}}>
+        <i style={{margin: "-19px 5px 6px"}}><RiErrorWarningFill/></i>
+        <span style={{margin:"-19px 5px 6px", zIndex:-1}}>이미 가입된 이메일 입니다.</span>
+        </div>])
+        setVisibled(false);
+      }
+      else
+      {
+        setVisibled(true);
+        axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
+              email:EmailTotal
+        })
+        .then(res=>{
+          return res.data;
+        })
+        .then(data=>{
+          authNum.current=data;
+        });
+      }
+        
+    });
   }
 
-  const OnSumbit = (e) =>
+  const register = (e) =>
     {
       e.preventDefault();
-      if ( Email === "" || EmailCert === "" || Pw === "" || PwConfirm === "" || Nickname === "" )
-      {
-        return;
-      }
+      
+      axios.post("http://localhost:8033/EightBitBackend/user/insert/",{
+        email:finalEmail.current,
+        password:PwConfirm,
+        nickname:Nickname
+      } 
+      )
+      .then(res=>{
+        return res.data;
+      })
+      .then(data=>{
+        navigate("/Login");
+      });
     }
 
   return (
-  <SignT>
-          <SignTop>
-            <Link to='/'><SignTopLogo src='img/8bit.png' alt='로고'/></Link>
-          </SignTop>
-          <SubmitT onSubmit={OnSumbit}>
-          <SignInputT>
-            <Information>
-            <SignTitle className='title'>회원가입</SignTitle>
-            </Information>
-            <EmailCheckT>
-            <Title htmlFor="email">이메일</Title>
-            <EmailBox>
-            <EmailInput disabled={isEmailCertCheck} value={Email} onChange={OnChangeEmail}/>
-            <SelectInput onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} disabled={isEmailCertCheck} ON={isInputDirect} value={InputDirect} ref={inputFocus} onChange={OnInputDirect}/>
-            <EmailText>@</EmailText>
-            <SelectBox ref={textRef} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} show={isSelectBtnCheck} event={isEmailCertCheck}>
-              <SelectOption showli={isSelectBtnCheck}>
-                <SelectOptionLI value="naver.com" onClick={OnSelectValue}>naver.com</SelectOptionLI>
-                <SelectOptionLI value="gmail.com" onClick={OnSelectValue}>gmail.com</SelectOptionLI>
-                <SelectOptionLI value="hanmail.net" onClick={OnSelectValue}>hanmail.net</SelectOptionLI>
-                <SelectOptionLI value="nate.com" onClick={OnSelectValue}>nate.com</SelectOptionLI>
-                <SelectOptionLI value="daum.net" onClick={OnSelectValue}>daum.net</SelectOptionLI>
-                <SelectOptionLI value="outlook.com" onClick={OnSelectValue}>outlook.com</SelectOptionLI>
-                <SelectOptionLI onClick={VisibleDirect}><span className="InputDirect">직접입력</span></SelectOptionLI>
-              </SelectOption>
-              <SelectValueText>{SelectValue}</SelectValueText>
-             <ArrowBox direction={isSelectBtnCheck}>{isSelectBtnCheck ? "▼" : "▲"}</ ArrowBox>
-            </SelectBox>
-            <CertBtn show={isEmail} disabled={isEmailCertCheck} onClick={Visibled}><span>{isVisibled ? "재요청" : "인증요청"}</span></CertBtn>
-            </EmailBox>
-            <ErrorMessage show = {isVisibled}>{EmailMessage}</ErrorMessage>
-          <EmailAuthCheckT show={isVisibled}>
-          <Title htmlFor="emailCert">인증번호</Title>
-          <EmailCheckBtnT>
-            <EmailAuthInput show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>
-             <CertCheckBtn show={isEmailCertCheck} onClick={OnEmailCertCheckBtn}><span>{isEmailCertCheck ? "인증완료" : "인증하기"}</span></CertCheckBtn>
-            </EmailCheckBtnT>
-            </EmailAuthCheckT>
-            <ErrorMessage show = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
-          </EmailCheckT>
-          <PwCofirmNicknameT>
-          <Title htmlFor="Pw">비밀번호</Title>
-          <PwBox show={isPw} check={isInputPwCheck} type="password" value={Pw} onChange={OnChangePw}/>
-            {Pw.length > 0 && (<ErrorMessage show = {isPw}>{PwMessage}</ErrorMessage>)}
-          </PwCofirmNicknameT>
-          <PwCofirmNicknameT>
-          <Title htmlFor="PwConfirm">비밀번호 확인</Title>
-            <PwCofirmBox show={isPwConfirm} check={isInputPwConfirmCheck} type="password" value={PwConfirm} onChange={OnChangePwConfirm}/>
-            {PwConfirm.length > 0 && (<ErrorMessage show = {isPwConfirm}>{PwConfirmMessage}</ErrorMessage>)}
-          </PwCofirmNicknameT>
-          <PwCofirmNicknameT>
-          <Title htmlFor="Nickname">닉네임</Title>
-            <NicknameBox show={isNickname} check={isInputNicknameCheck} value={Nickname} onChange={OnChangeNickname}/>
-            {Nickname.length > 0 && (<ErrorMessage show = {isNickname}>{NicknameMessage}</ErrorMessage>)}
-          </PwCofirmNicknameT>
-          </SignInputT>
-          <SumbitButtonBox>
-          <SumbitButton type='submit'disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
-        </SumbitButtonBox>
+      <SignT>
+        <SignTop>
+          <Link to='/'><SignTopLogo src='img/8bit.png' alt='로고'/></Link>
+        </SignTop>
+        <SubmitT onSubmit={register}>
+            <SignInputT>
+              <Information>
+              <SignTitle className='title'>회원가입</SignTitle>
+              </Information>
+              <EmailCheckT>
+              <Title htmlFor="email">이메일</Title>
+              <EmailBox>
+              <EmailInput disabled={isEmailCertCheck} value={Email} onChange={checkEmail}/>
+              <SelectInput onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} disabled={isEmailCertCheck} ON={isInputDirect} value={InputDirect} ref={inputFocus} onChange={checkAndSetInputDirect}/>
+              <EmailText>@</EmailText>
+              <SelectBox ref={textRef} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} show={isSelectBtnCheck} event={isEmailCertCheck}>
+                <SelectOption showli={isSelectBtnCheck}>
+                  <SelectOptionLI value="naver.com" onClick={setEmailDomain}>naver.com</SelectOptionLI>
+                  <SelectOptionLI value="gmail.com" onClick={setEmailDomain}>gmail.com</SelectOptionLI>
+                  <SelectOptionLI value="hanmail.net" onClick={setEmailDomain}>hanmail.net</SelectOptionLI>
+                  <SelectOptionLI value="nate.com" onClick={setEmailDomain}>nate.com</SelectOptionLI>
+                  <SelectOptionLI value="daum.net" onClick={setEmailDomain}>daum.net</SelectOptionLI>
+                  <SelectOptionLI value="outlook.com" onClick={setEmailDomain}>outlook.com</SelectOptionLI>
+                  <SelectOptionLI onClick={readyToWirteInputDirect}><span className="InputDirect">직접입력</span></SelectOptionLI>
+                </SelectOption>
+                <SelectValueText>{SelectValue}</SelectValueText>
+              <ArrowBox direction={isSelectBtnCheck}>{isSelectBtnCheck ? "▼" : "▲"}</ ArrowBox>
+              </SelectBox>
+              <CertBtn show={isEmail} disabled={isEmailCertCheck} type="button"onClick={checkAlreadySigning}><span>{isVisibled ? "재요청" : "인증요청"}</span></CertBtn>
+              </EmailBox>
+              <ErrorMessage show = {isVisibled}>{EmailMessage}</ErrorMessage>
+              <EmailAuthCheckT show={isVisibled}>
+              <Title htmlFor="emailCert">인증번호</Title>
+              <EmailCheckBtnT>
+                {/*<EmailAuthInput show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>*/}
+                <EmailAuthInput show={isInputCheck} check={isEmailCertCheck} value={EmailCert} onChange={setAuthNumber}/>
+                <CertCheckBtn show={isEmailCertCheck} type="button" onClick={checkAuthNumberRight}><span>{isEmailCertCheck ? "인증완료" : "인증하기"}</span></CertCheckBtn>
+              </EmailCheckBtnT>
+              </EmailAuthCheckT>
+              <ErrorMessage show = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
+              </EmailCheckT>
+              <PwCofirmNicknameT>
+              <Title htmlFor="Pw">비밀번호</Title>
+              <PwBox show={isPw} check={isInputPwCheck} type="password" value={Pw} onChange={OnChangePw}/>
+                {Pw.length > 0 && (<ErrorMessage show = {isPw}>{PwMessage}</ErrorMessage>)}
+              </PwCofirmNicknameT>
+              <PwCofirmNicknameT>
+              <Title htmlFor="PwConfirm">비밀번호 확인</Title>
+                <PwCofirmBox show={isPwConfirm} check={isInputPwConfirmCheck} type="password" value={PwConfirm} onChange={OnChangePwConfirm}/>
+                {PwConfirm.length > 0 && (<ErrorMessage show = {isPwConfirm}>{PwConfirmMessage}</ErrorMessage>)}
+              </PwCofirmNicknameT>
+              <PwCofirmNicknameT>
+              <Title htmlFor="Nickname">닉네임</Title>
+                <NicknameBox show={isNickname} check={isInputNicknameCheck} value={Nickname} onChange={checkAlreadyNickRegistered}/>
+                {Nickname.length > 0 && (<ErrorMessage show = {isNickname}>{NicknameMessage}</ErrorMessage>)}
+              </PwCofirmNicknameT>
+            </SignInputT>
+            <SumbitButtonBox>
+                  <SumbitButton type='submit' disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
+                  <EmPwFoundT>
+                    <EmailPwFoundList>
+                      <EmailPwFoundListLiBar><Link to='/Login'>로그인</Link></EmailPwFoundListLiBar>
+                      <EmailPwFoundListLI><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLI>
+                    </EmailPwFoundList>
+                  </EmPwFoundT>
+            </SumbitButtonBox>
         </SubmitT>
-    </SignT>
+      </SignT>
+      
   );
 }
 
@@ -463,7 +523,6 @@ const SelectOption = styled.ul
     list-style: none;
     padding: 0px 0px 0px 0px;
     width: ${props => props.showli ? "145px" : "155px"};
-    height:  ${props => props.showli ? "0px" : "248px"};
     border-radius: 10px;
     border: ${props => props.showli ? "none" : "solid 2px #6767ff"};
     animation: ${slide} 0.5s;
@@ -510,6 +569,8 @@ const ErrorMessage = styled.p
     color:red;
     font-size: 15px;
 `
+
+
 
 const EmailAuthCheckT = styled.div
 `
@@ -595,7 +656,7 @@ const NicknameBox = styled(PwBox)
 
 const SumbitButton = styled.button
 `
-    position: absolute;
+   
     width: 460px;
     padding: 15px;
     background: #6767ff;
@@ -634,9 +695,62 @@ const ErrorMessageIcon = styled.i
     margin: -2px 5px 6px;
 `
 
+const SuccessMessageIcon = styled.i
+`
+    margin: -2px 5px 6px;
+    color:green;
+`
+
 const ErrorMessageText = styled.span
 `
     margin: -2px 5px 6px;
 `
+const SuccessMessageText = styled.span
+`
+    margin: -2px 5px 6px;
+    color:green;
+`
+
+const EmPwFoundT = styled.div
+` 
+  margin-top: 50px;
+`
+
+const EmailPwFoundListLI = styled.li
+`
+    margin: 0px 10px 0px 10px;
+    a
+    {
+      color:black;
+      text-decoration: none;
+      margin: 0px 15px 0px 15px;
+    }
+`
+
+const EmailPwFoundList = styled.ul
+`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0px;
+`
+
+
+const EmailPwFoundListLiBar = styled(EmailPwFoundListLI)
+`
+  &::after {
+  position: absolute;
+  content: "";
+  display: inline-block;
+  border-right: solid 1px gray;
+  width: 1px;
+  height: 11px;
+  margin: 4px 10px 0px 8px;
+  opacity: 20%;
+}
+`
+
 export default Signinput;
 
