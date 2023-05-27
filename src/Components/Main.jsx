@@ -15,4 +15,8 @@ export default Main;
 const FooterSet = styled.div
 `
   min-height: calc(100% - 120px);
+  @media (min-width:250px) and (max-width:480px)
+    {
+        width: 480px;
+    }
 `

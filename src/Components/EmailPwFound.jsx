@@ -267,6 +267,11 @@ const EmPwInputContainer = styled.div
     border: solid 3px #6767ff;
     padding: 20px;
     border-radius: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `
 
 const Information = styled.div
@@ -295,7 +300,7 @@ const EmailInputT = styled.div
 
 const EmailInput = styled.input
 `
-    width: 320px;
+    width: 275px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -322,12 +327,12 @@ const ErrorMessageBox = styled.div
 
 const ErrorMessageIcon = styled.i
 `
-    margin: -2px 5px 6px;
+    margin: -2px -2px 5px;
 `
 
 const ErrorMessageText = styled.span
 `
-    margin: -2px 5px 6px;
+    margin: -2px 8px 6px;
 `
 
 const ErrorMessage = styled.p
@@ -423,7 +428,7 @@ const Title = styled.label
 
 const PasswordChangeInput = styled.input
 `
-    width: 430px;
+    width: 385px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;

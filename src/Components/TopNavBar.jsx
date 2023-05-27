@@ -151,9 +151,10 @@ const HeaderBox = () =>
             <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
             <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
             <>
-            {user.data !== "" ? <Profile click={ProfileClickCheck} onClick={() => [ProfileMenuCheck(), setIsProfileSlideCheck(!isProfileSlideCheck)]}><Profieimg src="img/kakao.jpg"/></Profile> :
-            [<MenuBox left={"20px"} top={"4px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></MenuBox>,
-            <MenuBox left={"9px"} top={"4px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
+            {user.data !== "" ? [<Profile click={ProfileClickCheck} onClick={() => [ProfileMenuCheck(), setIsProfileSlideCheck(!isProfileSlideCheck)]}><Profieimg src="img/kakao.jpg"/></Profile>,
+            <WriteBox><WriteBoxText>글쓰기</WriteBoxText></WriteBox>] :
+            [<LineBox left={"20px"} top={"12px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
+            <MenuBox left={"9px"} top={"12px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>
             <ProfileListBox default={isDefaultScene} logout={isProfileLogoutCheck} show={ProfileMenuShow} ref={ALLRef}>
                 <ProfileUl>
@@ -200,7 +201,22 @@ const HeaderBox = () =>
         </ALLNavBox>
     );
 }
+const WriteBox = styled.div
+`
+    margin: 3px 0px 0px 208px;
+    position: absolute;
+    border: solid 2px white;
+    padding: 10px;
+    border-radius: 11px;
+`
 
+const WriteBoxText = styled.span
+`
+    @media (min-width:250px) and (max-width:480px)
+    {
+        white-space: nowrap;
+    }
+`
 const BackgroudTopNav = styled.div
 `
     background-color: #6767ff;
@@ -411,18 +427,18 @@ const AllButtonBox = styled.div
     {
         flex-direction: column;
     }
-}
 `
 
 const ButtonBox = styled.div
 `
     display: flex;
-    margin-right: 23px;
+    margin-right: 72px;
 
     @media (min-width:250px) and (max-width:480px)
     {
         margin-left: ${props => props.menucheck ? "-61px" : "0px"};
         margin-top: ${props => props.menucheck ? "5px" : "0px"};
+        margin-right: ${props => props.menucheck ? "155px" : "28px"};
     }
 `
 
@@ -434,8 +450,11 @@ const MenuBox = styled.div
     margin-top: ${props => props.top};
     padding: ${props => props.padding};
     cursor: pointer;
+    white-space: nowrap;
     a
     {
+        font-size:20px;
+        font-weight: lighter;
         color: white;
         -webkit-tap-highlight-color:transparent;
     }
@@ -443,7 +462,19 @@ const MenuBox = styled.div
     {
         color: #55aaff;
     }
+`
 
+const LineBox = styled(MenuBox)
+`
+    &::after
+    {
+        content: "";
+        background: white;
+        display: inline-block;
+        height: 16px;
+        width: 2px;
+        margin: 1px 7px -3px 15px;
+    }
 `
 const SearchInputBox = styled.div
 `
