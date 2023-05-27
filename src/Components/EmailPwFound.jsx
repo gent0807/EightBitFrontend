@@ -165,7 +165,7 @@ const EmailPwFound = () =>
 
      const userPasswordAlreadyUsingCheck=(password)=>
      {  
-        axios.post("http://14.34.121.36:8033/EightBitBackend/user/alreadyPasswordUsingCheck/",{
+        axios.post("http://localhost:8033/EightBitBackend/user/alreadyPasswordUsingCheck/",{
             email:Email,
             password:password
         })
