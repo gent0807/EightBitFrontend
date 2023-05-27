@@ -49,7 +49,8 @@ const Logininput = () =>
           setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 입력하세요!</ErrorMessageText></ErrorMessageBox>])
         }
         else{
-        /*fetch(`http://localhost:8033/EightBitBackend/user/loginCheck/`, {
+        /*
+          fetch(`http://localhost:8033/EightBitBackend/user/loginCheck/`, {
           method:"POST",
           headers:{
             "Content-Type":"application/json",
