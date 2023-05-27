@@ -1,35 +1,35 @@
 import { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import {HiOutlineSearch} from "react-icons/hi";
-import {AiOutlineMenu} from "react-icons/ai";
-import {MdLanguage} from "react-icons/md";
-import {FaRegUserCircle} from "react-icons/fa";
+import { HiOutlineSearch } from "react-icons/hi";
+import { AiOutlineMenu } from "react-icons/ai";
+import { MdLanguage } from "react-icons/md";
+import { FaRegUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "./LoginUser";
-import {MdOutlineDeveloperMode} from "react-icons/md";
-import {AiTwotoneShop} from "react-icons/ai";
-import {GrLogout} from "react-icons/gr";
-import {AiOutlineUserSwitch} from "react-icons/ai";
+import { MdOutlineDeveloperMode } from "react-icons/md";
+import { AiTwotoneShop } from "react-icons/ai";
+import { GrLogout } from "react-icons/gr";
+import { AiOutlineUserSwitch } from "react-icons/ai";
 
 
 const HeaderBox = () =>
 {
-    const [Search, setSearch] = useState("");
-    const [ProfileMenuShow, setProfileMenuShow] = useState(false);
-    const [ProfileClickCheck, setProfileClickCheck] = useState(false);
-    const [isGameTabCheck, setIsGameTabCheck] = useState(false);
-    const [isShopTabCheck, setIsShopTabCheck] = useState(false);
-    const [isComunityTabCheck, setIsComunityTabCheck] = useState(false);
-    const [isSupprotTabCheck, setIsSupprotTabCheck] = useState(false);
-    const [isGameIconCheck, setIsGameIconCheck] = useState(true);
-    const [isShopIconCheck, setIsShopIconCheck] = useState(false);
-    const [isComunityIconCheck, setIsComunityIconCheck] = useState(false);
-    const [isSupprotIconCheck, setIsSupprotIconCheck] = useState(false);
-    const [isProfileSlideCheck, setIsProfileSlideCheck] = useState(false);
-    const [isProfileLogoutCheck, setIsProfileLogoutCheck] = useState(false);
-    const [isDefaultScene, setIsDefaultScene] = useState(false);
-    const user = useSelector((state) => state.user);
+    const [ Search, setSearch ] = useState("");
+    const [ ProfileMenuShow, setProfileMenuShow ] = useState(false);
+    const [ ProfileClickCheck, setProfileClickCheck ] = useState(false);
+    const [ isGameTabCheck, setIsGameTabCheck ] = useState(false);
+    const [ isShopTabCheck, setIsShopTabCheck ] = useState(false);
+    const [ isComunityTabCheck, setIsComunityTabCheck ] = useState(false);
+    const [ isSupprotTabCheck, setIsSupprotTabCheck ] = useState(false);
+    const [ isGameIconCheck, setIsGameIconCheck ] = useState(true);
+    const [ isShopIconCheck, setIsShopIconCheck ] = useState(false);
+    const [ isComunityIconCheck, setIsComunityIconCheck ] = useState(false);
+    const [ isSupprotIconCheck, setIsSupprotIconCheck ] = useState(false);
+    const [ isProfileSlideCheck, setIsProfileSlideCheck ] = useState(false);
+    const [ isProfileLogoutCheck, setIsProfileLogoutCheck ] = useState(false);
+    const [ isDefaultScene, setIsDefaultScene ] = useState(false);
+    const user = useSelector( (state) => state.user );
     const dispatch = useDispatch();
 
     console.log(isProfileSlideCheck);

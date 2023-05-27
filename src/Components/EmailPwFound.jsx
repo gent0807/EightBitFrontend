@@ -1,35 +1,35 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
-import {RiErrorWarningFill} from "react-icons/ri";
+import { RiErrorWarningFill } from "react-icons/ri";
 import { styled } from 'styled-components';
 
 const EmailPwFound = () => 
 {
 
-    const [Email, setEmail] = useState("");
-    const [Emailauth, setEmailauth] = useState("");
-    const [PasswordChangeE, setPasswordChange ] = useState("");
-    const [PasswordChangeConfirmM, setPasswordChangeConfirm ] = useState("");
+    const [ Email, setEmail ] = useState("");
+    const [ Emailauth, setEmailauth ] = useState("");
+    const [ PasswordChangeE, setPasswordChange ] = useState("");
+    const [ PasswordChangeConfirmM, setPasswordChangeConfirm ] = useState("");
 
-    const [EmailMessage, setEmailMessage] = useState("");
-    const [EmailauthMessage, setEmailauthMessage] = useState("");
-    const [PasswordChangeMessage, setPasswordChangeMessage ] = useState("");
-    const [PasswordChangeConfirmMessage, setPasswordChangeConfirmMessage ] = useState("");
-    const [EmailFoundCheckMessage, setEmailFoundCheckMessage ] = useState("");
+    const [ EmailMessage, setEmailMessage ] = useState("");
+    const [ EmailauthMessage, setEmailauthMessage ] = useState("");
+    const [ PasswordChangeMessage, setPasswordChangeMessage ] = useState("");
+    const [ PasswordChangeConfirmMessage, setPasswordChangeConfirmMessage ] = useState("");
+    const [ EmailFoundCheckMessage, setEmailFoundCheckMessage ] = useState("");
 
-    const [isEmail, setIsEmail] = useState(false);
-    const [isEmailBtn, setIsEmailBtn] = useState(false);
-    const [isEmailauthBtn, setIsEmailauthBtn] = useState(false);
-    const [isInputCheck, setIsInputCheck] = useState(true);
-    const [isButtonCheck, setIsButtonCheck] = useState(false);
-    const [isPasswordChange, setIsPasswordChange ] = useState(false);
-    const [isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = useState(false);
-    const [isEmailPoundCheck, setIsEmailPoundCheck] = useState(false);
-    const [isInputEmailCheck, setIsEmailtPwCheck] = useState(false);
-    const [isInputPasswordChangeCheck, setIsInputPasswordChangeCheck] = useState(false);
-    const [isInputPasswordChangeConfirmCheck, setIsInputPasswordChangeConfirmCheck] = useState(false);
+    const [ isEmail, setIsEmail ] = useState(false);
+    const [ isEmailBtn, setIsEmailBtn ] = useState(false);
+    const [ isEmailauthBtn, setIsEmailauthBtn ] = useState(false);
+    const [ isInputCheck, setIsInputCheck ] = useState(true);
+    const [ isButtonCheck, setIsButtonCheck ] = useState(false);
+    const [ isPasswordChange, setIsPasswordChange ] = useState(false);
+    const [ isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = useState(false);
+    const [ isEmailPoundCheck, setIsEmailPoundCheck ] = useState(false);
+    const [ isInputEmailCheck, setIsEmailtPwCheck ] = useState(false);
+    const [ isInputPasswordChangeCheck, setIsInputPasswordChangeCheck ] = useState(false);
+    const [ isInputPasswordChangeConfirmCheck, setIsInputPasswordChangeConfirmCheck ] = useState(false);
 
-    const [changeVisibled, setchangeVisibled] = useState(false);
+    const [ changeVisibled, setchangeVisibled ] = useState(false);
 
     let checkRef = useRef(null);
   

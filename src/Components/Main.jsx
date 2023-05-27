@@ -14,6 +14,5 @@ export default Main;
 
 const FooterSet = styled.div
 `
-    min-height: 100%;
-    position: relative;
+  min-height: calc(100% - 120px);
 `
