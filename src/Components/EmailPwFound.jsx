@@ -36,7 +36,8 @@ const EmailPwFound = () =>
 
     const navigate = useNavigate();
 
-    
+    let compareMode=useRef(false);
+    let passwordPossibleCombCheck=useRef(false);
     let authNum=useRef(null);
     let alreadyPasswordUsing=useRef("no");
     let checkRef = useRef(null);
@@ -93,7 +94,7 @@ const EmailPwFound = () =>
     }
 
     const PasswordChange = (e) =>
-    {
+    {   
         const PasswordChangeV = e.target.value;
         setPasswordChange(PasswordChangeV)
         const PwCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
@@ -110,12 +111,17 @@ const EmailPwFound = () =>
         if(!PwCheck.test(PasswordChangeV))
         {
           setPasswordChangeMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>])
-          setIsPasswordChange(false)
+          setIsPasswordChange(false);
+          passwordPossibleCombCheck.current=false;
         }
         else
         {
           setPasswordChangeMessage("")
-          setIsPasswordChange(true)
+          setIsPasswordChange(true);
+          passwordPossibleCombCheck.current=true;
+        }
+        if(compareMode.current==true)
+        {
           if(PasswordChangeV !== PasswordChangeConfirmM)
           {
             setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
@@ -137,25 +143,48 @@ const EmailPwFound = () =>
     }
 
     const PasswordChangeConfirm = (e) =>
-    {
+    {   
         const PasswordChangeConfirmV = e.target.value
         setPasswordChangeConfirm(PasswordChangeConfirmV)
         
         if(PasswordChangeConfirmV === "")
-        {
+        {   
+            compareMode.current=false;
             setIsInputPasswordChangeConfirmCheck(false);
+            if(passwordPossibleCombCheck.current==true)
+            { 
+              setIsPasswordChange(true);
+              setPasswordChangeMessage("")
+            }
+            else if(passwordPossibleCombCheck.current==false)
+            {
+              setIsPasswordChange(false);
+              setPasswordChangeMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+            }
         }
         else
-        {
+        {   
+            compareMode.current=true;
             setIsInputPasswordChangeConfirmCheck(true);
-            if(isPasswordChange&&(PasswordChangeE !== PasswordChangeConfirmV))
-            {
+            if(PasswordChangeE !== PasswordChangeConfirmV)
+            { 
+              setIsPasswordChange(false);
               setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
               setIsPasswordChangeConfirm(false)
             }
-            else if(isPasswordChange&&(PasswordChangeE == PasswordChangeConfirmV))
+            else if(PasswordChangeE == PasswordChangeConfirmV)
             { 
-              userPasswordAlreadyUsingCheck(PasswordChangeConfirmV);
+              if(passwordPossibleCombCheck.current==false)
+              {
+                setIsPasswordChange(false);
+                setIsPasswordChangeConfirm(false);
+                setPasswordChangeMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+                setPasswordChangeConfirmMessage("");
+              }
+              else if(passwordPossibleCombCheck.current==true)
+              {
+                userPasswordAlreadyUsingCheck(PasswordChangeConfirmV);
+              }
             }
         }
 
@@ -175,14 +204,14 @@ const EmailPwFound = () =>
         .then(data=>{
             alreadyPasswordUsing.current=data;
             if(alreadyPasswordUsing.current=="no"){
-              setPasswordChangeConfirmMessage("")
-              setIsPasswordChangeConfirm(true)
-              setIsPasswordChange(true)
+              setPasswordChangeConfirmMessage("");
+              setIsPasswordChangeConfirm(true);
+              setIsPasswordChange(true);
             }
             else if(alreadyPasswordUsing.current=="yes"){
               setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>기존의 비밀번호와 일치합니다!</ErrorMessageText></ErrorMessageBox>])
-              setIsPasswordChangeConfirm(false)
-              setIsPasswordChange(false)
+              setIsPasswordChangeConfirm(false);
+              setIsPasswordChange(false);
             }
         })
 
