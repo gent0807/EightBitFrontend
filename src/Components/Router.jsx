@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import styled from 'styled-components';
-import TopNavBar from './TopNavBar';
-import Login from './LoginContainer';
-import Sign from './SignContainer';
-import EmailPwFound from './EmailPwFoundContainer';
+import TopNavBar from './Header/TopNavBarContainer';
+import Login from './Login/LoginContainer';
+import Sign from './Sign/SignContainer';
+import EmailPwFound from './EmailPwFound/EmailPwFoundContainer';
+import PhoneAuth from './Phone/PhoneAuthContainer';
+import SelectSign from "./Phone/SelectSignContainer";
 import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
-import Footer from "./Footer";
-import NotFound from "./NotFound";
+import Footer from "./Footer/Footer";
+import NotFound from "./ErrorPage/NotFound";
 
 
 
@@ -20,6 +22,8 @@ return(
         <Route path="/Login" element={<Login />} />
         <Route path="/Sign" element={<Sign />} />
         <Route path="/EmailPwFound" element={<EmailPwFound />} />
+        <Route path="/PhoneAuth" element={<PhoneAuth />} />
+        <Route path="/SelectSign" element={<SelectSign />} />
         <Route path="*" element={<NotFound />} />
     </Routes>
 </FooterSetContent>
@@ -32,5 +36,5 @@ export default Router;
 
 const FooterSetContent = styled.div
 `
-    padding-bottom: 166px;
+    padding-bottom: 186px;
 `
