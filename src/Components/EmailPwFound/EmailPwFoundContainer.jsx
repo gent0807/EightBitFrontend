@@ -4,10 +4,10 @@ import EmailPwFound from './EmailPwFound';
 let Containerbox = styled.div`
     margin: auto;
     max-width: 460px;
-    padding: 169px 0px 54px 0px;
+    padding: 235px 0px 54px 0px;
     @media (min-width:250px) and (max-width:480px)
     {
-      padding: 328px 0px 54px 0px;
+        padding: 394px 0px 54px 0px;
     }
 `
 
