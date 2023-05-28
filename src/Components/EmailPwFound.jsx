@@ -233,7 +233,7 @@ const EmailPwFound = () =>
           {
             setIsEmailBtn(false);
             setIsEmailPoundCheck(true);
-            setEmailFoundCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 찾을수 없습니다!</ErrorMessageText></ErrorMessageBox>]);
+            setEmailFoundCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입 정보가 확인되지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
           }
           else if(data==="yes")
           {
