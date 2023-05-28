@@ -125,6 +125,8 @@ const HeaderBox = () =>
         setIsDefaultScene(true)
     }
 
+    console.log(ProfileMenuShow);
+
     return (
         <ALLNavBox>
         <BackgroudTopNav>
