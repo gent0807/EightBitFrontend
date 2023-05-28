@@ -26,13 +26,10 @@ const HeaderBox = () =>
     const [ isShopIconCheck, setIsShopIconCheck ] = useState(false);
     const [ isComunityIconCheck, setIsComunityIconCheck ] = useState(false);
     const [ isSupprotIconCheck, setIsSupprotIconCheck ] = useState(false);
-    const [ isProfileSlideCheck, setIsProfileSlideCheck ] = useState(false);
     const [ isProfileLogoutCheck, setIsProfileLogoutCheck ] = useState(false);
     const [ isDefaultScene, setIsDefaultScene ] = useState(false);
     const user = useSelector( (state) => state.user );
     const dispatch = useDispatch();
-
-    console.log(isProfileSlideCheck);
 
     let ALLRef = useRef(null);
   
@@ -63,7 +60,6 @@ const HeaderBox = () =>
         dispatch(clearUser(user));
         setProfileMenuShow(false);
         setProfileClickCheck(false);
-        setIsProfileSlideCheck(false);
         setIsProfileLogoutCheck(true);
     }
 
