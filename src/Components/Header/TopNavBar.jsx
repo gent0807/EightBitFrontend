@@ -246,8 +246,8 @@ const HeaderBox = () =>
             <>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profieimg src="img/Default.png"/></Profile>,
             <WriteBox onClick={WriteMenuCheck} ref={WriteRef}><WriteBoxText>글쓰기</WriteBoxText></WriteBox>] :
-            [<LineBox left={"20px"} top={"12px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox left={"9px"} top={"12px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
+            [<LineBox left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
+            <MenuBox left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>
             <ProfileListBox default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
                 <ProfileUl>
@@ -576,7 +576,7 @@ const MenuBox = styled.div
     white-space: nowrap;
     a
     {
-        font-size:20px;
+        font-size:23px;
         font-weight: lighter;
         color: white;
         -webkit-tap-highlight-color:transparent;
@@ -596,7 +596,7 @@ const LineBox = styled(MenuBox)
         display: inline-block;
         height: 16px;
         width: 2px;
-        margin: 1px 7px -3px 15px;
+        margin: 0px 7px -1px 15px;
     }
 `
 const SearchInputBox = styled.div
