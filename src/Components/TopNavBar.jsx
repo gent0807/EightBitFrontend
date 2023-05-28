@@ -45,10 +45,10 @@ const HeaderBox = () =>
       };
 
       if(!ProfileMenuShow) {
-      document.addEventListener("mousedown", handleOuside);
+        document.addEventListener("click", handleOuside);
       }
       return () => {
-        document.removeEventListener("mousedown", handleOuside);
+        document.removeEventListener("click", handleOuside);
       };
     }, [ALLRef])
 
@@ -117,11 +117,9 @@ const HeaderBox = () =>
 
     const ProfileMenuCheck = () =>
     {
-        if (isProfileSlideCheck) return;
         setIsProfileLogoutCheck(false);
-        setIsProfileSlideCheck(true);
-        setProfileMenuShow(true);
-        setProfileClickCheck(true);
+        setProfileMenuShow(!ProfileMenuShow);
+        setProfileClickCheck(!ProfileClickCheck);
         setIsDefaultScene(true)
     }
 
@@ -153,18 +151,18 @@ const HeaderBox = () =>
             <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
             <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
             <>
-            {user.data !== "" ? [<Profile click={ProfileClickCheck} onClick={() => [ProfileMenuCheck(), setIsProfileSlideCheck(!isProfileSlideCheck)]}><Profieimg src="img/kakao.jpg"/></Profile>,
+            {user.data !== "" ? [<Profile click={ProfileClickCheck}  ref={ALLRef} onClick={() => ProfileMenuCheck()}><Profieimg src="img/kakao.jpg"/></Profile>,
             <WriteBox><WriteBoxText>글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox left={"20px"} top={"12px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox left={"9px"} top={"12px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>
-            <ProfileListBox default={isDefaultScene} logout={isProfileLogoutCheck} show={ProfileMenuShow} ref={ALLRef}>
+            <ProfileListBox default={isDefaultScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
                 <ProfileUl>
-                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><Link to='/Sign'><ProfileliText>마이페이지</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><Link to='/'><ProfileliText>개발자등록</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><Link to='/'><ProfileliText>굿즈샵 입점</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><Link to='/'><ProfileliText>회원정보수정</ProfileliText></Link></Profileli>
-                    <Profileli line="none" padding="15px 0px 15px 13px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText MediaLeft={"8px"} MediaTop={"2px"}>로그아웃</ProfileliText></Profileli>
+                <Link to='/Sign'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText></Profileli></Link>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText></Profileli></Link>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>회원정보수정</ProfileliText></Profileli></Link>
+                    <Profileli line="none" padding="15px 0px 15px 13px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText MediaLeft={"13px"}>로그아웃</ProfileliText></Profileli>
                 </ProfileUl>
             </ProfileListBox>
         </ButtonBox>
@@ -562,6 +560,7 @@ const ProfileListBox = styled.div
     position: absolute;
     animation: ${props => props.show ? slideDown : slideUp } 0.5s;
     overflow: hidden;
+    z-index: 1;
 `
 
 const ProfileUl = styled.ul
@@ -569,6 +568,13 @@ const ProfileUl = styled.ul
     margin: 0px;
     padding: 0px;
     color: black;
+    a
+    {
+        color: black;
+        font-size: 25px;
+        font-weight: bold;
+        -webkit-tap-highlight-color:transparent;
+    }
 `
 
 const Profileli = styled.li
@@ -580,17 +586,6 @@ const Profileli = styled.li
     font-weight: bold;
     font-size: 25px;
     display:flex;
-    a{
-        color: black;
-        font-size: 25px;
-        font-weight: bold;
-        margin: 0px 0px 0px 12px;
-        -webkit-tap-highlight-color:transparent;
-        &:hover
-        {
-            color: black;
-        }
-    }
     &:hover
     {
         background-color: #55aaff;
@@ -619,10 +614,5 @@ const ProfileliText = styled.span
 const ProfileliIcon = styled.i
 `
         margin-left: ${props => props.left};
-        a
-        {
-            margin: 4px 0px 0px 0px;
-            -webkit-tap-highlight-color:transparent;
-        }
 `
 export default HeaderBox;
