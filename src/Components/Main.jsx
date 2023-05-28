@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import Router from './Router';
 
 const Main = () => {
-
+ 
   return (
     <FooterSet>
     <Router/>
