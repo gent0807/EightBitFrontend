@@ -5,24 +5,29 @@ import "./fonts/font.css";
 import Main from './Components/Main';
 import styled from 'styled-components';
 import { Provider } from "react-redux";
-import store from "./Components/Store";
+import store from "./Components/LoginRedux/Store";
 
 const Font = styled.body
 `
-  font-family: "Dung Geun Mo";
+  font-family: "NanumSquareR";
   margin: 0px;
   input 
   {
-    font-family: "Dung Geun Mo";
+    font-family: "NanumSquareR";
     &::placeholder
     {
-      font-family: "Dung Geun Mo";
+      font-family: "NanumSquareR";
     }
   }
 
+  input[type=password] 
+  {
+    font-family: none;
+  }
+  
   button
   {
-    font-family: "Dung Geun Mo";
+    font-family: "NanumSquareR";
   }
 
 `
