@@ -316,7 +316,7 @@ const Signinput = () =>
                   <SelectOptionLI value="nate.com" onClick={setEmailDomain}>nate.com</SelectOptionLI>
                   <SelectOptionLI value="daum.net" onClick={setEmailDomain}>daum.net</SelectOptionLI>
                   <SelectOptionLI value="outlook.com" onClick={setEmailDomain}>outlook.com</SelectOptionLI>
-                  <SelectOptionLI onClick={readyToWirteInputDirect}><span className="InputDirect">직접입력</span></SelectOptionLI>
+                  <SelectOptionLI onClick={readyToWirteInputDirect}>직접입력</SelectOptionLI>
                 </SelectOption>
                 <SelectValueText>{SelectValue}</SelectValueText>
               <ArrowBox direction={isSelectBtnCheck}>{isSelectBtnCheck ? "▼" : "▲"}</ ArrowBox>
@@ -475,7 +475,7 @@ const SelectBox = styled.div
     width: 130px;
     height: 20px;
     background-color: #dee2e6;
-    font-size:15px;
+    font-size:16px;
     border: ${props => props.show ? "none" : "solid 2px #6767ff"};
     border-radius: 10px;
     outline: none;
@@ -506,6 +506,7 @@ const SelectOptionLI = styled.li
 `
   padding: 10px 0px 10px 0px;
   text-align: center;
+  font-size: 16px;
   cursor: pointer;
   &:hover
   {
