@@ -26,11 +26,15 @@ const HeaderBox = () =>
     const [isShopIconCheck, setIsShopIconCheck] = useState(false);
     const [isComunityIconCheck, setIsComunityIconCheck] = useState(false);
     const [isSupprotIconCheck, setIsSupprotIconCheck] = useState(false);
+    const [isProfileSlideCheck, setIsProfileSlideCheck] = useState(false);
+    const [isProfileLogoutCheck, setIsProfileLogoutCheck] = useState(false);
+    const [isDefaultScene, setIsDefaultScene] = useState(false);
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
+    console.log(isProfileSlideCheck);
+
     let ALLRef = useRef(null);
-    let MouseOver = useRef(null);
   
     useEffect(() => {
       function handleOuside(e) {
@@ -59,6 +63,8 @@ const HeaderBox = () =>
         dispatch(clearUser(user));
         setProfileMenuShow(false);
         setProfileClickCheck(false);
+        setIsProfileSlideCheck(false);
+        setIsProfileLogoutCheck(true);
     }
 
     const GameliHover = () =>
@@ -109,6 +115,16 @@ const HeaderBox = () =>
         setIsGameTabCheck(true);
     }
 
+    const ProfileMenuCheck = () =>
+    {
+        if (isProfileSlideCheck) return;
+        setIsProfileLogoutCheck(false);
+        setIsProfileSlideCheck(true);
+        setProfileMenuShow(true);
+        setProfileClickCheck(true);
+        setIsDefaultScene(true)
+    }
+
     return (
         <ALLNavBox>
         <BackgroudTopNav>
@@ -131,21 +147,21 @@ const HeaderBox = () =>
                 <SearchButton><HiOutlineSearch/></SearchButton>
                 </SearchInputIconBox>
             </SearchInputBox>
-        <ButtonBox>
+        <ButtonBox menucheck={user.data !== ""}>
             <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><MdLanguage/></MenuBox>
             <MenuBox left={"20px"} size={"40px"} padding={"6px 0px 0px 0px"}><AiOutlineMenu/></MenuBox>
             <>
-            {user.data !== "" ? <Profile click={ProfileClickCheck} onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><Profieimg src="img/kakao.jpg"/></Profile> :
+            {user.data !== "" ? <Profile click={ProfileClickCheck} onClick={() => [ProfileMenuCheck(), setIsProfileSlideCheck(!isProfileSlideCheck)]}><Profieimg src="img/kakao.jpg"/></Profile> :
             [<MenuBox left={"20px"} top={"4px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></MenuBox>,
             <MenuBox left={"9px"} top={"4px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>
-            <ProfileListBox show={ProfileMenuShow} ref={ALLRef}>
+            <ProfileListBox default={isDefaultScene} logout={isProfileLogoutCheck} show={ProfileMenuShow} ref={ALLRef}>
                 <ProfileUl>
-                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><Link to='/Sign'><ProfileliText left="10px">마이페이지</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><Link to='/'><ProfileliText left="10px">개발자등록</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><Link to='/'><ProfileliText left="10px">굿즈샵 입점</ProfileliText></Link></Profileli>
-                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><Link to='/'><ProfileliText left="10px">회원정보수정</ProfileliText></Link></Profileli>
-                    <Profileli line="none" padding="15px 0px 15px 13px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText left={"7px"} top={"2px"}>로그아웃</ProfileliText></Profileli>
+                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><Link to='/Sign'><ProfileliText>마이페이지</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><Link to='/'><ProfileliText>개발자등록</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><Link to='/'><ProfileliText>굿즈샵 입점</ProfileliText></Link></Profileli>
+                    <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><Link to='/'><ProfileliText>회원정보수정</ProfileliText></Link></Profileli>
+                    <Profileli line="none" padding="15px 0px 15px 13px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText MediaLeft={"8px"} MediaTop={"2px"}>로그아웃</ProfileliText></Profileli>
                 </ProfileUl>
             </ProfileListBox>
         </ButtonBox>
@@ -188,11 +204,22 @@ const HeaderBox = () =>
 const BackgroudTopNav = styled.div
 `
     background-color: #6767ff;
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        width: 480px;
+        height: 233px;
+    }
 `
 
 const BackgroudSubNav = styled.div
 `
     border-bottom: solid 3px #6767ff;
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        width: 480px;
+    }
 `
 
 const ALLNavBox = styled.div
@@ -205,6 +232,7 @@ const GameSubNav = styled.div
     display: ${props => props.display ? "none" : "block"};
 a{
     text-decoration: none;
+    -webkit-tap-highlight-color:transparent;
     color: black;
     font-weight: bold;
     &:hover
@@ -228,6 +256,17 @@ const ComunitySubNav = styled(GameSubNav)
     &:hover
     {
         color: #55aaff;
+    }
+
+    &::-webkit-scrollbar
+    {
+        display: none;
+    }
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        white-space: nowrap;
+        overflow: scroll;
     }
 `
 const SupportSubNav = styled(GameSubNav)
@@ -255,6 +294,7 @@ const GameLi = styled.li
     a
     {
         color: ${props => props.active ? "#55aaff" : "white"};
+        -webkit-tap-highlight-color:transparent;
     }
 `
 
@@ -277,6 +317,12 @@ const SubNavMenu = styled.div
     margin: auto;
     max-width: 1500px;
     align-items: center;
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        font-size: 21px;
+    }
+    
 `
 
 const Topnav = styled.header
@@ -292,6 +338,12 @@ const Topnav = styled.header
         text-decoration: none;
         font-weight: bold;
         font-size: 25px;
+        -webkit-tap-highlight-color:transparent;
+    }
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        flex-direction: column;
     }
 `
 
@@ -311,12 +363,25 @@ const NavBox = styled.div
     display: flex;
     margin: 15px 0px 15px 0px;
     color: white;
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        flex-direction: column;
+        margin: 12px 0px 0px 0px;
+        text-align: center;
+    }
 `
 
 const NavUl = styled.ul
 `
     display: flex;
     margin: 12px 0px 12px 0px;
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        margin: 12px 0px 12px -63px;
+        white-space: nowrap;
+    }
 `
 
 const SearchInput = styled.input
@@ -340,6 +405,12 @@ const AllButtonBox = styled.div
     align-items: center;
     justify-content: center;
     color: white;
+    -webkit-tap-highlight-color:transparent;
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        flex-direction: column;
+    }
 }
 `
 
@@ -347,6 +418,12 @@ const ButtonBox = styled.div
 `
     display: flex;
     margin-right: 23px;
+
+    @media (min-width:250px) and (max-width:480px)
+    {
+        margin-left: ${props => props.menucheck ? "-61px" : "0px"};
+        margin-top: ${props => props.menucheck ? "5px" : "0px"};
+    }
 `
 
 const MenuBox = styled.div
@@ -360,11 +437,13 @@ const MenuBox = styled.div
     a
     {
         color: white;
+        -webkit-tap-highlight-color:transparent;
     }
     &:hover
     {
         color: #55aaff;
     }
+
 `
 const SearchInputBox = styled.div
 `
@@ -417,7 +496,7 @@ const Profieimg = styled.img
     height: 50px;
 `
 
-const slide = keyframes
+const slideDown = keyframes
 `
     0%{
         height: 0px;
@@ -425,19 +504,30 @@ const slide = keyframes
     100%{
         height: 300px;
     }
+    }
+`
+
+const slideUp = keyframes
+`
+    0%{
+        height: 300px;
+    }
+    100%{
+        height: 0px;
+    }
 `
 
 const ProfileListBox = styled.div
 `
-    display: ${props => props.show ? "block" : "none"};
+    display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    border: solid 2px #6767ff;
     margin: 54px 0px 0px -30px;
+    border: solid 2px #6767ff;
     background: white;
-    height: 300px;
+    height: ${props => props.show ? "300px" : "0px"};
     border-radius: 10px;
     position: absolute;
-    animation: ${slide} 0.5s;
+    animation: ${props => props.show ? slideDown : slideUp } 0.5s;
     overflow: hidden;
 `
 
@@ -461,7 +551,8 @@ const Profileli = styled.li
         color: black;
         font-size: 25px;
         font-weight: bold;
-        margin: 2px 0px 0px 0px;
+        margin: 0px 0px 0px 12px;
+        -webkit-tap-highlight-color:transparent;
         &:hover
         {
             color: black;
@@ -487,8 +578,8 @@ const Profileli = styled.li
 `
 const ProfileliText = styled.span
 `
-        margin-left: ${props => props.left};
-        margin-top: ${props => props.top};
+        margin-left: ${props => props.MediaLeft};
+        margin-top: ${props => props.MediaTop};
         font-size: 25px;
 `
 
@@ -498,6 +589,7 @@ const ProfileliIcon = styled.i
         a
         {
             margin: 4px 0px 0px 0px;
+            -webkit-tap-highlight-color:transparent;
         }
 `
 export default HeaderBox;
