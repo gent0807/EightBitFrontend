@@ -9,30 +9,30 @@ const EmailPwFound = () =>
     const [Pw1,setPw1]=useState("");
     const [Pw2,setPw2]=useState("");
 
-    const [Email, setEmail] = useState("");
-    const [Emailauth, setEmailauth] = useState("");
-    const [PasswordChangeE, setPasswordChange ] = useState("");
-    const [PasswordChangeConfirmM, setPasswordChangeConfirm ] = useState("");
+    const [ Email, setEmail ] = useState("");
+    const [ Emailauth, setEmailauth ] = useState("");
+    const [ PasswordChangeE, setPasswordChange ] = useState("");
+    const [ PasswordChangeConfirmM, setPasswordChangeConfirm ] = useState("");
 
-    const [EmailMessage, setEmailMessage] = useState("");
-    const [EmailauthMessage, setEmailauthMessage] = useState("");
-    const [PasswordChangeMessage, setPasswordChangeMessage ] = useState("");
-    const [PasswordChangeConfirmMessage, setPasswordChangeConfirmMessage ] = useState("");
-    const [EmailFoundCheckMessage, setEmailFoundCheckMessage ] = useState("");
+    const [ EmailMessage, setEmailMessage ] = useState("");
+    const [ EmailauthMessage, setEmailauthMessage ] = useState("");
+    const [ PasswordChangeMessage, setPasswordChangeMessage ] = useState("");
+    const [ PasswordChangeConfirmMessage, setPasswordChangeConfirmMessage ] = useState("");
+    const [ EmailFoundCheckMessage, setEmailFoundCheckMessage ] = useState("");
 
-    const [isEmail, setIsEmail] = useState(false);
-    const [isEmailBtn, setIsEmailBtn] = useState(false);
-    const [isEmailauthBtn, setIsEmailauthBtn] = useState(false);
-    const [isInputCheck, setIsInputCheck] = useState(true);
-    const [isButtonCheck, setIsButtonCheck] = useState(false);
-    const [isPasswordChange, setIsPasswordChange ] = useState(false);
-    const [isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = useState(false);
-    const [isEmailPoundCheck, setIsEmailPoundCheck] = useState(false);
-    const [isInputEmailCheck, setIsEmailtPwCheck] = useState(false);
-    const [isInputPasswordChangeCheck, setIsInputPasswordChangeCheck] = useState(false);
-    const [isInputPasswordChangeConfirmCheck, setIsInputPasswordChangeConfirmCheck] = useState(false);
+    const [ isEmail, setIsEmail ] = useState(false);
+    const [ isEmailBtn, setIsEmailBtn ] = useState(false);
+    const [ isEmailauthBtn, setIsEmailauthBtn ] = useState(false);
+    const [ isInputCheck, setIsInputCheck ] = useState(true);
+    const [ isButtonCheck, setIsButtonCheck ] = useState(false);
+    const [ isPasswordChange, setIsPasswordChange ] = useState(false);
+    const [ isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = useState(false);
+    const [ isEmailPoundCheck, setIsEmailPoundCheck ] = useState(false);
+    const [ isInputEmailCheck, setIsEmailtPwCheck ] = useState(false);
+    const [ isInputPasswordChangeCheck, setIsInputPasswordChangeCheck ] = useState(false);
+    const [ isInputPasswordChangeConfirmCheck, setIsInputPasswordChangeConfirmCheck ] = useState(false);
 
-    const [changeVisibled, setchangeVisibled] = useState(false);
+    const [ changeVisibled, setchangeVisibled ] = useState(false);
 
     const navigate = useNavigate();
 
@@ -370,6 +370,11 @@ const EmPwInputContainer = styled.div
     border: solid 3px #6767ff;
     padding: 20px;
     border-radius: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `
 
 const Information = styled.div
@@ -398,7 +403,7 @@ const EmailInputT = styled.div
 
 const EmailInput = styled.input
 `
-    width: 320px;
+    width: 275px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -425,12 +430,12 @@ const ErrorMessageBox = styled.div
 
 const ErrorMessageIcon = styled.i
 `
-    margin: -2px 5px 6px;
+    margin: -2px -2px 5px;
 `
 
 const ErrorMessageText = styled.span
 `
-    margin: -2px 5px 6px;
+    margin: -2px 8px 6px;
 `
 
 const ErrorMessage = styled.p
@@ -526,7 +531,7 @@ const Title = styled.label
 
 const PasswordChangeInput = styled.input
 `
-    width: 430px;
+    width: 385px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;

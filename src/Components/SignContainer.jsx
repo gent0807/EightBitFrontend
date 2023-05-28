@@ -4,7 +4,7 @@ import styled from 'styled-components'
 let Containerbox = styled.div`
     margin: auto;
     max-width: 460px;
-    padding: 56px 20px 54px;
+    padding: 54px 0px 54px 0px;
 `
 
 const SignContainer = () => {

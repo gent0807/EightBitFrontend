@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import {FcGoogle} from "react-icons/fc";
-import {FaFacebookF} from "react-icons/fa";
-import {SiNaver} from "react-icons/si";
-import {AiOutlineTwitter} from "react-icons/ai";
-import {RiErrorWarningFill} from "react-icons/ri";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebookF } from "react-icons/fa";
+import { SiNaver } from "react-icons/si";
+import { AiOutlineTwitter } from "react-icons/ai";
+import { RiErrorWarningFill } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';
@@ -12,11 +12,11 @@ import { loginUser } from './LoginUser';
 
 const Logininput = () => 
 {                 
-    const [Email, setEmail] = useState('');
-    const [Pw, setPw] = useState('');
+    const [ Email, setEmail ] = useState('');
+    const [ Pw, setPw ] = useState('');
     //const [loginCheck,setLoginCheck]=React.useState('');
-    const [message,setMessage] = useState('');
-    const [isShow, setIsShow] = useState(false);
+    const [ message,setMessage ] = useState('');
+    const [ isShow, setIsShow ] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let loginCheck;
