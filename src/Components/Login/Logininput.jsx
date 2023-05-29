@@ -108,8 +108,8 @@ const Logininput = () =>
           <LoginInput>
           <InputT>
           <Sumbit onSubmit={OnCheckSubmit}>
-          <InputBox placeholder="이메일" onChange={OnChangeEmail}/>
-          <PwInputBox placeholder="비밀번호" onChange={OnChangePw} type='password'/>
+          <InputBox placeholder="E-mail" onChange={OnChangeEmail}/>
+          <PwInputBox placeholder="Password" onChange={OnChangePw} type='password'/>
           <ErrorMessageShow>{message}</ErrorMessageShow>
           <LoginMaintainT>
           <LoginMaintainCheckBox type='checkbox' onClick={Show}/>
@@ -223,7 +223,7 @@ const ErrorMessageShow = styled.p
 
 const LoginMaintain = styled.p
 `
-    font-size: 15px;
+    font-size: 16px;
     margin-top: 14px;
     margin-left: 4px;
     font-weight: 400;
@@ -262,7 +262,7 @@ const LoginBtnT = styled.div
 const LoginBtn = styled.button
 `
     width: 460px;
-    height: 44px;
+    height: 51px;
     padding: 0px 16px;
     background: #3c3c3c;
     border: none;

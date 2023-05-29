@@ -241,11 +241,11 @@ const HeaderBox = () =>
                 </SearchInputIconBox>
             </SearchInputBox>
         <ButtonBox menucheck={user.data !== ""}>
-            <MenuBox left={"20px"} top={"9px"} size={"29px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
-            <MenuBox left={"20px"} top={"9px"} size={"29px"} ref={FastRef} padding={"6px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
+            <MenuBox left={"21px"} top={"9px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
+            <MenuBox left={"20px"} top={"8px"} size={"33px"} ref={FastRef} padding={"5px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
-            {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profieimg src="img/Default.png"/></Profile>,
-            <WriteBox onClick={WriteMenuCheck} ref={WriteRef}><WriteBoxText>글쓰기</WriteBoxText></WriteBox>] :
+            {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profieimg src="img/Default.jpg"/></Profile>,
+            <WriteBox onClick={WriteMenuCheck} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>
@@ -319,11 +319,13 @@ const HeaderBox = () =>
 
 const WriteBox = styled.div
 `
-    margin: -1px 0px 0px 183px;
+    margin: 9.5px 0px 0px 181px;
+    width:66px;
+    height: 11px;
     position: absolute;
     border: solid 2px white;
-    padding: 15px;
-    border-radius: 11px;
+    padding: 14.5px;
+    border-radius: 8px;
     background: #6a9dda;
     font-size: 21px;
     cursor: pointer;
@@ -334,7 +336,8 @@ const WriteBox = styled.div
 `
 
 const WriteBoxText = styled.span
-`
+`   
+    padding: 0px 0px 0px 3px;
     @media (min-width:250px) and (max-width:480px)
     {
         white-space: nowrap;
@@ -452,6 +455,7 @@ const SubNavMenu = styled.div
 `
     height: 55px;
     justify-content: center;
+    font-size:21.7px;
     display: flex;
     margin: auto;
     max-width: 1500px;
@@ -459,7 +463,7 @@ const SubNavMenu = styled.div
     background: white;
     @media (min-width:250px) and (max-width:480px)
     {
-        font-size: 21px;
+        font-size: 17px;
     }
     
 `
@@ -525,15 +529,15 @@ const NavUl = styled.ul
 
 const SearchInput = styled.input
 `
+    margin: 5.5px 0px 0px 0px;
     border: none;
     outline: none;
-    height: 20px;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     padding: 0px 0.6rem;
     font-size: 20px;
     width: 200px;
-    height: 40px;
+    height: 42.5px;
     caret-color: #3c3c3c;
     background: #dee2e6;
 `
@@ -603,22 +607,23 @@ const SearchInputBox = styled.div
 `
     display: flex;
     border: solid 3px #3c3c3c;
-    border-radius: 24px;
+    border-radius: 13px;
 }
 `
 
 const SearchInputIconBox = styled.div
 `
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
     background: #dee2e6;
+    margin: 5.5px 0px 0px 0px;
 `
 
 const SearchButton = styled.button
 `
     border: none;
     background: transparent;
-    padding: 3px 8px 0px 0px;
+    padding: 5px 8px 0px 0px;
     cursor: pointer;
     font-size: 29px;
     &:hover
@@ -629,25 +634,25 @@ const SearchButton = styled.button
 
 const Profile = styled.div
 `
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 26px;
-    border: ${props => props.click ? "solid 2px #3c3c3c" : "none"};
+    border: ${props => props.click ? "solid 3.8px #3c3c3c" : "none"};
     overflow: hidden;
     cursor: pointer;
-    margin: ${props => props.click ? "7px 0px 0px 120px" : "9px 0px 0px 122px"};
+    margin: ${props => props.click ? "7px 0px 0px 120px" : "12.6px 0px 0px 122px"};
     position: absolute;
     &:hover
     {
-        border: solid 2px #6a9dda;
-        margin: 7px 0px 0px 120px;
+        border: solid 3.8px #6a9dda;
+        margin: 7.3px 0px 0px 120px;
     }
 `
 
 const Profieimg = styled.img
 `
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
 `
 
 const ProFileSlideDown = keyframes

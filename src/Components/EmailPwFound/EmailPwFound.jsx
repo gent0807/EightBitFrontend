@@ -330,7 +330,7 @@ const EmailPwFound = () =>
                 </EmailInputT>
             </EmPwInputT>
             <SubmitBtnBox>
-                <SumbitButton type="submit" disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}><span>완료</span></SumbitButton>
+                <SumbitButton type="submit" disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}><span>비밀번호 수정완료</span></SumbitButton>
             </SubmitBtnBox>
             </EmPwInputContainer>
             <AnotherRoute>
@@ -367,7 +367,7 @@ const EmPwForm = styled.form
 const EmPwInputContainer = styled.div
 `
     width: 460px;
-    border: solid 3px #3c3c3c;
+    
     padding: 20px;
     border-radius: 20px;
     box-sizing: border-box;
@@ -379,8 +379,9 @@ const EmPwInputContainer = styled.div
 
 const Information = styled.div
 `
-    margin: 0px 120px 30px 120px;
-    width: 200px;
+    margin: 0px 154px 45px 154px;
+    width: 250px;
+    border: solid 3px #3c3c3c;
     padding: 10px;
     text-align: center;
     border-radius: 20px;
@@ -560,7 +561,7 @@ const SubmitBtnBox = styled.div
 
 const SumbitButton = styled.button
 `
-    width: 100px;
+    width: 410px;
     height: 55px;
     background: #3c3c3c;
     border: none;
