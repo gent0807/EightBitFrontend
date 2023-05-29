@@ -11,7 +11,7 @@ import { MdOutlineDeveloperMode } from "react-icons/md";
 import { AiTwotoneShop } from "react-icons/ai";
 import { GrLogout } from "react-icons/gr";
 import { AiOutlineUserSwitch } from "react-icons/ai";
-
+import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 
 const HeaderBox = () =>
 {
@@ -34,8 +34,11 @@ const HeaderBox = () =>
     const [ LanguageMenuShow, setIsLanguageMenuShow ] = useState(false);
     const [ FastMenuShow, setIsFastMenuShow ] = useState(false);
     const [ WriteMenuShow, setIsWriteMenuShow ] = useState(false);
+    const [ WriteMenuClickCheck, setIsWriteMenuClickCheck ] = useState(false);
     const [ LanguageClickCheck, setLanguageClickCheck ] = useState(false);
     const [ FastClickCheck, setFastClickCheck ] = useState(false);
+
+
     const user = useSelector( (state) => state.user );
     const dispatch = useDispatch();
 
@@ -96,6 +99,7 @@ const HeaderBox = () =>
         function handleOuside(e) {
           if (WriteRef.current && !WriteRef.current.contains(e.target)) {
               setIsWriteMenuShow(false);
+              setIsWriteMenuClickCheck(false);
           }
         };
   
@@ -180,6 +184,7 @@ const HeaderBox = () =>
         setIsFastMenuShow(false);
         setFastClickCheck(false);
         setIsWriteMenuShow(false);
+        setIsWriteMenuClickCheck(false);
     }
 
     const LanguageMenuCheck = () =>
@@ -192,6 +197,7 @@ const HeaderBox = () =>
         setIsFastMenuShow(false);
         setFastClickCheck(false);
         setIsWriteMenuShow(false);
+        setIsWriteMenuClickCheck(false);
     }
 
     const FastMenuCheck = () =>
@@ -204,11 +210,13 @@ const HeaderBox = () =>
         setIsLanguageMenuShow(false);
         setLanguageClickCheck(false);
         setIsWriteMenuShow(false);
+        setIsWriteMenuClickCheck(false);
     }
 
     const WriteMenuCheck = () =>
     {
         setIsWriteMenuShow(!WriteMenuShow);
+        setIsWriteMenuClickCheck(!WriteMenuClickCheck);
         setDefaultWriteScene(true);
         setProfileMenuShow(false);
         setProfileClickCheck(false);
@@ -241,11 +249,11 @@ const HeaderBox = () =>
                 </SearchInputIconBox>
             </SearchInputBox>
         <ButtonBox menucheck={user.data !== ""}>
-            <MenuBox left={"20px"} top={"9px"} size={"29px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
-            <MenuBox left={"20px"} top={"9px"} size={"29px"} ref={FastRef} padding={"6px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
+            <MenuBox left={"20px"} top={"9px"} size={"29px"} click={LanguageClickCheck} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
+            <MenuBox left={"20px"} top={"9px"} size={"29px"} click={FastClickCheck} ref={FastRef} padding={"6px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profieimg src="img/Default.png"/></Profile>,
-            <WriteBox onClick={WriteMenuCheck} ref={WriteRef}><WriteBoxText>글쓰기</WriteBoxText></WriteBox>] :
+            <WriteBox onClick={WriteMenuCheck} click={WriteMenuClickCheck} ref={WriteRef}><WriteBoxText>글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>
@@ -313,6 +321,7 @@ const HeaderBox = () =>
             </SupportSubNav>
         </SubNavMenu>
         </BackgroudSubNav>
+        <Darkmode />
         </ALLNavBox>
     );
 }
@@ -324,18 +333,22 @@ const WriteBox = styled.div
     border: solid 2px white;
     padding: 15px;
     border-radius: 11px;
-    background: #6a9dda;
+    background: ${props => props.click ? "#2773cf" : "#6a9dda" };
     font-size: 21px;
     cursor: pointer;
-    &:hover
+    
+    @media (hover: hover)
     {
-        background: #2773cf;
+        &:hover
+        {
+            background: #2773cf;
+        }
     }
 `
 
 const WriteBoxText = styled.span
 `
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         white-space: nowrap;
     }
@@ -344,26 +357,34 @@ const BackgroudTopNav = styled.div
 `
     background-color: #3c3c3c;
 
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         width: 480px;
         height: 244px;
+    }
+
+    @media (min-width:512px) and (max-width:1342px)
+    {
+        height: 160px;
     }
 `
 
 const BackgroudSubNav = styled.div
 `
     border-bottom: solid 3px #3c3c3c;
+    background: white;
 
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         width: 480px;
     }
+
 `
 
 const ALLNavBox = styled.div
 `
     font-size: 25px;
+    
 `
 
 const GameSubNav = styled.div
@@ -402,7 +423,7 @@ const ComunitySubNav = styled(GameSubNav)
         display: none;
     }
 
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         white-space: nowrap;
         overflow: scroll;
@@ -426,6 +447,7 @@ const GameLi = styled.li
 `
     padding: 0px 20px 0px 20px;
     list-style: none;
+    white-space: nowrap;
     &
     {
         font-size: 25px;
@@ -457,11 +479,10 @@ const SubNavMenu = styled.div
     max-width: 1500px;
     align-items: center;
     background: white;
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         font-size: 21px;
     }
-    
 `
 
 const Topnav = styled.header
@@ -480,10 +501,11 @@ const Topnav = styled.header
         -webkit-tap-highlight-color:transparent;
     }
 
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:1342px)
     {
         flex-direction: column;
     }
+
 `
 
 const Logo = styled.img
@@ -503,11 +525,16 @@ const NavBox = styled.div
     margin: 15px 0px 15px 0px;
     color: white;
 
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         flex-direction: column;
         margin: 12px 0px 0px 0px;
         text-align: center;
+    }
+
+    @media (min-width:512px) and (max-width:1342px)
+    {
+        justify-content: center;
     }
 `
 
@@ -516,11 +543,12 @@ const NavUl = styled.ul
     display: flex;
     margin: 12px 0px 12px 0px;
 
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         margin: 12px 0px 12px -63px;
         white-space: nowrap;
     }
+
 `
 
 const SearchInput = styled.input
@@ -546,9 +574,14 @@ const AllButtonBox = styled.div
     color: white;
     -webkit-tap-highlight-color:transparent;
 
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         flex-direction: column;
+    }
+
+    @media (min-width:512px) and (max-width:1342px)
+    {
+        margin: 0px -62px 0px 0px;
     }
 `
 
@@ -557,7 +590,7 @@ const ButtonBox = styled.div
     display: flex;
     margin-right: ${props => props.menucheck ? "265px" : "72px"};
 
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:512px)
     {
         margin-left: ${props => props.menucheck ? "-61px" : "0px"};
         margin-top: ${props => props.menucheck ? "5px" : "0px"};
@@ -567,7 +600,7 @@ const ButtonBox = styled.div
 
 const MenuBox = styled.div
 `
-    color: white;
+    color: ${props => props.click ? "#6a9dda" : "white" };
     font-size: ${props => props.size};
     margin-left: ${props => props.left};
     margin-top: ${props => props.top};
@@ -581,9 +614,13 @@ const MenuBox = styled.div
         color: white;
         -webkit-tap-highlight-color:transparent;
     }
-    &:hover
+
+    @media (hover: hover)
     {
-        color: #6a9dda;
+        &:hover
+        {
+            color: #6a9dda;
+        }
     }
 `
 
@@ -625,6 +662,14 @@ const SearchButton = styled.button
     {
         color: #6a9dda;
     }
+    @media (min-width:250px) and (max-width:512px)
+    {
+        &:hover
+        {
+            color: black;
+        }
+    }
+
 `
 
 const Profile = styled.div
@@ -632,15 +677,20 @@ const Profile = styled.div
     width: 40px;
     height: 40px;
     border-radius: 26px;
-    border: ${props => props.click ? "solid 2px #3c3c3c" : "none"};
+    border: ${props => props.click ? "solid 2px #6a9dda" : "none"};
     overflow: hidden;
     cursor: pointer;
     margin: ${props => props.click ? "7px 0px 0px 120px" : "9px 0px 0px 122px"};
     position: absolute;
-    &:hover
+    
+    @media (hover: hover)
     {
-        border: solid 2px #6a9dda;
-        margin: 7px 0px 0px 120px;
+        &:hover
+        {
+            border: solid 2px #6a9dda;
+            margin: 7px 0px 0px 120px;
+        }
+        
     }
 `
 

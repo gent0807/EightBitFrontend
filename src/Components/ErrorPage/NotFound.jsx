@@ -19,14 +19,15 @@ const NotFoundContainer = styled.div
     justify-content: center;
     align-items: center;
     height: 720px;
-    padding: 169px 0px 54px 0px;
-    @media (min-width:250px) and (max-width:480px)
+    padding: 346px 0px 54px 0px;
+    @media (min-width:250px) and (max-width:512px)
     {
-      padding: 328px 0px 54px 0px;
+      padding: 505px 0px 54px 0px;
     }
 `
 
 const NotFoundText = styled.span
 `
+    color: ${(props) => props.theme.textColor};
     font-size: 25px;
 `

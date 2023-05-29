@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 import {RiErrorWarningFill} from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { styled, keyframes } from 'styled-components';
+import { isDark } from '../Darkmode/Darkmode';
+import { useRecoilValue } from 'recoil';
 
 
 const Signinput = () => 
@@ -37,6 +39,7 @@ const Signinput = () =>
 
 
   const [isVisibled, setVisibled] = useState(false);
+  const isDarkmode = useRecoilValue(isDark);
 
   const navigate = useNavigate();
 
@@ -101,7 +104,7 @@ const Signinput = () =>
     setIsEmailCertCheck(false);
     setIsEmailCertCheckBtn(false);
     setIsConfirmCheck(false);
-    setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
+    setEmailCertCheckMessage([<ErrorMessageBox margin={"33px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
     }
   }
 
@@ -149,7 +152,7 @@ const Signinput = () =>
 
     if (!PwCheck.test(currentPw))
     {
-        setPwMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+        setPwMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
         setIsPw(false);
     }else{
         setPwMessage("");
@@ -158,7 +161,7 @@ const Signinput = () =>
 
     if(currentPw !== PwConfirm)
     {
-        setPwConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
+        setPwConfirmMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
         setIsPwConfirm(false);
     }else{
         setPwConfirmMessage("");
@@ -182,7 +185,7 @@ const Signinput = () =>
 
     if(Pw !== currentPwConfirm)
     {
-      setPwConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
+      setPwConfirmMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
       setIsPwConfirm(false);
     }else{
       setPwConfirmMessage("");
@@ -206,7 +209,7 @@ const Signinput = () =>
 
     if(currentNickname.length > 6 || currentNickname.length < 2)
     {
-      setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>])
+      setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>])
       setIsNickname(false);
     }else{
       axios.post("http://localhost:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
@@ -238,7 +241,20 @@ const Signinput = () =>
   const checkAlreadySigning = () => 
   {
     const EmailTotal = Email + "@" + SelectValue;
+    const EmailTotalCheck = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
+    if(!EmailTotalCheck.test(EmailTotal))
+    {
+        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
+        <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
+        <span style={{margin:"-3px 5px 6px"}}>올바른 이메일 작성해 주세요!</span>
+        </div>])
+        setEmailCertCheckMessage("");
+        setVisibled(false);
+        setEmailCert("");
+        setIsInputCheck(true);
+    }else{
+    
     finalEmail.current=EmailTotal;
     
     axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
@@ -251,9 +267,9 @@ const Signinput = () =>
     .then(data=>{
       if(data === "yes" )
       {
-        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "10px 5px 6px"}}>
-        <i style={{margin: "-19px 5px 6px"}}><RiErrorWarningFill/></i>
-        <span style={{margin:"-19px 5px 6px", zIndex:-1}}>이미 가입된 이메일 입니다.</span>
+        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
+        <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
+        <span style={{margin:"-3px 5px 6px"}}>이미 가입된 이메일 입니다.</span>
         </div>])
         setVisibled(false);
       }
@@ -272,6 +288,7 @@ const Signinput = () =>
       }
         
     });
+    }
   }
 
   const register = (e) =>
@@ -295,7 +312,7 @@ const Signinput = () =>
   return (
       <SignT>
         <SignTop>
-          <Link to='/'><SignTopLogo src='img/8bit_Dark.png' alt='로고'/></Link>
+          <Link to='/'><SignTopLogo src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
         </SignTop>
         <SubmitT onSubmit={register}>
             <SignInputT>
@@ -305,7 +322,7 @@ const Signinput = () =>
               <EmailCheckT>
               <Title htmlFor="email">이메일</Title>
               <EmailBox>
-              <EmailInput disabled={isEmailCertCheck} value={Email} onChange={checkEmail}/>
+              <EmailInput disabled={isEmailCertCheck} value={Email} onChange={checkEmail} placeholder="이메일"/>
               <SelectInput onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} disabled={isEmailCertCheck} ON={isInputDirect} value={InputDirect} ref={inputFocus} onChange={checkAndSetInputDirect}/>
               <EmailText>@</EmailText>
               <SelectBox ref={textRef} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} show={isSelectBtnCheck} event={isEmailCertCheck}>
@@ -328,25 +345,25 @@ const Signinput = () =>
               <Title htmlFor="emailCert">인증번호</Title>
               <EmailCheckBtnT>
                 {/*<EmailAuthInput show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>*/}
-                <EmailAuthInput show={isInputCheck} check={isEmailCertCheck} value={EmailCert} onChange={setAuthNumber}/>
+                <EmailAuthInput placeholder="인증번호를 입력해주세요!" show={isInputCheck} check={isEmailCertCheck} value={EmailCert} onChange={setAuthNumber}/>
                 <CertCheckBtn show={isEmailCertCheck} type="button" onClick={checkAuthNumberRight}><span>{isEmailCertCheck ? "인증완료" : "인증하기"}</span></CertCheckBtn>
               </EmailCheckBtnT>
               </EmailAuthCheckT>
               <ErrorMessage show = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
               </EmailCheckT>
-              <PwCofirmNicknameT>
+              <PwCofirmNicknameT top={isVisibled ? "57px" : "42px"}>
               <Title htmlFor="Pw">비밀번호</Title>
-              <PwBox show={isPw} check={isInputPwCheck} type="password" value={Pw} onChange={OnChangePw}/>
+              <PwBox placeholder="비밀번호를 입력해주세요!" show={isPw} check={isInputPwCheck} type="password" value={Pw} onChange={OnChangePw}/>
                 {Pw.length > 0 && (<ErrorMessage show = {isPw}>{PwMessage}</ErrorMessage>)}
               </PwCofirmNicknameT>
-              <PwCofirmNicknameT>
+              <PwCofirmNicknameT top={"20px"}>
               <Title htmlFor="PwConfirm">비밀번호 확인</Title>
-                <PwCofirmBox show={isPwConfirm} check={isInputPwConfirmCheck} type="password" value={PwConfirm} onChange={OnChangePwConfirm}/>
+                <PwCofirmBox  placeholder="비번번호를 다시 입력해주세요!" show={isPwConfirm} check={isInputPwConfirmCheck} type="password" value={PwConfirm} onChange={OnChangePwConfirm}/>
                 {PwConfirm.length > 0 && (<ErrorMessage show = {isPwConfirm}>{PwConfirmMessage}</ErrorMessage>)}
               </PwCofirmNicknameT>
-              <PwCofirmNicknameT>
+              <PwCofirmNicknameT top={"20px"}>
               <Title htmlFor="Nickname">닉네임</Title>
-                <NicknameBox show={isNickname} check={isInputNicknameCheck} value={Nickname} onChange={checkAlreadyNickRegistered}/>
+                <NicknameBox placeholder="닉네임을 입력해주세요!" show={isNickname} check={isInputNicknameCheck} value={Nickname} onChange={checkAlreadyNickRegistered}/>
                 {Nickname.length > 0 && (<ErrorMessage show = {isNickname}>{NicknameMessage}</ErrorMessage>)}
               </PwCofirmNicknameT>
             </SignInputT>
@@ -367,20 +384,21 @@ const Signinput = () =>
 
 const EmailInput = styled.input
 `
-    width: 128px;
+    position: absolute;
+    width: 130px;
     height: 20px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
     border: none;
     border-radius: 10px;
-    caret-color: #3c3c3c;
+    caret-color: ${(props) => props.theme.textColor};
     background-color: #dee2e6;
     font-size:15px;
     &:focus
     {
         outline: none;
-        border: solid 2px #3c3c3c;
+        border: solid 2px ${(props) => props.theme.borderColor};
         border-radius: 10px;
     }
 `
@@ -388,11 +406,12 @@ const EmailInput = styled.input
 const Title = styled.label
 `
   font-weight: bold;
+  color: ${(props) => props.theme.textColor};
 `
 
 const SignTitle = styled.span
 `
-  color: #3c3c3c;
+  color: ${(props) => props.theme.textColor};
   font-weight: bold;
   font-size: 20px;
 `
@@ -417,6 +436,7 @@ const SignTopLogo = styled.img
 `
     width: 192px;
     height: 102px;
+    -webkit-user-select: none;
 `
 
 const EmailCheckT = styled.div
@@ -438,7 +458,7 @@ const Information = styled.div
 `
     margin: 0px 154px 45px 154px;
     width: 130px;
-    border: solid 3px #3c3c3c;
+    border: solid 3px ${(props) => props.theme.borderColor};
     padding: 10px;
     text-align: center;
     border-radius: 20px;
@@ -456,14 +476,14 @@ const SelectInput = styled.input
     border-radius: 10px;
     outline: none;
     padding: 20px 5px 20px 20px;
-    margin: ${props => props.ON ? "20px -4px 0px 45px" : "20px -4px 0px 45px"};
+    margin: ${props => props.ON ? "20px -4px 0px 194px" : "20px -4px 0px 194px"};
     cursor: pointer;
-    z-index: ${props => props.ON ? "1" : "0"};
-    caret-color: #3c3c3c;
+    z-index: ${props => props.ON ? "2" : "0"};
+    caret-color: ${(props) => props.theme.checkBoxColor};
     &:focus
     {
         outline: none;
-        border: solid 2px #3c3c3c;
+        border: solid 2px ${(props) => props.theme.borderColor};
         border-radius: 10px;
     }
 `
@@ -476,20 +496,22 @@ const SelectBox = styled.div
     height: 20px;
     background-color: #dee2e6;
     font-size:15px;
-    border: ${props => props.show ? "none" : "solid 2px #3c3c3c"};
+    border: ${props => props.show ? "none" : `solid 2px ${props.theme.borderColor}`};
     border-radius: 10px;
     outline: none;
     padding: 20px 5px 20px 20px;
-    margin: 20px 0px 20px 0px;
+    margin: 20px 0px 20px 194px;
     cursor: ${props => props.event ? "none" : "pointer"};
-    z-index: 0;
+    z-index: 1;
     pointer-events: ${props => props.event ? "none" : ""};
 `
 
 const EmailText = styled.span
 `
+    position: absolute;
     font-size: 25px;
-    margin: 0px 10px 0px 10px;
+    margin: 36px 0px 0px 162px;
+    color: ${(props) => props.theme.textColor};
 `
 
 const slide = keyframes
@@ -524,7 +546,7 @@ const SelectOption = styled.ul
     padding: 0px 0px 0px 0px;
     width: ${props => props.showli ? "145px" : "155px"};
     border-radius: 10px;
-    border: ${props => props.showli ? "none" : "solid 2px #3c3c3c"};
+    border: ${props => props.showli ? "none" : `solid 2px ${props.theme.borderColor}`};
     animation: ${slide} 0.5s;
     overflow: hidden;
 `
@@ -532,24 +554,25 @@ const SelectOption = styled.ul
 const SelectValueText = styled.span
 `
     position: absolute;
-    margin-top: 3px;
+    margin: 1px 0px 0px 0px;
 `
 
 const ArrowBox = styled.div
 `
+    color: ${(props) => props.theme.textColor};
     position: absolute;
     margin-left: 110px;
-    margin-top: ${props => props.direction ? "0px" : "-1px"};
+    margin-top: ${props => props.direction ? "1px" : "0px"};
 `
 
 const CertBtn = styled.button
 `
-    margin-left: 162px;
-    margin-top: -4px;
+    margin-left: 359px;
+    margin-top: 22px;
     width: 100px;
-    height: 61px;
+    height: 55px;
     border: ${props => props.show ? "none" : "solid 1px #dddddd"};
-    background: ${props => props.show ? "#3c3c3c" : "#aaaaaa"};
+    background: ${props => props.show ? props.theme.buttonColor : "#aaaaaa"};
     border-radius: 0.4rem;
     cursor: pointer;
     color:white;
@@ -566,7 +589,7 @@ const ErrorMessage = styled.p
     display: ${props => props.show ? "none" : "block"};
     margin: 0px;
     padding: 0px;
-    color:red;
+    color: ${(props) => props.theme.errorColor};
     font-size: 15px;
 `
 
@@ -575,12 +598,13 @@ const ErrorMessage = styled.p
 const EmailAuthCheckT = styled.div
 `
     display: ${props => props.show ? "block" : "none"};
-    margin-top: ${props => props.show ? "15px" : "0px"};
+    margin-top: ${props => props.show ? "39px" : "0px"};
+    margin-bottom: ${props => props.show ? "-18px" : "0px"};
 `
 
 const PwCofirmNicknameT = styled.div
 `
-    margin-top: 15px;
+    margin-top: ${props => props.top};
 `
 
 const EmailAuthInput = styled.input
@@ -589,16 +613,17 @@ const EmailAuthInput = styled.input
   padding: 20px 5px 20px 20px;
   margin-top: 20px;
   margin-bottom: 20px;
-  border: ${props => props.show ? "none" : props.check ? "solid 2px green" : "solid 2px red"};
+  border: ${props => props.show ? "none" : props.check ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` };
   border-radius: 10px;
-  caret-color: #3c3c3c;
+  caret-color: ${props => props.theme.textColor};
   background-color: #dee2e6;
   font-size:15px;
   pointer-events: ${props => props.check ? "none" : "true"};
+  position: absolute;
   &:focus
   {
     outline: none;
-    border: solid 2px #3c3c3c;
+    border: solid 2px ${props => props.theme.borderColor};
     border-radius: 10px;
   }
 `
@@ -609,11 +634,11 @@ const EmailCheckBtnT = styled.div
 
 const CertCheckBtn = styled.button
 `
-  margin-left: 10px;
+  margin: 21px 0px 0px 359px;
   width: 100px;
   height: 55px;
   border: ${props => props.show ? "solid 1px #dddddd" : "none"};
-  background: ${props => props.show ? "#aaaaaa" : "#3c3c3c"};
+  background: ${props => props.show ? "#aaaaaa" : props.theme.buttonColor};
   border-radius: 0.4rem;
   cursor: pointer;
   color:white;
@@ -631,27 +656,27 @@ const PwBox = styled.input
   padding: 20px 5px 20px 20px;
   margin-top: 20px;
   margin-bottom: 20px;
-  border: ${props => props.check ? props => props.show ? "solid 2px green" : "solid 2px red" : "none"};
+  border: ${props => props.check ? props => props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
   border-radius: 10px;
-  caret-color: #3c3c3c;
+  caret-color: ${props => props.theme.textColor};
   background-color: #dee2e6;
   font-size:15px;
   &:focus
   {
     outline: none;
-    border: solid 2px #3c3c3c;
+    border: solid 2px  ${props => props.theme.borderColor};
     border-radius: 10px;
   }
 `
 
 const PwCofirmBox = styled(PwBox)
 `
-    border: ${props => props.check ? props => props.show ? "solid 2px green" : "solid 2px red" : "none"};
+    border: ${props => props.check ? props => props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
 `
 
 const NicknameBox = styled(PwBox)
 `
-    border: ${props => props.check ? props => props.show ? "solid 2px green" : "solid 2px red" : "none"};
+    border: ${props => props.check ? props => props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
 `
 
 const SumbitButton = styled.button
@@ -659,7 +684,7 @@ const SumbitButton = styled.button
    
     width: 460px;
     padding: 15px;
-    background: #3c3c3c;
+    background: ${props => props.theme.buttonColor};
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
@@ -685,7 +710,7 @@ const SumbitButtonBox = styled.div
 
 const ErrorMessageBox = styled.div
 `
-    margin: -13px 5px 6px;
+    margin: ${props => props.margin};
     display: flex;
     position: absolute;
 `
@@ -695,20 +720,9 @@ const ErrorMessageIcon = styled.i
     margin: -2px 5px 6px;
 `
 
-const SuccessMessageIcon = styled.i
-`
-    margin: -2px 5px 6px;
-    color:green;
-`
-
 const ErrorMessageText = styled.span
 `
     margin: -2px 5px 6px;
-`
-const SuccessMessageText = styled.span
-`
-    margin: -2px 5px 6px;
-    color:green;
 `
 
 const EmPwFoundT = styled.div
@@ -721,7 +735,7 @@ const EmailPwFoundListLI = styled.li
     margin: 0px 10px 0px 10px;
     a
     {
-      color:black;
+      color:${props => props.theme.textColor};
       text-decoration: none;
       margin: 0px 15px 0px 15px;
     }
@@ -741,14 +755,12 @@ const EmailPwFoundList = styled.ul
 const EmailPwFoundListLiBar = styled(EmailPwFoundListLI)
 `
   &::after {
-  position: absolute;
-  content: "";
-  display: inline-block;
-  border-right: solid 1px gray;
-  width: 1px;
-  height: 11px;
-  margin: 4px 10px 0px 8px;
-  opacity: 20%;
+    background: ${props => props.theme.textColor};
+    position: absolute;
+    content: "";
+    display: inline-block;
+    width: 2px;height: 11px;
+    margin: 4px 10px 0px 10px;
 }
 `
 

@@ -6,6 +6,7 @@ import Main from './Components/Main';
 import styled from 'styled-components';
 import { Provider } from "react-redux";
 import store from "./Components/LoginRedux/Store";
+import { RecoilRoot } from 'recoil';
 
 const Font = styled.body
 `
@@ -35,11 +36,15 @@ const Font = styled.body
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-    <Font>
-    <Main />
-    </Font>
-  </Provider>
+  <React.StrictMode>
+    <RecoilRoot>
+      <Provider store={store}>
+        <Font>
+          <Main />
+        </Font>
+      </Provider>
+    </RecoilRoot>
+  </React.StrictMode>
 );
 
 reportWebVitals();
