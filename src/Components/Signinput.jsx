@@ -550,7 +550,7 @@ const CertBtn = styled.button
     width: 100px;
     height: 55px;
     border: ${props => props.show ? "none" : "solid 1px #dddddd"};
-    background: ${props => props.show ? "#6767ff" : "#aaaaaa"};
+    background: ${props => props.show ? "#6a9dda" : "#aaaaaa"};
     border-radius: 0.4rem;
     cursor: pointer;
     color:white;
@@ -614,7 +614,7 @@ const CertCheckBtn = styled.button
   width: 100px;
   height: 55px;
   border: ${props => props.show ? "solid 1px #dddddd" : "none"};
-  background: ${props => props.show ? "#aaaaaa" : "#6767ff"};
+  background: ${props => props.show ? "#6a9dda" : "#6767ff"};
   border-radius: 0.4rem;
   cursor: pointer;
   color:white;
@@ -660,7 +660,7 @@ const SumbitButton = styled.button
    
     width: 460px;
     padding: 15px;
-    background: #6767ff;
+    background: #6a9dda;
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
