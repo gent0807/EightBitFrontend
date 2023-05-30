@@ -43,6 +43,10 @@ const HeaderBox = () =>
     const user = useSelector( (state) => state.user );
     const dispatch = useDispatch();
 
+    let languageTopZIndex=useRef(false);
+    let fastMenuTopZIndex=useRef(false);
+    let profileMenuTopZIndex=useRef(false);
+    let writeMemuTopZIndex=useRef(false);
     let ProfileRef = useRef(null);
     let LanguageRef = useRef(null);
     let FastRef = useRef(null);
@@ -110,7 +114,7 @@ const HeaderBox = () =>
             return () => {
             document.removeEventListener("click", handleOuside);
             };
-        }, [WriteRef]);   
+        }, [WriteRef]);
         
 
     const OnSearch = (e) =>
@@ -177,6 +181,10 @@ const HeaderBox = () =>
 
     const LanguageMenuCheck = () =>
     {   
+        languageTopZIndex.current=true;
+        fastMenuTopZIndex.current=false;
+        profileMenuTopZIndex.current=false;
+        writeMemuTopZIndex.current=false;
         setIsLanguageMenuShow(!LanguageMenuShow);
         setLanguageClickCheck(!LanguageClickCheck);
         setIsDefaultLanguageScene(true);    
@@ -190,6 +198,10 @@ const HeaderBox = () =>
 
     const FastMenuCheck = () =>
     {   
+        languageTopZIndex.current=false;
+        fastMenuTopZIndex.current=true;
+        profileMenuTopZIndex.current=false;
+        writeMemuTopZIndex.current=false;
         setIsFastMenuShow(!FastMenuShow);
         setFastClickCheck(!FastClickCheck);
         setIsDefaultFastScene(true);
@@ -203,6 +215,10 @@ const HeaderBox = () =>
 
     const ProfileMenuCheck = () =>
     {   
+        languageTopZIndex.current=false;
+        fastMenuTopZIndex.current=false;
+        profileMenuTopZIndex.current=true;
+        writeMemuTopZIndex.current=false;
         setIsProfileLogoutCheck(false);
         setProfileMenuShow(!ProfileMenuShow);
         setProfileClickCheck(!ProfileClickCheck);
@@ -217,6 +233,10 @@ const HeaderBox = () =>
 
     const WriteMenuCheck = () =>
     {   
+        languageTopZIndex.current=false;
+        fastMenuTopZIndex.current=false;
+        profileMenuTopZIndex.current=false;
+        writeMemuTopZIndex.current=true;
         setIsWriteMenuShow(!WriteMenuShow);
         setWriteClickCheck(!WriteClickCheck);
         setDefaultWriteScene(true);
@@ -260,7 +280,7 @@ const HeaderBox = () =>
             [<LineBox left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>  
-            <LanguageListBox zindex={LanguageClickCheck} default={isDefaultLanguageScene} show={LanguageMenuShow}>
+            <LanguageListBox zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/korea.png"/><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/uk.png"/><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli>
@@ -270,12 +290,12 @@ const HeaderBox = () =>
                 <Profileli padding="11.5px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/china.png"/><ProfileliText  MediaLeft={"17px"}>Chinese</ProfileliText></Profileli>
                 </ProfileUl>
             </LanguageListBox>
-            <FastListBox zindex={FastClickCheck} default={isDefaultFastScene} show={FastMenuShow}>
+            <FastListBox zindex={fastMenuTopZIndex.current} default={isDefaultFastScene} show={FastMenuShow}>
                 <ProfileUl>
                 
                 </ProfileUl>
             </FastListBox>
-            <ProfileListBox zindex={ProfileClickCheck} default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
+            <ProfileListBox zindex={profileMenuTopZIndex.current} default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
                 <ProfileUl>
                 <Link to='/Sign'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/user.png"/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/bell.png"/><ProfileliText  MediaLeft={"17px"}>최신 소식</ProfileliText></Profileli>
@@ -285,7 +305,7 @@ const HeaderBox = () =>
                 <Profileli line="none" padding="12.5px 0px 15px 13px" onClick={LogoutFunc}><DropdownImg src="img/logout.png"/><ProfileliText MediaLeft={"13px"}>로그아웃</ProfileliText></Profileli>
                 </ProfileUl>
             </ProfileListBox>
-            <WriteListBox zindex={WriteClickCheck} default={isDefaultWriteScene} show={WriteMenuShow}>
+            <WriteListBox zindex={writeMemuTopZIndex.current} default={isDefaultWriteScene} show={WriteMenuShow}>
                 <ProfileUl>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/essay.png"/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/discussion.png"/><ProfileliText  MediaLeft={"17px"}>토론게시판</ProfileliText></Profileli>
@@ -657,12 +677,12 @@ const Profile = styled.div
     border: ${props => props.click ? "solid 3.8px #3c3c3c" : "none"};
     overflow: hidden;
     cursor: pointer;
-    margin: ${props => props.click ? "9.6px 0px 0px 170.96px" : "12.6px 0px 0px 174px"};
+    margin: ${props => props.click ? "10px 0px 0px 170.96px" : "12.6px 0px 0px 174px"};
     position: absolute;
     &:hover
     {
         border: solid 3.8px #6a9dda;
-        margin: 9.6px 0px 0px 171px;
+        margin: 10px 0px 0px 171px;
     }
 `
 
