@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { styled, keyframes } from 'styled-components';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
+import { ScrollTop } from '../Header/TopNavBar'
 
 
 const Signinput = () => 
@@ -68,6 +69,7 @@ const Signinput = () =>
       const { innerText }  = e.target;
       console.log(innerText);
       setSelectValue(innerText);
+      setInputDirect(innerText);
       setIsInputDirect(false);
   }
 
@@ -243,7 +245,7 @@ const Signinput = () =>
     const EmailTotal = Email + "@" + SelectValue;
     const EmailTotalCheck = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
-    if(!EmailTotalCheck.test(EmailTotal))
+    if(!EmailTotalCheck.test(EmailTotal) || InputDirect === "")
     {
         setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
@@ -371,8 +373,8 @@ const Signinput = () =>
                   <SumbitButton type='submit' disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
                   <EmPwFoundT>
                     <EmailPwFoundList>
-                      <EmailPwFoundListLiBar><Link to='/Login'>로그인</Link></EmailPwFoundListLiBar>
-                      <EmailPwFoundListLI><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLI>
+                      <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></EmailPwFoundListLiBar>
+                      <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLI>
                     </EmailPwFoundList>
                   </EmPwFoundT>
             </SumbitButtonBox>

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 let Containerbox = styled.div`
     margin: 0 auto;
     position: fixed;
-    z-index: 2;
+    z-index: 3;
     width: 100%;
 `
 

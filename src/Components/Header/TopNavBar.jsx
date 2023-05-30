@@ -267,10 +267,10 @@ const HeaderBox = () =>
             <Link to='/'><Logo src='img/8bit.png' alt='로고'/></Link>
         </LogoBox>
             <NavUl>
-                <GameLi active = {isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
-                <ShopLi active = {isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
-                <ComunityLi active = {isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
-                <SupportLi active = {isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
+                <GameLi onClick={() => ScrollTop()} active = {isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
+                <ShopLi onClick={() => ScrollTop()} active = {isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
+                <ComunityLi onClick={() => ScrollTop()} active = {isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
+                <SupportLi onClick={() => ScrollTop()} active = {isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
             </NavUl>
         </NavBox>
         <AllButtonBox>
@@ -282,13 +282,13 @@ const HeaderBox = () =>
             </SearchInputBox>
         <ButtonBox menucheck={user.data !== ""}>
             {user.data !=="" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
-            <MenuBox left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
-            <MenuBox left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"4.8px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
+            <MenuBox click={LanguageClickCheck} left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
+            <MenuBox click={FastClickCheck} left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"4.8px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
-            <WriteBox onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
-            [<LineBox left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
+            <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
+            [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
+            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>  
             <LanguageListBox zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
@@ -312,7 +312,7 @@ const HeaderBox = () =>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/coding.png"/><ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText></Profileli></Link>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/store.png"/><ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText></Profileli></Link>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/update.png"/><ProfileliText  MediaLeft={"17px"}>회원정보수정</ProfileliText></Profileli></Link>
-                <Profileli line="none" padding="12.5px 0px 15px 13px" onClick={LogoutFunc}><DropdownImg src="img/logout.png"/><ProfileliText MediaLeft={"13px"}>로그아웃</ProfileliText></Profileli>
+                <Profileli line="none" padding="10px 0px 15px 13px" onClick={LogoutFunc}><DropdownImg src="img/logout.png"/><ProfileliText MediaLeft={"16px"}>로그아웃</ProfileliText></Profileli>
                 </ProfileUl>
             </ProfileListBox>
             <WriteListBox zindex={writeMemuTopZIndex.current} default={isDefaultWriteScene} show={WriteMenuShow}>
@@ -322,7 +322,7 @@ const HeaderBox = () =>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/strategy.png"/><ProfileliText  MediaLeft={"17px"}>공략게시판</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/rating.png"/><ProfileliText  MediaLeft={"17px"}>상품 리뷰</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/console.png"/><ProfileliText  MediaLeft={"17px"}>게임 리뷰</ProfileliText></Profileli>
-                <Profileli padding="10.5px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/digital.png"/><ProfileliText  MediaLeft={"17px"}>아트웍 게시판</ProfileliText></Profileli>
+                <Profileli padding="10.5px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/digital.png"/><ProfileliText  MediaLeft={"17px"}>아트워크</ProfileliText></Profileli>
                 </ProfileUl>
             </WriteListBox>
         </ButtonBox>
@@ -363,6 +363,11 @@ const HeaderBox = () =>
     );
 }
 
+export const ScrollTop = () =>
+    {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
 const WriteBox = styled.div
 `
     margin: 9.5px 0px 0px 233.5px;
@@ -372,7 +377,7 @@ const WriteBox = styled.div
     border: solid 2px white;
     padding: 14.5px;
     border-radius: 8px;
-    background: #6a9dda;
+    background: ${props => props.click ? "#2773cf" : "#6a9dda"};
     font-size: 22px;
     cursor: pointer;
     
@@ -401,7 +406,7 @@ const BackgroudTopNav = styled.div
     @media (min-width:250px) and (max-width:512px)
     {
         width: 480px;
-        height: 244px;
+        height: 249px;
     }
 
     @media (min-width:512px) and (max-width:1342px)
@@ -600,6 +605,8 @@ const SearchInput = styled.input
     outline: none;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
     padding: 0px 0.6rem;
     font-size: 20px;
     width: 200px;
@@ -623,14 +630,14 @@ const AllButtonBox = styled.div
 
     @media (min-width:512px) and (max-width:1342px)
     {
-        margin: 0px -62px 0px 0px;
+        margin: -10px 13px 0px 0px;
     }
 `
 
 const ButtonBox = styled.div
 `
     display: flex;
-    margin-right: ${props => props.menucheck ? "136px" : "-3px"};
+    margin-right: ${props => props.menucheck ? "166px" : "-3px"};
 
     @media (min-width:250px) and (max-width:512px)
     {
@@ -693,6 +700,8 @@ const SearchInputIconBox = styled.div
     border-bottom-right-radius: 10px;
     background: #dee2e6;
     margin: 5.5px 0px 0px 0px;
+    height: 43.5px;
+    -webkit-user-select: none;
 `
 
 const SearchButton = styled.button
@@ -702,15 +711,13 @@ const SearchButton = styled.button
     padding: 5px 8px 0px 0px;
     cursor: pointer;
     font-size: 29px;
-    &:hover
-    {
-        color: #6a9dda;
-    }
-    @media (min-width:250px) and (max-width:512px)
+    color: black;
+
+    @media (hover: hover)
     {
         &:hover
         {
-            color: black;
+            color: #6a9dda;
         }
     }
 
@@ -721,7 +728,7 @@ const Profile = styled.div
     width: 36px;
     height: 36px;
     border-radius: 26px;
-    border: ${props => props.click ? "solid 3.8px #3c3c3c" : "none"};
+    border: ${props => props.click ? "solid 3.8px #6a9dda" : "none"};
     overflow: hidden;
     cursor: pointer;
     margin: ${props => props.click ? "10px 0px 0px 170.96px" : "12.6px 0px 0px 174px"};
@@ -850,8 +857,8 @@ const WriteListBox = styled(ProfileListBox)
 `
     display: ${props => props.default ? "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 174px;
-    height: ${props => props.show ? "370px" : "0px"};
+    margin: 59px 0px 0px 172.9px;
+    height: ${props => props.show ? "369px" : "0px"};
     z-index: ${props => props.zindex? 2 : 1};
 `
 

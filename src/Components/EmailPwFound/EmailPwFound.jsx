@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { isDark } from '../Darkmode/Darkmode';
+import { ScrollTop } from '../Header/TopNavBar';
 
 const EmailPwFound = () => 
 {
@@ -80,7 +81,7 @@ const EmailPwFound = () =>
 
     if (!EmailCheck.test(currentEmail)) 
       {
-        setEmailMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>올바른 이메일을 작성해 주세요!</ErrorMessageText></ErrorMessageBox>]);
+        setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>올바른 이메일을 작성해 주세요!</ErrorMessageText></ErrorMessageBox>]);
         setIsEmail(false);
       }
       else
@@ -104,7 +105,7 @@ const EmailPwFound = () =>
 
         if(PasswordChangeV === "")
         {
-            setIsInputPasswordChangeCheck(false);
+          setIsInputPasswordChangeCheck(false);
         }
         else
         {
@@ -113,7 +114,7 @@ const EmailPwFound = () =>
 
         if(!PwCheck.test(PasswordChangeV))
         {
-          setPasswordChangeMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>])
+          setPasswordChangeMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>])
           setIsPasswordChange(false);
           passwordPossibleCombCheck.current=false;
         }
@@ -127,7 +128,7 @@ const EmailPwFound = () =>
         {
           if(PasswordChangeV !== PasswordChangeConfirmM)
           {
-            setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
+            setPasswordChangeConfirmMessage([<ErrorMessageBox margin={"-30px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
             setIsPasswordChangeConfirm(false)
             if(PasswordChangeConfirmM=="")
             {
@@ -162,7 +163,7 @@ const EmailPwFound = () =>
             else if(passwordPossibleCombCheck.current==false)
             {
               setIsPasswordChange(false);
-              setPasswordChangeMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+              setPasswordChangeMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
             }
         }
         else
@@ -172,7 +173,7 @@ const EmailPwFound = () =>
             if(PasswordChangeE !== PasswordChangeConfirmV)
             { 
               setIsPasswordChange(false);
-              setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
+              setPasswordChangeConfirmMessage([<ErrorMessageBox margin={"-30px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
               setIsPasswordChangeConfirm(false)
             }
             else if(PasswordChangeE == PasswordChangeConfirmV)
@@ -181,7 +182,7 @@ const EmailPwFound = () =>
               {
                 setIsPasswordChange(false);
                 setIsPasswordChangeConfirm(false);
-                setPasswordChangeMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+                setPasswordChangeMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
                 setPasswordChangeConfirmMessage("");
               }
               else if(passwordPossibleCombCheck.current==true)
@@ -212,7 +213,7 @@ const EmailPwFound = () =>
               setIsPasswordChange(true);
             }
             else if(alreadyPasswordUsing.current=="yes"){
-              setPasswordChangeConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>기존의 비밀번호와 일치합니다!</ErrorMessageText></ErrorMessageBox>])
+              setPasswordChangeConfirmMessage([<ErrorMessageBox margin={"-30px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>기존의 비밀번호와 일치합니다!</ErrorMessageText></ErrorMessageBox>])
               setIsPasswordChangeConfirm(false);
               setIsPasswordChange(false);
             }
@@ -237,7 +238,7 @@ const EmailPwFound = () =>
 
             setIsEmailBtn(false);
             setIsEmailPoundCheck(true);
-            setEmailFoundCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입 정보가 확인되지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
+            setEmailFoundCheckMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입 정보가 확인되지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
           }
           else if(data==="yes")
           {
@@ -293,7 +294,7 @@ const EmailPwFound = () =>
           setIsButtonCheck(false)
           setIsEmailauthBtn(false)
           setchangeVisibled(false)
-          setEmailauthMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>])
+          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>])
         }
        
     }
@@ -304,9 +305,11 @@ const EmailPwFound = () =>
             <Link to='/'><EmPwLogo src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
             </EmPwFoundTop>
             <EmPwForm onSubmit={update}>
+            <InformationAllBox>
             <EmPwInformation>
             <EmPwFoundTitle>이메일/비밀번호 찾기</EmPwFoundTitle>
             </EmPwInformation>
+            </InformationAllBox>
             <EmPwInputT>
               <EmailInputT>
                 <EmailAuthInputBox>
@@ -341,8 +344,8 @@ const EmailPwFound = () =>
             </SubmitBtnBox>
             <AnotherRoute>
             <AnotherList>
-              <Login><Link to='/Login'>로그인</Link></Login>
-              <Sign><Link to='/Sign'>회원가입</Link></Sign>
+              <Login onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></Login>
+              <Sign onClick={() => ScrollTop()}><Link to='/Sign'>회원가입</Link></Sign>
             </AnotherList>
             </AnotherRoute>
             </EmPwForm>
@@ -352,7 +355,6 @@ const EmailPwFound = () =>
 
 const EmPwInformation = styled.div
 `
-    margin: 0px 123px 45px 123px;
     width: 191px;
     border: solid 3px ${(props) => props.theme.borderColor};
     padding: 10px;
@@ -367,9 +369,15 @@ const EmPwFoundT = styled.div
     align-items: center;
 `
 
-const EmailAuthInputBox = styled.div
+const InformationAllBox = styled.div
+`
+    display: flex;
+    justify-content: center;
 `
 
+const EmailAuthInputBox = styled.div
+`
+    margin: 50px 0px 0px 0px;
 `
 
 const EmailAuthAllBox = styled.div
@@ -392,6 +400,9 @@ const EmPwLogo = styled.img
 
 const EmPwForm = styled.form
 `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `
 
 const EmPwInputContainer = styled.div
@@ -430,6 +441,9 @@ const EmPwInputT = styled.div
 
 const EmailInputT = styled.div
 `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `
 
 const EmailInput = styled.input
@@ -454,7 +468,7 @@ const EmailInput = styled.input
 
 const ErrorMessageBox = styled.div
 `
-    margin: -13px 5px 6px;
+    margin: ${props => props.margin};
     display: flex;
     position: absolute;
 `
@@ -466,7 +480,7 @@ const ErrorMessageIcon = styled.i
 
 const ErrorMessageText = styled.span
 `
-    margin: -2px 8px 6px;
+    margin: -3px 6px 6px 7px;
 `
 
 const ErrorMessage = styled.p
@@ -515,11 +529,12 @@ const SendButton = styled.button
 const EmailAuthBox = styled.div
 `
     display: ${props => props.show ? "inline-block" : "none"};
+    margin: 21px 0px 0px 0px;
 `
 const EmailAuthInput = styled(EmailInput)
 `
     border: ${props => props.show ? "none" : props.check ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` };
-    margin-top: 44px;
+    margin-top: 27px;
 `
 
 const EmailAuthBtn = styled.button
@@ -544,13 +559,17 @@ const EmailAuthBtn = styled.button
 
 const PasswordChangeT = styled.div
 `
-    display: ${props => props.show ? "inline-block" : "none"};
+    display: ${props => props.show ? "flex" : "none"};
+    flex-direction: column;
+    margin-top: 4px;
 `
 
 const PasswordChangeConfirmT = styled.div
 `
-    display: ${props => props.show ? "inline-block" : "none"};
-    margin-top: 12px;
+    display: ${props => props.show ? "flex" : "none"};
+    flex-direction: column;
+    margin-top: 17px;
+    margin-bottom: 21px;
 `
 
 const Title = styled.label
@@ -583,11 +602,13 @@ const PasswordChangeInput = styled.input
 
 const PasswordChangeConfirmInput= styled(PasswordChangeInput)
 `
+    margin-top: 23px;
 `
 
 const SubmitBtnBox = styled.div
 `
-  margin: 22px 180px 0px 180px;
+    margin-top: 13px;
+    margin-bottom: 28px;
 `
 
 const SumbitButton = styled.button

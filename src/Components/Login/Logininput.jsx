@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from '../LoginRedux/LoginUser';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
+import { ScrollTop } from '../Header/TopNavBar'
 
 const Logininput = () => 
 {                 
@@ -135,8 +136,8 @@ const Logininput = () =>
           </LOGINAPI>
           <EmPwFoundT>
           <EmailPwFoundList>
-            <EmailPwFoundListLiBar><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
-            <EmailPwFoundListLI><Link to='/SIGN'>회원가입</Link></EmailPwFoundListLI>
+            <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
+            <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/SIGN'>회원가입</Link></EmailPwFoundListLI>
           </EmailPwFoundList>
           </EmPwFoundT>
         </LoginInput>
