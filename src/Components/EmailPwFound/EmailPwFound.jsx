@@ -144,7 +144,7 @@ const EmailPwFound = () =>
 
     const PasswordChangeConfirm = (e) =>
     {   
-        const PasswordChangeConfirmV = e.target.value
+        const PasswordChangeConfirmV = e.target.value;
         setPasswordChangeConfirm(PasswordChangeConfirmV)
         
         if(PasswordChangeConfirmV === "")

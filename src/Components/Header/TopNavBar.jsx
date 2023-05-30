@@ -11,6 +11,9 @@ import { MdOutlineDeveloperMode } from "react-icons/md";
 import { AiTwotoneShop } from "react-icons/ai";
 import { GrLogout } from "react-icons/gr";
 import { AiOutlineUserSwitch } from "react-icons/ai";
+import { AiOutlineShopping } from "react-icons/ai";
+import { BiBell} from "react-icons/bi";
+import {RiEnglishInput} from "react-icons/ri";
 
 
 const HeaderBox = () =>
@@ -34,6 +37,7 @@ const HeaderBox = () =>
     const [ LanguageMenuShow, setIsLanguageMenuShow ] = useState(false);
     const [ FastMenuShow, setIsFastMenuShow ] = useState(false);
     const [ WriteMenuShow, setIsWriteMenuShow ] = useState(false);
+    const [ WriteClickCheck, setWriteClickCheck ] =useState(false);
     const [ LanguageClickCheck, setLanguageClickCheck ] = useState(false);
     const [ FastClickCheck, setFastClickCheck ] = useState(false);
     const user = useSelector( (state) => state.user );
@@ -44,68 +48,70 @@ const HeaderBox = () =>
     let FastRef = useRef(null);
     let WriteRef = useRef(null);
   
-    useEffect(() => {
-      function handleOuside(e) {
-        if (ProfileRef.current && !ProfileRef.current.contains(e.target)) {
-            setProfileMenuShow(false);
-            setProfileClickCheck(false);
-        }
-      };
-
-      if(!ProfileMenuShow) {
-        document.addEventListener("click", handleOuside);
-      }
-      return () => {
-        document.removeEventListener("click", handleOuside);
-      };
-    }, [ProfileRef])
-
-    useEffect(() => {
+    useEffect(() => { 
         function handleOuside(e) {
-          if (LanguageRef.current && !LanguageRef.current.contains(e.target)) {
-              setLanguageClickCheck(false);
-              setIsLanguageMenuShow(false);
-          }
-        };
-  
-        if(!LanguageMenuShow) {
-          document.addEventListener("click", handleOuside);
-        }
-        return () => {
-          document.removeEventListener("click", handleOuside);
-        };
-      }, [LanguageRef])
+            if (LanguageRef.current && !LanguageRef.current.contains(e.target)) {
+                setLanguageClickCheck(false);
+                setIsLanguageMenuShow(false);
+            }
+            };
+    
+            if(!LanguageMenuShow) {
+            document.addEventListener("click", handleOuside);
+            }
+            return () => {
+            document.removeEventListener("click", handleOuside);
+            };
+        }, [LanguageRef]);
 
-      useEffect(() => {
+    useEffect(() => {    
         function handleOuside(e) {
-          if (FastRef.current && !FastRef.current.contains(e.target)) {
-              setFastClickCheck(false);
-              setIsFastMenuShow(false);
-          }
-        };
-  
-        if(!FastMenuShow) {
-          document.addEventListener("click", handleOuside);
-        }
-        return () => {
-          document.removeEventListener("click", handleOuside);
-        };
-      }, [FastRef])
+            if (FastRef.current && !FastRef.current.contains(e.target)) {
+                setFastClickCheck(false);
+                setIsFastMenuShow(false);
+            }
+            };
+    
+            if(!FastMenuShow) {
+            document.addEventListener("click", handleOuside);
+            }
+            return () => {
+            document.removeEventListener("click", handleOuside);
+            };
+        }, [FastRef]);
 
-      useEffect(() => {
+    useEffect(() => {    
         function handleOuside(e) {
-          if (WriteRef.current && !WriteRef.current.contains(e.target)) {
-              setIsWriteMenuShow(false);
-          }
-        };
-  
-        if(!WriteMenuShow) {
-          document.addEventListener("click", handleOuside);
-        }
-        return () => {
-          document.removeEventListener("click", handleOuside);
-        };
-      }, [WriteRef])
+            if (ProfileRef.current && !ProfileRef.current.contains(e.target)) {
+                setProfileMenuShow(false);
+                setProfileClickCheck(false);
+            }
+            };
+    
+            if(!ProfileMenuShow) {
+            document.addEventListener("click", handleOuside);
+            }
+            return () => {
+            document.removeEventListener("click", handleOuside);
+            };
+        }, [ProfileRef]);
+
+    useEffect(() => {    
+        function handleOuside(e) {
+            if (WriteRef.current && !WriteRef.current.contains(e.target)) {
+                setIsWriteMenuShow(false);
+                setWriteClickCheck(false);
+            }
+            };
+    
+            if(!WriteMenuShow) {
+            document.addEventListener("click", handleOuside);
+            }
+            return () => {
+            document.removeEventListener("click", handleOuside);
+            };
+        }, [WriteRef]);   
+        
 
     const OnSearch = (e) =>
     {
@@ -169,8 +175,34 @@ const HeaderBox = () =>
         setIsGameTabCheck(true);
     }
 
+    const LanguageMenuCheck = () =>
+    {   
+        setIsLanguageMenuShow(!LanguageMenuShow);
+        setLanguageClickCheck(!LanguageClickCheck);
+        setIsDefaultLanguageScene(true);    
+        setProfileMenuShow(false);
+        setProfileClickCheck(false);
+        setIsFastMenuShow(false);
+        setFastClickCheck(false);
+        setWriteClickCheck(false);
+        setIsWriteMenuShow(false);
+    }
+
+    const FastMenuCheck = () =>
+    {   
+        setIsFastMenuShow(!FastMenuShow);
+        setFastClickCheck(!FastClickCheck);
+        setIsDefaultFastScene(true);
+        setProfileMenuShow(false);
+        setProfileClickCheck(false);
+        setIsLanguageMenuShow(false);
+        setLanguageClickCheck(false);
+        setWriteClickCheck(false);
+        setIsWriteMenuShow(false);
+    }
+
     const ProfileMenuCheck = () =>
-    {
+    {   
         setIsProfileLogoutCheck(false);
         setProfileMenuShow(!ProfileMenuShow);
         setProfileClickCheck(!ProfileClickCheck);
@@ -179,36 +211,14 @@ const HeaderBox = () =>
         setLanguageClickCheck(false);
         setIsFastMenuShow(false);
         setFastClickCheck(false);
-        setIsWriteMenuShow(false);
-    }
-
-    const LanguageMenuCheck = () =>
-    {
-        setIsLanguageMenuShow(!LanguageMenuShow);
-        setLanguageClickCheck(!LanguageClickCheck);
-        setIsDefaultLanguageScene(true);
-        setProfileMenuShow(false);
-        setProfileClickCheck(false);
-        setIsFastMenuShow(false);
-        setFastClickCheck(false);
-        setIsWriteMenuShow(false);
-    }
-
-    const FastMenuCheck = () =>
-    {
-        setIsFastMenuShow(!FastMenuShow);
-        setFastClickCheck(!FastClickCheck);
-        setIsDefaultFastScene(true);
-        setProfileMenuShow(false);
-        setProfileClickCheck(false);
-        setIsLanguageMenuShow(false);
-        setLanguageClickCheck(false);
+        setWriteClickCheck(false);
         setIsWriteMenuShow(false);
     }
 
     const WriteMenuCheck = () =>
-    {
+    {   
         setIsWriteMenuShow(!WriteMenuShow);
+        setWriteClickCheck(!WriteClickCheck);
         setDefaultWriteScene(true);
         setProfileMenuShow(false);
         setProfileClickCheck(false);
@@ -241,43 +251,48 @@ const HeaderBox = () =>
                 </SearchInputIconBox>
             </SearchInputBox>
         <ButtonBox menucheck={user.data !== ""}>
-            <MenuBox left={"21px"} top={"9px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
-            <MenuBox left={"20px"} top={"8px"} size={"33px"} ref={FastRef} padding={"5px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
+            {user.data !=="" ? [<MenuBox left={"21px"} top={"8.3px"} size={"32px"} padding={"6px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
+            <MenuBox left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
+            <MenuBox left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"5px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
-            {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profieimg src="img/Default.jpg"/></Profile>,
-            <WriteBox onClick={WriteMenuCheck} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
+            {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
+            <WriteBox onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
-            </>
-            <ProfileListBox default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
+            </>  
+            <LanguageListBox zindex={LanguageClickCheck} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
-                <Link to='/Sign'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>회원정보수정</ProfileliText></Profileli></Link>
-                    <Profileli line="none" padding="15px 0px 15px 13px" onClick={LogoutFunc}><ProfileliIcon left="3px"><GrLogout/></ProfileliIcon><ProfileliText MediaLeft={"13px"}>로그아웃</ProfileliText></Profileli>
-                </ProfileUl>
-            </ProfileListBox>
-            <LanguageListBox default={isDefaultLanguageScene} show={LanguageMenuShow}>
-                <ProfileUl>
-                <Link to='/Sign'><Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli></Link>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/korea.png"/><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/uk.png"/><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/germany.png"/><ProfileliText  MediaLeft={"17px"}>Deutsch</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/spain.png"/><ProfileliText  MediaLeft={"17px"}>Espanol</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/japan.png"/><ProfileliText  MediaLeft={"17px"}>Japanese</ProfileliText></Profileli>
+                <Profileli padding="11.5px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/china.png"/><ProfileliText  MediaLeft={"17px"}>Chinese</ProfileliText></Profileli>
                 </ProfileUl>
             </LanguageListBox>
-            <FastListBox default={isDefaultFastScene} show={FastMenuShow}>
+            <FastListBox zindex={FastClickCheck} default={isDefaultFastScene} show={FastMenuShow}>
                 <ProfileUl>
-                <Link to='/Sign'><Profileli padding="15px 0px 15px 13px" onClick={() => [setIsFastMenuShow(!FastMenuShow), setFastClickCheck(!FastClickCheck)]}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>미정</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setIsFastMenuShow(!FastMenuShow), setFastClickCheck(!FastClickCheck)]}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>미정</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setIsFastMenuShow(!FastMenuShow), setFastClickCheck(!FastClickCheck)]}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>미정</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setIsFastMenuShow(!FastMenuShow), setFastClickCheck(!FastClickCheck)]}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>미정</ProfileliText></Profileli></Link>
+                
                 </ProfileUl>
             </FastListBox>
-            <WriteListBox default={isDefaultWriteScene} show={WriteMenuShow}>
+            <ProfileListBox zindex={ProfileClickCheck} default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
                 <ProfileUl>
-                <Link to='/Sign'><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><ProfileliIcon><FaRegUserCircle/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>미정</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><ProfileliIcon><MdOutlineDeveloperMode/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>미정</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><ProfileliIcon><AiTwotoneShop/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>미정</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><ProfileliIcon><AiOutlineUserSwitch/></ProfileliIcon><ProfileliText  MediaLeft={"17px"}>미정</ProfileliText></Profileli></Link>
+                <Link to='/Sign'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/user.png"/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/bell.png"/><ProfileliText  MediaLeft={"17px"}>최신 소식</ProfileliText></Profileli>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/coding.png"/><ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText></Profileli></Link>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/store.png"/><ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText></Profileli></Link>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/update.png"/><ProfileliText  MediaLeft={"17px"}>회원정보수정</ProfileliText></Profileli></Link>
+                <Profileli line="none" padding="12.5px 0px 15px 13px" onClick={LogoutFunc}><DropdownImg src="img/logout.png"/><ProfileliText MediaLeft={"13px"}>로그아웃</ProfileliText></Profileli>
+                </ProfileUl>
+            </ProfileListBox>
+            <WriteListBox zindex={WriteClickCheck} default={isDefaultWriteScene} show={WriteMenuShow}>
+                <ProfileUl>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/essay.png"/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/discussion.png"/><ProfileliText  MediaLeft={"17px"}>토론게시판</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/strategy.png"/><ProfileliText  MediaLeft={"17px"}>공략게시판</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/rating.png"/><ProfileliText  MediaLeft={"17px"}>상품 리뷰</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/console.png"/><ProfileliText  MediaLeft={"17px"}>게임 리뷰</ProfileliText></Profileli>
+                <Profileli padding="10.5px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/digital.png"/><ProfileliText  MediaLeft={"17px"}>아트웍 게시판</ProfileliText></Profileli>
                 </ProfileUl>
             </WriteListBox>
         </ButtonBox>
@@ -319,15 +334,15 @@ const HeaderBox = () =>
 
 const WriteBox = styled.div
 `
-    margin: 9.5px 0px 0px 181px;
-    width:66px;
+    margin: 9.5px 0px 0px 233.5px;
+    width: 66px;
     height: 11px;
     position: absolute;
     border: solid 2px white;
     padding: 14.5px;
     border-radius: 8px;
     background: #6a9dda;
-    font-size: 21px;
+    font-size: 22px;
     cursor: pointer;
     &:hover
     {
@@ -337,7 +352,8 @@ const WriteBox = styled.div
 
 const WriteBoxText = styled.span
 `   
-    padding: 0px 0px 0px 3px;
+    margin: -6px 0px 0px 2.5px;
+    position:absolute;
     @media (min-width:250px) and (max-width:480px)
     {
         white-space: nowrap;
@@ -537,7 +553,7 @@ const SearchInput = styled.input
     padding: 0px 0.6rem;
     font-size: 20px;
     width: 200px;
-    height: 42.5px;
+    height: 43.5px;
     caret-color: #3c3c3c;
     background: #dee2e6;
 `
@@ -559,7 +575,7 @@ const AllButtonBox = styled.div
 const ButtonBox = styled.div
 `
     display: flex;
-    margin-right: ${props => props.menucheck ? "265px" : "72px"};
+    margin-right: ${props => props.menucheck ? "136px" : "-3px"};
 
     @media (min-width:250px) and (max-width:480px)
     {
@@ -583,7 +599,7 @@ const MenuBox = styled.div
         font-size:23px;
         font-weight: lighter;
         color: white;
-        -webkit-tap-highlight-color:transparent;
+        -webkit-tap-highlight-color:transparent;    
     }
     &:hover
     {
@@ -603,6 +619,7 @@ const LineBox = styled(MenuBox)
         margin: 0px 7px -1px 15px;
     }
 `
+
 const SearchInputBox = styled.div
 `
     display: flex;
@@ -640,20 +657,26 @@ const Profile = styled.div
     border: ${props => props.click ? "solid 3.8px #3c3c3c" : "none"};
     overflow: hidden;
     cursor: pointer;
-    margin: ${props => props.click ? "7px 0px 0px 120px" : "12.6px 0px 0px 122px"};
+    margin: ${props => props.click ? "9.6px 0px 0px 170.96px" : "12.6px 0px 0px 174px"};
     position: absolute;
     &:hover
     {
         border: solid 3.8px #6a9dda;
-        margin: 7.3px 0px 0px 120px;
+        margin: 9.6px 0px 0px 171px;
     }
 `
 
-const Profieimg = styled.img
+const Profileimg = styled.img
 `
     width: 36px;
     height: 36px;
 `
+const DropdownImg = styled.img
+`
+    width: 33px;
+    height: 33px;
+`
+
 
 const ProFileSlideDown = keyframes
 `
@@ -722,47 +745,42 @@ const ProfileListBox = styled.div
 `
     display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 53px;
+    margin: 59px 0px 0px 81.5px;
     border: solid 2px #3c3c3c;
-    background: white;
-    height: ${props => props.show ? "300px" : "0px"};
+    background: white;  
+    height: ${props => props.show ? "370px" : "0px"};
     border-radius: 10px;
     position: absolute;
-    animation: ${props => props.show ? ProFileSlideDown : ProFileSlideUp } 0.5s;
+    animation: ${props => props.show ? ProFileSlideDown : ProFileSlideUp } 0.25s;
     overflow: hidden;
-    z-index: 1;
+    z-index: ${props => props.zindex? 2 : 1};
 `
 
 const LanguageListBox = styled(ProfileListBox)
 `
     display: ${props => props.default ? "block" : "none"};
-    width: 160px;
-    margin: 57px 0px 0px -21px;
-    height: ${props => props.show ? "119px" : "0px"};
-    animation: ${props => props.show ? LanguageSlideDown : LanguageSlideUp } 0.5s;
-    z-index: 1;
+    width: 217px;
+    margin: 59px 0px 0px -22.7px;
+    height: ${props => props.show ? "370px" : "0px"};
+    z-index: ${props => props.zindex? 2 : 1};
+`
+
+const FastListBox = styled(ProfileListBox)
+`
+    display: ${props => props.default ? "block" : "none"};
+    width: 310px;
+    margin: 59px 0px 0px 20px;
+    height: ${props => props.show ? "370px" : "0px"};
+    z-index: ${props => props.zindex? 2 : 1};
 `
 
 const WriteListBox = styled(ProfileListBox)
 `
     display: ${props => props.default ? "block" : "none"};
-    width: 160px;
-    margin: 57px 0px 0px 184px;
-    height: ${props => props.show ? "119px" : "0px"};
-    animation: ${props => props.show ? WriteSlideDown : WriteSlideUp } 0.5s;
-    z-index: 1;
-`
-
-const FastListBox = styled.div
-`
-    display: ${props => props.show ? "block" : "none"};
-    position: absolute;
-    z-index: 1;
-    background: white;
-    border: solid 2px #3c3c3c;
-    margin: 59px 0px 0px 54px;
-    width: 335px;
-    z-index: 1;
+    width: 217px;
+    margin: 59px 0px 0px 174px;
+    height: ${props => props.show ? "370px" : "0px"};
+    z-index: ${props => props.zindex? 2 : 1};
 `
 
 const ProfileUl = styled.ul
@@ -809,7 +827,7 @@ const Profileli = styled.li
 const ProfileliText = styled.span
 `
         margin-left: ${props => props.MediaLeft};
-        margin-top: ${props => props.MediaTop};
+        margin-top: 2.5px; 
         font-size: 25px;
 `
 
