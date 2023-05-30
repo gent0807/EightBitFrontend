@@ -1,24 +1,50 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './CSS/index.css';
-import Main from './Components/Main';
-import Login from './Components/LoginContainer';
-import Sign from './Components/SignContainer';
-import EmailPwFound from './Components/EmailPwFoundContainer'
+import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import "./fonts/font.css"
+import "./fonts/font.css";
+import Main from './Components/Main';
+import styled from 'styled-components';
+import { Provider } from "react-redux";
+import store from "./Components/LoginRedux/Store";
+import { RecoilRoot } from 'recoil';
+
+const Font = styled.body
+`
+  font-family: "NanumSquareR";
+  margin: 0px;
+  input 
+  {
+    font-family: "NanumSquareR";
+    &::placeholder
+    {
+      font-family: "NanumSquareR";
+    }
+  }
+
+  input[type=password] 
+  {
+    font-family: none;
+  }
+  
+  button
+  {
+    font-family: "NanumSquareR";
+  }
+
+`
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Sign" element={<Sign />} />
-        <Route path="/EmailPwFound" element={<EmailPwFound />} />
-    </Routes>
-  </BrowserRouter>
+  <React.StrictMode>
+    <RecoilRoot>
+      <Provider store={store}>
+        <Font>
+          <Main />
+        </Font>
+      </Provider>
+    </RecoilRoot>
+  </React.StrictMode>
 );
 
 reportWebVitals();
