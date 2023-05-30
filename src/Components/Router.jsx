@@ -36,5 +36,5 @@ export default Router;
 
 const FooterSetContent = styled.div
 `
-    padding-bottom: 228px;
+    padding-bottom: 285px;
 `

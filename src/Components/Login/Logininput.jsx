@@ -9,6 +9,8 @@ import axios from 'axios';
 import { styled } from 'styled-components';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../LoginRedux/LoginUser';
+import { isDark } from '../Darkmode/Darkmode';
+import { useRecoilValue } from 'recoil';
 
 const Logininput = () => 
 {                 
@@ -19,6 +21,7 @@ const Logininput = () =>
     const [ isShow, setIsShow ] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isDarkmode = useRecoilValue(isDark);
     let loginCheck;
 
     const Show = () =>
@@ -103,7 +106,7 @@ const Logininput = () =>
     return(
       <LoginT> 
           <LoginTop>
-          <Link to='/'><LoginTopLOGO src='img/8bit_Dark.png' alt='로고'/></Link>
+          <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
           </LoginTop>
           <LoginInput>
           <InputT>
@@ -148,14 +151,14 @@ export const InputBox = styled.input
     margin-bottom: 10px;
     border: none;
     border-radius: 10px;
-    caret-color: #3c3c3c;
+    caret-color: ${(props) => props.theme.textColor};
     background-color: #dee2e6;
     font-size:15px;
     &:focus
     {
       border: none;
       outline: none;
-      border: solid 2px #3c3c3c;
+      border: solid 2px ${(props) => props.theme.borderColor};
       border-radius: 10px;
     }
     &::placeholder
@@ -197,6 +200,7 @@ const LoginTopLOGO = styled.img
 `
     width: 192px;
     height: 102px;
+    -webkit-user-select: none;
 `
 
 const LoginInput = styled.div
@@ -218,7 +222,7 @@ const ErrorMessageShow = styled.p
     display: inline-block;
     margin: 0px;
     font-size: 15px;
-    color: red;
+    color: ${(props) => props.theme.errorColor};
 `
 
 const LoginMaintain = styled.p
@@ -227,6 +231,7 @@ const LoginMaintain = styled.p
     margin-top: 14px;
     margin-left: 4px;
     font-weight: 400;
+    color: ${(props) => props.theme.textColor};
 `
 
 const LoginMaintainT = styled.div
@@ -237,12 +242,12 @@ const LoginMaintainT = styled.div
 
 const LoginMaintainCheckBox = styled.input
 `
-    accent-color: #3c3c3c;
+    accent-color: ${(props) => props.theme.checkBoxColor};
     zoom: 1.5;
     margin-top: 3px;
     &:checked
     {
-      accent-color: #3c3c3c;
+      accent-color: ${(props) => props.theme.checkBoxColor};
       zoom: 1.5;
       margin-top: -2px;
     }
@@ -253,7 +258,7 @@ const LoginMaintainMessageShow = styled.p
     display: ${props => props.show ? "block" : "none"};
     margin: 40px 0px 0px -100px;
     font-size: 12px;
-    color:gray;
+    color: ${(props) => props.theme.textColor};
 `
 
 const LoginBtnT = styled.div
@@ -264,7 +269,7 @@ const LoginBtn = styled.button
     width: 460px;
     height: 51px;
     padding: 0px 16px;
-    background: #3c3c3c;
+    background: ${(props) => props.theme.buttonColor};
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
@@ -274,7 +279,7 @@ const LoginBtn = styled.button
   &:active
   {
       padding: 10px;
-      background: #3c3c3c;
+      background: ${(props) => props.theme.buttonColor};
       font-size: 90%;
       opacity: 90%;
   }
@@ -287,21 +292,21 @@ const Line = styled.p
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    color:gray;
+    color: ${(props) => props.theme.textColor};
     font-size: 13px;
     &::before
     {
       height: 1px;
       flex: 1 1 0%;
       content: "";
-      background-color: rgba(0,0,0,.06);
+      background-color: ${(props) => props.theme.textColor};
     }
     &::after
     {
       height: 1px;
       flex: 1 1 0%;
       content: "";
-      background-color: rgba(0,0,0,.06);
+      background-color: ${(props) => props.theme.textColor};
     }
     span
     {
@@ -362,7 +367,7 @@ const EmailPwFoundListLI = styled.li
     margin: 0px 10px 0px 10px;
     a
     {
-      color:black;
+      color: ${props => props.theme.textColor};
       text-decoration: none;
       margin: 0px 15px 0px 15px;
     }
@@ -371,14 +376,12 @@ const EmailPwFoundListLI = styled.li
 const EmailPwFoundListLiBar = styled(EmailPwFoundListLI)
 `
   &::after {
-  position: absolute;
-  content: "";
-  display: inline-block;
-  border-right: solid 1px gray;
-  width: 1px;
-  height: 11px;
-  margin: 4px 10px 0px 8px;
-  opacity: 20%;
+    background: ${props => props.theme.textColor};
+    position: absolute;
+    content: "";
+    display: inline-block;
+    width: 2px;height: 11px;
+    margin: 4px 10px 0px 10px;
 }
 `
 

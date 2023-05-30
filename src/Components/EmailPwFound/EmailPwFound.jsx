@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import {RiErrorWarningFill} from "react-icons/ri";
+import { RiErrorWarningFill } from "react-icons/ri";
 import { styled } from 'styled-components';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
+import { isDark } from '../Darkmode/Darkmode';
 
 const EmailPwFound = () => 
 {
@@ -33,6 +35,7 @@ const EmailPwFound = () =>
     const [ isInputPasswordChangeConfirmCheck, setIsInputPasswordChangeConfirmCheck ] = useState(false);
 
     const [ changeVisibled, setchangeVisibled ] = useState(false);
+    const isDarkmode = useRecoilValue(isDark);
 
     const navigate = useNavigate();
 
@@ -231,6 +234,7 @@ const EmailPwFound = () =>
         .then(data=>{
           if(data === "no" )
           {
+
             setIsEmailBtn(false);
             setIsEmailPoundCheck(true);
             setEmailFoundCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입 정보가 확인되지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
@@ -297,18 +301,21 @@ const EmailPwFound = () =>
     return (
         <EmPwFoundT>
             <EmPwFoundTop>
-            <Link to='/'><EmPwLogo src='img/8bit_Dark.png' alt='로고'/></Link>
+            <Link to='/'><EmPwLogo src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
             </EmPwFoundTop>
             <EmPwForm onSubmit={update}>
-            <EmPwInputContainer>
-            <Information>
+            <EmPwInformation>
             <EmPwFoundTitle>이메일/비밀번호 찾기</EmPwFoundTitle>
-            </Information>
+            </EmPwInformation>
             <EmPwInputT>
-            <Title>이메일</Title>
               <EmailInputT>
+                <EmailAuthInputBox>
+                <Title>이메일</Title>
+                <EmailAuthAllBox>
                 <EmailInput ref={checkRef} disabled={isEmailauthBtn} show = {isEmail} check = {isInputEmailCheck} placeholder='이메일을 입력해 주세요!' value={Email} onChange={Emailuser}/>
                 <SendButton show = {isEmail} type="button" onClick={EmailCheck} disabled={isEmailauthBtn}><span>{isEmailBtn ? "재전송" : "전송"}</span></SendButton>
+                </EmailAuthAllBox>
+                </EmailAuthInputBox>
                 {Email.length > 0 && (<ErrorMessage show = {isEmail}>{EmailMessage}</ErrorMessage>)}
                 <EmailFoundErrorMessage show = {isEmailBtn} check={isEmailPoundCheck}>{EmailFoundCheckMessage}</EmailFoundErrorMessage>
                 <EmailAuthBox show={isEmailBtn}>
@@ -332,7 +339,6 @@ const EmailPwFound = () =>
             <SubmitBtnBox>
                 <SumbitButton type="submit" disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}><span>비밀번호 수정완료</span></SumbitButton>
             </SubmitBtnBox>
-            </EmPwInputContainer>
             <AnotherRoute>
             <AnotherList>
               <Login><Link to='/Login'>로그인</Link></Login>
@@ -344,8 +350,31 @@ const EmailPwFound = () =>
     );
 }
 
+const EmPwInformation = styled.div
+`
+    margin: 0px 123px 45px 123px;
+    width: 191px;
+    border: solid 3px ${(props) => props.theme.borderColor};
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px;
+`
+
 const EmPwFoundT = styled.div
 `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
+
+const EmailAuthInputBox = styled.div
+`
+
+`
+
+const EmailAuthAllBox = styled.div
+`
+
 `
 
 const EmPwFoundTop = styled.div
@@ -358,6 +387,7 @@ const EmPwLogo = styled.img
 `
     width: 192px;
     height: 102px;
+    -webkit-user-select: none;
 `
 
 const EmPwForm = styled.form
@@ -389,7 +419,7 @@ const Information = styled.div
 
 const EmPwFoundTitle = styled.span
 `
-    color: #3c3c3c;
+    color: ${(props) => props.theme.textColor};
     font-weight: bold;
     font-size: 20px;
 `
@@ -408,16 +438,16 @@ const EmailInput = styled.input
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
-    border: ${props => props.check ? props.show ? "solid 2px green" : "solid 2px red" : "none"};
+    border: ${props => props.check ? props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
     border-radius: 10px;
-    caret-color: #3c3c3c;
+    caret-color:  ${(props) => props.theme.textColor};
     background-color: #dee2e6;
     font-size:15px;
     &:focus
     {
       border: none;
       outline: none;
-      border: solid 2px #3c3c3c;
+      border: solid 2px ${(props) => props.theme.borderColor};
       border-radius: 10px;
     }
 `
@@ -444,7 +474,7 @@ const ErrorMessage = styled.p
     display: ${props => props.show ? "none" : "block"};
     margin: 0px;
     padding: 0px;
-    color:red;
+    color: ${(props) => props.theme.errorColor};
     font-size: 15px;
 `
 
@@ -453,7 +483,7 @@ const EmailFoundErrorMessage = styled.p
     display: ${props => props.show ? "none" : props.check ? "block" : "none" };
     margin: 0px;
     padding: 0px;
-    color:red;
+    color:${(props) => props.theme.errorColor};;
     font-size: 15px;
 `
 
@@ -463,10 +493,10 @@ const SendButton = styled.button
     width: 100px;
     height: 55px;
     border: ${props => props.show ? "none" : "solid 1px #dddddd"};
-    background: ${props => props.show ? "#3c3c3c" : "#aaaaaa"};
+    background: ${props => props.show ? props.theme.buttonColor : "#aaaaaa"};
     border-radius: 0.4rem;
     cursor: pointer;
-    color:white;
+    color: white;
     font-size: 15px;
     margin-top: -3px;
     pointer-events: ${props => props.show ? "true" : "none"};
@@ -488,7 +518,7 @@ const EmailAuthBox = styled.div
 `
 const EmailAuthInput = styled(EmailInput)
 `
-    border: ${props => props.show ? "none" : props.check ? "solid 2px green" : "solid 2px red"};
+    border: ${props => props.show ? "none" : props.check ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` };
     margin-top: 44px;
 `
 
@@ -498,7 +528,7 @@ const EmailAuthBtn = styled.button
     width: 100px;
     height: 55px;
     border: none;
-    background: #3c3c3c;
+    background: ${props => props.theme.buttonColor};
     border-radius: 0.4rem;
     cursor: pointer;
     color:white;
@@ -525,6 +555,7 @@ const PasswordChangeConfirmT = styled.div
 
 const Title = styled.label
 `
+    color: ${(props) => props.theme.textColor};
     font-weight: bold;
     position: ${props => props.position};
     margin-top: ${props => props.marginTop};
@@ -536,16 +567,16 @@ const PasswordChangeInput = styled.input
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
-    border: ${props => props.check ? props.show ? "solid 2px green" : "solid 2px red" : "none"};
+    border: ${props => props.check ? props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
     border-radius: 10px;
-    caret-color: #03ab95;
+    caret-color: ${(props) => props.theme.textColor};
     background-color: #dee2e6;
     font-size:15px;
     &:focus
     {
       border: none;
       outline: none;
-      border: solid 2px #3c3c3c;
+      border: solid 2px ${(props) => props.theme.borderColor};
       border-radius: 10px;
     }
 `
@@ -563,11 +594,11 @@ const SumbitButton = styled.button
 `
     width: 410px;
     height: 55px;
-    background: #3c3c3c;
+    background: ${props => props.theme.buttonColor};
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
-    color:white;
+    color: white;
     font-size: 16px;
     &:active
     {
@@ -601,7 +632,7 @@ const Sign = styled.li
     margin: 0px 10px 0px 10px;
     a
     {
-      color:black;
+      color: ${props => props.theme.textColor};
       text-decoration: none;
       margin: 0px 15px 0px 15px;
     }
@@ -610,14 +641,12 @@ const Sign = styled.li
 const Login = styled(Sign)
 `
   &::after {
+  background: ${props => props.theme.textColor};
   position: absolute;
   content: "";
   display: inline-block;
-  border-right: solid 1px gray;
-  width: 1px;
-  height: 11px;
-  margin: 4px 10px 0px 8px;
-  opacity: 20%;
+  width: 2px;height: 11px;
+  margin: 4px 10px 0px 10px;
 }
 `
 
