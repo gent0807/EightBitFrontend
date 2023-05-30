@@ -281,9 +281,9 @@ const HeaderBox = () =>
                 </SearchInputIconBox>
             </SearchInputBox>
         <ButtonBox menucheck={user.data !== ""}>
-            {user.data !=="" ? [<MenuBox left={"21px"} top={"8.3px"} size={"32px"} padding={"6px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
+            {user.data !=="" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
             <MenuBox left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
-            <MenuBox left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"5px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
+            <MenuBox left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"4.8px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
             <WriteBox onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
