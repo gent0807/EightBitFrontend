@@ -501,8 +501,8 @@ const SelectBox = styled.div
     outline: none;
     padding: 20px 5px 20px 20px;
     margin: 20px 0px 20px 194px;
-    cursor: ${props => props.event ? "none" : "pointer"};
     z-index: 1;
+    cursor: ${props => props.event ? "none" : "pointer"};
     pointer-events: ${props => props.event ? "none" : ""};
 `
 
@@ -568,9 +568,9 @@ const ArrowBox = styled.div
 const CertBtn = styled.button
 `
     margin-left: 359px;
-    margin-top: 22px;
+    margin-top: 20px;
     width: 100px;
-    height: 55px;
+    height: 59px;
     border: ${props => props.show ? "none" : "solid 1px #dddddd"};
     background: ${props => props.show ? props.theme.buttonColor : "#aaaaaa"};
     border-radius: 0.4rem;
@@ -609,7 +609,8 @@ const PwCofirmNicknameT = styled.div
 
 const EmailAuthInput = styled.input
 `
-  width: 320px;
+  width: 324px;
+  height: 20px;
   padding: 20px 5px 20px 20px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -634,9 +635,9 @@ const EmailCheckBtnT = styled.div
 
 const CertCheckBtn = styled.button
 `
-  margin: 21px 0px 0px 359px;
+  margin: 19.8px 0px 0px 358px;
   width: 100px;
-  height: 55px;
+  height: 59px;
   border: ${props => props.show ? "solid 1px #dddddd" : "none"};
   background: ${props => props.show ? "#aaaaaa" : props.theme.buttonColor};
   border-radius: 0.4rem;
