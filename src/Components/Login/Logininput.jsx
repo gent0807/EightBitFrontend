@@ -147,6 +147,7 @@ const Logininput = () =>
 export const InputBox = styled.input
 `
     width: 435px;
+    height: 20px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 10px;
     border: none;
