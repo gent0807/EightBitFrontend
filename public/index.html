@@ -40,4 +40,49 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <script type="text/javascript">
+    (function() {
+      function getInitialColorMode() {
+        const isClient = typeof window !== 'undefined';
+        if (isClient) {
+          const persistedColorPreference = window.localStorage.getItem('mode');
+  
+          if (persistedColorPreference) {
+            return persistedColorPreference;
+          }
+  
+          const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
+          if (systemPreference.matches) {
+            return 'true';
+          }
+          return 'false';
+        }
+      }
+      const colorMode = getInitialColorMode();
+      document.documentElement.style.setProperty(
+        'background-color',
+        colorMode === 'false' ? 'white' : '#1d2024'
+      );
+      document.documentElement.style.setProperty(
+        'background',
+        colorMode === 'false' ? 'white' : '#1d2024'
+      );
+      document.documentElement.style.setProperty(
+        'color',
+        colorMode === 'false' ? 'black' : '#6a9dda'
+      );
+      document.documentElement.style.setProperty(
+        'border',
+        colorMode === 'false' ? '#3c3c3c' : '#6a9dda'
+      );
+      document.documentElement.style.setProperty(
+        'accent-color',
+        colorMode === 'false' ? '#3c3c3c' : '#6a9dda'
+      );
+      document.documentElement.style.setProperty(
+        'box-shadow',
+        colorMode === 'false' ? '#3c3c3c' : '#6a9dda'
+      );
+    })();
+  </script>
 </html>

@@ -4,6 +4,6 @@ export const isDark = atom
 (
     {
         key: "isDark",
-        default: localStorage.getItem("mode") === "true" ? true : false,
+        default: localStorage.getItem("mode") === "false" ? false : true,
     }
 )
