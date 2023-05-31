@@ -445,7 +445,6 @@ const EmailCheckT = styled.div
 `
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
 `
 
 const EmailBox = styled.div
@@ -469,7 +468,6 @@ const Information = styled.div
 const SelectInput = styled.input
 `
     display: inline-block;
-    position: absolute;
     width: 130px;
     height: 20px;
     border: none;
@@ -478,7 +476,6 @@ const SelectInput = styled.input
     border-radius: 10px;
     outline: none;
     padding: 20px 5px 20px 20px;
-    margin: ${props => props.ON ? "20px -4px 0px 194px" : "20px -4px 0px 194px"};
     cursor: pointer;
     z-index: ${props => props.ON ? "2" : "0"};
     caret-color: ${(props) => props.theme.checkBoxColor};
@@ -493,7 +490,6 @@ const SelectInput = styled.input
 const SelectBox = styled.div
 `
     display: inline-block;
-    position: absolute;
     width: 130px;
     height: 20px;
     background-color: #dee2e6;
@@ -502,7 +498,6 @@ const SelectBox = styled.div
     border-radius: 10px;
     outline: none;
     padding: 20px 5px 20px 20px;
-    margin: 20px 0px 20px 194px;
     z-index: 1;
     cursor: ${props => props.event ? "none" : "pointer"};
     pointer-events: ${props => props.event ? "none" : ""};
@@ -510,9 +505,7 @@ const SelectBox = styled.div
 
 const EmailText = styled.span
 `
-    position: absolute;
     font-size: 25px;
-    margin: 36px 0px 0px 162px;
     color: ${(props) => props.theme.textColor};
 `
 
@@ -569,8 +562,6 @@ const ArrowBox = styled.div
 
 const CertBtn = styled.button
 `
-    margin-left: 359px;
-    margin-top: 20px;
     width: 100px;
     height: 59px;
     border: ${props => props.show ? "none" : "solid 1px #dddddd"};
