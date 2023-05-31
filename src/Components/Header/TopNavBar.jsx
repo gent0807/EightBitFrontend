@@ -203,6 +203,12 @@ const HeaderBox = () =>
         setIsWriteMenuClickCheck(false);
     }
 
+    const LanguageMenuNotCheck=()=>
+    {
+        setLanguageClickCheck(false);
+        setIsLanguageMenuShow(false);
+    }
+
     const FastMenuCheck = () =>
     {   
         languageTopZIndex.current=false;
@@ -282,7 +288,7 @@ const HeaderBox = () =>
             </SearchInputBox>
         <ButtonBox menucheck={user.data !== ""}>
             {user.data !=="" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
-            <MenuBox click={LanguageClickCheck} left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
+            <MenuBox click={LanguageClickCheck} left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}><MdLanguage/></MenuBox>
             <MenuBox click={FastClickCheck} left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"4.8px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
@@ -290,7 +296,7 @@ const HeaderBox = () =>
             [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>  
-            <LanguageListBox zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
+            <LanguageListBox margin={user.data !== ""} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/korea.png"/><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/uk.png"/><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli>
@@ -839,7 +845,7 @@ const LanguageListBox = styled(ProfileListBox)
 `
     display: ${props => props.default ? "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px -22.7px;
+    margin: ${props => props.margin ? "59px 0px 0px -21.4px" : "59px 0px 0px -74px"};
     height: ${props => props.show ? "370px" : "0px"};
     z-index: ${props => props.zindex? 2 : 1};
 `

@@ -505,7 +505,7 @@ const SendButton = styled.button
 `
     margin-left: 10px;
     width: 100px;
-    height: 55px;
+    height: 56.66px;
     border: ${props => props.show ? "none" : "solid 1px #dddddd"};
     background: ${props => props.show ? props.theme.buttonColor : "#aaaaaa"};
     border-radius: 0.4rem;
