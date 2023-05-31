@@ -184,8 +184,20 @@ const Signinput = () =>
       else if(currentPw == PwConfirm)
       { 
         setPwConfirmMessage("");
-        setIsPwConfirm(true);
-        setIsPw(true);
+
+        if(isPw==false)
+        {
+          setIsPwConfirm(false);
+          setIsPw(false);
+        }
+
+        else if(isPw==true)
+        {
+          setIsPwConfirm(true);
+          setIsPw(true);
+        }
+
+        
       }
     }
   };
