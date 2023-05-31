@@ -129,9 +129,9 @@ const Logininput = () =>
           <Line><span>또는</span></Line>
           <APIList>
             <APIListLI>< APIListA border="rgba(0,0,0,.15)" background="white" API="#"><FcGoogle /></ APIListA></APIListLI>
-            <APIListLI>< APIListA border="#1877f2" background="#1877f2" API="#"><FaFacebookF color='white'/></APIListA></APIListLI>
-            <APIListLI>< APIListA border="#00c60c" background="#00c60c" API="#"><SiNaver color='white'/></ APIListA></APIListLI>
-            <APIListLI>< APIListA border="#1da1f2" background="#1da1f2" API="#"><AiOutlineTwitter color='white'/></ APIListA></APIListLI>
+            <APIListLI>< APIListA border="#1877f2" background="#1877f2" API="#"><FaFacebookF /></APIListA></APIListLI>
+            <APIListLI>< APIListA border="#00c60c" background="#00c60c" API="#"><SiNaver /></ APIListA></APIListLI>
+            <APIListLI>< APIListA border="#1da1f2" background="#1da1f2" API="#"><AiOutlineTwitter /></ APIListA></APIListLI>
           </APIList>
           </LOGINAPI>
           <EmPwFoundT>
@@ -351,6 +351,7 @@ const APIListA = styled.a.attrs((props) => ({href : props.API}))
     border: 1px solid ${props => props.border};
     background-color: ${props => props.background};
     cursor: pointer;
+    color: white;
     svg
     {
       padding: 10px;

@@ -412,7 +412,7 @@ const BackgroudTopNav = styled.div
     @media (min-width:250px) and (max-width:666px)
     {
         width: 100%;
-        height: 249px;
+        height: 253px;
     }
 
     @media (min-width:666px) and (max-width:1342px)
@@ -770,7 +770,7 @@ const ProFileSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 300px;
+        height: 370px;
     }
     }
 `
@@ -778,7 +778,7 @@ const ProFileSlideDown = keyframes
 const ProFileSlideUp = keyframes
 `
     0%{
-        height: 300px;
+        height: 370px;
     }
     100%{
         height: 0px;
