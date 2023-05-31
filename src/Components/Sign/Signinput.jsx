@@ -185,13 +185,13 @@ const Signinput = () =>
       { 
         setPwConfirmMessage("");
 
-        if(isPw==false)
+        if(passwordPossibleCombCheck.current==false)
         {
           setIsPwConfirm(false);
           setIsPw(false);
         }
 
-        else if(isPw==true)
+        else if(passwordPossibleCombCheck.current==true)
         {
           setIsPwConfirm(true);
           setIsPw(true);
