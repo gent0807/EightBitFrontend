@@ -38,7 +38,6 @@ const Signinput = () =>
   const [isInputPwConfirmCheck, setIsInputPwConfirmCheck] = useState(false);
   const [isInputNicknameCheck, setIsInputNicknameCheck] = useState(false);
 
-
   const [isVisibled, setVisibled] = useState(false);
   const isDarkmode = useRecoilValue(isDark);
 
@@ -134,6 +133,7 @@ const Signinput = () =>
     const currentEmailCert = e.target.value;
     //const onlynumber = currentEmailCert.replace(/[^0-9]/g, '');
     setEmailCert(currentEmailCert);
+
     if(!EmailCert)
     {
       setIsEmailCertCheckBtn(false);
@@ -686,7 +686,7 @@ const EmailAuthInput = styled.input
   outline: none;
   &:focus
   {
-    box-shadow: 0 0 0 2px ${props => props.theme.borderColor} inset;
+    box-shadow: ${props => props.show ? `0 0 0 2px ${props.theme.boderColor} inset` : props.check ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` };
   }
 `
 
@@ -730,7 +730,7 @@ const PwBox = styled.input
   outline: none;
   &:focus
   {
-    box-shadow: 0 0 0 2px ${props => props.theme.borderColor} inset;
+    box-shadow: ${props => props.check ? props => props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : `0 0 0 2px ${props.theme.borderColor} inset`};
   }
 `
 
@@ -741,7 +741,7 @@ const PwCofirmBox = styled(PwBox)
 
 const NicknameBox = styled(PwBox)
 `
-box-shadow: ${props => props.check ? props => props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
+    box-shadow: ${props => props.check ? props => props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
 `
 
 const SumbitButton = styled.button
