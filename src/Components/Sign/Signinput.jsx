@@ -16,7 +16,7 @@ const Signinput = () =>
   const [PwConfirm, setPwConfirm] = useState("");
   const [Nickname, setNickname] = useState("");
   const [SelectValue, setSelectValue] = useState("naver.com");
-  const [InputDirect, setInputDirect] = useState("");
+  const [InputDirect, setInputDirect] = useState("naver.com");
 
   const [PwMessage, setPwMessage] = useState("");
   const [EmailMessage, setEmailMessage] = useState("");
