@@ -285,12 +285,13 @@ const EmailPwFound = () =>
         }
         else
         {
+          console.log(isInputEmailAuthCheck);
+          setIsInputEmailAuthCheck(true)
           setIsButtonCheck(false)
           setIsEmailauthBtn(false)
           setchangeVisibled(false)
           setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>])
         }
-       
     }
 
     return (
@@ -320,7 +321,7 @@ const EmailPwFound = () =>
                 </>
                 <EmailAuthBox show={isEmailBtn}>
                 <Title position={"absolute"} marginTop={"-8px"}>인증번호</Title>
-                <EmailAuthInput show={isEmailauthBtn} check={isInputEmailAuthCheck} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth}/>
+                <EmailAuthInput show={isInputEmailAuthCheck} check={isEmailauthBtn} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth}/>
                 <EmailAuthBtn show={isEmailauthBtn} type="button" onClick={EmailAuthCheck} disabled={isEmailauthBtn}><span>{isButtonCheck ? "인증완료" : "인증확인"}</span></EmailAuthBtn>
                 <ErrorMessage show = {isEmailauthBtn}>{EmailauthMessage}</ErrorMessage>
                 </EmailAuthBox>
@@ -529,7 +530,7 @@ const EmailAuthBox = styled.div
 `
 const EmailAuthInput = styled(EmailInput)
 `
-    box-shadow: ${props => props.show ? props.check ?  `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : 'none'};
+    box-shadow: ${props => props.show ? props.check ?  `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
     margin-top: 27px;
 
     &:focus
@@ -569,7 +570,7 @@ const PasswordChangeConfirmT = styled.div
 `
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
-    margin-top: 17px;
+    margin-top: 7px;
     margin-bottom: 21px;
 `
 
