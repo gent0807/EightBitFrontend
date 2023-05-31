@@ -101,7 +101,7 @@ const Signinput = () =>
     setIsEmailCertCheck(true);
     setIsEmailCertCheckBtn(true);
     setIsConfirmCheck(true);
-    setEmailCertCheckMessage([<ErrorMessageBox margin={"33px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>]);
+    setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>]);
     setIsEmail(false);
     }
     else
@@ -109,7 +109,7 @@ const Signinput = () =>
     setIsEmailCertCheck(false);
     setIsEmailCertCheckBtn(false);
     setIsConfirmCheck(false);
-    setEmailCertCheckMessage([<ErrorMessageBox margin={"33px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
+    setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
     }
   }
 
@@ -157,7 +157,7 @@ const Signinput = () =>
 
     if (!PwCheck.test(currentPw))
     {
-        setPwMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+        setPwMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
         setIsPw(false);
         passwordPossibleCombCheck.current=false;
     }else{
@@ -170,7 +170,7 @@ const Signinput = () =>
     {
       if(currentPw !== PwConfirm)
       {
-        setPwConfirmMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
+        setPwConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
         setIsPwConfirm(false);
         if(PwConfirm=="")
         {
@@ -218,7 +218,7 @@ const Signinput = () =>
         else if(passwordPossibleCombCheck.current==false)
         {
           setIsPw(false);
-          setPwMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+          setPwMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
         }
     }
     else
@@ -228,7 +228,7 @@ const Signinput = () =>
         if(Pw !== currentPwConfirm)
         { 
           setIsPw(false);
-          setPwConfirmMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
+          setPwConfirmMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
           setIsPwConfirm(false);
         }
         else if(Pw == currentPwConfirm)
@@ -237,7 +237,7 @@ const Signinput = () =>
           {
             setIsPw(false);
             setIsPwConfirm(false);
-            setPwMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+            setPwMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
             setPwConfirmMessage("");
           }
           else if(passwordPossibleCombCheck.current==true)
@@ -267,7 +267,7 @@ const Signinput = () =>
 
     if(currentNickname.length > 6 || currentNickname.length < 2)
     {
-      setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
+      setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
       setIsNickname(false);
       
     }else{
@@ -282,12 +282,12 @@ const Signinput = () =>
        
         if(data === "yes" )
         {
-          setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이미 사용 중인 닉네임입니다!</ErrorMessageText></ErrorMessageBox>])
+          setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이미 사용 중인 닉네임입니다!</ErrorMessageText></ErrorMessageBox>])
           setIsNickname(false);
         }
         else if(data=== "no" )
         { 
-          setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>사용가능한 닉네임입니다.</ErrorMessageText></ErrorMessageBox>])
+          setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>사용가능한 닉네임입니다.</ErrorMessageText></ErrorMessageBox>])
           setIsNickname(true);
         }
         
@@ -308,7 +308,7 @@ const Signinput = () =>
 
     if(!EmailTotalCheck.test(EmailTotal) || InputDirect === "")
     {
-        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
+        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
         <span style={{margin:"-3px 5px 6px"}}>올바른 이메일 작성해 주세요!</span>
         </div>])
@@ -327,7 +327,7 @@ const Signinput = () =>
     .then(data=>{
       if(data === "yes" )
       {
-        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
+        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
         <span style={{margin:"-3px 5px 6px"}}>이미 가입된 이메일 입니다.</span>
         </div>]);
@@ -343,13 +343,13 @@ const Signinput = () =>
         })
         .then(data=>{
           authNum.current=data;
-          setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
+          setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
           <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
           <span style={{margin:"-3px 5px 6px"}}>인증번호가 전송되었습니다.</span>
           </div>]);
           setVisibled(true);
         });
-        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
+        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
         <span style={{margin:"-3px 5px 6px"}}>인증번호 전송 중...</span>
         </div>]);
@@ -381,7 +381,7 @@ const Signinput = () =>
   return (
       <SignT>
         <SignTop>
-          <Link to='/'><SignTopLogo src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+          <Link to='/'><SignTopLogo src={ isDarkmode ? 'img/8bit.png' : 'img/8bit_Dark.png' } alt='로고'/></Link>
         </SignTop>
         <SubmitT onSubmit={register}>
             <SignInputT>
@@ -420,7 +420,7 @@ const Signinput = () =>
               </EmailAuthCheckT>
               <ErrorMessage color = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
               </EmailCheckT>
-              <PwCofirmNicknameT top={isVisibled ? "57px" : "42px"}>
+              <PwCofirmNicknameT top={"20px"}>
               <Title htmlFor="Pw">비밀번호</Title>
               <PwBox placeholder="비밀번호를 입력해주세요!" show={isPw} check={isInputPwCheck} type="password" value={Pw} onChange={OnChangePw}/>
                 {Pw.length > 0 && (<ErrorMessage show = {isPw}>{PwMessage}</ErrorMessage>)}
@@ -453,22 +453,18 @@ const Signinput = () =>
 
 const EmailInput = styled.input
 `
-    position: absolute;
     width: 130px;
     height: 20px;
     padding: 20px 5px 20px 20px;
-    margin-bottom: 20px;
-    margin-top: 20px;
     border: none;
     border-radius: 10px;
     caret-color: ${(props) => props.theme.textColor};
     background-color: #dee2e6;
     font-size:15px;
+    outline: none;
     &:focus
     {
-        outline: none;
-        border: solid 2px ${(props) => props.theme.borderColor};
-        border-radius: 10px;
+        box-shadow: 0 0 0 2px ${(props) => props.theme.borderColor} inset;
     }
 `
 
@@ -512,11 +508,12 @@ const EmailCheckT = styled.div
 `
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
 `
 
 const EmailBox = styled.div
 `
+    display: flex;
+    margin: 20px 0px 20px 0px;
 `
 
 const SubmitT = styled.form
@@ -535,7 +532,6 @@ const Information = styled.div
 
 const SelectInput = styled.input
 `
-    display: inline-block;
     position: absolute;
     width: 130px;
     height: 20px;
@@ -545,31 +541,29 @@ const SelectInput = styled.input
     border-radius: 10px;
     outline: none;
     padding: 20px 5px 20px 20px;
-    margin: ${props => props.ON ? "20px -4px 0px 194px" : "20px -4px 0px 194px"};
     cursor: pointer;
+    margin: 0px 0px 0px 194px;
     z-index: ${props => props.ON ? "2" : "0"};
     caret-color: ${(props) => props.theme.checkBoxColor};
+    outline: none;
     &:focus
     {
-        outline: none;
-        border: solid 2px ${(props) => props.theme.borderColor};
-        border-radius: 10px;
+        box-shadow: 0 0 0 2px ${(props) => props.theme.borderColor} inset;
     }
 `
 
 const SelectBox = styled.div
 `
-    display: inline-block;
-    position: absolute;
+    display: block;
     width: 130px;
     height: 20px;
     background-color: #dee2e6;
     font-size:15px;
-    border: ${props => props.show ? "none" : `solid 2px ${props.theme.borderColor}`};
+    box-shadow: ${props => props.show ? "none" : `0 0 0 2px ${props.theme.borderColor} inset`};
     border-radius: 10px;
     outline: none;
+    border: none;
     padding: 20px 5px 20px 20px;
-    margin: 20px 0px 20px 194px;
     z-index: 1;
     cursor: ${props => props.event ? "none" : "pointer"};
     pointer-events: ${props => props.event ? "none" : ""};
@@ -577,9 +571,8 @@ const SelectBox = styled.div
 
 const EmailText = styled.span
 `
-    position: absolute;
     font-size: 25px;
-    margin: 36px 0px 0px 162px;
+    margin: 16px 7px 16px 7px;
     color: ${(props) => props.theme.textColor};
 `
 
@@ -598,10 +591,11 @@ const SelectOptionLI = styled.li
   padding: 10px 0px 10px 0px;
   text-align: center;
   cursor: pointer;
+  border-radius: 5px;
+  color: black;
   &:hover
   {
-        background-color: #6a9dda;
-        border-radius: 5px;
+      background-color: ${(props) => props.theme.DropDownListColor};
   }
 `
 
@@ -610,12 +604,13 @@ const SelectOption = styled.ul
     display: ${props => props.showli ? "none" : "block"};
     position: absolute;
     background: #dee2e6;
-    margin: ${props => props.showli ? "53px 0px 0px -14px" : "41px 0px 0px -21px"};
+    margin: ${props => props.showli ? "0" : "42px 0px 0px -20px"};
     list-style: none;
     padding: 0px 0px 0px 0px;
     width: ${props => props.showli ? "145px" : "155px"};
     border-radius: 10px;
-    border: ${props => props.showli ? "none" : `solid 2px ${props.theme.borderColor}`};
+    border: none;
+    box-shadow: ${props => props.showli ? "none" : `0 0 0 2px ${props.theme.borderColor} inset`};
     animation: ${slide} 0.5s;
     overflow: hidden;
 `
@@ -624,6 +619,7 @@ const SelectValueText = styled.span
 `
     position: absolute;
     margin: 1px 0px 0px 0px;
+    color: black;
 `
 
 const ArrowBox = styled.div
@@ -636,16 +632,16 @@ const ArrowBox = styled.div
 
 const CertBtn = styled.button
 `
-    margin-left: 359px;
-    margin-top: 20px;
     width: 100px;
     height: 59px;
-    border: ${props => props.show ? "none" : "solid 1px #dddddd"};
+    border: none;
+    box-shadow: ${props => props.show ? "none" : "0 0 0 1px #dddddd inset"};
     background: ${props => props.show ? props.theme.buttonColor : "#aaaaaa"};
     border-radius: 0.4rem;
     cursor: pointer;
     color:white;
     font-size: 15px;
+    margin: 0px 0px 0px 11px;
     pointer-events: ${props => props.show ? "true" : "none"};
     &:active
     {
@@ -667,8 +663,7 @@ const ErrorMessage = styled.p
 const EmailAuthCheckT = styled.div
 `
     display: ${props => props.show ? "block" : "none"};
-    margin-top: ${props => props.show ? "39px" : "0px"};
-    margin-bottom: ${props => props.show ? "-18px" : "0px"};
+    margin-top: 20px;
 `
 
 const PwCofirmNicknameT = styled.div
@@ -678,41 +673,41 @@ const PwCofirmNicknameT = styled.div
 
 const EmailAuthInput = styled.input
 `
-  width: 320px;
+  width: 324px;
   height: 19px;
   padding: 20px 5px 20px 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: ${props => props.show ? "none" : props.check ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` };
+  border: none;
+  box-shadow: ${props => props.show ? "none" : props.check ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` };
   border-radius: 10px;
   caret-color: ${props => props.theme.textColor};
   background-color: #dee2e6;
   font-size:15px;
   pointer-events: ${props => props.check ? "none" : "true"};
-  position: absolute;
+  outline: none;
   &:focus
   {
-    outline: none;
-    border: solid 2px ${props => props.theme.borderColor};
-    border-radius: 10px;
+    box-shadow: 0 0 0 2px ${props => props.theme.borderColor} inset;
   }
 `
 
 const EmailCheckBtnT = styled.div
 `
+    display: flex;
+    margin: 20px 0px 20px 0px;
 `
 
 const CertCheckBtn = styled.button
 `
-  margin: 21px 0px 0px 358px;
   width: 100px;
   height: 60px;
-  border: ${props => props.show ? "solid 1px #dddddd" : "none"};
+  box-shadow: ${props => props.show ? "0 0 0 1px #dddddd inset" : "none"};
+  border: none;
   background: ${props => props.show ? "#aaaaaa" : props.theme.buttonColor};
   border-radius: 0.4rem;
   cursor: pointer;
   color:white;
   font-size: 15px;
+  margin: 0px 0px 0px 11px;
   pointer-events: ${props => props.show ? "none" : "true"};
   &:active
   {
@@ -726,27 +721,27 @@ const PwBox = styled.input
   padding: 20px 5px 20px 20px;
   margin-top: 20px;
   margin-bottom: 20px;
-  border: ${props => props.check ? props => props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
+  box-shadow: ${props => props.check ? props => props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
   border-radius: 10px;
+  border: none;
   caret-color: ${props => props.theme.textColor};
   background-color: #dee2e6;
   font-size:15px;
+  outline: none;
   &:focus
   {
-    outline: none;
-    border: solid 2px  ${props => props.theme.borderColor};
-    border-radius: 10px;
+    box-shadow: 0 0 0 2px ${props => props.theme.borderColor} inset;
   }
 `
 
 const PwCofirmBox = styled(PwBox)
 `
-    border: ${props => props.check ? props => props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
+    box-shadow: ${props => props.check ? props => props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
 `
 
 const NicknameBox = styled(PwBox)
 `
-    border: ${props => props.check ? props => props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
+box-shadow: ${props => props.check ? props => props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
 `
 
 const SumbitButton = styled.button
@@ -767,7 +762,7 @@ const SumbitButton = styled.button
     &:disabled
     {
       padding: 16px;
-      border: solid 1px #dddddd;
+      box-shadow: 0 0 0 1px #dddddd inset;
       background: #aaaaaa;
       pointer-events: none;
     }
@@ -780,7 +775,7 @@ const SumbitButtonBox = styled.div
 
 const ErrorMessageBox = styled.div
 `
-    margin: ${props => props.margin};
+    margin: -5px 5px 6px;
     display: flex;
     position: absolute;
 `

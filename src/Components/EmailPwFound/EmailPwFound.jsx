@@ -319,7 +319,7 @@ const EmailPwFound = () =>
     return (
         <EmPwFoundT>
             <EmPwFoundTop>
-            <Link to='/'><EmPwLogo src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+            <Link to='/'><EmPwLogo src={ isDarkmode ? 'img/8bit.png' : 'img/8bit_Dark.png' } alt='로고'/></Link>
             </EmPwFoundTop>
             <EmPwForm onSubmit={update}>
             <InformationAllBox>

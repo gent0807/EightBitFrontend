@@ -400,7 +400,7 @@ const WriteBoxText = styled.span
 `   
     margin: -6px 0px 0px 2.5px;
     position:absolute;
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:666px)
     {
         white-space: nowrap;
     }
@@ -409,13 +409,13 @@ const BackgroudTopNav = styled.div
 `
     background-color: #3c3c3c;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
-        width: 480px;
+        width: 100%;
         height: 249px;
     }
 
-    @media (min-width:512px) and (max-width:1342px)
+    @media (min-width:666px) and (max-width:1342px)
     {
         height: 160px;
     }
@@ -426,9 +426,9 @@ const BackgroudSubNav = styled.div
     border-bottom: solid 3px #3c3c3c;
     background: white;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
-        width: 480px;
+        width: 100%;
     }
 
 `
@@ -475,7 +475,7 @@ const ComunitySubNav = styled(GameSubNav)
         display: none;
     }
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         white-space: nowrap;
         overflow: scroll;
@@ -532,7 +532,7 @@ const SubNavMenu = styled.div
     max-width: 1500px;
     align-items: center;
     background: white;
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         font-size: 17px;
     }
@@ -578,14 +578,14 @@ const NavBox = styled.div
     margin: 15px 0px 15px 0px;
     color: white;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         flex-direction: column;
         margin: 12px 0px 0px 0px;
         text-align: center;
     }
 
-    @media (min-width:512px) and (max-width:1342px)
+    @media (min-width:666px) and (max-width:1342px)
     {
         justify-content: center;
     }
@@ -595,11 +595,12 @@ const NavUl = styled.ul
 `
     display: flex;
     margin: 12px 0px 12px 0px;
+    white-space: nowrap;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
-        margin: 12px 0px 12px -63px;
-        white-space: nowrap;
+        padding: 0px;
+        justify-content: center;
     }
 
 `
@@ -629,12 +630,12 @@ const AllButtonBox = styled.div
     color: white;
     -webkit-tap-highlight-color:transparent;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         flex-direction: column;
     }
 
-    @media (min-width:512px) and (max-width:1342px)
+    @media (min-width:666px) and (max-width:1342px)
     {
         margin: -10px 13px 0px 0px;
     }
@@ -645,7 +646,7 @@ const ButtonBox = styled.div
     display: flex;
     margin-right: ${props => props.menucheck ? "166px" : "-3px"};
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         margin-left: ${props => props.menucheck ? "-61px" : "0px"};
         margin-top: ${props => props.menucheck ? "5px" : "0px"};
