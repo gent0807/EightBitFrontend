@@ -44,6 +44,8 @@ const Signinput = () =>
 
   const navigate = useNavigate();
 
+  let compareMode=useRef(false);
+  let passwordPossibleCombCheck=useRef(false);
   let finalEmail=useRef("");
   let authNum=useRef(null);
   let inputFocus = useRef(null);
@@ -98,7 +100,7 @@ const Signinput = () =>
     setIsEmailCertCheck(true);
     setIsEmailCertCheckBtn(true);
     setIsConfirmCheck(true);
-    setEmailCertCheckMessage("");
+    setEmailCertCheckMessage([<ErrorMessageBox margin={"33px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>]);
     setIsEmail(false);
     }
     else
@@ -140,6 +142,7 @@ const Signinput = () =>
   const OnChangePw = (e) => {
     const currentPw = e.target.value;
     setPw(currentPw);
+    const PwCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 
     if(currentPw === "")
     {
@@ -150,25 +153,39 @@ const Signinput = () =>
      setIsInputPwCheck(true);
     }
 
-    const PwCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 
     if (!PwCheck.test(currentPw))
     {
         setPwMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
         setIsPw(false);
+        passwordPossibleCombCheck.current=false;
     }else{
-        setPwMessage("");
-        setIsPw(true);
+        setPwMessage("");    
+        setIsPw(true); 
+        passwordPossibleCombCheck.current=true;   
     }
 
-    if(currentPw !== PwConfirm)
+    if(compareMode.current==true)
     {
-        setPwConfirmMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
+      if(currentPw !== PwConfirm)
+      {
+        setPwConfirmMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
         setIsPwConfirm(false);
-    }else{
+        if(PwConfirm=="")
+        {
+          setIsPw(true);
+        }
+        else if(PwConfirm!="")
+        {
+          setIsPw(false);
+        }
+      }
+      else if(currentPw == PwConfirm)
+      { 
         setPwConfirmMessage("");
         setIsPwConfirm(true);
-      
+        setIsPw(true);
+      }
     }
   };
 
@@ -177,23 +194,49 @@ const Signinput = () =>
     setPwConfirm(currentPwConfirm);
 
     if(currentPwConfirm === "")
-    {
-      setIsInputPwConfirmCheck(false);
+    {   
+        compareMode.current=false;
+        setIsInputPwConfirmCheck(false);
+        if(passwordPossibleCombCheck.current==true)
+        { 
+          setIsPw(true);
+          setPwMessage("")
+        }
+        else if(passwordPossibleCombCheck.current==false)
+        {
+          setIsPw(false);
+          setPwMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+        }
     }
     else
-    {
-      setIsInputPwConfirmCheck(true);
+    {   
+        compareMode.current=true;
+        setIsInputPwConfirmCheck(true);
+        if(Pw !== currentPwConfirm)
+        { 
+          setIsPw(false);
+          setPwConfirmMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
+          setIsPwConfirm(false);
+        }
+        else if(Pw == currentPwConfirm)
+        { 
+          if(passwordPossibleCombCheck.current==false)
+          {
+            setIsPw(false);
+            setIsPwConfirm(false);
+            setPwMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+            setPwConfirmMessage("");
+          }
+          else if(passwordPossibleCombCheck.current==true)
+          {
+            setPwConfirmMessage("");
+            setIsPwConfirm(true);
+            setIsPw(true);
+          }
+        }
     }
 
-    if(Pw !== currentPwConfirm)
-    {
-      setPwConfirmMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
-      setIsPwConfirm(false);
-    }else{
-      setPwConfirmMessage("");
-      setIsPwConfirm(true);
-
-    }
+    
   };
 
   const checkAlreadyNickRegistered = (e) => {
@@ -211,7 +254,7 @@ const Signinput = () =>
 
     if(currentNickname.length > 6 || currentNickname.length < 2)
     {
-      setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>])
+      setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
       setIsNickname(false);
     }else{
       axios.post("http://localhost:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
@@ -225,12 +268,12 @@ const Signinput = () =>
         console.log(data);
         if(data === "yes" )
         {
-          setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이미 등록된 닉네임입니다!</ErrorMessageText></ErrorMessageBox>]);
+          setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이미 사용 중인 닉네임입니다!</ErrorMessageText></ErrorMessageBox>])
           setIsNickname(false);
         }
         else if(data=== "no" )
         { 
-          setNicknameMessage("");
+          setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>사용가능한 닉네임입니다.</ErrorMessageText></ErrorMessageBox>])
           setIsNickname(true);
        
         }
@@ -245,16 +288,17 @@ const Signinput = () =>
     const EmailTotal = Email + "@" + SelectValue;
     const EmailTotalCheck = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
+    setEmailCertCheckMessage("");
+    setEmailCert("");
+    setIsInputCheck(true);
+
     if(!EmailTotalCheck.test(EmailTotal) || InputDirect === "")
     {
         setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
         <span style={{margin:"-3px 5px 6px"}}>올바른 이메일 작성해 주세요!</span>
         </div>])
-        setEmailCertCheckMessage("");
         setVisibled(false);
-        setEmailCert("");
-        setIsInputCheck(true);
     }else{
     
     finalEmail.current=EmailTotal;
@@ -272,12 +316,11 @@ const Signinput = () =>
         setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
         <span style={{margin:"-3px 5px 6px"}}>이미 가입된 이메일 입니다.</span>
-        </div>])
+        </div>]);
         setVisibled(false);
       }
       else
       {
-        setVisibled(true);
         axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
               email:EmailTotal
         })
@@ -286,7 +329,17 @@ const Signinput = () =>
         })
         .then(data=>{
           authNum.current=data;
+          setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
+          <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
+          <span style={{margin:"-3px 5px 6px"}}>인증번호가 전송되었습니다.</span>
+          </div>]);
+          setVisibled(true);
         });
+        setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "17px 5px 6px"}}>
+        <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
+        <span style={{margin:"-3px 5px 6px"}}>인증번호 전송 중...</span>
+        </div>]);
+        setVisibled(false);
       }
         
     });
@@ -300,7 +353,7 @@ const Signinput = () =>
       axios.post("http://localhost:8033/EightBitBackend/user/insert/",{
         email:finalEmail.current,
         password:PwConfirm,
-        nickname:Nickname
+        nickname:Nickname,
       } 
       )
       .then(res=>{
@@ -342,7 +395,7 @@ const Signinput = () =>
               </SelectBox>
               <CertBtn show={isEmail} disabled={isEmailCertCheck} type="button"onClick={checkAlreadySigning}><span>{isVisibled ? "재요청" : "인증요청"}</span></CertBtn>
               </EmailBox>
-              <ErrorMessage show = {isVisibled}>{EmailMessage}</ErrorMessage>
+              <ErrorMessage color={isVisibled}>{EmailMessage}</ErrorMessage>
               <EmailAuthCheckT show={isVisibled}>
               <Title htmlFor="emailCert">인증번호</Title>
               <EmailCheckBtnT>
@@ -351,7 +404,7 @@ const Signinput = () =>
                 <CertCheckBtn show={isEmailCertCheck} type="button" onClick={checkAuthNumberRight}><span>{isEmailCertCheck ? "인증완료" : "인증하기"}</span></CertCheckBtn>
               </EmailCheckBtnT>
               </EmailAuthCheckT>
-              <ErrorMessage show = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
+              <ErrorMessage color = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
               </EmailCheckT>
               <PwCofirmNicknameT top={isVisibled ? "57px" : "42px"}>
               <Title htmlFor="Pw">비밀번호</Title>
@@ -366,7 +419,7 @@ const Signinput = () =>
               <PwCofirmNicknameT top={"20px"}>
               <Title htmlFor="Nickname">닉네임</Title>
                 <NicknameBox placeholder="닉네임을 입력해주세요!" show={isNickname} check={isInputNicknameCheck} value={Nickname} onChange={checkAlreadyNickRegistered}/>
-                {Nickname.length > 0 && (<ErrorMessage show = {isNickname}>{NicknameMessage}</ErrorMessage>)}
+                {Nickname.length > 0 && (<ErrorMessage color = {isNickname}>{NicknameMessage}</ErrorMessage>)}
               </PwCofirmNicknameT>
             </SignInputT>
             <SumbitButtonBox>
@@ -587,11 +640,11 @@ const CertBtn = styled.button
 `
 
 const ErrorMessage = styled.p                  
+/*display: ${props => props.show ? "none" : "block"};*/ 
 `
-    display: ${props => props.show ? "none" : "block"};
-    margin: 0px;
+    margin: -2px 0px 3px -6px ;
     padding: 0px;
-    color: ${(props) => props.theme.errorColor};
+    color: ${(props) => props.color ? props.theme.successColor : props.theme.errorColor };
     font-size: 15px;
 `
 
@@ -611,8 +664,8 @@ const PwCofirmNicknameT = styled.div
 
 const EmailAuthInput = styled.input
 `
-  width: 324px;
-  height: 20px;
+  width: 320px;
+  height: 19px;
   padding: 20px 5px 20px 20px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -637,9 +690,9 @@ const EmailCheckBtnT = styled.div
 
 const CertCheckBtn = styled.button
 `
-  margin: 19.8px 0px 0px 358px;
+  margin: 21px 0px 0px 358px;
   width: 100px;
-  height: 59px;
+  height: 60px;
   border: ${props => props.show ? "solid 1px #dddddd" : "none"};
   background: ${props => props.show ? "#aaaaaa" : props.theme.buttonColor};
   border-radius: 0.4rem;
