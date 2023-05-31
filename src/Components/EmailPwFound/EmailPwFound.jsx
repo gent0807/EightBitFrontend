@@ -201,8 +201,19 @@ const EmailPwFound = () =>
             alreadyPasswordUsing.current=data;
             if(alreadyPasswordUsing.current=="no"){
               setPasswordChangeConfirmMessage("");
-              setIsPasswordChangeConfirm(true);
-              setIsPasswordChange(true);
+
+              if(passwordPossibleCombCheck.current==false)
+              {
+                setIsPasswordChangeConfirm(false);
+                setIsPasswordChange(false);
+              }
+
+              else if(passwordPossibleCombCheck.current==true)
+              {
+                setIsPasswordChangeConfirm(true);
+                setIsPasswordChange(true);
+              }
+
             }
             else if(alreadyPasswordUsing.current=="yes"){
               setPasswordChangeConfirmMessage([<ErrorMessageBox margin={"-30px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>기존의 비밀번호와 일치합니다!</ErrorMessageText></ErrorMessageBox>])
@@ -226,7 +237,8 @@ const EmailPwFound = () =>
         })
         .then(data=>{
           if(data === "no" )
-          {
+          { 
+            setMessageChangeCheck(true);
             setIsEmail(false);
             setIsEmailBtn(false);
             setIsEmailPoundCheck(true);
@@ -235,9 +247,6 @@ const EmailPwFound = () =>
           }
           else if(data==="yes")
           {
-            setIsEmail(true);
-            setIsEmailBtn(true);
-            setEmailFoundCheckMessage("");
             axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
                   email:Email
             })
@@ -246,7 +255,19 @@ const EmailPwFound = () =>
             })
             .then(data=>{
               authNum.current=data;
+              setIsEmail(true);
+              setIsEmailBtn(true);
+              setIsEmailPoundCheck(false);
+              setMessageRevert(true);
+              setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증 번호가 전송되었습니다!</ErrorMessageText></ErrorMessageBox>]);
             });
+            setMessageChangeCheck(false);
+            setIsEmail(false);
+            setIsEmailBtn(false);
+            setIsEmailPoundCheck(false);
+            setMessageRevert(false);
+            setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호 전송 중...</ErrorMessageText></ErrorMessageBox>]);
+
           }
         });
 
@@ -282,15 +303,16 @@ const EmailPwFound = () =>
           setIsButtonCheck(true)
           setchangeVisibled(true)
           setIsInputEmailAuthCheck(true)
+          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>])
         }
         else
         {
-          console.log(isInputEmailAuthCheck);
+          
           setIsInputEmailAuthCheck(true)
           setIsButtonCheck(false)
           setIsEmailauthBtn(false)
           setchangeVisibled(false)
-          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>])
+          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
         }
     }
 
@@ -317,13 +339,13 @@ const EmailPwFound = () =>
                 <>
                 {MessageChangeCheck ?
                 <EmailFoundErrorMessage show = {MessageRevert} check={isEmailPoundCheck}>{EmailFoundCheckMessage}</EmailFoundErrorMessage> :
-                Email.length > 0 && (<ErrorMessage show = {isEmail}>{EmailMessage}</ErrorMessage>)}
+                Email.length > 0 && (<ErrorMessage color={isEmailBtn}>{EmailMessage}</ErrorMessage>)}
                 </>
                 <EmailAuthBox show={isEmailBtn}>
                 <Title position={"absolute"} marginTop={"-8px"}>인증번호</Title>
                 <EmailAuthInput show={isInputEmailAuthCheck} check={isEmailauthBtn} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth}/>
                 <EmailAuthBtn show={isEmailauthBtn} type="button" onClick={EmailAuthCheck} disabled={isEmailauthBtn}><span>{isButtonCheck ? "인증완료" : "인증확인"}</span></EmailAuthBtn>
-                <ErrorMessage show = {isEmailauthBtn}>{EmailauthMessage}</ErrorMessage>
+                <ErrorMessage2 color = {isEmailauthBtn}>{EmailauthMessage}</ErrorMessage2>
                 </EmailAuthBox>
                 <PasswordChangeT show={changeVisibled}>
                 <Title>새 비밀번호</Title>
@@ -482,11 +504,14 @@ const ErrorMessageText = styled.span
 
 const ErrorMessage = styled.p
 `
-    display: ${props => props.show ? "none" : "block"};
     margin: 0px;
     padding: 0px;
-    color: ${(props) => props.theme.errorColor};
+    color: ${(props) => props.color ? props.theme.successColor : props.theme.errorColor};
     font-size: 15px;
+`
+const ErrorMessage2=styled(ErrorMessage)
+`
+    margin: -5px 0px 7.7px -6px;
 `
 
 const EmailFoundErrorMessage = styled.p
@@ -563,7 +588,7 @@ const PasswordChangeT = styled.div
 `
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
-    margin-top: 4px;
+    margin-top: 7px;
 `
 
 const PasswordChangeConfirmT = styled.div
