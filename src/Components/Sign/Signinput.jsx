@@ -46,6 +46,7 @@ const Signinput = () =>
 
   let compareMode=useRef(false);
   let passwordPossibleCombCheck=useRef(false);
+  let nickNamePossible=useRef(false);
   let finalEmail=useRef("");
   let authNum=useRef(null);
   let inputFocus = useRef(null);
@@ -256,6 +257,7 @@ const Signinput = () =>
     {
       setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
       setIsNickname(false);
+      
     }else{
       axios.post("http://localhost:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
         nickname:currentNickname
@@ -265,7 +267,7 @@ const Signinput = () =>
         return res.data;
       })  
       .then(data=>{
-        console.log(data);
+       
         if(data === "yes" )
         {
           setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이미 사용 중인 닉네임입니다!</ErrorMessageText></ErrorMessageBox>])
@@ -275,8 +277,8 @@ const Signinput = () =>
         { 
           setNicknameMessage([<ErrorMessageBox margin={"-7px 5px 6px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>사용가능한 닉네임입니다.</ErrorMessageText></ErrorMessageBox>])
           setIsNickname(true);
-       
         }
+        
           
       });
     }
