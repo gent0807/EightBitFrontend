@@ -39,7 +39,5 @@ const FooterBackground = styled.div
 
 const FooterText = styled.span
 `
-
-
-
+    color: black;
 `

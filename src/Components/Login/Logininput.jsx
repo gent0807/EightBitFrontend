@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from '../LoginRedux/LoginUser';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
-import { ScrollTop } from '../Header/TopNavBar'
+import { ScrollTop } from '../Header/TopNavBar';
 
 const Logininput = () => 
 {                 
@@ -44,13 +44,13 @@ const Logininput = () =>
     {   
         e.preventDefault();
         if(Email==""&&Pw==""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일과 패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>])
+          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일과 패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
         }
         else if(Email!=""&&Pw==""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>])
+          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
         }
         else if(Email==""&&Pw!=""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 입력하세요!</ErrorMessageText></ErrorMessageBox>])
+          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
         }
         else{
         /*
@@ -128,16 +128,16 @@ const Logininput = () =>
           <LOGINAPI>
           <Line><span>또는</span></Line>
           <APIList>
-            <APIListLI>< APIListA border="rgba(0,0,0,.15)" background="white" API="#"><FcGoogle /></ APIListA></APIListLI>
-            <APIListLI>< APIListA border="#1877f2" background="#1877f2" API="#"><FaFacebookF /></APIListA></APIListLI>
-            <APIListLI>< APIListA border="#00c60c" background="#00c60c" API="#"><SiNaver /></ APIListA></APIListLI>
-            <APIListLI>< APIListA border="#1da1f2" background="#1da1f2" API="#"><AiOutlineTwitter /></ APIListA></APIListLI>
+            <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#1877f2"} background={"#1877f2"} API="#"><FaFacebookF /></APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></ APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#1da1f2"} background={"#1da1f2"} API="#"><AiOutlineTwitter /></ APIListA></APIListLI>
           </APIList>
           </LOGINAPI>
           <EmPwFoundT>
           <EmailPwFoundList>
             <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
-            <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/SIGN'>회원가입</Link></EmailPwFoundListLI>
+            <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></EmailPwFoundListLI>
           </EmailPwFoundList>
           </EmPwFoundT>
         </LoginInput>
@@ -196,10 +196,11 @@ const LoginTop = styled.div
     text-align: center;
     margin-bottom: 50px;
 `
-const LoginTopLOGO = styled.img
+export const LoginTopLOGO = styled.img
 `
     width: 192px;
     height: 102px;
+    margin: 0px 0px 32px 0px;
     -webkit-user-select: none;
 `
 
@@ -286,7 +287,7 @@ const LoginBtn = styled.button
   }
 `
 
-const Line = styled.p
+export const Line = styled.p
 `
     display: flex;
     flex-direction: row;
@@ -325,7 +326,7 @@ const EmPwFoundT = styled.div
 `
 `
 
-const EmailPwFoundList = styled.ul
+export const EmailPwFoundList = styled.ul
 `
     display: flex;
     flex-direction: row;
@@ -340,7 +341,7 @@ const APIList = styled(EmailPwFoundList)
     margin:40px 0px 40px 0px;
 `
 
-const APIListA = styled.a.attrs((props) => ({href : props.API}))
+export const APIListA = styled.a.attrs((props) => ({href : props.API}))
 `
     display: inline-block;
     padding: 5px;
