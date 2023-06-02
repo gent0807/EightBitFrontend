@@ -70,7 +70,7 @@ const Logininput = () =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-        axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
+        axios.post("http://14.38.253.206:8033/EightBitBackend/Users/login/",{
             email:Email,
             password:Pw
           } 

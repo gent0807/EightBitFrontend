@@ -44,6 +44,7 @@ const Signinput = () =>
   const navigate = useNavigate();
 
   let compareMode=useRef(false);
+  let password=useRef("");
   let passwordPossibleCombCheck=useRef(false);
   let nickNamePossible=useRef(false);
   let finalEmail=useRef("");
@@ -269,9 +270,8 @@ const Signinput = () =>
     {
       setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
       setIsNickname(false);
-      
     }else{
-      axios.post("http://localhost:8033/EightBitBackend/user/alreadyNickRegisterCheck/",{
+      axios.post("http://14.38.253.206:8033/EightBitBackend/Users/nick/already/",{
         nickname:currentNickname
       } 
       )
@@ -279,7 +279,7 @@ const Signinput = () =>
         return res.data;
       })  
       .then(data=>{
-       
+
         if(data === "yes" )
         {
           setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이미 사용 중인 닉네임입니다!</ErrorMessageText></ErrorMessageBox>])
@@ -317,7 +317,7 @@ const Signinput = () =>
     
     finalEmail.current=EmailTotal;
     
-    axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
+    axios.post("http://14.38.253.206:8033/EightBitBackend/Users/email/already/",{
         email:EmailTotal
       } 
     )
@@ -335,7 +335,7 @@ const Signinput = () =>
       }
       else
       {
-        axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
+        axios.post("http://14.38.253.206:8033/EightBitBackend/Users/authkey/",{
               email:EmailTotal
         })
         .then(res=>{
@@ -364,7 +364,7 @@ const Signinput = () =>
     {
       e.preventDefault();
       
-      axios.post("http://localhost:8033/EightBitBackend/user/insert/",{
+      axios.post("http://14.38.253.206:8033/EightBitBackend/Users/user/",{
         email:finalEmail.current,
         password:PwConfirm,
         nickname:Nickname,
