@@ -14,7 +14,7 @@ import { AiOutlineUserSwitch } from "react-icons/ai";
 import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
 import { BiBell} from "react-icons/bi";
-import {RiEnglishInput} from "react-icons/ri";
+import { RiEnglishInput } from "react-icons/ri";
 
 const HeaderBox = () =>
 {
@@ -294,7 +294,7 @@ const HeaderBox = () =>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
             <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
+            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>]}
             </>  
             <LanguageListBox margin={user.data !== ""} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
@@ -412,7 +412,7 @@ const BackgroudTopNav = styled.div
     @media (min-width:250px) and (max-width:666px)
     {
         width: 100%;
-        height: 249px;
+        height: 253px;
     }
 
     @media (min-width:666px) and (max-width:1342px)
@@ -770,7 +770,7 @@ const ProFileSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 300px;
+        height: 370px;
     }
     }
 `
@@ -778,7 +778,7 @@ const ProFileSlideDown = keyframes
 const ProFileSlideUp = keyframes
 `
     0%{
-        height: 300px;
+        height: 370px;
     }
     100%{
         height: 0px;

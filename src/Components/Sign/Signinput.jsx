@@ -117,6 +117,7 @@ const Signinput = () =>
     const currentEmail = e.target.value;
     const onlytext = currentEmail.replace(/[~!@#$%^&*()_+|<>?:{}]/g, '');
     setEmail(onlytext);
+
     const Check = /^([0-9a-zA-Z_\.-]+)/;
     if(!Check.test(currentEmail))
     {
@@ -151,7 +152,7 @@ const Signinput = () =>
     }
     else
     {
-     setIsInputPwCheck(true);
+      setIsInputPwCheck(true);
     }
 
 
@@ -468,7 +469,7 @@ const EmailInput = styled.input
     }
 `
 
-const Title = styled.label
+export const Title = styled.label
 `
   font-weight: bold;
   color: ${(props) => props.theme.textColor};
@@ -649,7 +650,7 @@ const CertBtn = styled.button
     }
 `
 
-const ErrorMessage = styled.p                  
+export const ErrorMessage = styled.p                  
 /*display: ${props => props.show ? "none" : "block"};*/ 
 `
     margin: -2px 0px 3px -6px ;
@@ -773,19 +774,19 @@ const SumbitButtonBox = styled.div
     margin-top: 50px;
 `
 
-const ErrorMessageBox = styled.div
+export const ErrorMessageBox = styled.div
 `
     margin: -5px 5px 6px;
     display: flex;
     position: absolute;
 `
 
-const ErrorMessageIcon = styled.i
+export const ErrorMessageIcon = styled.i
 `
     margin: -2px 5px 6px;
 `
 
-const ErrorMessageText = styled.span
+export const ErrorMessageText = styled.span
 `
     margin: -2px 5px 6px;
 `

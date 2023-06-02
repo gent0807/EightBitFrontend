@@ -339,7 +339,7 @@ const EmailPwFound = () =>
                 <>
                 {MessageChangeCheck ?
                 <EmailFoundErrorMessage show = {MessageRevert} check={isEmailPoundCheck}>{EmailFoundCheckMessage}</EmailFoundErrorMessage> :
-                Email.length > 0 && (<ErrorMessage color={isEmailBtn}>{EmailMessage}</ErrorMessage>)}
+                Email.length > 0 && (<ErrorMessage color={isEmail}>{EmailMessage}</ErrorMessage>)}
                 </>
                 <EmailAuthBox show={isEmailBtn}>
                 <Title position={"absolute"} marginTop={"-8px"}>인증번호</Title>
@@ -365,7 +365,7 @@ const EmailPwFound = () =>
             <AnotherRoute>
             <AnotherList>
               <Login onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></Login>
-              <Sign onClick={() => ScrollTop()}><Link to='/Sign'>회원가입</Link></Sign>
+              <Sign onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></Sign>
             </AnotherList>
             </AnotherRoute>
             </EmPwForm>
@@ -373,7 +373,7 @@ const EmailPwFound = () =>
     );
 }
 
-const EmPwInformation = styled.div
+export const EmPwInformation = styled.div
 `
     width: 191px;
     border: solid 3px ${(props) => props.theme.borderColor};
@@ -637,7 +637,7 @@ const SubmitBtnBox = styled.div
     margin-bottom: 28px;
 `
 
-const SumbitButton = styled.button
+export const SumbitButton = styled.button
 `
     width: 410px;
     height: 55px;
