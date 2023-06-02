@@ -19,7 +19,9 @@ const Phone = () =>
     const [ isPhoneCheck, setIsPhoneCheck ] = useState(false);
     const [ isPhoneAuthCheck, setIsPhoneAuthCheck ] = useState(false);
     const [ isPhoneBtnCheck, setIsPhoneBtnCheck] = useState(false);
+    const [ isPhoneAuthBtnCheck, setIsPhoneAuthBtnCheck] = useState(false);
     const [ PhoneMessage, setPhoneMessage ] = useState("");
+    const [ PhoneAuthMessage, setPhoneAuthMessage ] = useState("");
     const [ isVisibled, setIsVisibled ] = useState(false);
     
     const OnPhoneChange = (e) =>
@@ -41,7 +43,7 @@ const Phone = () =>
             {
                 setIsPhoneBtnCheck(false);
                 setIsPhone(false);
-                setPhoneMessage(<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>올바른 휴대폰 번호을 입력해주세요!</ErrorMessageText></ErrorMessageBox>);
+                setPhoneMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>올바른 휴대폰 번호을 입력해주세요!</ErrorMessageText></MessaageAllBox>);
             }
             else
             {
@@ -54,6 +56,16 @@ const Phone = () =>
     {
         const currentPhoneAuth = e.target.value;
         setPhoneAuth(currentPhoneAuth);
+
+        if(currentPhoneAuth === "")
+        {
+            setIsPhoneAuthBtnCheck(false);
+            setIsPhoneAuthCheck(false);
+        }
+        else
+        {
+            setIsPhoneAuthBtnCheck(true);
+        }
     }
 
     const PhoneData = (e) =>
@@ -68,14 +80,30 @@ const Phone = () =>
         {
             setIsPhone(false);
             setIsPhoneCheck(true);
-            setPhoneMessage(<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>올바른 휴대폰 번호을 입력해주세요!</ErrorMessageText></ErrorMessageBox>);
+            setPhoneMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>올바른 휴대폰 번호을 입력해주세요!</ErrorMessageText></MessaageAllBox>);
         }
         else
         {
             setIsPhoneCheck(true);
-            setPhoneMessage(<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 전송 되었습니다!</ErrorMessageText></ErrorMessageBox>);
+            setPhoneMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 전송 되었습니다!</ErrorMessageText></MessaageAllBox>);
             setIsVisibled(true);
             setIsPhone(true);
+        }
+    }
+
+    const PhoneAuthCheck = () =>
+    {
+        if(PhoneAuth === "123456")
+        {
+            setIsPhoneAuth(true);
+            setIsPhoneAuthCheck(true);
+            setPhoneAuthMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치 합니다!</ErrorMessageText></MessaageAllBox>);
+        }
+        else
+        {
+            setIsPhoneAuthCheck(true);
+            setPhoneAuthMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치 하지 않습니다.</ErrorMessageText></MessaageAllBox>);
+            setIsPhoneAuth(false);
         }
     }
 
@@ -101,9 +129,10 @@ const Phone = () =>
                 <PhoneAuthBox show={isVisibled}>
                     <PhoneTitle>인증번호</PhoneTitle>
                     <PhoneInputAllBox>
-                        <PhoneInput value={PhoneAuth} onChange={OnPhoneAuthChange}/>
-                        <PhoneSendBtn show={isPhoneAuth}><span>인증확인</span></PhoneSendBtn>
+                        <PhoneInput value={PhoneAuth} show={isPhoneAuth} check={isPhoneAuthCheck} onChange={OnPhoneAuthChange}/>
+                        <PhoneSendBtn show={isPhoneAuthBtnCheck} onClick={PhoneAuthCheck}><span>인증확인</span></PhoneSendBtn>
                     </PhoneInputAllBox>
+                    <MessageBox show={isPhoneAuthCheck} color={isPhoneAuth}>{PhoneAuthMessage}</MessageBox>
                 </PhoneAuthBox>
                 <SubmitBox>
                     <SubmitBtn disabled={!(isPhone, isPhoneAuth)}><span>완료</span></SubmitBtn>
@@ -124,6 +153,11 @@ const MessageBox = styled(ErrorMessage)
 `
     display: ${props => props.show ? "block" : "none"};
     color: ${props => props.color ? props.theme.successColor : props.theme.errorColor};
+`
+
+const MessaageAllBox = styled(ErrorMessageBox)
+`
+    margin: -18px 5px 6px;
 `
 
 const PhoneForm = styled.form

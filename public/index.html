@@ -53,9 +53,9 @@
   
           const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
           if (systemPreference.matches) {
-            return 'true';
+            return 'false';
           }
-          return 'false';
+          return 'true';
         }
       }
       const colorMode = getInitialColorMode();
