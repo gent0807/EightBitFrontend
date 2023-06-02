@@ -22,7 +22,7 @@ const NotFoundContainer = styled.div
     padding: 346px 0px 54px 0px;
     @media (min-width:250px) and (max-width:512px)
     {
-      padding: 505px 0px 54px 0px;
+      padding: 358px 0px 54px 0px;
     }
 `
 

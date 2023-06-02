@@ -70,7 +70,7 @@ const Logininput = () =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-        axios.post("http://localhost:8033/EightBitBackend/user/loginCheck/",{
+        axios.post("http://14.38.253.206:8033/EightBitBackend/Users/login/",{
             email:Email,
             password:Pw
           } 
@@ -107,7 +107,7 @@ const Logininput = () =>
     return(
       <LoginT> 
           <LoginTop>
-          <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+          <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit.png' : 'img/8bit_Dark.png' } alt='로고'/></Link>
           </LoginTop>
           <LoginInput>
           <InputT>
@@ -155,13 +155,11 @@ export const InputBox = styled.input
     border-radius: 10px;
     caret-color: ${(props) => props.theme.textColor};
     background-color: #dee2e6;
+    outline: none;
     font-size:15px;
     &:focus
     {
-      border: none;
-      outline: none;
-      border: solid 2px ${(props) => props.theme.borderColor};
-      border-radius: 10px;
+      box-shadow: 0 0 0 2px ${(props) => props.theme.borderColor} inset;
     }
     &::placeholder
     {
@@ -240,13 +238,14 @@ const LoginMaintainT = styled.div
 `
     margin-bottom: 15px;
     display: flex;
+    height: 54px;
 `
 
 const LoginMaintainCheckBox = styled.input
 `
     accent-color: ${(props) => props.theme.checkBoxColor};
     zoom: 1.5;
-    margin-top: 3px;
+    margin-top: -2px;
     &:checked
     {
       accent-color: ${(props) => props.theme.checkBoxColor};

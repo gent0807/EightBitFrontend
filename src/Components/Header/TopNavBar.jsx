@@ -203,6 +203,12 @@ const HeaderBox = () =>
         setIsWriteMenuClickCheck(false);
     }
 
+    const LanguageMenuNotCheck=()=>
+    {
+        setLanguageClickCheck(false);
+        setIsLanguageMenuShow(false);
+    }
+
     const FastMenuCheck = () =>
     {   
         languageTopZIndex.current=false;
@@ -282,7 +288,7 @@ const HeaderBox = () =>
             </SearchInputBox>
         <ButtonBox menucheck={user.data !== ""}>
             {user.data !=="" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
-            <MenuBox click={LanguageClickCheck} left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()}><MdLanguage/></MenuBox>
+            <MenuBox click={LanguageClickCheck} left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}><MdLanguage/></MenuBox>
             <MenuBox click={FastClickCheck} left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"4.8px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
@@ -290,7 +296,7 @@ const HeaderBox = () =>
             [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
             </>  
-            <LanguageListBox zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
+            <LanguageListBox margin={user.data !== ""} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/korea.png"/><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/uk.png"/><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli>
@@ -394,7 +400,7 @@ const WriteBoxText = styled.span
 `   
     margin: -6px 0px 0px 2.5px;
     position:absolute;
-    @media (min-width:250px) and (max-width:480px)
+    @media (min-width:250px) and (max-width:666px)
     {
         white-space: nowrap;
     }
@@ -403,13 +409,13 @@ const BackgroudTopNav = styled.div
 `
     background-color: #3c3c3c;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
-        width: 480px;
+        width: 100%;
         height: 249px;
     }
 
-    @media (min-width:512px) and (max-width:1342px)
+    @media (min-width:666px) and (max-width:1342px)
     {
         height: 160px;
     }
@@ -420,9 +426,9 @@ const BackgroudSubNav = styled.div
     border-bottom: solid 3px #3c3c3c;
     background: white;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
-        width: 480px;
+        width: 100%;
     }
 
 `
@@ -469,7 +475,7 @@ const ComunitySubNav = styled(GameSubNav)
         display: none;
     }
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         white-space: nowrap;
         overflow: scroll;
@@ -526,7 +532,7 @@ const SubNavMenu = styled.div
     max-width: 1500px;
     align-items: center;
     background: white;
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         font-size: 17px;
     }
@@ -572,14 +578,14 @@ const NavBox = styled.div
     margin: 15px 0px 15px 0px;
     color: white;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         flex-direction: column;
         margin: 12px 0px 0px 0px;
         text-align: center;
     }
 
-    @media (min-width:512px) and (max-width:1342px)
+    @media (min-width:666px) and (max-width:1342px)
     {
         justify-content: center;
     }
@@ -589,11 +595,12 @@ const NavUl = styled.ul
 `
     display: flex;
     margin: 12px 0px 12px 0px;
+    white-space: nowrap;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
-        margin: 12px 0px 12px -63px;
-        white-space: nowrap;
+        padding: 0px;
+        justify-content: center;
     }
 
 `
@@ -623,12 +630,12 @@ const AllButtonBox = styled.div
     color: white;
     -webkit-tap-highlight-color:transparent;
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         flex-direction: column;
     }
 
-    @media (min-width:512px) and (max-width:1342px)
+    @media (min-width:666px) and (max-width:1342px)
     {
         margin: -10px 13px 0px 0px;
     }
@@ -639,7 +646,7 @@ const ButtonBox = styled.div
     display: flex;
     margin-right: ${props => props.menucheck ? "166px" : "-3px"};
 
-    @media (min-width:250px) and (max-width:512px)
+    @media (min-width:250px) and (max-width:666px)
     {
         margin-left: ${props => props.menucheck ? "-61px" : "0px"};
         margin-top: ${props => props.menucheck ? "5px" : "0px"};
@@ -839,7 +846,7 @@ const LanguageListBox = styled(ProfileListBox)
 `
     display: ${props => props.default ? "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px -22.7px;
+    margin: ${props => props.margin ? "59px 0px 0px -21.4px" : "59px 0px 0px -74px"};
     height: ${props => props.show ? "370px" : "0px"};
     z-index: ${props => props.zindex? 2 : 1};
 `

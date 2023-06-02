@@ -15,7 +15,7 @@ const ToggleBtn = () =>
 };
 
 return (
-    <IconsBox onClick={ToggleBtn}><Icons src={ Darkmode ? "img/light.png" : "img/dark.png" }/></IconsBox>
+    <IconsBox onClick={ToggleBtn}><Icons src={ Darkmode ? "img/dark.png" : "img/light.png" }/></IconsBox>
 );
 
 }
@@ -33,6 +33,8 @@ const IconsBox = styled.div
     padding: 5px;
     width: 40px;
     height: 40px;
+    position: absolute;
+    right: 0px;
     -webkit-tap-highlight-color:transparent;
 `
 

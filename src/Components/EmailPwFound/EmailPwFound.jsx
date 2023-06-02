@@ -26,7 +26,7 @@ const EmailPwFound = () =>
     const [ isEmail, setIsEmail ] = useState(false);
     const [ isEmailBtn, setIsEmailBtn ] = useState(false);
     const [ isEmailauthBtn, setIsEmailauthBtn ] = useState(false);
-    const [ isInputCheck, setIsInputCheck ] = useState(true);
+    const [ isInputEmailAuthCheck, setIsInputEmailAuthCheck ] = useState(false);
     const [ isButtonCheck, setIsButtonCheck ] = useState(false);
     const [ isPasswordChange, setIsPasswordChange ] = useState(false);
     const [ isPasswordChangeConfirm, setIsPasswordChangeConfirm ] = useState(false);
@@ -34,6 +34,9 @@ const EmailPwFound = () =>
     const [ isInputEmailCheck, setIsEmailtPwCheck ] = useState(false);
     const [ isInputPasswordChangeCheck, setIsInputPasswordChangeCheck ] = useState(false);
     const [ isInputPasswordChangeConfirmCheck, setIsInputPasswordChangeConfirmCheck ] = useState(false);
+    const [ isEmailAuthInputCheck, setIsEmailAuthInputCheck] = useState(false);
+    const [ MessageChangeCheck, setMessageChangeCheck] = useState(false);
+    const [ MessageRevert, setMessageRevert ] = useState(false);
 
     const [ changeVisibled, setchangeVisibled ] = useState(false);
     const isDarkmode = useRecoilValue(isDark);
@@ -44,24 +47,6 @@ const EmailPwFound = () =>
     let passwordPossibleCombCheck=useRef(false);
     let authNum=useRef(null);
     let alreadyPasswordUsing=useRef("no");
-    let checkRef = useRef(null);
-  
-    useEffect(() => {
-      function handleOuside(e) {
-        if (document.activeElement !== checkRef.current || !checkRef.current.contains(e.target)) 
-        {
-            setIsEmailPoundCheck(false);
-            console.log(checkRef);
-        }
-      };
-
-      if(!isEmailPoundCheck) {
-        document.addEventListener("mousedown", handleOuside);
-      }
-      return () => {
-        document.removeEventListener("mousedown", handleOuside);
-      };
-    }, [checkRef])
 
     const Emailuser = (e) =>
     {
@@ -71,6 +56,7 @@ const EmailPwFound = () =>
       if(currentEmail === "")
       {
           setIsEmailtPwCheck(false);
+          setIsEmailAuthInputCheck(false);
       }
       else
       {
@@ -83,11 +69,16 @@ const EmailPwFound = () =>
       {
         setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>올바른 이메일을 작성해 주세요!</ErrorMessageText></ErrorMessageBox>]);
         setIsEmail(false);
+        setIsEmailAuthInputCheck(false);
+        setMessageChangeCheck(false);
+        setMessageRevert(true);
       }
       else
       {
+        setMessageChangeCheck(true);
         setEmailMessage("");
-        setIsEmail(true);
+        { MessageRevert ? setIsEmail(true) : setIsEmail(false) };
+        setIsEmailAuthInputCheck(true);
       }
     }
 
@@ -95,6 +86,7 @@ const EmailPwFound = () =>
     {
         const currentEmailCert = e.target.value;
         setEmailauth(currentEmailCert);
+
     }
 
     const PasswordChange = (e) =>
@@ -198,7 +190,7 @@ const EmailPwFound = () =>
 
      const userPasswordAlreadyUsingCheck=(password)=>
      {  
-        axios.post("http://localhost:8033/EightBitBackend/user/alreadyPasswordUsingCheck/",{
+        axios.post("http://14.38.253.206:8033/EightBitBackend/Users/password/already/",{
             email:Email,
             password:password
         })
@@ -209,8 +201,19 @@ const EmailPwFound = () =>
             alreadyPasswordUsing.current=data;
             if(alreadyPasswordUsing.current=="no"){
               setPasswordChangeConfirmMessage("");
-              setIsPasswordChangeConfirm(true);
-              setIsPasswordChange(true);
+
+              if(passwordPossibleCombCheck.current==false)
+              {
+                setIsPasswordChangeConfirm(false);
+                setIsPasswordChange(false);
+              }
+
+              else if(passwordPossibleCombCheck.current==true)
+              {
+                setIsPasswordChangeConfirm(true);
+                setIsPasswordChange(true);
+              }
+
             }
             else if(alreadyPasswordUsing.current=="yes"){
               setPasswordChangeConfirmMessage([<ErrorMessageBox margin={"-30px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>기존의 비밀번호와 일치합니다!</ErrorMessageText></ErrorMessageBox>])
@@ -226,7 +229,7 @@ const EmailPwFound = () =>
 
     const EmailCheck = () =>
     {   
-        axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
+        axios.post("http://14.38.253.206:8033/EightBitBackend/Users/email/already/",{
           email:Email
         })
         .then(res=>{
@@ -234,17 +237,17 @@ const EmailPwFound = () =>
         })
         .then(data=>{
           if(data === "no" )
-          {
-
+          { 
+            setMessageChangeCheck(true);
+            setIsEmail(false);
             setIsEmailBtn(false);
             setIsEmailPoundCheck(true);
+            setMessageRevert(false);
             setEmailFoundCheckMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입 정보가 확인되지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
           }
           else if(data==="yes")
           {
-            setIsEmailBtn(true);
-            setEmailFoundCheckMessage("");
-            axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
+            axios.post("http://14.38.253.206:8033/EightBitBackend/Users/authkey/",{
                   email:Email
             })
             .then(res=>{
@@ -252,7 +255,19 @@ const EmailPwFound = () =>
             })
             .then(data=>{
               authNum.current=data;
+              setIsEmail(true);
+              setIsEmailBtn(true);
+              setIsEmailPoundCheck(false);
+              setMessageRevert(true);
+              setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증 번호가 전송되었습니다!</ErrorMessageText></ErrorMessageBox>]);
             });
+            setMessageChangeCheck(false);
+            setIsEmail(false);
+            setIsEmailBtn(false);
+            setIsEmailPoundCheck(false);
+            setMessageRevert(false);
+            setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호 전송 중...</ErrorMessageText></ErrorMessageBox>]);
+
           }
         });
 
@@ -264,7 +279,7 @@ const EmailPwFound = () =>
     {
       e.preventDefault();
 
-      axios.put("http://localhost:8033/EightBitBackend/user/updateUserPw/",{
+      axios.put("http://14.38.253.206:8033/EightBitBackend/Users/password/",{
         email:Email,
         password:PasswordChangeConfirmM,
       } 
@@ -281,28 +296,30 @@ const EmailPwFound = () =>
 
     const EmailAuthCheck = () =>
     {
-      setIsInputCheck(false)
       
       if(Emailauth == authNum.current)
         {   
           setIsEmailauthBtn(true)
           setIsButtonCheck(true)
           setchangeVisibled(true)
+          setIsInputEmailAuthCheck(true)
+          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>])
         }
         else
         {
+          
+          setIsInputEmailAuthCheck(true)
           setIsButtonCheck(false)
           setIsEmailauthBtn(false)
           setchangeVisibled(false)
-          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>])
+          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
         }
-       
     }
 
     return (
         <EmPwFoundT>
             <EmPwFoundTop>
-            <Link to='/'><EmPwLogo src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+            <Link to='/'><EmPwLogo src={ isDarkmode ? 'img/8bit.png' : 'img/8bit_Dark.png' } alt='로고'/></Link>
             </EmPwFoundTop>
             <EmPwForm onSubmit={update}>
             <InformationAllBox>
@@ -315,17 +332,20 @@ const EmailPwFound = () =>
                 <EmailAuthInputBox>
                 <Title>이메일</Title>
                 <EmailAuthAllBox>
-                <EmailInput ref={checkRef} disabled={isEmailauthBtn} show = {isEmail} check = {isInputEmailCheck} placeholder='이메일을 입력해 주세요!' value={Email} onChange={Emailuser}/>
-                <SendButton show = {isEmail} type="button" onClick={EmailCheck} disabled={isEmailauthBtn}><span>{isEmailBtn ? "재전송" : "전송"}</span></SendButton>
+                <EmailInput disabled={isEmailauthBtn} revert={MessageRevert} show = {isEmail} check = {isInputEmailCheck} placeholder='이메일을 입력해 주세요!' value={Email} onChange={Emailuser}/>
+                <SendButton show = {isEmail} type="button" onClick={EmailCheck} disabled={isEmailAuthInputCheck ? isEmailauthBtn : true}><span>{isEmailBtn ? "재전송" : "전송"}</span></SendButton>
                 </EmailAuthAllBox>
                 </EmailAuthInputBox>
-                {Email.length > 0 && (<ErrorMessage show = {isEmail}>{EmailMessage}</ErrorMessage>)}
-                <EmailFoundErrorMessage show = {isEmailBtn} check={isEmailPoundCheck}>{EmailFoundCheckMessage}</EmailFoundErrorMessage>
+                <>
+                {MessageChangeCheck ?
+                <EmailFoundErrorMessage show = {MessageRevert} check={isEmailPoundCheck}>{EmailFoundCheckMessage}</EmailFoundErrorMessage> :
+                Email.length > 0 && (<ErrorMessage color={isEmailBtn}>{EmailMessage}</ErrorMessage>)}
+                </>
                 <EmailAuthBox show={isEmailBtn}>
                 <Title position={"absolute"} marginTop={"-8px"}>인증번호</Title>
-                <EmailAuthInput show={isInputCheck} check={isEmailauthBtn} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth}/>
+                <EmailAuthInput show={isInputEmailAuthCheck} check={isEmailauthBtn} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth}/>
                 <EmailAuthBtn show={isEmailauthBtn} type="button" onClick={EmailAuthCheck} disabled={isEmailauthBtn}><span>{isButtonCheck ? "인증완료" : "인증확인"}</span></EmailAuthBtn>
-                <ErrorMessage show = {isEmailauthBtn}>{EmailauthMessage}</ErrorMessage>
+                <ErrorMessage2 color = {isEmailauthBtn}>{EmailauthMessage}</ErrorMessage2>
                 </EmailAuthBox>
                 <PasswordChangeT show={changeVisibled}>
                 <Title>새 비밀번호</Title>
@@ -452,17 +472,16 @@ const EmailInput = styled.input
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
-    border: ${props => props.check ? props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
+    border: none;
+    box-shadow: ${props => props.check ? props.revert ? props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
     border-radius: 10px;
     caret-color:  ${(props) => props.theme.textColor};
     background-color: #dee2e6;
     font-size:15px;
+    outline: none;
     &:focus
     {
-      border: none;
-      outline: none;
-      border: solid 2px ${(props) => props.theme.borderColor};
-      border-radius: 10px;
+      box-shadow: ${props => props.check ? props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : `0 0 0 2px ${props.theme.borderColor} inset`};
     }
 `
 
@@ -485,11 +504,14 @@ const ErrorMessageText = styled.span
 
 const ErrorMessage = styled.p
 `
-    display: ${props => props.show ? "none" : "block"};
     margin: 0px;
     padding: 0px;
-    color: ${(props) => props.theme.errorColor};
+    color: ${(props) => props.color ? props.theme.successColor : props.theme.errorColor};
     font-size: 15px;
+`
+const ErrorMessage2=styled(ErrorMessage)
+`
+    margin: -5px 0px 7.7px -6px;
 `
 
 const EmailFoundErrorMessage = styled.p
@@ -505,22 +527,22 @@ const SendButton = styled.button
 `
     margin-left: 10px;
     width: 100px;
-    height: 55px;
-    border: ${props => props.show ? "none" : "solid 1px #dddddd"};
-    background: ${props => props.show ? props.theme.buttonColor : "#aaaaaa"};
+    height: 56.66px;
+    border: none;
+    box-shadow: "0 0 0 1px #dddddd inset";
+    background: ${props => props.theme.buttonColor};
     border-radius: 0.4rem;
     cursor: pointer;
     color: white;
     font-size: 15px;
-    margin-top: -3px;
-    pointer-events: ${props => props.show ? "true" : "none"};
+    margin-top: -3px; 
     &:active
     {
       opacity: 90%;
     }
+
     &:disabled
     {
-        border: solid 1px #dddddd;
         background: #aaaaaa;
         pointer-events: none;
     }
@@ -533,8 +555,13 @@ const EmailAuthBox = styled.div
 `
 const EmailAuthInput = styled(EmailInput)
 `
-    border: ${props => props.show ? "none" : props.check ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` };
+    box-shadow: ${props => props.show ? props.check ?  `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
     margin-top: 27px;
+
+    &:focus
+    {
+      box-shadow: ${props => props.show ? props.check ?  `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : `0 0 0 2px ${props.theme.borderColor} inset`};
+    }
 `
 
 const EmailAuthBtn = styled.button
@@ -544,6 +571,7 @@ const EmailAuthBtn = styled.button
     height: 55px;
     border: none;
     background: ${props => props.theme.buttonColor};
+    box-shadow: 0 0 0 1px #dddddd inset;
     border-radius: 0.4rem;
     cursor: pointer;
     color:white;
@@ -551,7 +579,6 @@ const EmailAuthBtn = styled.button
     margin-top: -3px;
     &:disabled
     {
-        border: solid 1px #dddddd;
         background: #aaaaaa;
         pointer-events: none;
     }
@@ -561,14 +588,14 @@ const PasswordChangeT = styled.div
 `
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
-    margin-top: 4px;
+    margin-top: 7px;
 `
 
 const PasswordChangeConfirmT = styled.div
 `
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
-    margin-top: 17px;
+    margin-top: 7px;
     margin-bottom: 21px;
 `
 
@@ -586,17 +613,16 @@ const PasswordChangeInput = styled.input
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
-    border: ${props => props.check ? props.show ? `solid 2px ${props.theme.successColor}` : `solid 2px ${props.theme.errorColor}` : "none"};
+    border: none;
+    outline: none;
+    box-shadow: ${props => props.check ? props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
     border-radius: 10px;
     caret-color: ${(props) => props.theme.textColor};
     background-color: #dee2e6;
     font-size:15px;
     &:focus
     {
-      border: none;
-      outline: none;
-      border: solid 2px ${(props) => props.theme.borderColor};
-      border-radius: 10px;
+      box-shadow: ${props => props.check ? props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : `0 0 0 2px ${props.theme.borderColor} inset`};
     }
 `
 
@@ -628,7 +654,7 @@ const SumbitButton = styled.button
     }
     &:disabled
     {
-      border: solid 1px #dddddd;
+      box-shadow: 0 0 0 1px #dddddd inset;
       background: #aaaaaa;
       pointer-events: none;
     }
