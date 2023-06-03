@@ -6,7 +6,7 @@ import { Title, ErrorMessageBox, ErrorMessageIcon, ErrorMessageText, ErrorMessag
 import { IntroduceBox, IntroduceText, SelectSignBox } from "./SelectSignInput"
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EmPwInformation, SumbitButton } from "../EmailPwFound/EmailPwFound"
 
 const Phone = () =>
@@ -23,6 +23,7 @@ const Phone = () =>
     const [ PhoneMessage, setPhoneMessage ] = useState("");
     const [ PhoneAuthMessage, setPhoneAuthMessage ] = useState("");
     const [ isVisibled, setIsVisibled ] = useState(false);
+    const Navigater = useNavigate();
     
     const OnPhoneChange = (e) =>
     {
@@ -109,7 +110,7 @@ const Phone = () =>
 
     return(
         <PhoneBox>
-            <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit.png' : 'img/8bit_Dark.png' } alt='로고'/></Link>
+            <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
             <IntroduceBox>
                 <MainText as={"h1"}>서비스 이용을 위해 본인 확인이 필요합니다!</MainText>
                 <IntroduceText>만 18세 미만인 경우 보호자 동의가 필요합니다.</IntroduceText>
@@ -130,12 +131,12 @@ const Phone = () =>
                     <PhoneTitle>인증번호</PhoneTitle>
                     <PhoneInputAllBox>
                         <PhoneInput value={PhoneAuth} show={isPhoneAuth} check={isPhoneAuthCheck} onChange={OnPhoneAuthChange}/>
-                        <PhoneSendBtn show={isPhoneAuthBtnCheck} onClick={PhoneAuthCheck}><span>인증확인</span></PhoneSendBtn>
+                        <PhoneSendBtn type={"submit"} show={isPhoneAuthBtnCheck} onClick={PhoneAuthCheck}><span>인증확인</span></PhoneSendBtn>
                     </PhoneInputAllBox>
                     <MessageBox show={isPhoneAuthCheck} color={isPhoneAuth}>{PhoneAuthMessage}</MessageBox>
                 </PhoneAuthBox>
                 <SubmitBox>
-                    <SubmitBtn disabled={!(isPhone, isPhoneAuth)}><span>완료</span></SubmitBtn>
+                    <SubmitBtn disabled={!(isPhone && isPhoneAuth)}><span>완료</span></SubmitBtn>
                 </SubmitBox>
             </PhoneForm>
         </PhoneBox>
@@ -145,7 +146,7 @@ const Phone = () =>
 export default Phone;
 
 const PhoneBox = styled(SelectSignBox)
-`
+`p
 
 `
 
@@ -252,4 +253,5 @@ const MainText = styled(IntroduceText)
 `
     font-size: 25px;
     opacity: 100%;
+    white-space: nowrap;
 `
