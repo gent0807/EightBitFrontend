@@ -1,349 +1,750 @@
 import { styled, keyframes } from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import { EmPwInformation } from "../EmailPwFound/EmailPwFound"
-import { SearchInputBox, SearchInput, SearchInputIconBox, SearchButton } from "../Header/TopNavBar"
+import { EmPwInformation } from "../EmailPwFound/EmailPwFound";
+import { SearchInputBox, SearchInput, SearchInputIconBox, SearchButton } from "../Header/TopNavBar";
 import { ArrowBox } from "../Sign/Signinput";
 import { HiOutlineSearch } from "react-icons/hi";
-import  Pagination  from "./Pagination";
+import  Pagination from "./Pagination";
+import { useRecoilState } from "recoil";
+import { firstReset } from "../Darkmode/Darkmode";
 
 const FreeBoard = () =>
 {
     const [posts, setPosts] = useState([
         {
-            id: 1,
-            title: "슈퍼마리오",
+            id : 1,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 2,
-            title: "슈퍼마리오",
+            id : 2,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 3,
-            title: "슈퍼마리오",
+            id : 3,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 4,
-            title: "슈퍼마리오",
+            id : 4,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 5,
-            title: "슈퍼마리오",
+            id : 5,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 6,
-            title: "슈퍼마리오",
+            id : 6,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 7,
-            title: "슈퍼마리오",
+            id : 7,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 8,
-            title: "슈퍼마리오",
+            id : 8,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 9,
-            title: "슈퍼마리오",
+            id : 9,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 10,
-            title: "슈퍼마리오",
+            id : 10,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 11,
-            title: "슈퍼마리오",
+            id : 11,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 12,
-            title: "슈퍼마리오",
+            id : 12,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 13,
-            title: "슈퍼마리오",
+            id : 13,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 14,
-            title: "슈퍼마리오",
+            id : 14,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 15,
-            title: "슈퍼마리오",
+            id : 15,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 16,
-            title: "슈퍼마리오",
+            id : 16,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 17,
-            title: "슈퍼마리오",
+            id : 17,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 18,
-            title: "슈퍼마리오",
+            id : 18,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 19,
-            title: "슈퍼마리오",
+            id : 19,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 20,
-            title: "슈퍼마리오",
+            id : 20,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 21,
-            title: "슈퍼마리오",
+            id : 21,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 22,
-            title: "슈퍼마리오",
+            id : 22,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 23,
-            title: "슈퍼마리오",
+            id : 23,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 24,
-            title: "슈퍼마리오",
+            id : 24,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 25,
-            title: "슈퍼마리오",
+            id : 25,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 26,
-            title: "슈퍼마리오",
+            id : 26,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 27,
-            title: "슈퍼마리오",
+            id : 27,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 28,
-            title: "슈퍼마리오",
+            id : 28,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 29,
-            title: "슈퍼마리오",
+            id : 29,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 30,
-            title: "슈퍼마리오",
+            id : 30,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 31,
-            title: "슈퍼마리오",
+            id : 31,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 32,
-            title: "슈퍼마리오",
+            id : 32,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 33,
-            title: "슈퍼마리오",
+            id : 33,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 34,
-            title: "슈퍼마리오",
+            id : 34,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 35,
-            title: "슈퍼마리오",
+            id : 35,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 36,
-            title: "슈퍼마리오",
+            id : 36,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 37,
-            title: "슈퍼마리오",
+            id : 37,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 38,
-            title: "슈퍼마리오",
+            id : 38,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 39,
-            title: "슈퍼마리오",
+            id : 39,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 40,
-            title: "슈퍼마리오",
+            id : 40,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 41,
-            title: "슈퍼마리오",
+            id : 41,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 42,
-            title: "슈퍼마리오",
+            id : 42,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 43,
-            title: "슈퍼마리오",
+            id : 43,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 44,
-            title: "슈퍼마리오",
+            id : 44,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 45,
-            title: "슈퍼마리오",
+            id : 45,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 46,
-            title: "슈퍼마리오",
+            id : 46,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 47,
-            title: "슈퍼마리오",
+            id : 47,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
         },
         {
-            id: 48,
-            title: "슈퍼마리오",
+            id : 48,
+            title : "슈퍼마리오",
             writer: "곰탱이",
             time: "2023-06-23",
-            counter: "200",
+            counter: 200,
+        },
+        {
+            id : 49,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 50,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 51,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 52,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 53,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 54,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 55,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 56,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 57,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 58,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 59,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 60,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 61,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 62,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 63,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 64,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 65,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 66,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 67,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 68,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 69,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 70,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 71,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 72,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 73,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 74,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 75,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 76,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 77,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 78,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 79,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 80,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 81,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 82,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 83,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 84,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 85,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 86,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 87,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 88,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 89,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 90,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 91,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 92,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 93,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 94,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 95,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 96,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 97,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 98,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 99,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 100,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 101,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 102,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 103,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 104,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
+        },
+        {
+            id : 105,
+            title : "슈퍼마리오",
+            writer: "곰탱이",
+            time: "2023-06-23",
+            counter: 200,
         },
     ]);
     const [ Search, setSearch ] = useState("");
@@ -354,6 +755,8 @@ const FreeBoard = () =>
     const offset = (page - 1) * limit;
     const [ FitterDropdown, setFitterDropdown ] = useState(false);
     const [ LimitDropdown, setLimitDropdown ] = useState(false);
+
+    const [FirstReset, setFirstReset] = useRecoilState(firstReset);
 
     const FillterRef = useRef("");
     const LimitRef = useRef("");
@@ -406,6 +809,13 @@ const FreeBoard = () =>
         const Limit = e.target.value;
         setLimtText(innerText);
         setLimit(Limit);
+        setPage(1);
+        setFirstReset(false);
+    }
+
+    const ScrollBottom = () =>
+    {
+      window.scrollTo({ top: 1, behavior: "smooth" });
     }
 
     return(
@@ -416,12 +826,14 @@ const FreeBoard = () =>
             </FreeBoardInformation>
             </InformationAllBox>
             <SearchBox>
-                <FreeBoardSearchInputBox>
+                <SearchAllBox>
+                    <FreeBoardSearchInputBox>
                         <FreeBoardSearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch}/>
                     <FreeBoardSearchIconBox>
                         <FreeBoardSearchBtn><HiOutlineSearch/></FreeBoardSearchBtn>
                     </FreeBoardSearchIconBox>
                 </FreeBoardSearchInputBox>
+                </SearchAllBox>
                 <FitterBox>
                 <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                     <FitterSelectBox show={FitterDropdown}>
@@ -454,7 +866,7 @@ const FreeBoard = () =>
                 </BoardTitle>
                 <BoardContentAllBox>
                         {posts.slice(offset, offset + limit).map(({ id, title, writer, time, counter }) => (
-                        <BoardContentBox key={id+1}>
+                        <BoardContentBox key={id}>
                             <BoardContentNumber>{id}</BoardContentNumber>
                             <BoardContentTitle>{title}</BoardContentTitle>
                             <BoardContentWriter>{writer}</BoardContentWriter>
@@ -470,6 +882,7 @@ const FreeBoard = () =>
                 limit={limit}
                 page={page}
                 setPage={setPage}
+                offset={offset}
             />
             </PageNationBox>
         </FreeBoardBox>
@@ -477,6 +890,18 @@ const FreeBoard = () =>
 }
 
 export default FreeBoard;
+
+const SearchAllBox = styled.div
+`
+    margin: 0px 0px 0px 0px;
+
+    @media (min-width:250px) and (max-width:607px)
+    {
+        display: flex;
+        justify-content: center;
+        margin: -28px 0px 24px 13px;
+    }
+`
 
 const BoardContentNumber = styled.div
 `
@@ -555,6 +980,10 @@ const FitterSelectAllBox = styled.div
     margin: 0px 0px 0px 33px;
     height: 39px;
     -webkit-tap-highlight-color:transparent;
+    @media (min-width:250px) and (max-width:607px)
+    {
+        margin: 0px 0px -12px 7px;
+    }
 `
 
 const LimitSelectAllBox = styled(FitterSelectAllBox)
@@ -630,7 +1059,7 @@ const FitterSelectValue = styled.div
 
 const LimitSelectValue = styled(FitterSelectValue)
 `
-
+    margin: 11px 0px 11px 36px;
 `
 
 const FitterSelectList = styled.li
@@ -645,13 +1074,13 @@ const FitterSelectList = styled.li
 
 const LimitSelectList = styled(FitterSelectList)
 `
-
 `
 
 const FreeBoardSearchInputBox = styled(SearchInputBox)
 `
     border: solid 2px ${(props) => props.theme.borderColor};
     height: 39px;
+    width: 248px;
 `
 
 const FreeBoardSearchInput = styled(SearchInput)
@@ -710,6 +1139,11 @@ const FitterBox = styled.div
 `
     display: flex;
     justify-content: right;
+    
+    @media (min-width:250px) and (max-width:607px)
+    {
+        margin: 15px 0px 0px 0px;
+    }
 `
 
 const SearchBox = styled.div
@@ -718,6 +1152,11 @@ const SearchBox = styled.div
     justify-content: right;
     border-bottom: solid 2px ${(props) => props.theme.BoardTitle};
     padding: 20px 15px 20px 0px;
+
+    @media (min-width:250px) and (max-width:607px)
+    {
+        flex-direction: column;
+    }
 `
 
 const PageNationBox = styled.div

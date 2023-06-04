@@ -1,46 +1,68 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { firstReset } from "../Darkmode/Darkmode";
 
 function PaginationNav ({ total, limit, page, setPage }) {
   const numPages = Math.ceil(total / limit);
   const [currPage, setCurrPage] = useState(page)
-  let firstNum = currPage - (currPage % 10) + 1
+  const FirstReset = useRecoilValue(firstReset);
+  const [CFirstReset, setCFirstReset] = useRecoilState(firstReset);
+  let firstNum = FirstReset ? currPage - (currPage % 10) + 1 : 1 ;
   let lastNum = currPage - (currPage % 10) + 10
-  console.log({"currPage is":currPage, "firsNum is" : firstNum, "page is" : page});
+  console.log({"currPage is":currPage, "firsNum is" : firstNum, "page is" : page, lastNum});
+
+  const ScrollTop = () =>
+  {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   return (
     <>
       <Nav>
-        <Button onClick={() => {setPage(1); setCurrPage(0);}} disabled={page === 1}>
+        <Button onClick={() => {setPage(1); setCurrPage(1); setCFirstReset(true); ScrollTop();}} disabled={page === 1}>
           &lt;
           &lt;
         </Button>
         <Button 
-            onClick={() => {setPage(page-1); setCurrPage(page-2);}} 
+            onClick={() => {setPage(page-1); setCurrPage(page-2); setCFirstReset(true); ScrollTop();}} 
             disabled={page===1}>
             &lt;
         </Button>
         <Button 
-            onClick={() => setPage(firstNum)}
+            onClick={() => {setPage(firstNum); setCFirstReset(true); ScrollTop();}}
             aria-current={page === firstNum ? "page" : null}>
             {firstNum}
         </Button>
-                {Array(9).fill().map((_, i) =>{
-                    if(i <=9){
+                {Array(numPages < 10 ? numPages - 1 : numPages === numPages ? numPages - firstNum : 9).fill().map((_, i) =>{
+                    if(i <= Math.round(8))
+                    {
                         return (
                             <Button 
                                 key={i+1} 
-                                onClick={() => {setPage(firstNum+1+i)}}
+                                onClick={() => {setPage(firstNum+1+i); setCFirstReset(true); ScrollTop();}}
                                 aria-current={page === firstNum+1+i ? "page" : null}>
                                 {firstNum+1+i}
                             </Button>
                         )
                     }
-                    else if(i>=1){
+                    else if(numPages < 10)
+                    {
+                        return(
+                            <Button
+                                key ={i+1}
+                                onClick={() => {setPage(numPages); setCFirstReset(true); ScrollTop();}}
+                                aria-current={page === numPages ? "page" : null}>
+                                {numPages}
+                            </Button>
+                        );
+                    }
+                    else if (i >= Math.round(numPages))
+                    {
                         return (
                             <Button
                                 key ={i+1}
-                                onClick={() => setPage(lastNum)}
+                                onClick={() => {setPage(lastNum); setCFirstReset(true); ScrollTop();}}
                                 aria-current={page === lastNum ? "page" : null}>
                                 {lastNum}
                             </Button>
@@ -48,11 +70,11 @@ function PaginationNav ({ total, limit, page, setPage }) {
                     }
                 })}
         <Button 
-            onClick={() => {setPage(page+1); setCurrPage(page);}} 
+            onClick={() => {setPage(page+1); setCurrPage(page); setCFirstReset(true); ScrollTop();}} 
             disabled={page===numPages}>
             &gt;
         </Button>
-        <Button onClick={() => {setPage(numPages); setCurrPage(numPages);}} disabled={page === numPages}>
+        <Button onClick={() => {setPage(numPages); setCurrPage(numPages); setCFirstReset(true); ScrollTop();}} disabled={page === numPages}>
           &gt;
           &gt;
         </Button>
@@ -99,3 +121,4 @@ const Button = styled.button`
 `;
 
 export default PaginationNav;
+
