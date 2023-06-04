@@ -116,6 +116,7 @@ const Signinput = () =>
       .then(data=>{
          console.log(data);
          if(data=="no"){
+            token.current=token.current.substring(7);
             setIsEmailCertCheck(false);
             setIsEmailCertCheckBtn(false);
             setIsConfirmCheck(false);
@@ -123,6 +124,7 @@ const Signinput = () =>
          }
          else{
             token.current=data;
+            console.log(token.current);
             setIsEmailCertCheck(true);
             setIsEmailCertCheckBtn(true);
             setIsConfirmCheck(true);
@@ -389,8 +391,9 @@ const Signinput = () =>
     {
       e.preventDefault();
 
-      token.current="Bearer " + token.current
-
+      token.current="Bearer "+token.current
+      console.log(token.current)
+;
       axios.post("http://localhost:8033/EightBitBackend/Users/user",
       {
         email:finalEmail.current,
@@ -409,6 +412,7 @@ const Signinput = () =>
       })
       .then(data=>{
         token.current=data;
+        console.log(token.current);
         navigate("/Login");
       });
     }
