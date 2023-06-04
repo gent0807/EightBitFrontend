@@ -8,7 +8,7 @@ const Main = () => {
   const isDarkmode = useRecoilValue(isDark);
 
   return (
-    <ThemeProvider theme={ isDarkmode ? darkTheme : lightTheme }>
+    <ThemeProvider theme={ isDarkmode ? lightTheme : darkTheme }>
     <GlobalStyle />
     <FooterSet>
     <Router/>
@@ -38,6 +38,9 @@ const darkTheme =
   buttonColor: "#6a9dda",
   checkBoxColor: "#6a9dda",
   DropDownListColor: "orange",
+  BoardTitle: "white",
+  BoardInformaiton: "Orange",
+  PaginationSelect: "Orange"
 };
 
 const lightTheme = 
@@ -50,6 +53,9 @@ const lightTheme =
   buttonColor: "#3c3c3c",
   checkBoxColor: "#3c3c3c",
   DropDownListColor: "#6a9dda",
+  BoardTitle: "black",
+  BoardInformaiton: "black",
+  PaginationSelect: "#6a9dda",
 };
 
 const GlobalStyle = createGlobalStyle

@@ -420,7 +420,7 @@ const Signinput = () =>
   return (
       <SignT>
         <SignTop>
-          <Link to='/'><SignTopLogo src={ isDarkmode ? 'img/8bit.png' : 'img/8bit_Dark.png' } alt='로고'/></Link>
+          <Link to='/'><SignTopLogo src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
         </SignTop>
         <SubmitT onSubmit={register}>
             <SignInputT>
@@ -661,7 +661,7 @@ const SelectValueText = styled.span
     color: black;
 `
 
-const ArrowBox = styled.div
+export const ArrowBox = styled.div
 `
     color: ${(props) => props.theme.textColor};
     position: absolute;

@@ -6,6 +6,7 @@ import Sign from './Sign/SignContainer';
 import EmailPwFound from './EmailPwFound/EmailPwFoundContainer';
 import PhoneAuth from './Phone/PhoneAuthContainer';
 import SelectSign from "./Phone/SelectSignContainer";
+import FreeBoard from "./FreeBoard/FreeBoardContainer";
 import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
 import Footer from "./Footer/Footer";
 import NotFound from "./ErrorPage/NotFound";
@@ -24,7 +25,8 @@ return(
         <Route path="/EmailPwFound" element={<EmailPwFound />} />
         <Route path="/PhoneAuth" element={<PhoneAuth />} />
         <Route path="/SelectSign" element={<SelectSign />} />
-        <Route path="/" element={<NotFound />} />
+        <Route path="/FreeBoard" element={<FreeBoard />} />
+        <Route path="*" element={<NotFound />} />
     </Routes>
 </FooterSetContent>
     <Footer/>

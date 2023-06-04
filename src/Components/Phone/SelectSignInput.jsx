@@ -17,7 +17,7 @@ const SelectSign = () =>
 
     return(
         <SelectSignBox>
-            <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit.png' : 'img/8bit_Dark.png' } alt='로고'/></Link>
+            <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
             <IntroduceBox>
                 <MainText as="h1">8bit 가입을 시작합니다!</MainText>
                 <IntroduceText>회원가입을 위해 가입 방식을 선택하세요!</IntroduceText>

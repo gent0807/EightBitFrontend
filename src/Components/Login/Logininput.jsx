@@ -107,7 +107,7 @@ const Logininput = () =>
     return(
       <LoginT> 
           <LoginTop>
-          <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit.png' : 'img/8bit_Dark.png' } alt='로고'/></Link>
+          <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
           </LoginTop>
           <LoginInput>
           <InputT>

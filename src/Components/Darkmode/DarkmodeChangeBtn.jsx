@@ -15,7 +15,7 @@ const ToggleBtn = () =>
 };
 
 return (
-    <IconsBox onClick={ToggleBtn}><Icons src={ Darkmode ? "img/dark.png" : "img/light.png" }/></IconsBox>
+    <IconsBox onClick={ToggleBtn}><Icons src={ Darkmode ? "img/light.png" : "img/dark.png" }/></IconsBox>
 );
 
 }
