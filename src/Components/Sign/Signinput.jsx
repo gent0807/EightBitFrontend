@@ -43,12 +43,14 @@ const Signinput = () =>
 
   const navigate = useNavigate();
 
+  let certEmail=useRef(null);
   let compareMode=useRef(false);
   let password=useRef("");
   let passwordPossibleCombCheck=useRef(false);
   let nickNamePossible=useRef(false);
   let finalEmail=useRef("");
   let authNum=useRef(null);
+  let token=useRef(null); 
   let inputFocus = useRef(null);
   let textRef = useRef(null);
   
@@ -94,23 +96,42 @@ const Signinput = () =>
   const checkAuthNumberRight = () =>
   {
     setIsInputCheck(false)
+
+    token.current="Bearer " + token.current
     
+    axios.post("http://localhost:8033/EightBitBackend/Users/check/authkey/",
+      {
+        email:certEmail.current,
+        authNum:EmailCert
+      },
+      {
+        headers:
+        {
+          Authorization:token.current,
+        },
+      })
+      .then(res=>{
+        return res.data;
+      })
+      .then(data=>{
+         console.log(data);
+         if(data=="no"){
+            setIsEmailCertCheck(false);
+            setIsEmailCertCheckBtn(false);
+            setIsConfirmCheck(false);
+            setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
+         }
+         else{
+            token.current=data;
+            setIsEmailCertCheck(true);
+            setIsEmailCertCheckBtn(true);
+            setIsConfirmCheck(true);
+            setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>]);
+            setIsEmail(false);
+         }
+
+      })
     
-    if(EmailCert == authNum.current)
-    {
-    setIsEmailCertCheck(true);
-    setIsEmailCertCheckBtn(true);
-    setIsConfirmCheck(true);
-    setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>]);
-    setIsEmail(false);
-    }
-    else
-    {
-    setIsEmailCertCheck(false);
-    setIsEmailCertCheckBtn(false);
-    setIsConfirmCheck(false);
-    setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
-    }
   }
 
 
@@ -272,7 +293,7 @@ const Signinput = () =>
       setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
       setIsNickname(false);
     }else{
-      axios.post("http://localhost:8033/EightBitBackend/Users/nick/already/",{
+      axios.post("http://localhost:8033/EightBitBackend/Users/check/nick/already/",{
         nickname:currentNickname
       } 
       )
@@ -318,7 +339,7 @@ const Signinput = () =>
     
     finalEmail.current=EmailTotal;
     
-    axios.post("http://localhost:8033/EightBitBackend/Users/email/already/",{
+    axios.post("http://localhost:8033/EightBitBackend/Users/check/email/already/",{
         email:EmailTotal
       } 
     )
@@ -336,19 +357,22 @@ const Signinput = () =>
       }
       else
       {
-        axios.post("http://localhost:8033/EightBitBackend/Users/authkey/",{
+        axios.post("http://localhost:8033/EightBitBackend/Users/authkey/email/",{
               email:EmailTotal
         })
         .then(res=>{
           return res.data;
         })
         .then(data=>{
-          authNum.current=data;
+          console.log(data);
+          token.current=data;
+          console.log(token.current);
           setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
           <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
           <span style={{margin:"-3px 5px 6px"}}>인증번호가 전송되었습니다.</span>
           </div>]);
           setVisibled(true);
+          certEmail.current=EmailTotal;
         });
         setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
@@ -364,17 +388,27 @@ const Signinput = () =>
   const register = (e) =>
     {
       e.preventDefault();
-      
-      axios.post("http://localhost:8033/EightBitBackend/Users/user/",{
+
+      token.current="Bearer " + token.current
+
+      axios.post("http://localhost:8033/EightBitBackend/Users/user",
+      {
         email:finalEmail.current,
         password:PwConfirm,
         nickname:Nickname,
-      } 
-      )
+        role:"USER"
+      },
+      {
+        headers:
+        {
+          Authorization:token.current,
+        },
+      })
       .then(res=>{
         return res.data;
       })
       .then(data=>{
+        token.current=data;
         navigate("/Login");
       });
     }

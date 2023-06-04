@@ -24,7 +24,7 @@ return(
         <Route path="/EmailPwFound" element={<EmailPwFound />} />
         <Route path="/PhoneAuth" element={<PhoneAuth />} />
         <Route path="/SelectSign" element={<SelectSign />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<NotFound />} />
     </Routes>
 </FooterSetContent>
     <Footer/>

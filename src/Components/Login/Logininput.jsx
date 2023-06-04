@@ -70,7 +70,7 @@ const Logininput = () =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-        axios.post("http://localhost:8033/EightBitBackend/Users/login/",{
+        axios.post("http://localhost:8033/EightBitBackend/Users/check/login/",{
             email:Email,
             password:Pw
           } 
@@ -81,17 +81,17 @@ const Logininput = () =>
         .then(data=>{
           
           loginCheck=data;
-          if(loginCheck=="allok"){
-            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
-            dispatch(loginUser(loginCheck));
-            navigate("/");
-          }
-          else if(loginCheck=="emailok"){
+          if(loginCheck=="emailok"){
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 틀렸습니다!</ErrorMessageText></ErrorMessageBox>])
           }
           else if(loginCheck=="no"){
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입되지 않은 이메일입니다!</ErrorMessageText></ErrorMessageBox>])
-          }         
+          }
+          else{
+            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
+            dispatch(loginUser(loginCheck));
+            navigate("/");
+          }
         });
 
         /*if(loginCheck=="emailok"){   <- 위에 함수 호출로 인한 실행과 비동기적이기 때문에 위에서의 loginCheck와는 동기화되지 않는다. 즉 최초의 submit 이벤트 처리시에는 axios 함수에서의 loginCheck와 axios와 비동기적으로 실행되는 if문에서의 loginCheck는 다를 수 밖에 없다.

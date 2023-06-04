@@ -190,7 +190,7 @@ const EmailPwFound = () =>
 
      const userPasswordAlreadyUsingCheck=(password)=>
      {  
-        axios.post("http://localhost:8033/EightBitBackend/Users/password/already/",{
+        axios.post("http://localhost:8033/EightBitBackend/Users/check/password/already/",{
             email:Email,
             password:password
         })
@@ -229,7 +229,7 @@ const EmailPwFound = () =>
 
     const EmailCheck = () =>
     {   
-        axios.post("http://localhost:8033/EightBitBackend/Users/email/already/",{
+        axios.post("http://localhost:8033/EightBitBackend/Users/check/email/already/",{
           email:Email
         })
         .then(res=>{
@@ -247,7 +247,7 @@ const EmailPwFound = () =>
           }
           else if(data==="yes")
           {
-            axios.post("http://localhost:8033/EightBitBackend/Users/authkey/",{
+            axios.post("http://localhost:8033/EightBitBackend/Users/authkey/email",{
                   email:Email
             })
             .then(res=>{

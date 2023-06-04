@@ -252,4 +252,5 @@ const MainText = styled(IntroduceText)
 `
     font-size: 25px;
     opacity: 100%;
+    white-space: nowrap;
 `
