@@ -14,7 +14,7 @@ const Main = () => {
 
   
   return (
-    <ThemeProvider theme={ isDarkmode ? lightTheme : darkTheme }>
+  
     <ThemeProvider theme={ isDarkmode ? lightTheme : darkTheme }>
     <GlobalStyle />
     <FooterSet>

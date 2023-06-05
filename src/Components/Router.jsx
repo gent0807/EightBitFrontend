@@ -8,7 +8,6 @@ import PhoneAuth from './Phone/PhoneAuthContainer';
 import PhoneAuth2 from './Phone/PhoneAuthContainer2';
 import SelectSign from "./Phone/SelectSignContainer";
 import FreeBoard from "./FreeBoard/FreeBoardContainer";
-import FreeBoard from "./FreeBoard/FreeBoardContainer";
 import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
 import Footer from "./Footer/Footer";
 import NotFound from "./ErrorPage/NotFound";

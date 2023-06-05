@@ -121,6 +121,3 @@ const Button = styled.button`
 `;
 
 export default PaginationNav;
-
-
-export default PaginationNav;
