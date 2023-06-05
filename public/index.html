@@ -84,4 +84,66 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+<<<<<<< HEAD
+=======
+  <script type="text/javascript">
+    (function() {
+      function getInitialColorMode() {
+        const isClient = typeof window !== 'undefined';
+        if (isClient) {
+          const persistedColorPreference = window.localStorage.getItem('mode');
+  
+          if (persistedColorPreference) {
+            return persistedColorPreference;
+          }
+  
+          const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
+          if (systemPreference.matches) {
+            return 'false';
+          }
+          return 'false';
+        }
+        const colorMode = getInitialColorMode();
+        document.documentElement.style.setProperty(
+          'background-color',
+          colorMode === 'false' ? '#1d2024' : 'white'
+        );
+        document.documentElement.style.setProperty(
+          'background',
+          colorMode === 'false' ? '#1d2024' : 'white'
+        );
+        document.documentElement.style.setProperty(
+          'color',
+          colorMode === 'false' ? '#6a9dda' : 'black'
+        );
+        document.documentElement.style.setProperty(
+          'border',
+          colorMode === 'false' ? '#6a9dda' : '#3c3c3c'
+        );
+        document.documentElement.style.setProperty(
+          'accent-color',
+          colorMode === 'false' ? '#6a9dda' : '#3c3c3c'
+        );
+        document.documentElement.style.setProperty(
+          'box-shadow',
+          colorMode === 'false' ? '#6a9dda' : '#3c3c3c'
+        );
+      })();
+    </script>
+    <title>React App</title>
+  </head>
+  <body style="margin: 0; padding: 0; height: 100%;">
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+>>>>>>> LANTOBOY-lanto
 </html>
