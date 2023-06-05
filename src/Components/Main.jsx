@@ -40,13 +40,15 @@ const darkTheme =
   DropDownListColor: "orange",
   BoardTitle: "white",
   BoardInformaiton: "Orange",
-  PaginationSelect: "Orange"
+  PaginationSelect: "Orange",
+  WriterColor: "white",
 };
 
 const lightTheme = 
 {
   backgroundColor: "white",
   textColor: "black",
+  WriterColor: "black",
   successColor: "green",
   errorColor: "red",
   borderColor: "#3c3c3c",
