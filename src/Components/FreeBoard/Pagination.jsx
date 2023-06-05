@@ -5,17 +5,29 @@ import { firstReset } from "../Darkmode/Darkmode";
 
 function PaginationNav ({ total, limit, page, setPage }) {
   const numPages = total > 0 && limit > 0 ? Math.ceil(total / limit) : 1;
-  const [currPage, setCurrPage] = useState(page)
+  const [currPage, setCurrPage] = useState(page);
+  const [WindowLength, setWindowLength] = useState(window.innerWidth);
   const FirstReset = useRecoilValue(firstReset);
   const [CFirstReset, setCFirstReset] = useRecoilState(firstReset);
-  let firstNum = FirstReset ? currPage - (currPage % 10) + 1 : 1 ;
-  let lastNum = currPage - (currPage % 10) + 10
-  console.log({"currPage is":currPage, "firsNum is" : firstNum, "page is" : page, lastNum});
+  let firstNum = FirstReset ? WindowLength <= 666 ? currPage - (currPage % 5) + 1 : currPage - (currPage % 10) + 1 : 1 ;
+  console.log(WindowLength , firstNum);
 
   const ScrollTop = () =>
   {
       window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  const handleResize = () => 
+  {
+      setWindowLength(window.innerWidth);
+  };
+
+  useEffect(() => {
+      window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
+  })
 
   return (
     <>
@@ -34,8 +46,8 @@ function PaginationNav ({ total, limit, page, setPage }) {
             aria-current={page === firstNum ? "page" : null}>
             {firstNum}
         </Button>
-                {Array(numPages < 10 ? numPages - 1 : numPages === numPages ? numPages - firstNum : 9).fill().map((_, i) =>{
-                    if(i <= Math.round(8))
+                {Array(numPages < 10 ? numPages - 1 : numPages - firstNum).fill().map((_, i) =>{
+                    if(i <= Math.round(WindowLength <= 666 ? 3 : 8))
                     {
                         return (
                             <Button 
@@ -45,28 +57,6 @@ function PaginationNav ({ total, limit, page, setPage }) {
                                 {firstNum+1+i}
                             </Button>
                         )
-                    }
-                    else if(numPages < 10)
-                    {
-                        return(
-                            <Button
-                                key ={i+1}
-                                onClick={() => {setPage(numPages); setCFirstReset(true); ScrollTop();}}
-                                aria-current={page === numPages ? "page" : null}>
-                                {numPages}
-                            </Button>
-                        );
-                    }
-                    else if (i >= Math.round(numPages))
-                    {
-                        return (
-                            <Button
-                                key ={i+1}
-                                onClick={() => {setPage(lastNum); setCFirstReset(true); ScrollTop();}}
-                                aria-current={page === lastNum ? "page" : null}>
-                                {lastNum}
-                            </Button>
-                        )  
                     }
                 })}
         <Button 
