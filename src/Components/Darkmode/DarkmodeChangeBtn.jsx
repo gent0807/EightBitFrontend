@@ -6,7 +6,7 @@ import { icons } from "react-icons/lib";
 const Darkmode = () =>
 {
 
-    const [Darkmode, setDarkmode] = useRecoilState(isDark);
+const [Darkmode, setDarkmode] = useRecoilState(isDark);
 
 const ToggleBtn = () =>
 {

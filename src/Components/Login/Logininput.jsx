@@ -23,7 +23,9 @@ const Logininput = (props) =>
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isDarkmode = useRecoilValue(isDark);
+    
     let loginCheck;
+    const ip=localStorage.getItem("ip");
 
     const Show = () =>
     {
@@ -70,7 +72,7 @@ const Logininput = (props) =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-        axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/login/",{
+        axios.post(`${ip}/Users/check/login/`,{
             email:Email,
             password:Pw
           } 
@@ -90,7 +92,6 @@ const Logininput = (props) =>
           else{
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
             dispatch(loginUser(loginCheck));
-            localStorage.setItem(token, loginCheck);
             navigate("/");
           }
         });
@@ -137,7 +138,7 @@ const Logininput = (props) =>
           </LOGINAPI>
           <EmPwFoundT>
           <EmailPwFoundList>
-            <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
+            <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/PhoneAuth2'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
             <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></EmailPwFoundListLI>
           </EmailPwFoundList>
           </EmPwFoundT>

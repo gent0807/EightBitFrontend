@@ -45,6 +45,7 @@ const HeaderBox = () =>
 
     const user = useSelector( (state) => state.user );
     const dispatch = useDispatch();
+    const navigate=useNavigate();
 
     let languageTopZIndex=useRef(false);
     let fastMenuTopZIndex=useRef(false);
