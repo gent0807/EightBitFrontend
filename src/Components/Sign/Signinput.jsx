@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar'
 
 
-const Signinput = () => 
+const Signinput = (props) => 
 {
   const [Email, setEmail] = useState("");
   const [EmailCert, setEmailCert] = useState("");
@@ -54,20 +54,24 @@ const Signinput = () =>
   let inputFocus = useRef(null);
   let textRef = useRef(null);
   
-    useEffect(() => {
-      function handleOuside(e) {
-        if (textRef.current && !textRef.current.contains(e.target)) {
-            setIsSelectBtnCheck(true);
-        };
-      };
 
-      if(isSelectBtnCheck) {
+  useEffect(()=>{
+    console.log(props);
+  }, []);
+  useEffect(() => {
+    function handleOuside(e) {
+      if (textRef.current && !textRef.current.contains(e.target)) {
+          setIsSelectBtnCheck(true);
+      };
+    };
+
+    if(isSelectBtnCheck) {
       document.addEventListener("mousedown", handleOuside);
       };
       return () => {
         document.removeEventListener("mousedown", handleOuside);
       };
-    }, [textRef])
+  }, [textRef])
 
   const setEmailDomain = (e) =>
   {
@@ -99,7 +103,7 @@ const Signinput = () =>
 
     token.current="Bearer " + token.current
     
-    axios.post("http://localhost:8033/EightBitBackend/Users/check/authkey/",
+    axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/authkey/",
       {
         email:certEmail.current,
         authNum:EmailCert
@@ -295,7 +299,7 @@ const Signinput = () =>
       setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
       setIsNickname(false);
     }else{
-      axios.post("http://localhost:8033/EightBitBackend/Users/check/nick/already/",{
+      axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/nick/already/",{
         nickname:currentNickname
       } 
       )
@@ -341,7 +345,7 @@ const Signinput = () =>
     
     finalEmail.current=EmailTotal;
     
-    axios.post("http://localhost:8033/EightBitBackend/Users/check/email/already/",{
+    axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/email/already/",{
         email:EmailTotal
       } 
     )
@@ -359,7 +363,7 @@ const Signinput = () =>
       }
       else
       {
-        axios.post("http://localhost:8033/EightBitBackend/Users/authkey/email/",{
+        axios.post("http://14.34.121.36:8033/EightBitBackend/Users/authkey/email/",{
               email:EmailTotal
         })
         .then(res=>{
@@ -394,7 +398,7 @@ const Signinput = () =>
       token.current="Bearer "+token.current
       console.log(token.current)
 ;
-      axios.post("http://localhost:8033/EightBitBackend/Users/user",
+      axios.post("http://14.34.121.36:8033/EightBitBackend/Users/user",
       {
         email:finalEmail.current,
         password:PwConfirm,

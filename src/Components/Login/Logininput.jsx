@@ -13,7 +13,7 @@ import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar';
 
-const Logininput = () => 
+const Logininput = (props) => 
 {                 
     const [ Email, setEmail ] = useState('');
     const [ Pw, setPw ] = useState('');
@@ -70,7 +70,7 @@ const Logininput = () =>
         .then(data=>{
           setLoginCheck(data);
         })*/
-        axios.post("http://localhost:8033/EightBitBackend/Users/check/login/",{
+        axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/login/",{
             email:Email,
             password:Pw
           } 
@@ -90,6 +90,7 @@ const Logininput = () =>
           else{
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
             dispatch(loginUser(loginCheck));
+            localStorage.setItem(token, loginCheck);
             navigate("/");
           }
         });

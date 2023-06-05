@@ -192,7 +192,7 @@ const EmailPwFound = () =>
 
      const userPasswordAlreadyUsingCheck=(password)=>
      {  
-        axios.post("http://localhost:8033/EightBitBackend/Users/check/password/already/",{
+        axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/password/already/",{
             email:Email,
             password:password
         })
@@ -233,7 +233,7 @@ const EmailPwFound = () =>
     {   
         
 
-        axios.post("http://localhost:8033/EightBitBackend/Users/check/email/already/",{
+        axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/email/already/",{
           email:Email
         })
         .then(res=>{
@@ -251,7 +251,7 @@ const EmailPwFound = () =>
           }
           else if(data==="yes")
           {
-            axios.post("http://localhost:8033/EightBitBackend/Users/authkey/email",{
+            axios.post("http://14.34.121.36:8033/EightBitBackend/Users/authkey/email",{
                   email:Email
             })
             .then(res=>{
@@ -287,7 +287,7 @@ const EmailPwFound = () =>
       token.current="Bearer "+token.current
       console.log(token.current);
 
-      axios.put("http://localhost:8033/EightBitBackend/Users/password/",{
+      axios.put("http://14.34.121.36:8033/EightBitBackend/Users/password/",{
         email:Email,
         password:PasswordChangeConfirmM,
       },
@@ -312,7 +312,7 @@ const EmailPwFound = () =>
     {
       token.current="Bearer " + token.current
 
-      axios.post("http://localhost:8033/EightBitBackend/Users/check/authkey/",
+      axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/authkey/",
       {
         email: Email,
         authNum: Emailauth 

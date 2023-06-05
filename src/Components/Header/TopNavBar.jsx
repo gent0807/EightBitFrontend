@@ -296,7 +296,7 @@ const HeaderBox = () =>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
             <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
+            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>]}
             </>  
             <LanguageListBox margin={user.data !== ""} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
@@ -315,7 +315,7 @@ const HeaderBox = () =>
             </FastListBox>
             <ProfileListBox zindex={profileMenuTopZIndex.current} default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
                 <ProfileUl>
-                <Link to='/Sign'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/user.png"/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/user.png"/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/bell.png"/><ProfileliText  MediaLeft={"17px"}>소식 알람</ProfileliText></Profileli>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/coding.png"/><ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText></Profileli></Link>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/store.png"/><ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText></Profileli></Link>

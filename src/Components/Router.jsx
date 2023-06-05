@@ -15,23 +15,26 @@ import NotFound from "./ErrorPage/NotFound";
 
 const Router = () =>
 {
-return(
-<BrowserRouter>
-<FooterSetContent>
-    <TopNavBar/>
-    <Routes>
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Sign" element={<Sign />} />
-        <Route path="/EmailPwFound" element={<EmailPwFound />} />
-        <Route path="/PhoneAuth" element={<PhoneAuth />} />
-        <Route path="/SelectSign" element={<SelectSign />} />
-        <Route path="/FreeBoard" element={<FreeBoard />} />
-        <Route path="*" element={<NotFound />} />
-    </Routes>
-</FooterSetContent>
-    <Footer/>
-</BrowserRouter>
-);
+
+    const ip="14.34.121.36";
+    
+    return(
+    <BrowserRouter>
+    <FooterSetContent>
+        <TopNavBar/>
+        <Routes>
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Sign" element={<Sign />} />
+            <Route path="/EmailPwFound" element={<EmailPwFound />} />
+            <Route path="/PhoneAuth" element={<PhoneAuth />} />
+            <Route path="/SelectSign" element={<SelectSign />} />
+            <Route path="/FreeBoard" element={<FreeBoard />} />
+            <Route path="*" element={<NotFound />} />
+        </Routes>
+    </FooterSetContent>
+        <Footer/>
+    </BrowserRouter>
+    );
 }
 
 export default Router;

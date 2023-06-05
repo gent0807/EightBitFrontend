@@ -6,8 +6,9 @@ import { Title, ErrorMessageBox, ErrorMessageIcon, ErrorMessageText, ErrorMessag
 import { IntroduceBox, IntroduceText, SelectSignBox } from "./SelectSignInput"
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { EmPwInformation, SumbitButton } from "../EmailPwFound/EmailPwFound"
+import axios from "axios";
 
 const Phone = () =>
 {
@@ -24,6 +25,11 @@ const Phone = () =>
     const [ PhoneAuthMessage, setPhoneAuthMessage ] = useState("");
     const [ isVisibled, setIsVisibled ] = useState(false);
     const Navigater = useNavigate();
+
+    const navigate = useNavigate();
+
+    let token=useRef("");
+    let realPhone=useRef("");
     
     const OnPhoneChange = (e) =>
     {
@@ -84,28 +90,91 @@ const Phone = () =>
             setPhoneMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>올바른 휴대폰 번호을 입력해주세요!</ErrorMessageText></MessaageAllBox>);
         }
         else
-        {
-            setIsPhoneCheck(true);
-            setPhoneMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 전송 되었습니다!</ErrorMessageText></MessaageAllBox>);
-            setIsVisibled(true);
-            setIsPhone(true);
+        {   
+            axios.post("http://14.34.121.36:8033/EightBitBackend/Users/authkey/phone/",{
+                phoneNum:Phone
+            })
+            .then(res=>{
+                return res.data;
+            })
+            .then(data=>{
+                token.current=data;
+                console.log(token.current);
+                console.log(data);
+                realPhone.current=Phone;
+                console.log(realPhone.current);
+                setIsPhoneCheck(true);
+                setPhoneMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 전송 되었습니다!</ErrorMessageText></MessaageAllBox>);
+                setIsVisibled(true);
+                setIsPhone(true);
+            })
+            setIsPhoneCheck(false);
+            setPhoneMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호 전송 중...</ErrorMessageText></MessaageAllBox>);
+            setIsVisibled(false);
+            setIsPhone(false);
         }
     }
 
     const PhoneAuthCheck = () =>
-    {
-        if(PhoneAuth === "123456")
+    {   
+        token.current="Bearer " + token.current
+        console.log(token.current);
+    
+        axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/phonekey/",
         {
-            setIsPhoneAuth(true);
-            setIsPhoneAuthCheck(true);
-            setPhoneAuthMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치 합니다!</ErrorMessageText></MessaageAllBox>);
-        }
-        else
+            phoneNum:realPhone.current,
+            authNum:PhoneAuth
+        },
         {
-            setIsPhoneAuthCheck(true);
-            setPhoneAuthMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치 하지 않습니다.</ErrorMessageText></MessaageAllBox>);
-            setIsPhoneAuth(false);
-        }
+            headers:
+            {
+                Authorization: token.current,
+            },
+        })
+        .then(res=>{
+            return res.data;
+        })
+        .then(data=>{
+            if(data=="no"){
+                token.current=token.current.substring(7);
+                console.log(token.current);
+                setIsPhoneAuthCheck(true);
+                setPhoneAuthMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치 하지 않습니다.</ErrorMessageText></MessaageAllBox>);
+                setIsPhoneAuth(false);
+            }
+            else{
+                token.current=data;
+                console.log(token.current);
+                setIsPhoneAuth(true);
+                setIsPhoneAuthCheck(true);
+                setPhoneAuthMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치 합니다!</ErrorMessageText></MessaageAllBox>);
+            }
+        })
+    }
+
+    const deletePhoneNum= ()=>{
+        token.current="Bearer " + token.current;
+        axios.delete("http://14.34.121.36:8033/EightBitBackend/Users/phone/",{
+            headers:
+            {
+                Authorization: token.current,
+            },
+            data:{
+                phoneNum:realPhone.current
+            }
+        })
+        .then(res=>{
+            return res.data;
+        })
+        .then(data=>{
+            if(data!="fail"){
+                token.current=data;
+                navigate("/Sign",{state:token.current});
+            }
+            else{
+                token.current=token.current.substring(7);
+            }
+        })
     }
 
     return(
@@ -123,7 +192,7 @@ const Phone = () =>
                     <PhoneTitle>휴대폰</PhoneTitle>
                     <PhoneInputAllBox>
                         <PhoneInput maxlength="12" show={isPhone} check={isPhoneCheck} value={Phone} onChange={OnPhoneChange}/>
-                        <PhoneSendBtn onClick={PhoneCheck} show={isPhoneBtnCheck}><span>{isVisibled ? "재전송" : "전송"}</span></PhoneSendBtn>
+                        <PhoneSendBtn type="button" onClick={PhoneCheck} show={isPhoneBtnCheck}><span>{isVisibled ? "재전송" : "전송"}</span></PhoneSendBtn>
                     </PhoneInputAllBox>
                     <MessageBox show={isPhoneCheck} color={isPhone}>{PhoneMessage}</MessageBox>
                 </PhoneInputBox>
@@ -131,12 +200,12 @@ const Phone = () =>
                     <PhoneTitle>인증번호</PhoneTitle>
                     <PhoneInputAllBox>
                         <PhoneInput value={PhoneAuth} show={isPhoneAuth} check={isPhoneAuthCheck} onChange={OnPhoneAuthChange}/>
-                        <PhoneSendBtn type={"submit"} show={isPhoneAuthBtnCheck} onClick={PhoneAuthCheck}><span>인증확인</span></PhoneSendBtn>
+                        <PhoneSendBtn type="button" show={isPhoneAuthBtnCheck} onClick={PhoneAuthCheck}><span>인증확인</span></PhoneSendBtn>
                     </PhoneInputAllBox>
                     <MessageBox show={isPhoneAuthCheck} color={isPhoneAuth}>{PhoneAuthMessage}</MessageBox>
                 </PhoneAuthBox>
                 <SubmitBox>
-                    <SubmitBtn disabled={!(isPhone && isPhoneAuth)}><span>완료</span></SubmitBtn>
+                    <SubmitBtn disabled={!(isPhone && isPhoneAuth)} onClick={deletePhoneNum}><span>완료</span></SubmitBtn>
                 </SubmitBox>
             </PhoneForm>
         </PhoneBox>
