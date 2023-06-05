@@ -10,7 +10,7 @@ function PaginationNav ({ total, limit, page, setPage }) {
   const FirstReset = useRecoilValue(firstReset);
   const [CFirstReset, setCFirstReset] = useRecoilState(firstReset);
   let firstNum = FirstReset ? WindowLength <= 666 ? currPage - (currPage % 5) + 1 : currPage - (currPage % 10) + 1 : 1 ;
-  console.log(WindowLength , firstNum);
+  console.log(WindowLength , firstNum, numPages);
 
   const ScrollTop = () =>
   {
@@ -46,7 +46,7 @@ function PaginationNav ({ total, limit, page, setPage }) {
             aria-current={page === firstNum ? "page" : null}>
             {firstNum}
         </Button>
-                {Array(numPages < 10 ? numPages - 1 : numPages - firstNum).fill().map((_, i) =>{
+                {Array(numPages - firstNum).fill().map((_, i) =>{
                     if(i <= Math.round(WindowLength <= 666 ? 3 : 8))
                     {
                         return (
