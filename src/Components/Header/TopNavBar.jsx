@@ -264,6 +264,8 @@ const HeaderBox = () =>
         setFastClickCheck(false);
     }
 
+    console.log(user.data);
+
     return (
         <ALLNavBox>
         <BackgroudTopNav>
@@ -281,20 +283,20 @@ const HeaderBox = () =>
         </NavBox>
         <AllButtonBox>
             <SearchInputBox>
-                <SearchInput value={Search} onChange={OnSearch}/>
+                <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch}/>
                 <SearchInputIconBox>
                 <SearchButton><HiOutlineSearch/></SearchButton>
                 </SearchInputIconBox>
             </SearchInputBox>
-        <ButtonBox menucheck={user.data !== ""}>
-            {user.data !=="" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
+            <ButtonBox menucheck={user.data !== ""}>
+            {user.data !== "" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
             <MenuBox click={LanguageClickCheck} left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}><MdLanguage/></MenuBox>
             <MenuBox click={FastClickCheck} left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"4.8px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
             {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
             <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Sign'>회원가입</Link></MenuBox>]}
+            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>]}
             </>  
             <LanguageListBox margin={user.data !== ""} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
@@ -323,7 +325,7 @@ const HeaderBox = () =>
             </ProfileListBox>
             <WriteListBox zindex={writeMemuTopZIndex.current} default={isDefaultWriteScene} show={WriteMenuShow}>
                 <ProfileUl>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/essay.png"/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli>
+                <Link to="/FreeBoard"><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/essay.png"/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli></Link>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/discussion.png"/><ProfileliText  MediaLeft={"17px"}>토론게시판</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/strategy.png"/><ProfileliText  MediaLeft={"17px"}>공략게시판</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/rating.png"/><ProfileliText  MediaLeft={"17px"}>상품 리뷰</ProfileliText></Profileli>
@@ -356,7 +358,7 @@ const HeaderBox = () =>
                 <Link to='/'><SubNavText>이벤트</SubNavText></Link>
                 <Link to='/'><SubNavText>공략게시판</SubNavText></Link>
                 <Link to='/'><SubNavText>토론게시판</SubNavText></Link>
-                <Link to='/'><SubNavText>자유게시판</SubNavText></Link>
+                <Link to='/FreeBoard'><SubNavText>자유게시판</SubNavText></Link>
             </ComunitySubNav>
             <SupportSubNav display={isSupprotTabCheck}>
                 <Link to='/'><SubNavText>이용문의</SubNavText></Link>
@@ -605,7 +607,7 @@ const NavUl = styled.ul
 
 `
 
-const SearchInput = styled.input
+export const SearchInput = styled.input
 `
     margin: 5.5px 0px 0px 0px;
     border: none;
@@ -614,7 +616,7 @@ const SearchInput = styled.input
     border-bottom-left-radius: 10px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    padding: 0px 0.6rem;
+    padding: 3px 0px 0px 11px;
     font-size: 20px;
     width: 200px;
     height: 43.5px;
@@ -693,7 +695,7 @@ const LineBox = styled(MenuBox)
     }
 `
 
-const SearchInputBox = styled.div
+export const SearchInputBox = styled.div
 `
     display: flex;
     border: solid 3px #3c3c3c;
@@ -701,21 +703,21 @@ const SearchInputBox = styled.div
 }
 `
 
-const SearchInputIconBox = styled.div
+export const SearchInputIconBox = styled.div
 `
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     background: #dee2e6;
     margin: 5.5px 0px 0px 0px;
-    height: 43.5px;
+    height: 46.5px;
     -webkit-user-select: none;
 `
 
-const SearchButton = styled.button
+export const SearchButton = styled.button
 `
     border: none;
     background: transparent;
-    padding: 5px 8px 0px 0px;
+    padding: 8px 8px 0px 0px;
     cursor: pointer;
     font-size: 29px;
     color: black;
