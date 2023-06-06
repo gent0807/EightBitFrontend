@@ -43,6 +43,8 @@ const EmailPwFound = () =>
 
     const navigate = useNavigate();
 
+
+    let token=useRef("");
     let compareMode=useRef(false);
     let passwordPossibleCombCheck=useRef(false);
     let authNum=useRef(null);
@@ -190,7 +192,7 @@ const EmailPwFound = () =>
 
      const userPasswordAlreadyUsingCheck=(password)=>
      {  
-        axios.post("http://localhost:8033/EightBitBackend/user/alreadyPasswordUsingCheck/",{
+        axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/password/already/",{
             email:Email,
             password:password
         })
@@ -229,7 +231,9 @@ const EmailPwFound = () =>
 
     const EmailCheck = () =>
     {   
-        axios.post("http://localhost:8033/EightBitBackend/user/alreadyEmailRegisterCheck/",{
+        
+
+        axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/email/already/",{
           email:Email
         })
         .then(res=>{
@@ -247,14 +251,15 @@ const EmailPwFound = () =>
           }
           else if(data==="yes")
           {
-            axios.post("http://localhost:8033/EightBitBackend/user/send_auth_key_to_email/",{
+            axios.post("http://14.34.121.36:8033/EightBitBackend/Users/authkey/email",{
                   email:Email
             })
             .then(res=>{
               return res.data;
             })
             .then(data=>{
-              authNum.current=data;
+              token.current=data;
+              console.log(token.current);
               setIsEmail(true);
               setIsEmailBtn(true);
               setIsEmailPoundCheck(false);
@@ -279,15 +284,24 @@ const EmailPwFound = () =>
     {
       e.preventDefault();
 
-      axios.put("http://localhost:8033/EightBitBackend/user/updateUserPw/",{
+      token.current="Bearer "+token.current
+      console.log(token.current);
+
+      axios.put("http://14.34.121.36:8033/EightBitBackend/Users/password/",{
         email:Email,
         password:PasswordChangeConfirmM,
-      } 
-      )
+      },
+      {
+        headers:
+        {
+          Authorization: token.current
+        },
+      })
       .then(res=>{
         return res.data;
       })
       .then(data=>{
+        token.current=data;
         navigate("/Login");
       });
       
@@ -296,24 +310,45 @@ const EmailPwFound = () =>
 
     const EmailAuthCheck = () =>
     {
-      
-      if(Emailauth == authNum.current)
-        {   
-          setIsEmailauthBtn(true)
-          setIsButtonCheck(true)
-          setchangeVisibled(true)
-          setIsInputEmailAuthCheck(true)
-          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>])
-        }
-        else
+      token.current="Bearer " + token.current
+
+      axios.post("http://14.34.121.36:8033/EightBitBackend/Users/check/authkey/",
+      {
+        email: Email,
+        authNum: Emailauth 
+      },
+      {
+        headers:
         {
-          
-          setIsInputEmailAuthCheck(true)
-          setIsButtonCheck(false)
-          setIsEmailauthBtn(false)
-          setchangeVisibled(false)
-          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
-        }
+          Authorization:token.current,
+        },
+      })
+      .then(res=>{
+        return res.data;
+      })
+      .then(data=>{
+          console.log(data);
+          if(data=="no"){
+            token.current=token.current.substring(7);
+            console.log(token.current);
+            setIsInputEmailAuthCheck(true)
+            setIsButtonCheck(false)
+            setIsEmailauthBtn(false)
+            setchangeVisibled(false)
+            setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
+          }
+          else{
+            token.current=data;
+            console.log(token.current);
+            setIsEmailauthBtn(true)
+            setIsButtonCheck(true)
+            setchangeVisibled(true)
+            setIsInputEmailAuthCheck(true)
+            setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>])
+          }
+      })
+
+      
     }
 
     return (

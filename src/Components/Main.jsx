@@ -2,16 +2,23 @@ import { styled, createGlobalStyle, ThemeProvider } from 'styled-components';
 import Router from './Router';
 import { useRecoilValue } from 'recoil';
 import { isDark } from './Darkmode/Darkmode';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Provider } from 'react-redux';
 
 const Main = () => {
- 
+  
+
   const isDarkmode = useRecoilValue(isDark);
 
+  localStorage.setItem("ip", ip);
+
+  
   return (
     <ThemeProvider theme={ isDarkmode ? lightTheme : darkTheme }>
     <GlobalStyle />
     <FooterSet>
-    <Router/>
+    <Router />
     </FooterSet>
     </ThemeProvider>
   );
@@ -40,8 +47,7 @@ const darkTheme =
   DropDownListColor: "orange",
   BoardTitle: "white",
   BoardInformaiton: "Orange",
-  PaginationSelect: "Orange",
-  WriterColor: "white",
+  PaginationSelect: "Orange"
 };
 
 const lightTheme = 
@@ -68,3 +74,6 @@ const GlobalStyle = createGlobalStyle
     transition: background-color 0.5s, background 0.5s, color 0.5s, box-shadow 0.5s, border 0.5s, accent-color 0.5s;
   }
 `
+
+const ip= "http://14.34.121.36:8033/EightBitBackend";
+

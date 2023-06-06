@@ -1,70 +1,58 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import { useRecoilValue, useRecoilState } from 'recoil';
-import { firstReset } from "../Darkmode/Darkmode";
 
 function PaginationNav ({ total, limit, page, setPage }) {
-  const numPages = total > 0 && limit > 0 ? Math.ceil(total / limit) : 1;
-  const [currPage, setCurrPage] = useState(page);
-  const [WindowLength, setWindowLength] = useState(window.innerWidth);
-  const FirstReset = useRecoilValue(firstReset);
-  const [CFirstReset, setCFirstReset] = useRecoilState(firstReset);
-  let firstNum = FirstReset ? WindowLength <= 666 ? currPage - (currPage % 5) + 1 : currPage - (currPage % 10) + 1 : 1 ;
-  console.log(WindowLength , firstNum, numPages);
-
-  const ScrollTop = () =>
-  {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  const handleResize = () => 
-  {
-      setWindowLength(window.innerWidth);
-  };
-
-  useEffect(() => {
-      window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    }
-  })
+  const numPages = Math.ceil(total / limit);
+  const [currPage, setCurrPage] = useState(page)
+  let firstNum = currPage - (currPage % 10) + 1
+  let lastNum = currPage - (currPage % 10) + 10
+  console.log({"currPage is":currPage, "firsNum is" : firstNum, "page is" : page});
 
   return (
     <>
       <Nav>
-        <Button onClick={() => {setPage(1); setCurrPage(1); setCFirstReset(true); ScrollTop();}} off={page === 1}>
+        <Button onClick={() => {setPage(1); setCurrPage(0);}} disabled={page === 1}>
           &lt;
           &lt;
         </Button>
         <Button 
-            onClick={() => {setPage(page-1); setCurrPage(page-2); setCFirstReset(true); ScrollTop();}} 
-            off={page===1}>
+            onClick={() => {setPage(page-1); setCurrPage(page-2);}} 
+            disabled={page===1}>
             &lt;
         </Button>
         <Button 
-            onClick={() => {setPage(firstNum); setCFirstReset(true); ScrollTop();}}
+            onClick={() => setPage(firstNum)}
             aria-current={page === firstNum ? "page" : null}>
             {firstNum}
         </Button>
-                {Array(numPages - firstNum).fill().map((_, i) =>{
-                    if(i <= Math.round(WindowLength <= 666 ? 3 : 8))
-                    {
+                {Array(9).fill().map((_, i) =>{
+                    if(i <=9){
                         return (
                             <Button 
                                 key={i+1} 
-                                onClick={() => {setPage(firstNum+1+i); setCFirstReset(true); ScrollTop();}}
+                                onClick={() => {setPage(firstNum+1+i)}}
                                 aria-current={page === firstNum+1+i ? "page" : null}>
                                 {firstNum+1+i}
                             </Button>
                         )
                     }
+                    else if(i>=1){
+                        return (
+                            <Button
+                                key ={i+1}
+                                onClick={() => setPage(lastNum)}
+                                aria-current={page === lastNum ? "page" : null}>
+                                {lastNum}
+                            </Button>
+                        )  
+                    }
                 })}
         <Button 
-            onClick={() => {setPage(page+1); setCurrPage(page); setCFirstReset(true); ScrollTop();}} 
-            off={page === numPages}>
+            onClick={() => {setPage(page+1); setCurrPage(page);}} 
+            disabled={page===numPages}>
             &gt;
         </Button>
-        <Button onClick={() => {setPage(numPages); setCurrPage(numPages); setCFirstReset(true); ScrollTop();}} off={page === numPages}>
+        <Button onClick={() => {setPage(numPages); setCurrPage(numPages);}} disabled={page === numPages}>
           &gt;
           &gt;
         </Button>
@@ -86,12 +74,9 @@ const Button = styled.button`
   border-radius: 8px;
   padding: 8px;
   margin: 0;
-  background: ${props => props.off ? "grey" : props.theme.textColor};
+  background: ${props => props.theme.textColor};
   color: white;
   font-size: 1rem;
-  cursor: ${props => props.off ? "revert" : "pointer"};
-  transform: ${props => props.off ? "revert" : "none"};
-  pointer-events: ${props => props.off ? "none" : "true"};
 
   &:hover {
     background: tomato;
@@ -100,6 +85,9 @@ const Button = styled.button`
   }
 
   &[disabled] {
+    background: grey;
+    cursor: revert;
+    transform: revert;
   }
 
   &[aria-current] {
@@ -111,4 +99,3 @@ const Button = styled.button`
 `;
 
 export default PaginationNav;
-

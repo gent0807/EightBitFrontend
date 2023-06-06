@@ -1,18 +1,22 @@
+import { useState } from "react";
 import styled from "styled-components";
+
 
 const NotFound = () =>
 {   
     
+    const[alreadyLogin, setAlreadyLogin]=useState(false);
+
     return(
-        <NotFoundContainer>
-            <NotFoundText>to be continued...</NotFoundText>
-        </NotFoundContainer>
+        <TestTerminalContainer>
+            <TestTerminalText>{alreadyLogin ? "님 환경합니다." : ""}</TestTerminalText>
+        </TestTerminalContainer>
     );
 }
 
 export default NotFound;
 
-const NotFoundContainer = styled.div
+const TestTerminalContainer = styled.div
 `
     display: flex;
     margin: 0 auto;
@@ -27,7 +31,7 @@ const NotFoundContainer = styled.div
     }
 `
 
-const NotFoundText = styled.span
+const TestTerminalText = styled.span
 `
     color: ${(props) => props.theme.textColor};
     font-size: 25px;

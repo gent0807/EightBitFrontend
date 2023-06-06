@@ -169,7 +169,7 @@ const Phone = () =>
         .then(data=>{
             if(data!="fail"){
                 token.current=data;
-                navigate("/Sign",{state:token.current});
+                navigate("/EmailPwFound",{state:token.current});
             }
             else{
                 token.current=token.current.substring(7);
@@ -182,7 +182,6 @@ const Phone = () =>
             <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
             <IntroduceBox>
                 <MainText as={"h1"}>서비스 이용을 위해 본인 확인이 필요합니다!</MainText>
-                <IntroduceText>만 18세 미만인 경우 보호자 동의가 필요합니다.</IntroduceText>
             </IntroduceBox>
             <PhoneInformation>
                 <PhoneInformationText>휴대폰 인증</PhoneInformationText>
