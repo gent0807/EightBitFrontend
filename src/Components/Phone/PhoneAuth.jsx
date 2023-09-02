@@ -25,7 +25,7 @@ const Phone = () =>
     const [ PhoneAuthMessage, setPhoneAuthMessage ] = useState("");
     const [ isVisibled, setIsVisibled ] = useState(false);
     const Navigater = useNavigate();
-    const ip=localStorage.getItem("ip");5
+    const ip=localStorage.getItem("ip");
 
     const navigate = useNavigate();
 
