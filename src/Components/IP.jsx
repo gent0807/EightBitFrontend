@@ -1,0 +1,3 @@
+const originIP=()=>{
+    return 'localhost'
+};
