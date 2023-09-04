@@ -55,10 +55,12 @@ const Signinput = (props) =>
   const token=useRef(location.state.token);
   const inputFocus = useRef(null);
   const textRef = useRef(null);
+  const inputRef = useRef();
   
 
   useEffect(()=>{
     console.log(props);
+    inputRef.current.focus();
   }, []);
 
   useEffect(() => {
@@ -452,7 +454,7 @@ const Signinput = (props) =>
               <EmailCheckT>
               <Title htmlFor="email">이메일</Title>
               <EmailBox>
-              <EmailInput disabled={isEmailCertCheck} value={Email} onChange={checkEmail} placeholder="이메일"/>
+              <EmailInput ref={inputRef} disabled={isEmailCertCheck} value={Email} onChange={checkEmail} placeholder="이메일"/>
               <SelectInput onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} disabled={isEmailCertCheck} ON={isInputDirect} value={InputDirect} ref={inputFocus} onChange={checkAndSetInputDirect}/>
               <EmailText>@</EmailText>
               <SelectBox ref={textRef} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} show={isSelectBtnCheck} event={isEmailCertCheck}>
@@ -499,12 +501,12 @@ const Signinput = (props) =>
             </SignInputT>
             <SumbitButtonBox>
                   <SumbitButton type='submit' disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
-                  <EmPwFoundT>
+                  {/* <EmPwFoundT>
                     <EmailPwFoundList>
                       <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></EmailPwFoundListLiBar>
                       <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLI>
                     </EmailPwFoundList>
-                  </EmPwFoundT>
+                  </EmPwFoundT> */}
             </SumbitButtonBox>
         </SubmitT>
       </SignT>

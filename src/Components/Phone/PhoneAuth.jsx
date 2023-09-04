@@ -30,8 +30,13 @@ const Phone = () =>
 
     const navigate = useNavigate();
 
+    const inputRef = useRef();
     const token=useRef("");
     const realPhone=useRef("");
+
+    useEffect(() => { 
+        inputRef.current.focus();
+     },[]);
     
     const OnPhoneChange = (e) =>
     {
@@ -201,7 +206,7 @@ const Phone = () =>
                 <PhoneInputBox>
                     <PhoneTitle>휴대폰</PhoneTitle>
                     <PhoneInputAllBox>
-                        <PhoneInput maxlength="12" show={isPhone} check={isPhoneCheck} value={Phone} onChange={OnPhoneChange}/>
+                        <PhoneInput ref={inputRef} maxlength="12" show={isPhone} check={isPhoneCheck} value={Phone} onChange={OnPhoneChange}/>
                         <PhoneSendBtn type="button" onClick={PhoneCheck} show={isPhoneBtnCheck}><span>{isVisibled ? "재전송" : "전송"}</span></PhoneSendBtn>
                     </PhoneInputAllBox>
                     <MessageBox show={isPhoneCheck} color={isPhone}>{PhoneMessage}</MessageBox>

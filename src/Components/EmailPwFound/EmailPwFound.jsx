@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { styled } from 'styled-components';
 import axios from 'axios';
@@ -44,12 +44,16 @@ const EmailPwFound = () =>
     const navigate = useNavigate();
     const location = useLocation();
 
+    const inputRef=useRef();
     const token=useRef(location.state.token);
     const compareMode=useRef(false);
     const passwordPossibleCombCheck=useRef(false);
     const authNum=useRef(null);
     const alreadyPasswordUsing=useRef("no");
 
+    useEffect(() => {
+      inputRef.current.focus();
+    },[]);
 
     const Emailuser = (e) =>
     {
@@ -392,7 +396,7 @@ const EmailPwFound = () =>
                 <EmailAuthInputBox>
                 <Title>이메일</Title>
                 <EmailAuthAllBox>
-                <EmailInput disabled={isEmailauthBtn} revert={MessageRevert} show = {isEmail} check = {isInputEmailCheck} placeholder='이메일을 입력해 주세요!' value={Email} onChange={Emailuser}/>
+                <EmailInput ref={inputRef} disabled={isEmailauthBtn} revert={MessageRevert} show = {isEmail} check = {isInputEmailCheck} placeholder='이메일을 입력해 주세요!' value={Email} onChange={Emailuser}/>
                 <SendButton show = {isEmail} type="button" onClick={EmailCheck} disabled={isEmailAuthInputCheck ? isEmailauthBtn : true}><span>{isEmailBtn ? "재전송" : "전송"}</span></SendButton>
                 </EmailAuthAllBox>
                 </EmailAuthInputBox>
@@ -423,10 +427,10 @@ const EmailPwFound = () =>
                 <SumbitButton type="submit" disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}><span>비밀번호 수정완료</span></SumbitButton>
             </SubmitBtnBox>
             <AnotherRoute>
-            <AnotherList>
+           {/*  <AnotherList>
               <Login onClick={() => ScrollTop()}><Link to='/Login' >로그인</Link></Login>
               <Sign onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></Sign>
-            </AnotherList>
+            </AnotherList> */}
             </AnotherRoute>
             </EmPwForm>
         </EmPwFoundT>

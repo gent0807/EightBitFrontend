@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef,useEffect, useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { SiNaver } from "react-icons/si";
@@ -25,12 +25,13 @@ const Logininput = (props) =>
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isDarkmode = useRecoilValue(isDark);
- 
+    const inputRef = useRef();
     
     let loginCheck;
     const ip=localStorage.getItem("ip");
 
     useEffect(() => {
+      inputRef.current.focus();
       setAuthMode('find');
     },[]);
 
@@ -123,7 +124,7 @@ const Logininput = (props) =>
           <LoginInput>
           <InputT>
           <Sumbit onSubmit={OnCheckSubmit}>
-          <InputBox placeholder="E-mail" onChange={OnChangeEmail}/>
+          <InputBox ref={inputRef} placeholder="E-mail" onChange={OnChangeEmail}/>
           <PwInputBox placeholder="Password" onChange={OnChangePw} type='password'/>
           <ErrorMessageShow>{message}</ErrorMessageShow>
           <LoginMaintainT>
