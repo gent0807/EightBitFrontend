@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { styled } from 'styled-components';
 import axios from 'axios';
@@ -37,19 +37,19 @@ const EmailPwFound = () =>
     const [ isEmailAuthInputCheck, setIsEmailAuthInputCheck] = useState(false);
     const [ MessageChangeCheck, setMessageChangeCheck] = useState(false);
     const [ MessageRevert, setMessageRevert ] = useState(false);
-
     const [ changeVisibled, setchangeVisibled ] = useState(false);
     const isDarkmode = useRecoilValue(isDark);
     const ip=localStorage.getItem("ip");
 
     const navigate = useNavigate();
+    const location = useLocation();
 
+    const token=useRef(location.state.token);
+    const compareMode=useRef(false);
+    const passwordPossibleCombCheck=useRef(false);
+    const authNum=useRef(null);
+    const alreadyPasswordUsing=useRef("no");
 
-    let token=useRef("");
-    let compareMode=useRef(false);
-    let passwordPossibleCombCheck=useRef(false);
-    let authNum=useRef(null);
-    let alreadyPasswordUsing=useRef("no");
 
     const Emailuser = (e) =>
     {
@@ -193,14 +193,23 @@ const EmailPwFound = () =>
 
      const userPasswordAlreadyUsingCheck=(password)=>
      {  
+        token.current="Bearer "+token.current;
+
         axios.post(`${ip}/Users/check/password/already/`,{
             email:Email,
             password:password
+        },
+        {
+          headers:
+          {
+            Authorization: token.current
+          },
         })
         .then(res=>{
             return res.data;
         })
         .then(data=>{
+            token.current=token.current.substring(7);
             alreadyPasswordUsing.current=data;
             if(alreadyPasswordUsing.current=="no"){
               setPasswordChangeConfirmMessage("");
@@ -232,10 +241,16 @@ const EmailPwFound = () =>
 
     const EmailCheck = () =>
     {   
-        
+        token.current="Bearer "+token.current;
 
         axios.post(`${ip}/Users/check/email/already/`,{
           email:Email
+        },
+        {
+          headers:
+          {
+            Authorization: token.current
+          },
         })
         .then(res=>{
           return res.data;
@@ -243,6 +258,7 @@ const EmailPwFound = () =>
         .then(data=>{
           if(data === "no" )
           { 
+            token.current=token.current.substring(7);
             setMessageChangeCheck(true);
             setIsEmail(false);
             setIsEmailBtn(false);
@@ -254,6 +270,12 @@ const EmailPwFound = () =>
           {
             axios.post(`${ip}/Users/authkey/email`,{
                   email:Email
+            },
+            {
+              headers:
+              {
+                Authorization: token.current
+              },
             })
             .then(res=>{
               return res.data;
@@ -303,7 +325,7 @@ const EmailPwFound = () =>
       })
       .then(data=>{
         token.current=data;
-        navigate("/Login");
+        navigate("/Login", {state:{token:token.current}});
       });
       
     }
@@ -351,6 +373,8 @@ const EmailPwFound = () =>
 
       
     }
+
+ 
 
     return (
         <EmPwFoundT>
@@ -400,7 +424,7 @@ const EmailPwFound = () =>
             </SubmitBtnBox>
             <AnotherRoute>
             <AnotherList>
-              <Login onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></Login>
+              <Login onClick={() => ScrollTop()}><Link to='/Login' >로그인</Link></Login>
               <Sign onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></Sign>
             </AnotherList>
             </AnotherRoute>

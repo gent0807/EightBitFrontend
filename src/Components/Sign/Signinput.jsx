@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 import {RiErrorWarningFill} from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { styled, keyframes } from 'styled-components';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
@@ -43,22 +43,24 @@ const Signinput = (props) =>
   const ip=localStorage.getItem("ip");
 
   const navigate = useNavigate();
+  const location=useLocation();
 
-  let certEmail=useRef(null);
-  let compareMode=useRef(false);
-  let password=useRef("");
-  let passwordPossibleCombCheck=useRef(false);
-  let nickNamePossible=useRef(false);
-  let finalEmail=useRef("");
-  let authNum=useRef(null);
-  let token=useRef(null); 
-  let inputFocus = useRef(null);
-  let textRef = useRef(null);
+  const certEmail=useRef(null);
+  const compareMode=useRef(false);
+  const password=useRef("");
+  const passwordPossibleCombCheck=useRef(false);
+  const nickNamePossible=useRef(false);
+  const finalEmail=useRef("");
+  const authNum=useRef(null);
+  const token=useRef(location.state.token);
+  const inputFocus = useRef(null);
+  const textRef = useRef(null);
   
 
   useEffect(()=>{
     console.log(props);
   }, []);
+
   useEffect(() => {
     function handleOuside(e) {
       if (textRef.current && !textRef.current.contains(e.target)) {
@@ -72,7 +74,7 @@ const Signinput = (props) =>
       return () => {
         document.removeEventListener("mousedown", handleOuside);
       };
-  }, [textRef])
+  }, [textRef]);
 
   const setEmailDomain = (e) =>
   {
@@ -344,11 +346,19 @@ const Signinput = (props) =>
         setVisibled(false);
     }else{
     
+    token.current="Bearer "+token.current;
+
     finalEmail.current=EmailTotal;
     
     axios.post(`${ip}/Users/check/email/already/`,{
         email:EmailTotal
-      } 
+      },
+      {
+        headers:
+        {
+          Authorization: token.current
+        },
+      }
     )
     .then(res=>{
       return res.data;
@@ -356,6 +366,7 @@ const Signinput = (props) =>
     .then(data=>{
       if(data === "yes" )
       {
+        token.current=token.current.substring(7);
         setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
         <span style={{margin:"-3px 5px 6px"}}>이미 가입된 이메일 입니다.</span>
@@ -366,6 +377,12 @@ const Signinput = (props) =>
       {
         axios.post(`${ip}/Users/authkey/email/`,{
               email:EmailTotal
+        },
+        {
+          headers:
+          {
+            Authorization: token.current
+          },
         })
         .then(res=>{
           return res.data;

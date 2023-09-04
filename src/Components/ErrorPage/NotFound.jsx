@@ -5,7 +5,7 @@ const NotFound = () =>
     
     return(
         <NotFoundContainer>
-            <NotFoundText>to be continued...</NotFoundText>
+            <NotFoundText>not found!</NotFoundText>
         </NotFoundContainer>
     );
 }

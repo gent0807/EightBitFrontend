@@ -5,14 +5,15 @@ import { isDark } from './Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-const Main = () => {
-  
+const ip= `http://localhost:8033/EightBitBackend`;
 
-  const isDarkmode = useRecoilValue(isDark);
+
+const Main = () => {
 
   localStorage.setItem("ip", ip);
 
-  
+  const isDarkmode = useRecoilValue(isDark);
+
   return (
     <ThemeProvider theme={ isDarkmode ? lightTheme : darkTheme }>
     <GlobalStyle />
@@ -72,6 +73,4 @@ const GlobalStyle = createGlobalStyle
     transition: background-color 0.5s, background 0.5s, color 0.5s, box-shadow 0.5s, border 0.5s, accent-color 0.5s;
   }
 `
-
-const ip= `http://localhost:8033/EightBitBackend`;
 

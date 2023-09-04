@@ -3,17 +3,22 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { EmailPwFoundList, LoginTopLOGO, APIListA, Line } from "../Login/Logininput";
 import { isDark } from '../Darkmode/Darkmode';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { SiNaver } from "react-icons/si";
 import { AiOutlineTwitter } from "react-icons/ai";
-
+import { work } from '../Phone/PhoneAuthMode';
 
 
 const SelectSign = () => 
 {
     const isDarkmode = useRecoilValue(isDark);
+    const [authMode, setAuthMode]=useRecoilState(work);
+    
+    useEffect(() => {
+        setAuthMode('register');
+    },[]);
 
     return(
         <SelectSignBox>
@@ -22,7 +27,7 @@ const SelectSign = () =>
                 <MainText as="h1">8bit 가입을 시작합니다!</MainText>
                 <IntroduceText>회원가입을 위해 가입 방식을 선택하세요!</IntroduceText>
             </IntroduceBox>
-            <Link to={"/PhoneAuth"}>
+            <Link to='/PhoneAuth'>
             <EmailButton><EmailButtonText>이메일로 가입</EmailButtonText></EmailButton>
             </Link>
             <LOGINAPI>

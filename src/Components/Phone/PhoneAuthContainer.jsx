@@ -1,7 +1,8 @@
+import { useParams } from 'react-router-dom';
 import PhoneAuth from './PhoneAuth';
 import styled from 'styled-components'
 
-let Containerbox = styled.div`
+const Containerbox = styled.div`
     margin: 0 auto;
     max-width: 460px;
     padding: 267px 0px 54px 0px;
@@ -12,10 +13,9 @@ let Containerbox = styled.div`
 `
 
 const Phone = () => {
-
     return (
       <Containerbox>
-        <PhoneAuth />
+        <PhoneAuth/>
       </Containerbox>
     );
 }

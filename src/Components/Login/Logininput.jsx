@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { SiNaver } from "react-icons/si";
@@ -8,13 +8,15 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';
 import { useDispatch } from "react-redux";
-import { loginUser } from '../LoginRedux/LoginUser';
+import { loginUser } from '../Redux/LoginUser';
 import { isDark } from '../Darkmode/Darkmode';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar';
+import { work } from '../Phone/PhoneAuthMode';
 
 const Logininput = (props) => 
 {                 
+    const [ authMode, setAuthMode ]=useRecoilState(work);
     const [ Email, setEmail ] = useState('');
     const [ Pw, setPw ] = useState('');
     //const [loginCheck,setLoginCheck]=React.useState('');
@@ -23,9 +25,14 @@ const Logininput = (props) =>
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isDarkmode = useRecoilValue(isDark);
+ 
     
     let loginCheck;
     const ip=localStorage.getItem("ip");
+
+    useEffect(() => {
+      setAuthMode('find');
+    },[]);
 
     const Show = () =>
     {
@@ -106,6 +113,8 @@ const Logininput = (props) =>
 
     }
 
+ 
+
     return(
       <LoginT> 
           <LoginTop>
@@ -138,7 +147,7 @@ const Logininput = (props) =>
           </LOGINAPI>
           <EmPwFoundT>
           <EmailPwFoundList>
-            <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/PhoneAuth2'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
+            <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/PhoneAuth'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
             <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></EmailPwFoundListLI>
           </EmailPwFoundList>
           </EmPwFoundT>

@@ -5,7 +5,7 @@ import "./fonts/font.css";
 import Main from './Components/Main';
 import styled from 'styled-components';
 import { Provider } from "react-redux";
-import store from "./Components/LoginRedux/Store";
+import store from './Components/Redux/Store'
 import { RecoilRoot } from 'recoil';
 
 
@@ -34,7 +34,20 @@ const Font = styled.body
   }
 
 `
+/* const reducer = (currentState, action) => {
+    if(currentState===undefined){
+      return {
+        token: null,
+      }
+    }
+    let newState={...currentState};
+    if(action.type==='LOGIN'){
+      newState.token=action.token;
+    }
+    return newState;
+};
 
+const store = createStore(reducer); */
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

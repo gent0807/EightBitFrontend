@@ -5,14 +5,16 @@ import { LoginTopLOGO, InputBox } from "../Login/Logininput"
 import { Title, ErrorMessageBox, ErrorMessageIcon, ErrorMessageText, ErrorMessage } from "../Sign/Signinput"
 import { IntroduceBox, IntroduceText, SelectSignBox } from "./SelectSignInput"
 import { isDark } from '../Darkmode/Darkmode';
+import { work } from './PhoneAuthMode';
 import { useRecoilValue } from 'recoil';
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { EmPwInformation, SumbitButton } from "../EmailPwFound/EmailPwFound"
 import axios from "axios";
 
 const Phone = () =>
 {
     const isDarkmode = useRecoilValue(isDark);
+    const authMode=useRecoilValue(work);
     const [ Phone, setPhone ] = useState("");
     const [ PhoneAuth, setPhoneAuth ] = useState("");
     const [ isPhone, setIsPhone] = useState(false);
@@ -24,13 +26,12 @@ const Phone = () =>
     const [ PhoneMessage, setPhoneMessage ] = useState("");
     const [ PhoneAuthMessage, setPhoneAuthMessage ] = useState("");
     const [ isVisibled, setIsVisibled ] = useState(false);
-    const Navigater = useNavigate();
     const ip=localStorage.getItem("ip");
 
     const navigate = useNavigate();
 
-    let token=useRef("");
-    let realPhone=useRef("");
+    const token=useRef("");
+    const realPhone=useRef("");
     
     const OnPhoneChange = (e) =>
     {
@@ -116,6 +117,8 @@ const Phone = () =>
         }
     }
 
+    
+
     const PhoneAuthCheck = () =>
     {   
         token.current="Bearer " + token.current
@@ -170,7 +173,13 @@ const Phone = () =>
         .then(data=>{
             if(data!="fail"){
                 token.current=data;
-                navigate("/Sign",{state:token.current});
+                if(authMode==='register'){
+                    navigate("/Sign",{state:{token:token.current}});
+                }
+                else if(authMode==='find'){
+                    navigate("/EmailPwFound",{state:{token:token.current}});
+                }
+                    
             }
             else{
                 token.current=token.current.substring(7);
