@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';
 import { useDispatch } from "react-redux";
-import { loginUser } from '../Redux/LoginUser';
+import { loginUser } from '../Redux/User';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar';

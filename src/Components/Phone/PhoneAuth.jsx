@@ -10,6 +10,7 @@ import { useRecoilValue } from 'recoil';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { EmPwInformation, SumbitButton } from "../EmailPwFound/EmailPwFound"
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 const Phone = () =>
 {
@@ -29,6 +30,7 @@ const Phone = () =>
     const ip=localStorage.getItem("ip");
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const inputRef = useRef();
     const token=useRef("");
@@ -179,6 +181,7 @@ const Phone = () =>
             if(data!="fail"){
                 token.current=data;
                 if(authMode==='register'){
+                    
                     navigate("/Sign",{state:{token:token.current}});
                 }
                 else if(authMode==='find'){
