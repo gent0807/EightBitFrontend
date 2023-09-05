@@ -6,6 +6,7 @@ import { styled, keyframes } from 'styled-components';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar'
+import { useSelector } from 'react-redux';
 
 
 const Signinput = (props) => 
@@ -45,6 +46,7 @@ const Signinput = (props) =>
   const navigate = useNavigate();
   const location=useLocation();
 
+  const user=useSelector((state)=>state.user);
   const certEmail=useRef(null);
   const compareMode=useRef(false);
   const password=useRef("");
@@ -52,11 +54,12 @@ const Signinput = (props) =>
   const nickNamePossible=useRef(false);
   const finalEmail=useRef("");
   const authNum=useRef(null);
-  const token=useRef(location.state.token);
+  const token=useRef(user.temp_token);
   const inputFocus = useRef(null);
   const textRef = useRef(null);
   const inputRef = useRef();
   
+  console.log(user, token);
 
   useEffect(()=>{
     console.log(props);
@@ -501,12 +504,12 @@ const Signinput = (props) =>
             </SignInputT>
             <SumbitButtonBox>
                   <SumbitButton type='submit' disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
-                  {/* <EmPwFoundT>
+                  <EmPwFoundT>
                     <EmailPwFoundList>
                       <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></EmailPwFoundListLiBar>
                       <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLI>
                     </EmailPwFoundList>
-                  </EmPwFoundT> */}
+                  </EmPwFoundT>
             </SumbitButtonBox>
         </SubmitT>
       </SignT>

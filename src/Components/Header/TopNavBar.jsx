@@ -130,8 +130,8 @@ const HeaderBox = () =>
     }
     
     const LogoutFunc = () =>
-    {
-        dispatch(clearUser(user));
+    {   
+        dispatch(clearUser());
         setProfileMenuShow(false);
         setProfileClickCheck(false);
         setIsProfileLogoutCheck(true);

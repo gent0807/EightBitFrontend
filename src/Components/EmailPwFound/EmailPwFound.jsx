@@ -6,6 +6,9 @@ import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { isDark } from '../Darkmode/Darkmode';
 import { ScrollTop } from '../Header/TopNavBar';
+import { useSelector } from 'react-redux';
+
+
 
 const EmailPwFound = () => 
 {
@@ -42,10 +45,10 @@ const EmailPwFound = () =>
     const ip=localStorage.getItem("ip");
 
     const navigate = useNavigate();
-    const location = useLocation();
-
+    
+    const user=useSelector((state)=>state.user);
     const inputRef=useRef();
-    const token=useRef(location.state.token);
+    const token=useRef(user.temp_token);
     const compareMode=useRef(false);
     const passwordPossibleCombCheck=useRef(false);
     const authNum=useRef(null);
@@ -427,10 +430,10 @@ const EmailPwFound = () =>
                 <SumbitButton type="submit" disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}><span>비밀번호 수정완료</span></SumbitButton>
             </SubmitBtnBox>
             <AnotherRoute>
-           {/*  <AnotherList>
+            <AnotherList>
               <Login onClick={() => ScrollTop()}><Link to='/Login' >로그인</Link></Login>
-              <Sign onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></Sign>
-            </AnotherList> */}
+              <Sign onClick={() => ScrollTop()}><Link to='/Sign'>회원가입</Link></Sign>
+            </AnotherList>
             </AnotherRoute>
             </EmPwForm>
         </EmPwFoundT>

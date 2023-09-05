@@ -11,6 +11,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { EmPwInformation, SumbitButton } from "../EmailPwFound/EmailPwFound"
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { tempToken } from "../Redux/User";
 
 const Phone = () =>
 {
@@ -180,12 +181,13 @@ const Phone = () =>
         .then(data=>{
             if(data!="fail"){
                 token.current=data;
+                console.log(token.current); 
+                dispatch(tempToken(token));
                 if(authMode==='register'){
-                    
-                    navigate("/Sign",{state:{token:token.current}});
+                    navigate("/Sign");
                 }
                 else if(authMode==='find'){
-                    navigate("/EmailPwFound",{state:{token:token.current}});
+                    navigate("/EmailPwFound");
                 }
                     
             }
