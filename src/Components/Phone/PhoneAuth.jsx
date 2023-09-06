@@ -10,8 +10,7 @@ import { useRecoilValue } from 'recoil';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { EmPwInformation, SumbitButton } from "../EmailPwFound/EmailPwFound"
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { tempToken } from "../Redux/User";
+
 
 const Phone = () =>
 {
@@ -31,10 +30,10 @@ const Phone = () =>
     const ip=localStorage.getItem("ip");
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+
 
     const inputRef = useRef();
-    const token=useRef("");
+    
     const realPhone=useRef("");
 
     useEffect(() => { 
@@ -108,8 +107,6 @@ const Phone = () =>
                 return res.data;
             })
             .then(data=>{
-                token.current=data;
-                console.log(token.current);
                 console.log(data);
                 realPhone.current=Phone;
                 console.log(realPhone.current);
@@ -129,34 +126,22 @@ const Phone = () =>
 
     const PhoneAuthCheck = () =>
     {   
-        token.current="Bearer " + token.current
-        console.log(token.current);
     
         axios.post(`${ip}/Users/check/phonekey/`,
         {
             phoneNum:realPhone.current,
             authNum:PhoneAuth
-        },
-        {
-            headers:
-            {
-                Authorization: token.current,
-            },
         })
         .then(res=>{
             return res.data;
         })
         .then(data=>{
             if(data=="no"){
-                token.current=token.current.substring(7);
-                console.log(token.current);
                 setIsPhoneAuthCheck(true);
                 setPhoneAuthMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치 하지 않습니다.</ErrorMessageText></MessaageAllBox>);
                 setIsPhoneAuth(false);
             }
-            else{
-                token.current=data;
-                console.log(token.current);
+            else if(data=="yes"){
                 setIsPhoneAuth(true);
                 setIsPhoneAuthCheck(true);
                 setPhoneAuthMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치 합니다!</ErrorMessageText></MessaageAllBox>);
@@ -165,12 +150,7 @@ const Phone = () =>
     }
 
     const deletePhoneNum= ()=>{
-        token.current="Bearer " + token.current;
         axios.delete(`${ip}/Users/phone/`,{
-            headers:
-            {
-                Authorization: token.current,
-            },
             data:{
                 phoneNum:realPhone.current
             }
@@ -179,10 +159,7 @@ const Phone = () =>
             return res.data;
         })
         .then(data=>{
-            if(data!="fail"){
-                token.current=data;
-                console.log(token.current); 
-                dispatch(tempToken(token));
+            if(data=="success"){
                 if(authMode==='register'){
                     navigate("/Sign");
                 }
@@ -191,8 +168,8 @@ const Phone = () =>
                 }
                     
             }
-            else{
-                token.current=token.current.substring(7);
+            else if(data=="fail"){
+                
             }
         })
     }

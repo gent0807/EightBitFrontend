@@ -6,7 +6,7 @@ import { styled, keyframes } from 'styled-components';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar'
-import { useSelector } from 'react-redux';
+
 
 
 const Signinput = (props) => 
@@ -44,9 +44,9 @@ const Signinput = (props) =>
   const ip=localStorage.getItem("ip");
 
   const navigate = useNavigate();
-  const location=useLocation();
 
-  const user=useSelector((state)=>state.user);
+
+
   const certEmail=useRef(null);
   const compareMode=useRef(false);
   const password=useRef("");
@@ -54,12 +54,10 @@ const Signinput = (props) =>
   const nickNamePossible=useRef(false);
   const finalEmail=useRef("");
   const authNum=useRef(null);
-  const token=useRef(user.temp_token);
   const inputFocus = useRef(null);
   const textRef = useRef(null);
   const inputRef = useRef();
   
-  console.log(user, token);
 
   useEffect(()=>{
     console.log(props);
@@ -109,18 +107,11 @@ const Signinput = (props) =>
   {
     setIsInputCheck(false)
 
-    token.current="Bearer " + token.current
     
     axios.post(`${ip}/Users/check/authkey/`,
       {
         email:certEmail.current,
         authNum:EmailCert
-      },
-      {
-        headers:
-        {
-          Authorization:token.current,
-        },
       })
       .then(res=>{
         return res.data;
@@ -128,15 +119,12 @@ const Signinput = (props) =>
       .then(data=>{
          console.log(data);
          if(data=="no"){
-            token.current=token.current.substring(7);
             setIsEmailCertCheck(false);
             setIsEmailCertCheckBtn(false);
             setIsConfirmCheck(false);
             setEmailCertCheckMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다.</ErrorMessageText></ErrorMessageBox>]);
          }
-         else{
-            token.current=data;
-            console.log(token.current);
+         else if(data=="yes"){
             setIsEmailCertCheck(true);
             setIsEmailCertCheckBtn(true);
             setIsConfirmCheck(true);
@@ -351,18 +339,11 @@ const Signinput = (props) =>
         setVisibled(false);
     }else{
     
-    token.current="Bearer "+token.current;
 
     finalEmail.current=EmailTotal;
     
     axios.post(`${ip}/Users/check/email/already/`,{
         email:EmailTotal
-      },
-      {
-        headers:
-        {
-          Authorization: token.current
-        },
       }
     )
     .then(res=>{
@@ -371,7 +352,6 @@ const Signinput = (props) =>
     .then(data=>{
       if(data === "yes" )
       {
-        token.current=token.current.substring(7);
         setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
         <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
         <span style={{margin:"-3px 5px 6px"}}>이미 가입된 이메일 입니다.</span>
@@ -382,20 +362,11 @@ const Signinput = (props) =>
       {
         axios.post(`${ip}/Users/authkey/email/`,{
               email:EmailTotal
-        },
-        {
-          headers:
-          {
-            Authorization: token.current
-          },
         })
         .then(res=>{
           return res.data;
         })
         .then(data=>{
-          console.log(data);
-          token.current=data;
-          console.log(token.current);
           setEmailMessage([<div style={{ display: "flex" , position: "absolute" ,margin: "0px 5px 6px"}}>
           <i style={{margin: "-3px 5px 6px"}}><RiErrorWarningFill/></i>
           <span style={{margin:"-3px 5px 6px"}}>인증번호가 전송되었습니다.</span>
@@ -418,8 +389,6 @@ const Signinput = (props) =>
     {
       e.preventDefault();
 
-      token.current="Bearer "+token.current
-      console.log(token.current)
 ;
       axios.post(`${ip}/Users/user`,
       {
@@ -427,20 +396,17 @@ const Signinput = (props) =>
         password:PwConfirm,
         nickname:Nickname,
         role:"USER"
-      },
-      {
-        headers:
-        {
-          Authorization:token.current,
-        },
       })
       .then(res=>{
         return res.data;
       })
       .then(data=>{
-        token.current=data;
-        console.log(token.current);
-        navigate("/Login");
+        if(data=="OK"){
+          navigate("/Login");
+        }
+        else{
+
+        }
       });
     }
 

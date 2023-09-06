@@ -16,10 +16,6 @@ export const userSlice = createSlice({
             state.data = "";
             return state;
         },
-        tempToken:(state, action)=>{
-            state.temp_token=action.payload.current;
-            return state;
-        },
         accessToken: (state, action)=>{
             state.access_token=action.payload.access_token;
             return state;
@@ -27,5 +23,5 @@ export const userSlice = createSlice({
     },
 });
 
-export const { loginUser, clearUser, tempToken, accessToken } = userSlice.actions;
+export const { loginUser, clearUser, accessToken } = userSlice.actions;
 export default userSlice.reducer;

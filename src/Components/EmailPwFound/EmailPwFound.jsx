@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { isDark } from '../Darkmode/Darkmode';
 import { ScrollTop } from '../Header/TopNavBar';
-import { useSelector } from 'react-redux';
+
 
 
 
@@ -46,9 +46,9 @@ const EmailPwFound = () =>
 
     const navigate = useNavigate();
     
-    const user=useSelector((state)=>state.user);
+  
     const inputRef=useRef();
-    const token=useRef(user.temp_token);
+   
     const compareMode=useRef(false);
     const passwordPossibleCombCheck=useRef(false);
     const authNum=useRef(null);
@@ -200,23 +200,16 @@ const EmailPwFound = () =>
 
      const userPasswordAlreadyUsingCheck=(password)=>
      {  
-        token.current="Bearer "+token.current;
+    
 
         axios.post(`${ip}/Users/check/password/already/`,{
             email:Email,
             password:password
-        },
-        {
-          headers:
-          {
-            Authorization: token.current
-          },
         })
         .then(res=>{
             return res.data;
         })
         .then(data=>{
-            token.current=token.current.substring(7);
             alreadyPasswordUsing.current=data;
             if(alreadyPasswordUsing.current=="no"){
               setPasswordChangeConfirmMessage("");
@@ -248,16 +241,9 @@ const EmailPwFound = () =>
 
     const EmailCheck = () =>
     {   
-        token.current="Bearer "+token.current;
 
         axios.post(`${ip}/Users/check/email/already/`,{
           email:Email
-        },
-        {
-          headers:
-          {
-            Authorization: token.current
-          },
         })
         .then(res=>{
           return res.data;
@@ -265,7 +251,6 @@ const EmailPwFound = () =>
         .then(data=>{
           if(data === "no" )
           { 
-            token.current=token.current.substring(7);
             setMessageChangeCheck(true);
             setIsEmail(false);
             setIsEmailBtn(false);
@@ -277,19 +262,11 @@ const EmailPwFound = () =>
           {
             axios.post(`${ip}/Users/authkey/email`,{
                   email:Email
-            },
-            {
-              headers:
-              {
-                Authorization: token.current
-              },
             })
             .then(res=>{
               return res.data;
             })
             .then(data=>{
-              token.current=data;
-              console.log(token.current);
               setIsEmail(true);
               setIsEmailBtn(true);
               setIsEmailPoundCheck(false);
@@ -314,25 +291,18 @@ const EmailPwFound = () =>
     {
       e.preventDefault();
 
-      token.current="Bearer "+token.current
-      console.log(token.current);
 
       axios.put(`${ip}/Users/password/`,{
         email:Email,
         password:PasswordChangeConfirmM,
-      },
-      {
-        headers:
-        {
-          Authorization: token.current
-        },
       })
       .then(res=>{
         return res.data;
       })
       .then(data=>{
-        token.current=data;
-        navigate("/Login", {state:{token:token.current}});
+        if(data==="OK"){
+            navigate("/Login");
+        }
       });
       
     }
@@ -340,18 +310,11 @@ const EmailPwFound = () =>
 
     const EmailAuthCheck = () =>
     {
-      token.current="Bearer " + token.current
 
       axios.post(`${ip}/Users/check/authkey/`,
       {
         email: Email,
         authNum: Emailauth 
-      },
-      {
-        headers:
-        {
-          Authorization:token.current,
-        },
       })
       .then(res=>{
         return res.data;
@@ -359,17 +322,13 @@ const EmailPwFound = () =>
       .then(data=>{
           console.log(data);
           if(data=="no"){
-            token.current=token.current.substring(7);
-            console.log(token.current);
             setIsInputEmailAuthCheck(true)
             setIsButtonCheck(false)
             setIsEmailauthBtn(false)
             setchangeVisibled(false)
             setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>])
           }
-          else{
-            token.current=data;
-            console.log(token.current);
+          else if(data=="yes"){
             setIsEmailauthBtn(true)
             setIsButtonCheck(true)
             setchangeVisibled(true)
