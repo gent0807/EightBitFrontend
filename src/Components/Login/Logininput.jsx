@@ -26,9 +26,9 @@ const Logininput = (props) =>
     const dispatch = useDispatch();
     const isDarkmode = useRecoilValue(isDark);
     const inputRef = useRef();
-    
-    let loginCheck;
     const ip=localStorage.getItem("ip");
+
+    let loginCheck;
 
     useEffect(() => {
       inputRef.current.focus();
