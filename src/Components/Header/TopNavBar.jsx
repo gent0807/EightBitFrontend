@@ -6,7 +6,6 @@ import { CgMenuGridR } from "react-icons/cg";
 import { MdLanguage } from "react-icons/md";
 import { FaRegUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { clearUser } from "../Redux/User";
 import { MdOutlineDeveloperMode } from "react-icons/md";
 import { AiTwotoneShop } from "react-icons/ai";
 import { GrLogout } from "react-icons/gr";
@@ -131,7 +130,7 @@ const HeaderBox = () =>
     
     const LogoutFunc = () =>
     {   
-        dispatch(clearUser());
+        
         setProfileMenuShow(false);
         setProfileClickCheck(false);
         setIsProfileLogoutCheck(true);
