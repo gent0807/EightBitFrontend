@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';
 import { useDispatch } from "react-redux";
-import { loginUser } from '../Redux/User';
+import { loginState } from '../Redux/User';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar';
@@ -63,23 +63,7 @@ const Logininput = (props) =>
           setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
         }
         else{
-        /*
-          fetch(`http://localhost:8033/EightBitBackend/user/loginCheck/`, {
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json",
-          },
-          body: JSON.stringify({
-            email:Email,
-            password:Pw
-          })
-        }).
-        then(res=>{
-          return res.text();
-        })
-        .then(data=>{
-          setLoginCheck(data);
-        })*/
+        
         axios.post(`${ip}/Users/check/login/`,{
             email:Email,
             password:Pw
@@ -90,18 +74,18 @@ const Logininput = (props) =>
         })
         .then(data=>{
           console.log(data);
-         /*  loginCheck=data;
+          loginCheck=data.loginState;
           if(loginCheck=="emailok"){
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 틀렸습니다!</ErrorMessageText></ErrorMessageBox>])
           }
           else if(loginCheck=="no"){
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입되지 않은 이메일입니다!</ErrorMessageText></ErrorMessageBox>])
           }
-          else{
+          else if(loginCheck=="allok"){
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
-            dispatch(loginUser(loginCheck));
+            dispatch(loginState(data));
             navigate("/");
-          } */
+          }
         });
 
         /*if(loginCheck=="emailok"){   <- 위에 함수 호출로 인한 실행과 비동기적이기 때문에 위에서의 loginCheck와는 동기화되지 않는다. 즉 최초의 submit 이벤트 처리시에는 axios 함수에서의 loginCheck와 axios와 비동기적으로 실행되는 if문에서의 loginCheck는 다를 수 밖에 없다.

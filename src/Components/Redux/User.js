@@ -9,28 +9,32 @@ export const userSlice = createSlice({
         nickname:null
     },
     reducers: {
-        loginState: (state, action) => {
-            state.login_state = action.payload.data;
-            return state;
-        },
         clearLoginState: (state) => {
             state.login_state = "";
+            state.access_token = null;
+            state.refresh_token = null;
+            state.temp_token = null;
+            state.nickname=null;
             return state;
         },
         accessToken: (state, action)=>{
-            state.access_token=action.payload.access_token;
+            state.access_token=action.payload.accessToken;
             return state;
         },
         refreshToken: (state, action)=>{
-            state.refresh_token=action.payload.refresh_token;
+            state.refresh_token=action.payload.refreshToken;
             return state;
         },
-        nickName: (state,action)=>{
-            state.nickname=action.payload.nickname;
+        loginState:(state,action)=>{
+            state.login_state=action.payload.loginState;
+            state.access_token=action.payload.access_token;
+            state.refresh_token=action.payload.refresh_token;
+            state.nickname=action.payload.nickName;
             return state;
         }
+        
     },
 });
 
-export const { loginState, clearState, accessToken, refreshToken,nickName } = userSlice.actions;
+export const { clearLoginState, accessToken, refreshToken, loginState} = userSlice.actions;
 export default userSlice.reducer;

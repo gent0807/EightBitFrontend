@@ -14,6 +14,7 @@ import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
 import { BiBell} from "react-icons/bi";
 import { RiEnglishInput } from "react-icons/ri";
+import { clearLoginState } from "../Redux/User";
 
 const HeaderBox = () =>
 {
@@ -40,6 +41,7 @@ const HeaderBox = () =>
     const [ WriteClickCheck, setWriteClickCheck ] =useState(false);
     const [ LanguageClickCheck, setLanguageClickCheck ] = useState(false);
     const [ FastClickCheck, setFastClickCheck ] = useState(false);
+
 
 
     const user = useSelector( (state) => state.user );
@@ -130,7 +132,7 @@ const HeaderBox = () =>
     
     const LogoutFunc = () =>
     {   
-        
+        dispatch(clearLoginState());
         setProfileMenuShow(false);
         setProfileClickCheck(false);
         setIsProfileLogoutCheck(true);
@@ -264,7 +266,7 @@ const HeaderBox = () =>
         setFastClickCheck(false);
     }
 
-    console.log(user.data);
+    
 
     return (
         <ALLNavBox>
@@ -288,17 +290,17 @@ const HeaderBox = () =>
                 <SearchButton><HiOutlineSearch/></SearchButton>
                 </SearchInputIconBox>
             </SearchInputBox>
-        <ButtonBox menucheck={user.data !== ""}>
-            {user.data !== "" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
+        <ButtonBox menucheck={user.login_state !== ""}>
+            {user.login_state === "allok" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []}
             <MenuBox click={LanguageClickCheck} left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}><MdLanguage/></MenuBox>
             <MenuBox click={FastClickCheck} left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"4.8px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
             <>
-            {user.data !== "" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
+            {user.login_state === "allok" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
             <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>]}
             </>  
-            <LanguageListBox margin={user.data !== ""} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
+            <LanguageListBox margin={user.login_state === "allok"} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/korea.png"/><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/uk.png"/><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli>
