@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import {styled} from "styled-components";
 
 const ContainerBox = styled.div
@@ -23,14 +24,22 @@ const FirstText = styled.span
 `
 
 const FirstPage = () => {
-
+  const user=useSelector((state) => state.user);
+  let userInfo=localStorage.getItem("userInfo");
+  const loginMaintain=localStorage.getItem("loginMaintain");
+  userInfo=JSON.parse(userInfo);
   useEffect(() => {
     
   },[]);
 
   return (
     <ContainerBox>
-        <FirstText>First Page!</FirstText>
+      <FirstText>
+        {loginMaintain == null ? [<div>This is first page!!</div>]: 
+        loginMaintain === "true" ? userInfo == null ? [<div>This is first page!!</div>] : userInfo.loginState === "allok" ? [<div>{userInfo.nickName}님 환영합니다!</div>]:[<div>This is first page!!</div>]
+        : user.login_state === "allok" ? [<div>{user.nickname}님 환영합니다!</div>]:[<div>This is first page!!</div>]
+        }
+      </FirstText>
     </ContainerBox>
   );
 }

@@ -14,7 +14,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar';
 import { work } from '../Phone/PhoneAuthMode';
 
-const Logininput = (props) => 
+const Logininput = () => 
 {                 
     const [ authMode, setAuthMode ]=useRecoilState(work);
     const [ Email, setEmail ] = useState('');
@@ -30,6 +30,8 @@ const Logininput = (props) =>
 
     let loginCheck;
 
+    localStorage.setItem("loginMaintain", isShow);
+
     useEffect(() => {
       inputRef.current.focus();
       setAuthMode('find');
@@ -38,6 +40,7 @@ const Logininput = (props) =>
     const Show = () =>
     {
       setIsShow(!isShow);
+      localStorage.setItem("loginMaintain", isShow);
     } 
 
     const OnChangeEmail = (e) => {
@@ -84,6 +87,8 @@ const Logininput = (props) =>
           else if(loginCheck=="allok"){
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
             dispatch(loginState(data));
+            localStorage.setItem("userInfo", JSON.stringify(data));
+            console.log(localStorage.getItem("userInfo"));
             navigate("/");
           }
         });
