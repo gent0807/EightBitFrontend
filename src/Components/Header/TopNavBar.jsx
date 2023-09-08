@@ -141,6 +141,7 @@ const HeaderBox = () =>
         setProfileMenuShow(false);
         setProfileClickCheck(false);
         setIsProfileLogoutCheck(true);
+        navigate("/");
     }
 
     const GameliHover = () =>

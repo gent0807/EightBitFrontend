@@ -3,14 +3,16 @@ import { createSlice } from '@reduxjs/toolkit';
 export const userSlice = createSlice({
     name: "user",
     initialState: {
-        login_state:"",
+        login_state:null,
+        role:null,
         access_token: null,
         refresh_token: null,
         nickname:null
     },
     reducers: {
         clearLoginState: (state) => {
-            state.login_state = "";
+            state.login_state = null;
+            state.role=null;
             state.access_token = null;
             state.refresh_token = null;
             state.temp_token = null;
@@ -27,8 +29,9 @@ export const userSlice = createSlice({
         },
         loginState:(state,action)=>{
             state.login_state=action.payload.loginState;
-            state.access_token=action.payload.access_token;
-            state.refresh_token=action.payload.refresh_token;
+            state.role=action.payload.role;
+            state.access_token=action.payload.accessToken;
+            state.refresh_token=action.payload.refreshToken;
             state.nickname=action.payload.nickName;
             return state;
         }
