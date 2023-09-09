@@ -1,4 +1,4 @@
-import FreeBoard from "./FreeBoard"
+import FreeBoard from "./FreeBoard";
 import { useState, useRef, useEffect } from "react";
 import { styled } from "styled-components";
 

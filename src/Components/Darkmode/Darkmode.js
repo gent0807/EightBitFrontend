@@ -7,4 +7,13 @@ export const isDark = atom
         key: "isDark",
         default: localStorage.getItem("mode") === "false" ? true : false,
     }
+    
+)
+
+export const firstReset = atom
+(
+    {
+        key: "firstReset",
+        default: false,
+    }
 )

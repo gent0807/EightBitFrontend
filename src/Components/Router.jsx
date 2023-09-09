@@ -11,6 +11,7 @@ import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
 import Footer from "./Footer/Footer";
 import NotFound from "./ErrorPage/NotFound";
 import FirstPage from "./FirstPage";
+import WriteBoard from "./WriteBoard/WriteBoardContainer";
 
 
 const Router = () =>
@@ -27,6 +28,7 @@ return(
             <Route path="/PhoneAuth" element={<PhoneAuth />} />
             <Route path="/SelectSign" element={<SelectSign />} />
             <Route path="/FreeBoard" element={<FreeBoard />} />
+            <Route path="/WriteBoard" element={<WriteBoard />} />
             <Route path="/" element={<FirstPage />}/>
             <Route path="*" element={<NotFound />} />
         </Routes> 

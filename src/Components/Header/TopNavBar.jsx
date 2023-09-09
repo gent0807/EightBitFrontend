@@ -62,7 +62,6 @@ const HeaderBox = () =>
     let LanguageRef = useRef(null);
     let FastRef = useRef(null);
     let WriteRef = useRef(null);
-    let img;
     
     
    
@@ -348,7 +347,7 @@ const HeaderBox = () =>
             </ProfileListBox>
             <WriteListBox zindex={writeMemuTopZIndex.current} default={isDefaultWriteScene} show={WriteMenuShow}>
                 <ProfileUl>
-                <Link to="/FreeBoard"><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/essay.png"/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli></Link>
+                <Link to="/WriteBoard"><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/essay.png"/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli></Link>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/discussion.png"/><ProfileliText  MediaLeft={"17px"}>토론게시판</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/strategy.png"/><ProfileliText  MediaLeft={"17px"}>공략게시판</ProfileliText></Profileli>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/rating.png"/><ProfileliText  MediaLeft={"17px"}>상품 리뷰</ProfileliText></Profileli>
