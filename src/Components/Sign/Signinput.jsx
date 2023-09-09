@@ -43,6 +43,7 @@ const Signinput = (props) =>
   const isDarkmode = useRecoilValue(isDark);
   const ip=localStorage.getItem("ip");
 
+
   const navigate = useNavigate();
 
 
@@ -389,13 +390,13 @@ const Signinput = (props) =>
     {
       e.preventDefault();
 
-;
       axios.post(`${ip}/Users/user`,
       {
         email:finalEmail.current,
         password:PwConfirm,
         nickname:Nickname,
-        role:"USER"
+        role:"USER",
+        profileImgPath:"default.jpg",
       })
       .then(res=>{
         return res.data;

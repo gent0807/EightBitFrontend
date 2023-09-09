@@ -28,6 +28,8 @@ const FirstPage = () => {
   let userInfo=localStorage.getItem("userInfo");
   const loginMaintain=localStorage.getItem("loginMaintain");
   userInfo=JSON.parse(userInfo);
+
+
   useEffect(() => {
     
   },[]);

@@ -7,7 +7,7 @@ import { RiErrorWarningFill } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginState } from '../Redux/User';
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -27,7 +27,6 @@ const Logininput = () =>
     const isDarkmode = useRecoilValue(isDark);
     const inputRef = useRef();
     const ip=localStorage.getItem("ip");
-
     let loginCheck;
 
     localStorage.setItem("loginMaintain", isShow);
@@ -40,7 +39,6 @@ const Logininput = () =>
     const Show = () =>
     {
       setIsShow(!isShow);
-      localStorage.setItem("loginMaintain", isShow);
     } 
 
     const OnChangeEmail = (e) => {
@@ -87,7 +85,10 @@ const Logininput = () =>
           else if(loginCheck=="allok"){
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
             dispatch(loginState(data));
-            localStorage.setItem("userInfo", JSON.stringify(data));
+            localStorage.setItem("loginMaintain", isShow);
+            if(isShow==true){
+                localStorage.setItem("userInfo", JSON.stringify(data));
+            }
             console.log(localStorage.getItem("userInfo"));
             navigate("/");
           }

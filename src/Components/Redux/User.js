@@ -7,7 +7,8 @@ export const userSlice = createSlice({
         role:null,
         access_token: null,
         refresh_token: null,
-        nickname:null
+        nickname:null,
+        profile_img_path:null
     },
     reducers: {
         clearLoginState: (state) => {
@@ -17,6 +18,7 @@ export const userSlice = createSlice({
             state.refresh_token = null;
             state.temp_token = null;
             state.nickname=null;
+            state.profile_img_path=null;
             return state;
         },
         accessToken: (state, action)=>{
@@ -33,6 +35,7 @@ export const userSlice = createSlice({
             state.access_token=action.payload.accessToken;
             state.refresh_token=action.payload.refreshToken;
             state.nickname=action.payload.nickName;
+            state.profile_img_path=action.payload.profileImgPath;
             return state;
         }
         

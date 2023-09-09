@@ -15,6 +15,7 @@ import { AiOutlineShopping } from "react-icons/ai";
 import { BiBell} from "react-icons/bi";
 import { RiEnglishInput } from "react-icons/ri";
 import { clearLoginState } from "../Redux/User";
+import axios from 'axios';
 
 const HeaderBox = () =>
 {
@@ -50,6 +51,8 @@ const HeaderBox = () =>
     let userInfo=localStorage.getItem("userInfo");
     userInfo=JSON.parse(userInfo);         
     const loginMaintain=localStorage.getItem("loginMaintain");
+    const ip=localStorage.getItem("ip");
+    
 
     let languageTopZIndex=useRef(false);
     let fastMenuTopZIndex=useRef(false);
@@ -59,7 +62,11 @@ const HeaderBox = () =>
     let LanguageRef = useRef(null);
     let FastRef = useRef(null);
     let WriteRef = useRef(null);
-  
+    let img;
+    
+    
+   
+
     useEffect(() => { 
         function handleOuside(e) {
             if (LanguageRef.current && !LanguageRef.current.contains(e.target)) {
@@ -305,11 +312,11 @@ const HeaderBox = () =>
             <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>]
             :loginMaintain=="true" ? (userInfo==null? [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>] :
-            userInfo.loginState === "allok" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
+            userInfo.loginState === "allok" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src={localStorage.getItem("profileImageDir")+userInfo.profileImgPath}/></Profile>,
             <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
             [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>])
-            :(user.login_state === "allok" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src="img/Default.jpg"/></Profile>,
+            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>])    
+            :(user.login_state === "allok" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src={localStorage.getItem("profileImageDir")+user.profile_img_path}/></Profile>,
             <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] 
             :  [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
             <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>])}
