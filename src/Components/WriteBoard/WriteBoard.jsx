@@ -131,7 +131,7 @@ const WriteBoard = () =>
 
       const OncheckSubmit = async (e) =>
       { 
-        const registFile = async (id) => {
+        const registFile = async (writer, regdate) => {
             const fd = new FormData();
 
             Object.values(files).forEach((file) => fd.append("file", file));
@@ -147,7 +147,7 @@ const WriteBoard = () =>
             }
             )
             .then((data) =>{
-                navigate('/FreeArticle/'+id);
+                navigate('/FreeArticle/'+writer+'/'+regdate);
             }
                 
             )
@@ -184,11 +184,11 @@ const WriteBoard = () =>
         .then((data)=>{
             if(files.length==0){
             console.log("this is no file");
-            navigate('/FreeArticle/'+data.seq);
-            return ;
+            navigate('/FreeArticle/'+data.writer+'/'+data.regdate);
+            return ;    
             }
             else if(files.length>0){
-                registFile(data.seq);
+                registFile(data.writer,data);
             }
         })
 

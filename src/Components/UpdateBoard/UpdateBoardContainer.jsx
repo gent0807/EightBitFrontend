@@ -13,7 +13,7 @@ let Containerbox = styled.div`
     }
 `
 
-const WriteBoardContainer = () =>
+const UpdateBoardContainer = () =>
 {
     return(
         <Containerbox>
@@ -22,4 +22,4 @@ const WriteBoardContainer = () =>
     );
 }
 
-export default WriteBoardContainer;
+export default UpdateBoardContainer;

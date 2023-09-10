@@ -1,0 +1,44 @@
+.swiper-pagination
+{
+    
+}
+
+.swiper-slide
+{
+    box-sizing: border-box;
+    height: 250px;
+}
+
+.swiper-wrapper
+{
+    height: 537px;
+}
+
+.swiper-button-next, .swiper-button-prev
+{
+    top: 40%;
+    background: white;
+    background: white;
+    border-radius: 30px;
+    padding: 10px;
+    border: solid 3px #55AAFF;
+    width: 30px;
+    height: 30px;
+}
+
+.swiper-container
+{
+
+}
+
+.swiper-button-prev.swiper-button-disabled,
+.swiper-button-next.swiper-button-disabled
+{
+    display: none;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after
+{
+    font-size: 22px;
+}

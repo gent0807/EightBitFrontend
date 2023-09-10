@@ -13,7 +13,8 @@ import NotFound from "./ErrorPage/NotFound";
 import FirstPage from "./FirstPage";
 import WriteBoard from "./WriteBoard/WriteBoardContainer";
 import FreeArticle from "./Articles/FreeArticleContainer";
-
+import UpdateBoard from "./UpdateBoard/UpdateBoardContainer";
+import Center from "./Center/CenterContainer";
 
 const Router = () =>
 {
@@ -31,7 +32,8 @@ return(
             <Route path="/FreeBoard" element={<FreeBoard />} />
             <Route path="/WriteBoard" element={<WriteBoard />} />
             <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
-            <Route path="/" element={<FirstPage />}/>
+            <Route path="/UpdateBoard/:writer/:regdate" element={<UpdateBoard/>} />
+            <Route path="/" element={<Center />}/>
             <Route path="*" element={<NotFound />} />
         </Routes> 
     </FooterSetContent>

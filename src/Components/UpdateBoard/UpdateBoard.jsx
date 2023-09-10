@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef, useCallback  } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
 
-const WriteBoard = () =>
-{
+const UpdateBoard = () =>
+{   
+    const {writer} = useParams();
+    const {regdate} = useParams();  
     const [ WriterChangeValue, setWriterChangeValue ] = useState("");
     const [ StoryChangeValue, setStoryChangeValue ] = useState("");
     const [ isDragging, setIsDragging ] = useState(false);
@@ -131,8 +133,26 @@ const WriteBoard = () =>
 
       const OncheckSubmit = async (e) =>
       { 
-        const updateFile = async (id) => {
-            console.log("this is registFile");
+        const registFile = async (writer, regdate) => {
+            const fd = new FormData();
+
+            Object.values(files).forEach((file) => fd.append("file", file));
+
+            axios.post(`${ip}/Board/article/file/images`, fd, {
+                headers: {
+                    Authorization: {Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`},
+                    "Content-Type": `multipart/form-data; `
+                }
+            })
+            .then((res) => {
+                return res.data
+            }
+            )
+            .then((data) =>{
+                navigate('/FreeArticle/'+writer+'/'+regdate);
+            }
+                
+            )
         }
         
         e.preventDefault();
@@ -152,10 +172,9 @@ const WriteBoard = () =>
         }
 
         
-        await axios.put(`${ip}/Board/article`,{
+        await axios.patch(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`,{
         	title: WriterChangeValue,
             content: StoryChangeValue,
-            writer:loginMaintain == "true" ? userInfo.nickName : user.nickname,
         },
         {
         	headers: {Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`},
@@ -166,11 +185,11 @@ const WriteBoard = () =>
         .then((data)=>{
             if(files.length==0){
             console.log("this is no file");
-            navigate('/FreeArticle/'+data.seq);
-            return ;
+            navigate('/FreeArticle/'+data.writer+'/'+data.regdate);
+            return ;    
             }
             else if(files.length>0){
-                updateFile(data.seq);
+                registFile(data.writer,data);
             }
         })
 
@@ -181,7 +200,7 @@ const WriteBoard = () =>
     return(
         <WriterInputBox>
             <WriterInformationTextAllBox>
-            <WriterInformation><WriterInformationText>수정하기</WriterInformationText></WriterInformation>
+            <WriterInformation><WriterInformationText>글쓰기</WriterInformationText></WriterInformation>
             </WriterInformationTextAllBox>
             <WriteBoardSubmit onSubmit={OncheckSubmit}>
             <WriterInput placeholder='제목' onChange={WriterChange} value={WriterChangeValue}/>
@@ -218,7 +237,7 @@ const WriteBoard = () =>
     );
 }
 
-export default WriteBoard;
+export default UpdateBoard;
 
 const WriteBoardSubmit = styled.form
 `

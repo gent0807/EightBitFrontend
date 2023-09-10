@@ -277,7 +277,6 @@ const HeaderBox = () =>
         setIsFastMenuShow(false);
         setFastClickCheck(false);
     }
-
     
 
     return (
@@ -286,7 +285,7 @@ const HeaderBox = () =>
         <Topnav>
         <NavBox>
         <LogoBox>
-            <Link to='/'><Logo src='img/8bit.png' alt='로고'/></Link>
+            <Link to='/'><Logo src="img/8bit.png" alt='로고'/></Link>
         </LogoBox>
             <NavUl>
                 <GameLi onClick={() => ScrollTop()} active = {isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { styled } from 'styled-components';
 import WriteBoard from "./WriteBoard";
+import { styled } from 'styled-components';
 
 let Containerbox = styled.div`
     margin: 0 auto;
