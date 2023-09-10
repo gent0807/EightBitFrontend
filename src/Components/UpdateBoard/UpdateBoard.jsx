@@ -185,11 +185,11 @@ const UpdateBoard = () =>
         .then((data)=>{
             if(files.length==0){
             console.log("this is no file");
-            navigate('/FreeArticle/'+data.writer+'/'+data.regdate);
+            navigate('/FreeArticle/'+writer+'/'+regdate);
             return ;    
             }
             else if(files.length>0){
-                registFile(data.writer,data);
+                registFile(writer, regdate);
             }
         })
 
@@ -200,7 +200,7 @@ const UpdateBoard = () =>
     return(
         <WriterInputBox>
             <WriterInformationTextAllBox>
-            <WriterInformation><WriterInformationText>글쓰기</WriterInformationText></WriterInformation>
+            <WriterInformation><WriterInformationText>수정하기</WriterInformationText></WriterInformation>
             </WriterInformationTextAllBox>
             <WriteBoardSubmit onSubmit={OncheckSubmit}>
             <WriterInput placeholder='제목' onChange={WriterChange} value={WriterChangeValue}/>

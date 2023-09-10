@@ -15,6 +15,7 @@ const FreeArticle = () => {
     const [updatedate, setUpdatedate]=useState("");
     const [visitcnt, setVisitcnt]=useState(0);
     const [likecount, setLikecount]=useState(0);
+    const [profileImagePath, setProfileImagePath]=useState("");
     
     const navigate=useNavigate();
     const ip=localStorage.getItem("ip");
@@ -28,6 +29,24 @@ const FreeArticle = () => {
 
  
     useEffect( ()=>{
+
+        const getUsreProfileImagePath= (writer)=>{
+            axios.get(`${ip}/Users/profileImgPath?nickname=${writer}`,{
+                
+            },
+            {
+
+            })
+            .then((res)=>{
+              return res.data; 
+            })
+            .then(data=>{
+                console.log(data);
+                setProfileImagePath(data);
+            })
+
+        }
+
         axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`,{
         	
         },
@@ -43,6 +62,7 @@ const FreeArticle = () => {
             setVisitcnt(data.visitcnt);
             setLikecount(data.likecount);
             console.log(data);
+            getUsreProfileImagePath(writer);
         })
         .catch(err=>{
             navigate("/NotFound");
@@ -53,19 +73,28 @@ const FreeArticle = () => {
     
 
     const deleteArticle=()=>{
-        axios.delete(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`,{
+        const check=window.confirm("정말 삭제하시겠습니까?");
+        if(check==true){
+            
+            axios.delete(`${ip}/Board/article/${writer}/${regdate}`,{
 
-        },{
-            headers:{Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`}
-        })
-        .then(res=>{
-            navigate("/FreeBoard");
-        })
+            },{
+                headers:{Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`}
+            })
+            .then(res=>{
+                navigate("/FreeBoard");
+            })
+        }
+        else{
+            return;
+        }
+
+        
         
     }
 
     const getNewLikeCount=async ()=>{
-        await axios.get(`${ip}/Board/article/like?writer=${writer}&regdate=${regdate}`,{
+        axios.get(`${ip}/Board/article/like?writer=${writer}&regdate=${regdate}`,{
 
         },{
 
@@ -118,6 +147,7 @@ const FreeArticle = () => {
     
     return(
         <div>
+            <img src={localStorage.getItem("profileImageDir")+profileImagePath} style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
             <h1>글 제목: {title}</h1>
             <h1>내용 : {content}</h1>
             <h1>작성자 : {writer}</h1>
