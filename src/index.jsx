@@ -51,7 +51,7 @@ const store = createStore(reducer); */
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  
     <RecoilRoot>
       <Provider store={store}>
         <Font>
@@ -59,7 +59,7 @@ root.render(
         </Font>
       </Provider>
     </RecoilRoot>
-  </React.StrictMode>
+ 
 );
 
 reportWebVitals();

@@ -9,876 +9,16 @@ import { useRecoilState } from "recoil";
 import { firstReset } from "../Darkmode/Darkmode";
 import { Link, useNavigate } from "react-router-dom";
 import NotPage from "./NotPage";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const FreeBoard = () =>
 {
-    const [posts, setPosts] = useState([
-        {   
-            id : 1,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 2,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 3,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 4,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 5,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 6,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 7,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 8,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 9,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 10,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 11,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 12,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 13,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 14,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 15,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 16,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 17,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 18,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 19,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 20,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 21,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 22,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 23,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 24,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 25,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 26,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 27,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 28,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 29,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 30,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 31,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 32,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 33,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 34,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 35,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 36,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 37,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 38,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 39,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 40,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 41,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 42,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 43,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 44,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 45,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 46,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 47,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 48,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 49,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 50,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 51,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 52,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 53,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 54,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 55,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 56,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 57,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 58,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 59,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 60,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 61,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 62,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 63,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 64,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 65,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 66,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 67,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 68,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 69,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 70,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 71,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 72,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 73,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 74,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 75,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 76,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 77,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 78,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 79,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 80,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 81,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 82,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 83,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 84,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 85,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 86,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 87,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 88,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 89,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 90,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 91,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 92,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 93,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 94,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 95,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 96,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 97,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 98,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 99,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 100,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 101,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 102,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 103,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 104,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 105,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 106,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 107,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 108,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 109,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 110,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 111,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 112,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 113,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 114,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 115,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 116,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 117,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 118,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 119,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 120,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 121,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 122,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-        {   
-            id : 123,
-            title : "방치모험가",
-            writer : "박세준",
-            time : "2023-06-05",
-            counter : 1000,
-        },
-    ]);
+    const [posts, setPosts] = useState([]);
     const [ Search, setSearch ] = useState("");
     const [ Fitter, setFitter ] = useState("미정");
-    const [ LimtText, setLimtText ] = useState("10개씩");
-    const [ limit, setLimit ] = useState(10);
+    const [ LimtText, setLimtText ] = useState("20개씩");
+    const [ limit, setLimit ] = useState(20);
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
     const [ FitterDropdown, setFitterDropdown ] = useState(false);
@@ -886,6 +26,35 @@ const FreeBoard = () =>
     const [FirstReset, setFirstReset] = useRecoilState(firstReset);
     const FillterRef = useRef("");
     const LimitRef = useRef("");
+    const ip=localStorage.getItem("ip");
+    const user=useSelector(state=>state.user);
+    const loginMaintain = localStorage.getItem("loginMaintain");
+    let userInfo=localStorage.getItem("userInfo");
+    userInfo=JSON.parse(userInfo);   
+    console.log("loginMaintain",loginMaintain);
+    console.log("userInfo",userInfo);
+    console.log("user",user);
+
+    const linkStyle = {
+        textDecoration: "none",
+        color: "skyblue",
+    }
+    
+    useEffect(()=>{
+        axios.get(`${ip}/Board/articles`,{
+        	
+        },
+        {
+        	
+        })
+        .then(res=>res.data
+        )
+        .then(data=>{
+            console.log(data);
+            setPosts(data);
+        })
+
+    },[])
 
     useEffect(() => {
         function handleOuside(e) {
@@ -900,7 +69,7 @@ const FreeBoard = () =>
         return () => {
           document.removeEventListener("mousedown", handleOuside);
         };
-      }, [FillterRef])
+      }, [FillterRef]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -915,7 +84,7 @@ const FreeBoard = () =>
         return () => {
           document.removeEventListener("mousedown", handleOuside);
         };
-      }, [LimitRef])
+      }, [LimitRef]);
 
     const OnSearch = (e) =>
     {
@@ -954,7 +123,7 @@ const FreeBoard = () =>
             <SearchBox>
                 <SearchAllBox>
                     <FreeBoardSearchInputBox>
-                        <FreeBoardSearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch}/>
+                        <FreeBoardSearchInput placeholder="제목 검색하기" value={Search} onChange={OnSearch}/>
                     <FreeBoardSearchIconBox>
                         <FreeBoardSearchBtn><HiOutlineSearch/></FreeBoardSearchBtn>
                     </FreeBoardSearchIconBox>
@@ -980,7 +149,8 @@ const FreeBoard = () =>
                     <LimitSelectValue><FitterSelectText>{LimtText}</FitterSelectText></LimitSelectValue>
                     <LimitArrowBox direction={LimitDropdown}>{ LimitDropdown ? "▲" : "▼" }</LimitArrowBox>
                 </LimitSelectAllBox>
-                <WriteBtn><Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link></WriteBtn>
+                <WriteBtn>{loginMaintain == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> : loginMaintain=="true" ? userInfo==null? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> :
+                (userInfo.loginState==="allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>):(user.login_state==="allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link>:<Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}</WriteBtn>
             </FitterBox>
             </SearchBox>
             <BoardBox>
@@ -988,18 +158,18 @@ const FreeBoard = () =>
                     <BoardTitleNumber><BoardTitleText>번호</BoardTitleText></BoardTitleNumber>
                     <BoardTitleTitle><BoardTitleText>제목</BoardTitleText></BoardTitleTitle>
                     <BoardTitleWriter><BoardTitleText>작성자</BoardTitleText></BoardTitleWriter>
-                    <BoardTitleViewTime><BoardTitleText>날짜</BoardTitleText></BoardTitleViewTime>
+                    <BoardTitleViewTime><BoardTitleText>등록일</BoardTitleText></BoardTitleViewTime>
                     <BoardTitleViewCounter><BoardTitleText>조회수</BoardTitleText></BoardTitleViewCounter>
                 </BoardTitle>
-                <BoardContentAllBox>
+                <BoardContentAllBox>    
                  {posts.length === 0 && <NotPage />}
-                  {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, title, writer, time, counter }) => (
+                  {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt }) => (
                         <BoardContentBox key={id}>
                             <BoardContentNumber>{id}</BoardContentNumber>
-                            <BoardContentTitle>{title}</BoardContentTitle>
+                            <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`} style={linkStyle}>{title}</Link></BoardContentTitle>
                             <BoardContentWriter>{writer}</BoardContentWriter>
-                            <BoardContentViewtime>{time}</BoardContentViewtime>
-                            <BoardContentCounter>{counter}</BoardContentCounter>
+                            <BoardContentViewtime>{regdate}</BoardContentViewtime>
+                            <BoardContentCounter>{visitcnt}</BoardContentCounter>
                         </BoardContentBox>
                         ))}
                 </BoardContentAllBox>
@@ -1071,6 +241,10 @@ const SearchAllBox = styled.div
 
 const BoardContentNumber = styled.div
 `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
 `
 const BoardContentTitle = styled(BoardContentNumber)
 `

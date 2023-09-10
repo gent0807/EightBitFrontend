@@ -28,7 +28,9 @@ const FirstPage = () => {
   let userInfo=localStorage.getItem("userInfo");
   const loginMaintain=localStorage.getItem("loginMaintain");
   userInfo=JSON.parse(userInfo);
-
+  console.log("loginMaintain",loginMaintain);
+  console.log("userInfo",userInfo);
+  console.log("user",user);
 
   useEffect(() => {
     

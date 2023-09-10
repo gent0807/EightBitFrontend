@@ -31,6 +31,14 @@ const Logininput = () =>
 
     localStorage.setItem("loginMaintain", isShow);
 
+    const user=useSelector(state=>state.user);
+    const loginMaintain = localStorage.getItem("loginMaintain");
+    let userInfo=localStorage.getItem("userInfo");
+    userInfo=JSON.parse(userInfo);   
+    console.log("loginMaintain",loginMaintain);
+    console.log("userInfo",userInfo);
+    console.log("user",user);
+
     useEffect(() => {
       inputRef.current.focus();
       setAuthMode('find');

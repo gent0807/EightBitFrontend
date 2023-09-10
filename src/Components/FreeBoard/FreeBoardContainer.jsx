@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { styled } from "styled-components";
 
 
-let Containerbox = styled.div`
+const Containerbox = styled.div`
     margin: 0 auto;
     max-width: 1280px;
     padding: 267px 0px 54px 0px;

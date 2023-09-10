@@ -131,26 +131,8 @@ const WriteBoard = () =>
 
       const OncheckSubmit = async (e) =>
       { 
-        const registFile = async (id) => {
-            const fd = new FormData();
-
-            Object.values(files).forEach((file) => fd.append("file", file));
-
-            axios.post(`${ip}/Board/article/file/images`, fd, {
-                headers: {
-                    Authorization: {Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`},
-                    "Content-Type": `multipart/form-data; `
-                }
-            })
-            .then((res) => {
-                return res.data
-            }
-            )
-            .then((data) =>{
-                navigate('/FreeArticle/'+id);
-            }
-                
-            )
+        const updateFile = async (id) => {
+            console.log("this is registFile");
         }
         
         e.preventDefault();
@@ -170,7 +152,7 @@ const WriteBoard = () =>
         }
 
         
-        await axios.post(`${ip}/Board/article`,{
+        await axios.put(`${ip}/Board/article`,{
         	title: WriterChangeValue,
             content: StoryChangeValue,
             writer:loginMaintain == "true" ? userInfo.nickName : user.nickname,
@@ -188,7 +170,7 @@ const WriteBoard = () =>
             return ;
             }
             else if(files.length>0){
-                registFile(data.seq);
+                updateFile(data.seq);
             }
         })
 
@@ -199,7 +181,7 @@ const WriteBoard = () =>
     return(
         <WriterInputBox>
             <WriterInformationTextAllBox>
-            <WriterInformation><WriterInformationText>글쓰기</WriterInformationText></WriterInformation>
+            <WriterInformation><WriterInformationText>수정하기</WriterInformationText></WriterInformation>
             </WriterInformationTextAllBox>
             <WriteBoardSubmit onSubmit={OncheckSubmit}>
             <WriterInput placeholder='제목' onChange={WriterChange} value={WriterChangeValue}/>
