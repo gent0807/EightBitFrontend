@@ -161,6 +161,8 @@ const WriteBoard = () =>
         
         e.preventDefault();
 
+        console.log(files.map(file => file.object));
+
         if(WriterChangeValue.length<5&&StoryChangeValue.length>20)
         {
             window.alert("제목을 5자 이상 입력해주세요!");
@@ -196,6 +198,7 @@ const WriteBoard = () =>
             else if(files.length>0){
                 const writer=data.writer;
                 const regdate=data.regdate;
+
                 const fd = new FormData();  
 
                 Object.values(files).forEach((file) => fd.append("file", file));
