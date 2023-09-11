@@ -108,6 +108,15 @@ const FreeArticle = () => {
     }
 
     const countUpLike=async (e)=>{
+        if(loginMaintain != "true"){
+            if(user.login_state!="allok"){
+                alert("로그인이 필요합니다.");
+                navigate("/Login");
+                return;
+            }
+        }
+           
+        
         await axios.patch(`${ip}/Board/article/like/up?writer=${writer}&regdate=${regdate}`,{
 
         },
