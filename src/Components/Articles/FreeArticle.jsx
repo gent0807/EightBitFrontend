@@ -121,7 +121,7 @@ const FreeArticle = () => {
 
         },
         {
-
+            headers:{Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`}
         })
         .then(res=>{
             return res.data;       
@@ -140,7 +140,7 @@ const FreeArticle = () => {
         await axios.patch(`${ip}/Board/article/like/down?writer=${writer}&regdate=${regdate}`,{ 
         },
         {
-
+            headers:{Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`}
         })
         .then(res=>{
             return res.data;       
