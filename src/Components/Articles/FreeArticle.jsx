@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import {BsHandThumbsUpFill} from "react-icons/bs";
+import {BsHandThumbsUp} from "react-icons/bs";
 
 
 
@@ -173,11 +175,12 @@ const FreeArticle = () => {
             </InformationAllBox>
             </InformationBox>
             <EditAllBox>
-                <input type="button" style={{display:loginMaintain==null ? "none":(loginMaintain=="true" ? (userInfo.loginState==="allok" ? "block":"none"):(user.login_state==="allok" ? "block":"none"))}} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}} value="좋아요"/>
+                <LikeBtn  LoginMaintain={loginMaintain} UserInfo={userInfo.loginState} User={user.login_state} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}>{likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}</LikeBtn>
+
                 <Link to={`/UpdateBoard/${writer}/${regdate}`} style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
                 (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}}>수정</Link> 
-                <input type="button" style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
-                (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}} onClick={deleteArticle} value="삭제"></input>
+
+                <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo.loginState} UserInfoNickname={userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
                 <Link to="/FreeBoard">목록</Link>
             </EditAllBox>
         </FreeArticleBox >
@@ -186,9 +189,33 @@ const FreeArticle = () => {
 
 export default FreeArticle;
 
+const DeleteBtn = styled.div
+`
+    display: ${props => props.LoginMaintain == null  ? "none" : props.LoginMaintain=="true" ? (props.UserInfo==null ? "none" : (props.UserInfoState==="allok"? (props.UserInfoNickname==props.Writer? "block" :"none" ): "none" )):
+    (props.User==="allok" ? (props.UserInfoNickname==props.Writer ? "block":"none" ):"none" )};
+    cursor : pointer;
+    margin: 0px 0px 0px 13px;
+`
+
+const LikeBtn = styled.div
+`
+    display: ${props => props.LoginMaintain==null ? "none":(props.LoginMaintain=="true" ? (props.UserInfo==="allok" ? "block":"none"):(props.User==="allok" ? "block":"none"))};
+    cursor : pointer;
+    color: orange;
+    font-size: 45px;
+    margin: -8px 0px 0px 0px;
+`
+
 const EditAllBox = styled.div
 `
     display: flex;
+    font-size: 30px;
+    justify-content: end;
+    a{
+        margin: 0px 0px 0px 13px;
+        text-decoration: none;
+    }
+    }
 `
 
 const WriterText = styled.span
@@ -233,7 +260,7 @@ const InformationAllBox = styled.div
 
 const FreeArticleBox = styled.div
 `
-
+    margin: 20px;
 `
 
 const WriteViewBox = styled.div
@@ -245,7 +272,7 @@ const InformationBox = styled.div
 `
     display: flex;
     flex-direction: column;
-    margin: 0px 0px 20px 0px;
+    margin: 20px 0px 86px 0px;
 `
 
 const LikeViewBox = styled.div
