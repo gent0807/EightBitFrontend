@@ -5,9 +5,9 @@ import { isDark } from './Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-const ip= `http://localhost:8033/EightBitBackend`;
+const ip= `http://172.30.1.10:8033/EightBitBackend`;
 
-const profileImageDir="http://localhost:8033/EightBitBackend/resources/Users/profileImage/"
+const profileImageDir="http://172.30.1.10:8033/EightBitBackend/resources/Users/profileImage/"
 
 const Main = () => {
 
