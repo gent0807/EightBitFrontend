@@ -16,6 +16,7 @@ const FreeArticle = () => {
     const [visitcnt, setVisitcnt]=useState(0);
     const [likecount, setLikecount]=useState(0);
     const [profileImagePath, setProfileImagePath]=useState("");
+    const [replyChangeValue, setReplyChangeValue]=useState("");
     
     const navigate=useNavigate();
     const ip=localStorage.getItem("ip");
@@ -69,7 +70,7 @@ const FreeArticle = () => {
         })
     },[]);
 
-
+    
     
 
     const deleteArticle=()=>{
@@ -153,6 +154,37 @@ const FreeArticle = () => {
         }
         else return;
     }
+
+    const replyChange=(e)=>{
+        setReplyChangeValue(e.target.value);
+    }
+
+    const registerReply= async (e)=>{
+        e.preventDefault();
+
+        if(replyChangeValue.length>0){
+            await axios.post(`${ip}/Board/freeReply`,{
+                replyer:loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content:replyChangeValue,
+                original_writer:writer,
+                original_regdate:regdate
+            },
+            {
+                headers: {Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`},
+            })
+            .then(res=>{
+                return res.data;
+            })
+            .then(data=>{
+                
+            })
+        }
+        else if(replyChangeValue.length==0){
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
+    }
+
     
     return(
         <div>
@@ -166,6 +198,13 @@ const FreeArticle = () => {
             <h1>좋아요 수 : {likecount}</h1>
 
             <input type="button" style={{display:loginMaintain==null ? "none":(loginMaintain=="true" ? (userInfo.loginState==="allok" ? "block":"none"):(user.login_state==="allok" ? "block":"none"))}} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}} value="좋아요"/>
+
+            <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
+            (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}} onSubmit={registerReply}>
+                <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
+                <input type="button" value="댓글 등록"/>  
+            </form>
+              
 
             <Link to={`/UpdateBoard/${writer}/${regdate}`} style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
             (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}}>수정</Link> 

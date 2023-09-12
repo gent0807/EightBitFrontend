@@ -129,14 +129,14 @@ const WriteBoard = () =>
         return () => resetDragEvents();
       }, [initDragEvents, resetDragEvents]);
 
-      const OncheckSubmit = (e) =>
+      const OncheckSubmit = async (e) =>
       { 
-       /*  const registFile = (writer, regdate) => {
+        const registFile = async (writer, regdate) => {
             const fd = new FormData();
 
             Object.values(files).forEach((file) => fd.append("file", file));
 
-            axios({
+            await axios({
                 method: "post",
                 url: `${ip}/Board/article/file/images`,
                 data: fd,
@@ -157,7 +157,7 @@ const WriteBoard = () =>
             }
                 
             )
-        } */
+        } 
         
         e.preventDefault();
 
@@ -178,7 +178,7 @@ const WriteBoard = () =>
         }
 
         
-        axios.post(`${ip}/Board/article`,{
+        await axios.post(`${ip}/Board/article`,{
         	title: WriterChangeValue,
             content: StoryChangeValue,
             writer:loginMaintain == "true" ? userInfo.nickName : user.nickname,
@@ -196,10 +196,9 @@ const WriteBoard = () =>
                 return ;    
             }
             else if(files.length>0){
-                const writer=data.writer;
-                const regdate=data.regdate;
+                registFile(data.writer, data.regdate);
 
-                const fd = new FormData();  
+         /*        const fd = new FormData();  
 
                 Object.values(files).forEach((file) => fd.append("file", file));
     
@@ -219,9 +218,7 @@ const WriteBoard = () =>
                     console.log(userInfo.accessToken);
                     console.log(user.access_token);
                     navigate('/FreeArticle/'+writer+'/'+regdate);
-                }
-                    
-                )
+                }) */
                 
                 
             }
