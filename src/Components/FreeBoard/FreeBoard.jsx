@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import NotPage from "./NotPage";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const FreeBoard = () =>
 {
@@ -168,7 +169,7 @@ const FreeBoard = () =>
                             <BoardContentNumber>{id}</BoardContentNumber>
                             <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`} style={linkStyle}>{title}</Link></BoardContentTitle>
                             <BoardContentWriter>{writer}</BoardContentWriter>
-                            <BoardContentViewtime>{regdate}</BoardContentViewtime>
+                            <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
                             <BoardContentCounter>{visitcnt}</BoardContentCounter>
                         </BoardContentBox>
                         ))}
@@ -248,6 +249,12 @@ const BoardContentNumber = styled.div
 `
 const BoardContentTitle = styled(BoardContentNumber)
 `
+    a{
+        width: 400px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 `
 const BoardContentViewtime = styled(BoardContentNumber)
 `

@@ -128,7 +128,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -154,7 +154,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -180,7 +180,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -206,7 +206,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -232,7 +232,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -258,7 +258,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,

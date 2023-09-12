@@ -435,10 +435,10 @@ const BackgroudTopNav = styled.div
     @media (min-width:250px) and (max-width:666px)
     {
         width: 100%;
-        height: 253px;
+        height: 260px;
     }
 
-    @media (min-width:666px) and (max-width:1342px)
+    @media (min-width:667px) and (max-width:1342px)
     {
         height: 160px;
     }
