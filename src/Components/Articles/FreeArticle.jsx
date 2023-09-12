@@ -219,19 +219,23 @@ const FreeArticle = () => {
             <EditAllBox>
                 <LikeBtn  LoginMaintain={loginMaintain} UserInfo={userInfo.loginState} User={user.login_state} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}>{likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}</LikeBtn>
 
-            <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
-            (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}} onSubmit={registerReply}>
-                <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
-                <input type="button" value="댓글 등록"/>  
-            </form>
-              
+            
 
                 <Link to={`/UpdateBoard/${writer}/${regdate}`} style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
                 (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}}>수정</Link> 
 
                 <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo.loginState} UserInfoNickname={userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
                 <Link to="/FreeBoard">목록</Link>
-            </EditAllBox>
+                
+           
+              
+            </EditAllBox> 
+            
+            <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
+            (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}} onSubmit={registerReply}>
+                <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
+                <input type="button" value="댓글 등록"/>  
+            </form>
         </FreeArticleBox >
     );
 }   
