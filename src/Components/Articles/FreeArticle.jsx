@@ -109,6 +109,7 @@ const FreeArticle = () => {
     }
 
     const countUpLike=async (e)=>{
+        
         if(loginMaintain != "true"){
             if(user.login_state!="allok"){
                 alert("로그인이 필요합니다.");
