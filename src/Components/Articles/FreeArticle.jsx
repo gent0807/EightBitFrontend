@@ -197,7 +197,7 @@ const FreeArticle = () => {
             <UserProfileBox>
             <UserProfile src={localStorage.getItem("profileImageDir")+profileImagePath} style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
             <WriteViewBox>
-            <WriterText>작성자 : {writer}</WriterText>
+            <WriterText>{writer}</WriterText>
             <LikeViewBox>
             <LikeText>좋아요 수 : {likecount}</LikeText>
             <ViewText>조회 수 : {visitcnt}</ViewText>
