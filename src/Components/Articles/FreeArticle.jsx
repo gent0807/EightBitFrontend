@@ -230,7 +230,7 @@ const FreeArticle = () => {
            
               
             </EditAllBox> 
-            
+            <img src="http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png" style={{width:"70px", height:"70px", borderRadius:"26px"}}></img>
             <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
             (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}} onSubmit={registerReply}>
                 <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
