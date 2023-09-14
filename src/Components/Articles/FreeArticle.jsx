@@ -24,7 +24,7 @@ const FreeArticle = () => {
     const [InformationImage, setInformationImage]=useState([
         {
             id : 1,
-            src : "http://192.168.225.129:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+            src : "http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
     const navigate=useNavigate();
