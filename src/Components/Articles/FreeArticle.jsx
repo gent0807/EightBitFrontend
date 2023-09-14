@@ -220,14 +220,15 @@ const FreeArticle = () => {
             </InformationAllBox>
             </InformationBox>
             <EditAllBox>
-                <LikeBtn  LoginMaintain={loginMaintain} UserInfo={userInfo==null ? null : userInfo.loginState} User={user.login_state} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}>{likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}</LikeBtn>
+                <LikeBtn  LoginMaintain={loginMaintain} UserInfo={userInfo==null? null : userInfo.loginState} User={user.login_state} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}>{likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}</LikeBtn>
 
                 <Link to={`/UpdateBoard/${writer}/${regdate}`} style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
-                (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}}>수정</Link> 
+                (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" ), color:"black"}}>수정</Link> 
 
-                <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo == null ? null : userInfo.loginState} UserInfoNickname={userInfo==null? null : userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
-                <Link to="/FreeBoard">목록</Link>
+                <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo==null ? null : userInfo.loginState} UserInfoNickname={userInfo==null ? (user.login_state==="allok" ? user.nickname : null): userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
+                <Link to="/FreeBoard" style={{color:"black"}}>목록</Link>
             </EditAllBox>
+            
             <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
             (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}} onSubmit={registerReply}>
                 <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
