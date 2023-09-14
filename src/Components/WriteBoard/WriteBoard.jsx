@@ -289,8 +289,8 @@ const SubmitBtnBox = styled.div
 const SubmitBtn = styled.button
 `
     color: black;
-    border: solid 2px #3c3c3c;
-    background: #6a9dda;
+    border: solid 3px ${props => props.theme.borderColor};
+    background: ${props => props.theme.DropDownListColor};
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
@@ -309,7 +309,7 @@ const FileNumber = styled.div
     box-sizing: border-box;
     display: flex;
     padding: 10px;
-    border: 2px solid ${props => props.theme.borderColor};
+    border: 3px solid ${props => props.theme.borderColor};
     margin: 0px 0px 10px 0px;
     color : ${props => props.theme.textColor};
     font-weight : bold;
@@ -349,17 +349,20 @@ const FileUploadLabel = styled.label
 `
     
     color: black;
-    border: solid 2px #3c3c3c;
+    border: solid 3px #3c3c3c;
     background: #6a9dda;
     padding : 10px;
     border-radius : 10px;
     cursor : pointer;
     font-weight : bold;
     caret-color: transparent;
+    border: solid 3px ${props => props.theme.borderColor};
+    background: ${props => props.theme.DropDownListColor};
 `
 
 const FileUploadText = styled.span
 `
+    
 `
 
 const WriterInputBox = styled.div
@@ -374,7 +377,7 @@ const FileUploadBox = styled.div
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-    border: solid 2px ${props => props.theme.borderColor};
+    border: solid 3px ${props => props.theme.borderColor};
     margin: 0px 20px 30px 20px;
     border-radius: 20px;
     justify-content: center;
@@ -393,12 +396,17 @@ const WriterInput = styled.input
 `
     border: none;
     outline: none;
+    color: ${props => props.theme.textColor};
     padding: 10px 10px 10px 15px;
-    box-shadow: 0 0 0 2px ${props => props.theme.borderColor} inset;
+    box-shadow: 0 0 0 3px ${props => props.theme.borderColor} inset;
     border-radius: 10px;
     font-size: 20px;
     box-sizing: border-box;
     margin: 0px 20px 30px 20px;
+    &::placeholder
+    {
+        color: ${props => props.theme.textColor};
+    }
 `
 
 const FileUpload = styled.input
@@ -410,21 +418,47 @@ const FileUpload = styled.input
 const StoryInput = styled.textarea
 `
     box-sizing: border-box;
+    color: ${props => props.theme.textColor};
     height: 500px;
     border: none;
     resize: none;
     padding: 10px 10px 10px 15px;
     font-size: 15px;
-    box-shadow: 0 0 0 2px ${props => props.theme.borderColor} inset;
+    box-shadow: 0 0 0 3px ${props => props.theme.borderColor} inset;
     border-radius: 10px;
     outline: none;
     margin: 0px 20px 30px 20px;
+    &::placeholder
+    {
+        color: ${props => props.theme.textColor};
+    }
+    &::-webkit-scrollbar{
+        background: gray;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border: solid 3px ${props => props.theme.borderColor};
+    }
+    &::-webkit-scrollbar-thumb
+    {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+    }
+    &::-webkit-scrollbar-track
+    {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
 `
 
 const WriterInformation = styled.div
 `
     text-align: center;
-    border: solid 2px ${props => props.theme.borderColor};
+    border: solid 3px ${props => props.theme.borderColor};
     color : ${props => props.theme.textColor}
     width: 70px;
     padding: 15px;

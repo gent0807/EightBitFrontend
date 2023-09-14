@@ -521,7 +521,7 @@ const Lanking = styled.span
 
 const PopTitleBox = styled.h1
 `
-
+    color: ${props => props.theme.textColor};
 `
 
 const SwiperBox = styled.div
