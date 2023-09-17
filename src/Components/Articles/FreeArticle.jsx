@@ -7,6 +7,7 @@ import styled from "styled-components";
 import {BsHandThumbsUpFill} from "react-icons/bs";
 import {BsHandThumbsUp} from "react-icons/bs";
 import dayjs from "dayjs";
+import DOMPurify from "dompurify";
 
 
 
@@ -24,7 +25,7 @@ const FreeArticle = () => {
     const [InformationImage, setInformationImage]=useState([
         {
             id : 1,
-            src : "http://192.168.225.129:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+            src : "http://218.155.175.176:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
     const navigate=useNavigate();
@@ -218,7 +219,7 @@ const FreeArticle = () => {
             <InformationBox>
             <TitleText>{title}</TitleText>
             <InformationAllBox>
-            <InformationText>{content}</InformationText>
+            <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content)}}/>
             {InformationImage.length > 0 &&
                         InformationImage.map(Image => { 
                                 return (
@@ -315,7 +316,7 @@ const TitleText = styled.h1
 
 `
 
-const InformationText = styled.span
+const Information = styled.div
 `
     font-size: 20px;
 `
