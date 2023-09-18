@@ -7,6 +7,7 @@ import styled from "styled-components";
 import {BsHandThumbsUpFill} from "react-icons/bs";
 import {BsHandThumbsUp} from "react-icons/bs";
 import dayjs from "dayjs";
+import DOMPurify from "dompurify";
 
 
 
@@ -118,11 +119,20 @@ const FreeArticle = () => {
     }
 
     const countUpLike=async (e)=>{
+        if(loginMaintain != "true"){
+            if(user.login_state!="allok"){
+                alert("로그인이 필요합니다.");
+                navigate("/Login");
+                return;
+            }
+        }
+           
+        
         await axios.patch(`${ip}/Board/article/like/up?writer=${writer}&regdate=${regdate}`,{
 
         },
         {
-
+            headers:{Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`}
         })
         .then(res=>{
             return res.data;       
@@ -141,7 +151,7 @@ const FreeArticle = () => {
         await axios.patch(`${ip}/Board/article/like/down?writer=${writer}&regdate=${regdate}`,{ 
         },
         {
-
+            headers:{Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`}
         })
         .then(res=>{
             return res.data;       
@@ -209,7 +219,7 @@ const FreeArticle = () => {
             <InformationBox>
             <TitleText>{title}</TitleText>
             <InformationAllBox>
-            <InformationText>{content}</InformationText>
+            <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content)}}/>
             {InformationImage.length > 0 &&
                         InformationImage.map(Image => { 
                                 return (
@@ -307,7 +317,7 @@ const TitleText = styled.h1
 
 `
 
-const InformationText = styled.span
+const Information = styled.div
 `
     font-size: 20px;
 `

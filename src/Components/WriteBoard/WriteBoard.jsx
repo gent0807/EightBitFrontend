@@ -1,9 +1,16 @@
-import { useState, useEffect, useRef, useCallback  } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import ReactQuill, { Quill } from "react-quill";
+import ImageResize from "quill-image-resize-module-react";
+import "react-quill/dist/quill.snow.css";
+import "./CustomEditer.css";
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
-import dayjs from "dayjs";
+import { ImageDrop } from "quill-image-drop-module";
+
+Quill.register("modules/imageDrop", ImageDrop);
+Quill.register("modules/imageResize", ImageResize);
 
 const WriteBoard = () =>
 {
@@ -20,6 +27,100 @@ const WriteBoard = () =>
 
     const dragRef = useRef(null);
     const fileId = useRef(0);
+
+    const quillRef = useRef(null);
+    const [EditerValue, setEditerValue] = useState("");
+    const toolbarOptions = [
+        ["link", "image", "video"],
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        ["blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ color: [] }, { background: [] }],
+        [{ align: [] }],
+    ];
+
+      const modules = useMemo(
+        () => ({
+        toolbar: {
+          container: toolbarOptions,
+        },
+        imageResize: {
+            parchment: Quill.import("parchment"),
+            modules: ["Resize", "DisplaySize", "Toolbar"],
+        },
+        imageDrop: true,
+      }),[]);
+
+     /* useEffect(() => {
+        const quill = quillRef.current;
+        // console.log(quill);
+ 
+        const handleImage = () => {
+            // 이미지 핸들 로직
+            const input = document.createElement("input");
+            input.setAttribute("type", "file");
+            input.setAttribute("accept", "image/*");
+            input.click();
+ 
+            input.onchange = async () => {
+                const file = input.files[0];
+ 
+                // 현재 커서 위치 저장
+                // const range = getEditor().getSelection(true);
+                const range = quill.selection
+ 
+                // 서버에 올려질때까지 표시할 로딩 placeholder 삽입
+                quill.getEditor().insertEmbed(range.index, "image", `/img/loading.gif`);
+                
+                
+                try {
+                    // S3에 업로드 한뒤 이미지 태그에 삽입할 url을 반환받도록 구현
+                    const formData = new FormData();
+                    formData.append('file' , file)
+                    const result = await actionUploadEditorImage(formData); 
+                    const url = result.data
+                    console.log(url);
+                    // 정상적으로 업로드 됐다면 로딩 placeholder 삭제
+                    quill.getEditor().deleteText(range.index, 1);
+                    // 받아온 url을 이미지 태그에 삽입
+                    quill.getEditor().insertEmbed(range.index, "image", url);
+                    
+                    // 사용자 편의를 위해 커서 이미지 오른쪽으로 이동
+                    quill.getEditor().setSelection(range.index + 1);
+                } catch (e) {
+                    quill.getEditor().deleteText(range.index, 1);
+                }
+            };
+        }
+        
+        if (quillRef.current) {
+            // const { getEditor } = quillRef.current;
+            const toolbar = quill.getEditor().getModule("toolbar");
+            toolbar.addHandler("image", handleImage);
+        }
+    }, []); */
+
+      const formats = [
+        "header",
+        "font",
+        "size",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "align",
+        "blockquote",
+        "list",
+        "bullet",
+        "indent",
+        "background",
+        "color",
+        "link",
+        "image",
+        "video",
+        "width",
+      ];
 
     const onChangeFiles = useCallback((e) => {
         let selectFiles = [];
@@ -100,12 +201,6 @@ const WriteBoard = () =>
         console.log(WriterChangeValue);
     }
 
-    const StoryChange = (e) =>
-    {
-        const currentWriter = e.target.value;
-        setStoryChangeValue(currentWriter);
-    }
-
     const initDragEvents = useCallback(() => {
         if (dragRef.current !== null) {
           dragRef.current.addEventListener("dragenter", handleDragIn);
@@ -130,17 +225,20 @@ const WriteBoard = () =>
         return () => resetDragEvents();
       }, [initDragEvents, resetDragEvents]);
 
-      const OncheckSubmit = async (e) =>
+      const OncheckSubmit = (e) =>
       { 
-        const registFile = async (writer, regdate) => {
+       /*  const registFile = (writer, regdate) => {
             const fd = new FormData();
 
             Object.values(files).forEach((file) => fd.append("file", file));
 
-            axios.post(`${ip}/Board/article/file/images`, fd, {
+            axios({
+                method: "post",
+                url: `${ip}/Board/article/file/images`,
+                data: fd,
                 headers: {
                     Authorization: {Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`},
-                    "Content-Type": `multipart/form-data; `
+                    'Content-Type': 'multipart/form-data'
                 }
             })
             .then((res) => {
@@ -148,32 +246,36 @@ const WriteBoard = () =>
             }
             )
             .then((data) =>{
+                console.log(data);
+                console.log(userInfo.accessToken);
+                console.log(user.access_token);
                 navigate('/FreeArticle/'+writer+'/'+regdate);
             }
                 
             )
-        }
+        } */
         
         e.preventDefault();
 
-        if(WriterChangeValue.length<5&&StoryChangeValue.length>20)
+        console.log(files.map(file => file.object));
+        if(WriterChangeValue.length<5&&EditerValue.length>20)
         {
             window.alert("제목을 5자 이상 입력해주세요!");
             return;
         }
-        else if(WriterChangeValue.length>5&&StoryChangeValue.length<20) {
+        else if(WriterChangeValue.length>5&&EditerValue.length<20) {
             window.alert("내용을 20자 이상 입력해주세요!");
             return;
         }
-        else if(WriterChangeValue.length<5 && StoryChangeValue.length<20) {                 
+        else if(WriterChangeValue.length<5 &&EditerValue.length<20) {                 
             window.alert("제목 5자 이상, 내용 20자 이상 입력해주세요!");
             return;
         }
 
         
-        await axios.post(`${ip}/Board/article`,{
+        axios.post(`${ip}/Board/article`,{
         	title: WriterChangeValue,
-            content: StoryChangeValue,
+            content: EditerValue,
             writer:loginMaintain == "true" ? userInfo.nickName : user.nickname,
         },
         {
@@ -184,12 +286,39 @@ const WriteBoard = () =>
         })
         .then((data)=>{
             if(files.length==0){
-            console.log("this is no file");
-            navigate('/FreeArticle/'+data.writer+'/'+data.regdate);
-            return ;    
+                console.log("this is no file");
+                navigate('/FreeArticle/'+data.writer+'/'+data.regdate);
+                return ;    
             }
             else if(files.length>0){
-                registFile(data.writer,data);
+                const writer=data.writer;
+                const regdate=data.regdate;
+
+                const fd = new FormData();  
+
+                Object.values(files).forEach((file) => fd.append("file", file));
+    
+                axios.post(`${ip}/Board/article/file/images`,fd,{
+                    headers: {
+                        Authorization: {Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`},
+                        "Content-Type": `multipart/form-data;   `
+                    }
+                }
+                )
+                .then((res) => {
+                    return res.data
+                }
+                )
+                .then((data) =>{
+                    console.log(data);
+                    console.log(userInfo.accessToken);
+                    console.log(user.access_token);
+                    navigate('/FreeArticle/'+writer+'/'+regdate);
+                }
+                    
+                )
+                
+                
             }
         })
 
@@ -204,7 +333,16 @@ const WriteBoard = () =>
             </WriterInformationTextAllBox>
             <WriteBoardSubmit onSubmit={OncheckSubmit}>
             <WriterInput placeholder='제목' onChange={WriterChange} value={WriterChangeValue}/>
-            <StoryInput placeholder='내용' onChange={StoryChange} value={StoryChangeValue}></StoryInput>
+            <EditerBox>
+                <ReactQuill
+                    placeholder="내용을 입력해 주세요!"
+                    value={EditerValue}
+                    onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
+                    theme="snow" 
+                    modules={modules}
+                    formats={formats}
+                ></ReactQuill>
+            </EditerBox>
             <FileUploadBox ref={dragRef} checkFile={isDragging}>
             <FileUploadLabel checkFile={isDragging} htmlFor='fileUpload'>
                 <FileUpload id='fileUpload' type="file" multiple={true} onChange={(e) => {onChangeFiles(e); e.target.value = '';}}/>
@@ -238,6 +376,16 @@ const WriteBoard = () =>
 }
 
 export default WriteBoard;
+
+const EditerBox = styled.div
+`
+    max-width: 1240px;
+    margin: 0px 20px 30px 20px;
+    border: solid 3px ${props => props.theme.borderColor};
+    border-radius: 20px;
+    overflow: hidden;
+    background: white;
+`
 
 const WriteBoardSubmit = styled.form
 `
@@ -361,17 +509,12 @@ const WriterInput = styled.input
 `
     border: none;
     outline: none;
-    color: ${props => props.theme.textColor};
     padding: 10px 10px 10px 15px;
     box-shadow: 0 0 0 3px ${props => props.theme.borderColor} inset;
     border-radius: 10px;
     font-size: 20px;
     box-sizing: border-box;
     margin: 0px 20px 30px 20px;
-    &::placeholder
-    {
-        color: ${props => props.theme.textColor};
-    }
 `
 
 const FileUpload = styled.input
@@ -383,7 +526,6 @@ const FileUpload = styled.input
 const StoryInput = styled.textarea
 `
     box-sizing: border-box;
-    color: ${props => props.theme.textColor};
     height: 500px;
     border: none;
     resize: none;
@@ -393,10 +535,6 @@ const StoryInput = styled.textarea
     border-radius: 10px;
     outline: none;
     margin: 0px 20px 30px 20px;
-    &::placeholder
-    {
-        color: ${props => props.theme.textColor};
-    }
     &::-webkit-scrollbar{
         background: gray;
         border-top-right-radius: 10px;
