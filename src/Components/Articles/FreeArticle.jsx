@@ -229,8 +229,8 @@ const FreeArticle = () => {
                 <Link to="/FreeBoard" style={{color:"black"}}>목록</Link>
             </EditAllBox>
             
-            <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
-            (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}} onSubmit={registerReply}>
+            <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? "block": "none" )):
+            (user.login_state==="allok" ? "block" :"none" )}} onSubmit={registerReply}>
                 <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
                 <input type="button" value="댓글 등록"/>  
             </form>
