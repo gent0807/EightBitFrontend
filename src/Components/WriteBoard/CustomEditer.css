@@ -25,3 +25,9 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
+
+.ql-video
+{
+    width: 1280px;
+    height: 700px;
+}
