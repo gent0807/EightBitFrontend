@@ -331,8 +331,7 @@ const WriteBoard = () =>
 
     }
 
-    const filesname = files.filter((file) => file.object.name.toLowerCase().includes("pptx"));
-    console.log(filesname);
+
     return(
         <WriterInputBox>
             <WriterInformationTextAllBox>
