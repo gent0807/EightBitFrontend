@@ -50,7 +50,8 @@ const darkTheme =
   DropDownListColor: "orange",
   BoardTitle: "white",
   BoardInformaiton: "Orange",
-  PaginationSelect: "Orange"
+  PaginationSelect: "Orange",
+  WriterBorder: "#55aaff"
 };
 
 const lightTheme = 
@@ -66,6 +67,7 @@ const lightTheme =
   BoardTitle: "black",
   BoardInformaiton: "black",
   PaginationSelect: "#6a9dda",
+  WriterBorder: "white"
 };
 
 const GlobalStyle = createGlobalStyle
