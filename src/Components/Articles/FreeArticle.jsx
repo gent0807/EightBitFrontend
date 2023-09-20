@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {BsHandThumbsUpFill} from "react-icons/bs";
 import {BsHandThumbsUp} from "react-icons/bs";
+import dayjs from "dayjs";
+import DOMPurify from "dompurify";
 
 
 
@@ -19,8 +21,13 @@ const FreeArticle = () => {
     const [visitcnt, setVisitcnt]=useState(0);
     const [likecount, setLikecount]=useState(0);
     const [profileImagePath, setProfileImagePath]=useState("");
-    const [replyChangeValue, setReplyChangeValue]=useState("");
-    
+    const [replyChangeValue, setReplyChangeValue ]=useState("");
+    const [InformationImage, setInformationImage]=useState([
+        {
+            id : 1,
+            src : "http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+        }
+    ]);
     const navigate=useNavigate();
     const ip=localStorage.getItem("ip");
     const user=useSelector(state=>state.user);
@@ -197,7 +204,7 @@ const FreeArticle = () => {
             <UserProfileBox>
             <UserProfile src={localStorage.getItem("profileImageDir")+profileImagePath} style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
             <WriteViewBox>
-            <WriterText>작성자 : {writer}</WriterText>
+            <WriterText>{writer}</WriterText>
             <LikeViewBox>
             <LikeText>좋아요 수 : {likecount}</LikeText>
             <ViewText>조회 수 : {visitcnt}</ViewText>
@@ -205,25 +212,40 @@ const FreeArticle = () => {
             </WriteViewBox>
             </UserProfileBox>
             <DayBox>
-            <RegdateText>등록일 : {regdate}</RegdateText>
-            <EditText>수정일 : {updatedate}</EditText>  
+            <RegdateText>등록일 : {dayjs(regdate).format("YY.MM.DD hh:mm")}</RegdateText>
+            <DayBoxBar></DayBoxBar>
+            <EditText>수정일 : {dayjs(updatedate).format("YY.MM.DD hh:mm")}</EditText>  
             </DayBox>
             </UserinformationBox>
             </UserBox>
             <InformationBox>
             <TitleText>{title}</TitleText>
             <InformationAllBox>
-            <InformationText>{content}</InformationText>
+            <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content)}}/>
+            {InformationImage.length > 0 &&
+                        InformationImage.map(Image => { 
+                                return (
+                                    <InformaionImageBox key={Image.id} src={Image.src} style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
+                                );
+                        })
+                    }
             </InformationAllBox>
             </InformationBox>
             <EditAllBox>
                 <LikeBtn  LoginMaintain={loginMaintain} UserInfo={userInfo==null? null : userInfo.loginState} User={user.login_state} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}>{likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}</LikeBtn>
 
-            
-
                 <Link to={`/UpdateBoard/${writer}/${regdate}`} style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
                 (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" ), color:"black"}}>수정</Link> 
 
+                <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo==null ? null : userInfo.loginState} UserInfoNickname={userInfo==null ? (user.login_state==="allok" ? user.nickname : null): userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
+                <Link to="/FreeBoard" style={{color:"black"}}>목록</Link>
+            </EditAllBox>
+            
+                <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? "block": "none" )):
+                (user.login_state==="allok" ? "block" :"none" )}} onSubmit={registerReply}>
+                    <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
+                    <input type="button" value="댓글 등록"/>  
+                </form>
                 <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo==null ? null : userInfo.loginState} UserInfoNickname={userInfo==null ? (user.login_state==="allok" ? user.nickname : null): userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
                 <Link to="/FreeBoard" style={{color:"black"}}>목록</Link>
                 
@@ -241,6 +263,11 @@ const FreeArticle = () => {
 }   
 
 export default FreeArticle;
+
+const InformaionImageBox = styled.img
+`
+
+`
 
 const DeleteBtn = styled.div
 `
@@ -288,7 +315,10 @@ const ViewText = styled.span
 
 const RegdateText = styled.span
 `
-    margin: 0px 8px 0px 0px;
+    @media (min-width:666px) and (max-width:910px)
+    {
+        margin: 0px 0px 0px 0px;
+    }
 `
 
 const EditText = styled.span
@@ -301,7 +331,7 @@ const TitleText = styled.h1
 
 `
 
-const InformationText = styled.span
+const Information = styled.div
 `
     font-size: 20px;
 `
@@ -345,6 +375,13 @@ const UserinformationBox = styled.div
     display: flex;
     justify-content: space-between;
     margin: 0px 0px 10px 0px;
+    @media (min-width:250px) and (max-width:666px)
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 0px 0px 10px 0px;
+    }
 `
 
 const UserProfile = styled.img
@@ -356,11 +393,48 @@ const UserProfileBox = styled.div
 `
     display: flex;
     align-items: center;
+    @media (min-width:250px) and (max-width:666px)
+    {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin : 0px 0px 10px 0px;
+    }
+    
+`
+
+const DayBoxBar = styled.div
+`
+    display: inline-block;
+    width: 2px;
+    height: 11px;
+    background: black;
+    margin: 0px 7px 6px 7px;
+    @media (min-width:667px) and (max-width:910px)
+    {
+        display: none;
+    };
+    @media (min-width:250px) and (max-width:666px)
+    {
+        margin: 0px 7px 3px 7px;
+    };
 `
 
 const DayBox = styled.div
 `
-    font-size: 20px;
+    font-size: 18px;
     display: flex;
     align-items: end;
+    @media (min-width:667px) and (max-width:910px)
+    {
+        flex-direction: column;
+        justify-content: end;
+        align-items: center;
+    };
+    @media (min-width:250px) and (max-width:666px)
+    {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 `

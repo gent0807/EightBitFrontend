@@ -128,7 +128,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -154,7 +154,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -180,7 +180,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -206,7 +206,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -232,7 +232,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -258,7 +258,7 @@ const CenterPage = () =>
         breakpoints : {
             300: {
                 spaceBetween : 30,
-                slidesPerView : 3,
+                slidesPerView : 1,
             },
             965: {
                 spaceBetween : 30,
@@ -498,7 +498,7 @@ const AdSlideBox = styled.div
 
 const GameSlideBox = styled.div
 `
-    max-width: 1600px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 0px 20px 0px 20px;
 `
@@ -521,7 +521,7 @@ const Lanking = styled.span
 
 const PopTitleBox = styled.h1
 `
-
+    color: ${props => props.theme.textColor};
 `
 
 const SwiperBox = styled.div

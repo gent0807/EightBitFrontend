@@ -336,7 +336,7 @@ const HeaderBox = () =>
             </FastListBox>
             <ProfileListBox zindex={profileMenuTopZIndex.current} default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
                 <ProfileUl>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/user.png"/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><UserImg src={localStorage.getItem("profileImageDir")+user.profile_img_path}/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/bell.png"/><ProfileliText  MediaLeft={"17px"}>소식 알람</ProfileliText></Profileli>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/coding.png"/><ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText></Profileli></Link>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/store.png"/><ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText></Profileli></Link>
@@ -435,10 +435,10 @@ const BackgroudTopNav = styled.div
     @media (min-width:250px) and (max-width:666px)
     {
         width: 100%;
-        height: 253px;
+        height: 260px;
     }
 
-    @media (min-width:666px) and (max-width:1342px)
+    @media (min-width:667px) and (max-width:1342px)
     {
         height: 160px;
     }
@@ -784,6 +784,11 @@ const DropdownImg = styled.img
 `
     width: 33px;
     height: 33px;
+`
+
+const UserImg = styled(DropdownImg)
+`
+    border-radius: 26px;
 `
 
 
