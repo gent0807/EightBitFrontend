@@ -240,18 +240,6 @@ const FreeArticle = () => {
                 <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo==null ? null : userInfo.loginState} UserInfoNickname={userInfo==null ? (user.login_state==="allok" ? user.nickname : null): userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
                 <Link to="/FreeBoard" style={{color:"black"}}>목록</Link>
             </EditAllBox>
-            
-                <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? "block": "none" )):
-                (user.login_state==="allok" ? "block" :"none" )}} onSubmit={registerReply}>
-                    <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
-                    <input type="button" value="댓글 등록"/>  
-                </form>
-                <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo==null ? null : userInfo.loginState} UserInfoNickname={userInfo==null ? (user.login_state==="allok" ? user.nickname : null): userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
-                <Link to="/FreeBoard" style={{color:"black"}}>목록</Link>
-                
-           
-              
-            </EditAllBox> 
             <img src="http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png" style={{width:"70px", height:"70px", borderRadius:"26px"}}></img>
             <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
             (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}} onSubmit={registerReply}>
