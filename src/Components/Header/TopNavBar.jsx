@@ -336,13 +336,13 @@ const HeaderBox = () =>
             </FastListBox>
             <ProfileListBox zindex={profileMenuTopZIndex.current} default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
                 <ProfileUl>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><UserImg src={localStorage.getItem("profileImageDir")+user.profile_img_path}/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
+                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><UserImg src={loginMaintain=="true" ? localStorage.getItem("profileImageDir")+userInfo.profileImgPath : localStorage.getItem("profileImageDir")+user.profile_img_path}/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
                 <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/bell.png"/><ProfileliText  MediaLeft={"17px"}>소식 알람</ProfileliText></Profileli>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/coding.png"/><ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText></Profileli></Link>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/store.png"/><ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText></Profileli></Link>
                 <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src="img/update.png"/><ProfileliText  MediaLeft={"17px"}>회원정보수정</ProfileliText></Profileli></Link>
                 <Profileli line="none" padding="10px 0px 15px 13px" onClick={LogoutFunc}><DropdownImg src="img/logout.png"/><ProfileliText MediaLeft={"16px"}>로그아웃</ProfileliText></Profileli>
-                </ProfileUl>
+                </ProfileUl>    
             </ProfileListBox>
             <WriteListBox zindex={writeMemuTopZIndex.current} default={isDefaultWriteScene} show={WriteMenuShow}>
                 <ProfileUl>
