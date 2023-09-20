@@ -36,11 +36,6 @@ const FreeBoard = () =>
     console.log("userInfo",userInfo);
     console.log("user",user);
 
-    const linkStyle = {
-        textDecoration: "none",
-        color: "skyblue",
-    }
-    
     useEffect(()=>{
         axios.get(`${ip}/Board/articles`,{
         	
@@ -167,7 +162,7 @@ const FreeBoard = () =>
                   {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt }) => (
                         <BoardContentBox key={id}>
                             <BoardContentNumber>{id}</BoardContentNumber>
-                            <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`} style={linkStyle}>{title}</Link></BoardContentTitle>
+                            <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>
                             <BoardContentWriter>{writer}</BoardContentWriter>
                             <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
                             <BoardContentCounter>{visitcnt}</BoardContentCounter>
@@ -254,6 +249,8 @@ const BoardContentTitle = styled(BoardContentNumber)
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        text-decoration: none;
+        color: ${props => props.theme.textColor};
     }
 `
 const BoardContentViewtime = styled(BoardContentNumber)
