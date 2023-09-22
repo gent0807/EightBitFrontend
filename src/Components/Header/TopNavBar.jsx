@@ -798,6 +798,17 @@ a{
         color: #6a9dda;
     }
 }
+
+&::-webkit-scrollbar
+    {
+        display: none;
+    }
+
+    @media (min-width:250px) and (max-width:666px)
+    {
+        white-space: nowrap;
+        overflow: scroll;
+    }
 `
 
 const ShopSubNav = styled(GameSubNav)
@@ -806,6 +817,16 @@ const ShopSubNav = styled(GameSubNav)
     &:hover
     {
         color: #6a9dda;
+    }
+    &::-webkit-scrollbar
+    {
+        display: none;
+    }
+
+    @media (min-width:250px) and (max-width:666px)
+    {
+        white-space: nowrap;
+        overflow: scroll;
     }
 `
 const ComunitySubNav = styled(GameSubNav)
@@ -833,6 +854,16 @@ const SupportSubNav = styled(GameSubNav)
     &:hover
     {
         color: #6a9dda;
+    }
+    &::-webkit-scrollbar
+    {
+        display: none;
+    }
+
+    @media (min-width:250px) and (max-width:666px)
+    {
+        white-space: nowrap;
+        overflow: scroll;
     }
 `
 

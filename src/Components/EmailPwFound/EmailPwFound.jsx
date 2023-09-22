@@ -45,6 +45,7 @@ function EmailPwFound() {
 
   const navigate = useNavigate();
 
+  const ErrorMsMargin = "-9px 0px 0px 8px";
 
   const inputRef = useRef();
 
@@ -73,7 +74,7 @@ function EmailPwFound() {
     setEmail(currentEmail);
 
     if (!EmailCheck.test(currentEmail)) {
-      setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>올바른 이메일을 작성해 주세요!</ErrorMessageText></ErrorMessageBox>]);
+      setEmailMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>올바른 이메일을 작성해 주세요!</ErrorMessageText></ErrorMessageBox>]);
       setIsEmail(false);
       setIsEmailAuthInputCheck(false);
       setMessageChangeCheck(false);
@@ -108,7 +109,7 @@ function EmailPwFound() {
     }
 
     if (!PwCheck.test(PasswordChangeV)) {
-      setPasswordChangeMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+      setPasswordChangeMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
       setIsPasswordChange(false);
       passwordPossibleCombCheck.current = false;
     }
@@ -120,7 +121,7 @@ function EmailPwFound() {
     }
     if (compareMode.current == true) {
       if (PasswordChangeV !== PasswordChangeConfirmM) {
-        setPasswordChangeConfirmMessage([<ErrorMessageBox margin={"-30px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
+        setPasswordChangeConfirmMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
         setIsPasswordChangeConfirm(false);
         if (PasswordChangeConfirmM == "") {
           setIsPasswordChange(true);
@@ -148,7 +149,7 @@ function EmailPwFound() {
       }
       else if (passwordPossibleCombCheck.current == false) {
         setIsPasswordChange(false);
-        setPasswordChangeMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+        setPasswordChangeMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
       }
     }
 
@@ -157,14 +158,14 @@ function EmailPwFound() {
       setIsInputPasswordChangeConfirmCheck(true);
       if (PasswordChangeE !== PasswordChangeConfirmV) {
         setIsPasswordChange(false);
-        setPasswordChangeConfirmMessage([<ErrorMessageBox margin={"-30px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
+        setPasswordChangeConfirmMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>비밀번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
         setIsPasswordChangeConfirm(false);
       }
       else if (PasswordChangeE == PasswordChangeConfirmV) {
         if (passwordPossibleCombCheck.current == false) {
           setIsPasswordChange(false);
           setIsPasswordChangeConfirm(false);
-          setPasswordChangeMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
+          setPasswordChangeMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>숫자,영문자,특수문자 조합으로 8자리 이상 입력해주세요!</ErrorMessageText></ErrorMessageBox>]);
           setPasswordChangeConfirmMessage("");
         }
         else if (passwordPossibleCombCheck.current == true) {
@@ -204,7 +205,7 @@ function EmailPwFound() {
 
         }
         else if (alreadyPasswordUsing.current == "yes") {
-          setPasswordChangeConfirmMessage([<ErrorMessageBox margin={"-30px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>기존의 비밀번호와 일치합니다!</ErrorMessageText></ErrorMessageBox>]);
+          setPasswordChangeConfirmMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>기존의 비밀번호와 일치합니다!</ErrorMessageText></ErrorMessageBox>]);
           setIsPasswordChangeConfirm(false);
           setIsPasswordChange(false);
         }
@@ -230,7 +231,7 @@ function EmailPwFound() {
           setIsEmailBtn(false);
           setIsEmailPoundCheck(true);
           setMessageRevert(false);
-          setEmailFoundCheckMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>가입 정보가 확인되지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
+          setEmailFoundCheckMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>가입 정보가 확인되지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
         }
         else if (data === "yes") {
           axios.post(`${ip}/Users/authkey/email`, {
@@ -244,14 +245,14 @@ function EmailPwFound() {
               setIsEmailBtn(true);
               setIsEmailPoundCheck(false);
               setMessageRevert(true);
-              setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>인증 번호가 전송되었습니다!</ErrorMessageText></ErrorMessageBox>]);
+              setEmailMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>인증 번호가 전송되었습니다!</ErrorMessageText></ErrorMessageBox>]);
             });
           setMessageChangeCheck(false);
           setIsEmail(false);
           setIsEmailBtn(false);
           setIsEmailPoundCheck(false);
           setMessageRevert(false);
-          setEmailMessage([<ErrorMessageBox margin={"-13px 0px 0px -202px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>인증번호 전송 중...</ErrorMessageText></ErrorMessageBox>]);
+          setEmailMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>인증번호 전송 중...</ErrorMessageText></ErrorMessageBox>]);
 
         }
       });
@@ -297,14 +298,14 @@ function EmailPwFound() {
           setIsButtonCheck(false);
           setIsEmailauthBtn(false);
           setchangeVisibled(false);
-          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
+          setEmailauthMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>인증번호가 일치하지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
         }
         else if (data == "yes") {
           setIsEmailauthBtn(true);
           setIsButtonCheck(true);
           setchangeVisibled(true);
           setIsInputEmailAuthCheck(true);
-          setEmailauthMessage([<ErrorMessageBox margin={"-9px 0px 0px 8px"}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>]);
+          setEmailauthMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>인증번호가 일치합니다.</ErrorMessageText></ErrorMessageBox>]);
         }
       });
 
@@ -318,59 +319,162 @@ function EmailPwFound() {
       <EmPwFoundTop>
         <Link to='/'><EmPwLogo src={isDarkmode ? LogoDark : LogoLight} alt='로고' /></Link>
       </EmPwFoundTop>
+    <EwPwBox>
       <EmPwForm onSubmit={update}>
-        <InformationAllBox>
-          <EmPwInformation>
-            <EmPwFoundTitle>이메일/비밀번호 찾기</EmPwFoundTitle>
-          </EmPwInformation>
-        </InformationAllBox>
-        <EmPwInputT>
+          <InformationAllBox>
+              <EmPwInformation>
+                  <EmPwFoundTitle>이메일/비밀번호 찾기</EmPwFoundTitle>
+              </EmPwInformation>
+          </InformationAllBox>
+
+      <EmPwInputT>
           <EmailInputT>
-            <EmailAuthInputBox>
               <Title>이메일</Title>
-              <EmailAuthAllBox>
-                <EmailInput ref={inputRef} disabled={isEmailauthBtn} revert={MessageRevert} show={isEmail} check={isInputEmailCheck} placeholder='이메일을 입력해 주세요!' value={Email} onChange={Emailuser} />
-                <SendButton show={isEmail} type="button" onClick={EmailCheck} disabled={isEmailAuthInputCheck ? isEmailauthBtn : true}><span>{isEmailBtn ? "재전송" : "전송"}</span></SendButton>
-              </EmailAuthAllBox>
-            </EmailAuthInputBox>
+              <EmailAuthInputBox>
+                  <EmailAuthAllBox>
+                      <EmailInput 
+                          ref={inputRef} 
+                          disabled={isEmailauthBtn} 
+                          revert={MessageRevert} 
+                          show={isEmail} 
+                          check={isInputEmailCheck} 
+                          placeholder='이메일을 입력해 주세요!' 
+                          value={Email} 
+                          onChange={Emailuser} 
+                      />
+                      <SendButton 
+                          show={isEmail} 
+                          type="button" 
+                          onClick={EmailCheck} 
+                          disabled={isEmailAuthInputCheck ? 
+                          isEmailauthBtn : true}
+                      >
+                          <SendText>{isEmailBtn ? "재전송" : "전송"}</SendText>
+                      </SendButton>
+                  </EmailAuthAllBox>
+              </EmailAuthInputBox>
+
             <>
               {MessageChangeCheck ?
-                <EmailFoundErrorMessage show={MessageRevert} check={isEmailPoundCheck}>{EmailFoundCheckMessage}</EmailFoundErrorMessage> :
+                <EmailFoundErrorMessage 
+                    show={MessageRevert} 
+                    check={isEmailPoundCheck}
+                >
+                    {EmailFoundCheckMessage}
+                </EmailFoundErrorMessage> :
                 Email.length > 0 && (<ErrorMessage color={isEmail}>{EmailMessage}</ErrorMessage>)}
             </>
-            <EmailAuthBox show={isEmailBtn}>
-              <Title position={"absolute"} marginTop={"-8px"}>인증번호</Title>
-              <EmailAuthInput show={isInputEmailAuthCheck} check={isEmailauthBtn} disabled={isEmailauthBtn} placeholder='인증번호를 입력해 주세요!' value={Emailauth} onChange={EmailAuth} />
-              <EmailAuthBtn show={isEmailauthBtn} type="button" onClick={EmailAuthCheck} disabled={isEmailauthBtn}><span>{isButtonCheck ? "인증완료" : "인증확인"}</span></EmailAuthBtn>
-              <ErrorMessage2 color={isEmailauthBtn}>{EmailauthMessage}</ErrorMessage2>
+            
+            <EmailAuthAllInputBox show={isEmailBtn}>
+            <Title>인증번호</Title>
+            <EmailAuthBox>
+              <EmailAuthInput 
+                  show={isInputEmailAuthCheck} 
+                  check={isEmailauthBtn} 
+                  disabled={isEmailauthBtn} 
+                  placeholder='인증번호를 입력해 주세요!' 
+                  value={Emailauth} 
+                  onChange={EmailAuth} 
+              />
+              <EmailAuthBtn 
+                  show={isEmailauthBtn} 
+                  type="button" 
+                  onClick={EmailAuthCheck} 
+                  disabled={isEmailauthBtn}
+              >
+                  <AuthText>{isButtonCheck ? "완료" : "확인"}</AuthText>
+              </EmailAuthBtn>
             </EmailAuthBox>
+
+            <ErrorMessage2 check={isButtonCheck} color={isEmailauthBtn}>{EmailauthMessage}</ErrorMessage2>
+
+            </EmailAuthAllInputBox>
+
             <PasswordChangeT show={changeVisibled}>
-              <Title>새 비밀번호</Title>
-              <PasswordChangeInput type="password" show={isPasswordChange} check={isInputPasswordChangeCheck} placeholder='새 비밀번호를 입력해 주세요!' value={PasswordChangeE} onChange={PasswordChange} />
+                <Title>새 비밀번호</Title>
+                <PasswordChangeBox>
+                  <PasswordChangeInput 
+                      type="password" 
+                      show={isPasswordChange} 
+                      check={isInputPasswordChangeCheck} 
+                      placeholder='새 비밀번호를 입력해 주세요!' 
+                      value={PasswordChangeE} 
+                      onChange={PasswordChange} 
+                  />
+                </PasswordChangeBox>
             </PasswordChangeT>
+
             {PasswordChangeE.length > 0 && (<ErrorMessage show={isPasswordChange}>{PasswordChangeMessage}</ErrorMessage>)}
+
             <PasswordChangeConfirmT show={changeVisibled}>
-              <Title>새 비밀번호 확인</Title>
-              <PasswordChangeConfirmInput type="password" show={isPasswordChangeConfirm} check={isInputPasswordChangeConfirmCheck} placeholder='새 비밀번호를 다시 입력해 주세요!' value={PasswordChangeConfirmM} onChange={PasswordChangeConfirm} />
+                <Title>새 비밀번호 확인</Title>
+                <PasswordChangeBox>
+                  <PasswordChangeConfirmInput 
+                      type="password" 
+                      show={isPasswordChangeConfirm} 
+                      check={isInputPasswordChangeConfirmCheck} 
+                      placeholder='새 비밀번호를 다시 입력해 주세요!' 
+                      value={PasswordChangeConfirmM} 
+                      onChange={PasswordChangeConfirm} 
+                  />
+                </PasswordChangeBox>
             </PasswordChangeConfirmT>
+
             {PasswordChangeConfirmM.length > 0 && (<ErrorMessage show={isPasswordChangeConfirm}>{PasswordChangeConfirmMessage}</ErrorMessage>)}
+
           </EmailInputT>
-        </EmPwInputT>
+      </EmPwInputT>
+
         <SubmitBtnBox>
-          <SumbitButton type="submit" disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}><span>비밀번호 수정완료</span></SumbitButton>
+            <SumbitButton 
+                type="submit" 
+                disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}
+            >
+                <SumbitText>비밀번호 수정완료</SumbitText>
+            </SumbitButton>
         </SubmitBtnBox>
+
         <AnotherRoute>
-          <AnotherList>
-            <Login onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></Login>
-            <Sign onClick={() => ScrollTop()}><Link to='/Sign'>회원가입</Link></Sign>
-          </AnotherList>
+            <AnotherList>
+                <Login onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></Login>
+                <Sign onClick={() => ScrollTop()}><Link to='/Sign'>회원가입</Link></Sign>
+            </AnotherList>
         </AnotherRoute>
       </EmPwForm>
+      </EwPwBox>
     </EmPwFoundT>
   );
 }
 
-export const EmPwInformation = styled.div
+const PasswordChangeBox = styled.div
+`
+    display: flex;
+    flex-direction: column;
+`
+
+const EmailAuthAllInputBox = styled.div
+`
+    display: ${props => props.show ? "flex" : "none" };
+    flex-direction: column;
+    margin: 18px 0px 0px 0px;
+`
+
+const SumbitText = styled.span
+`
+
+`
+
+const SendText = styled.span
+`
+
+`
+
+const AuthText = styled.span
+`
+
+`
+
+const EmPwInformation = styled.div
 `
     width: 191px;
     border: solid 3px ${(props) => props.theme.borderColor};
@@ -383,7 +487,6 @@ const EmPwFoundT = styled.div
 `
     display: flex;
     flex-direction: column;
-    align-items: center;
 `
 
 const InformationAllBox = styled.div
@@ -394,12 +497,14 @@ const InformationAllBox = styled.div
 
 const EmailAuthInputBox = styled.div
 `
-    margin: 50px 0px 0px 0px;
+    
 `
 
 const EmailAuthAllBox = styled.div
 `
-
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 3fr 1fr;
 `
 
 const EmPwFoundTop = styled.div
@@ -417,9 +522,12 @@ const EmPwLogo = styled.img
 
 const EmPwForm = styled.form
 `
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    
+`
+
+const EwPwBox = styled.div
+`
+
 `
 
 const EmPwInputContainer = styled.div
@@ -460,12 +568,12 @@ const EmailInputT = styled.div
 `
     display: flex;
     flex-direction: column;
-    align-items: center;
+    margin: 20px 0px 0px 0px;
 `
 
 const EmailInput = styled.input
 `
-    width: 275px;
+    max-width: 322px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -508,7 +616,7 @@ const ErrorMessage = styled.p
 `
 const ErrorMessage2=styled(ErrorMessage)
 `
-    margin: -5px 0px 7.7px -6px;
+    display: "block";
 `
 
 const EmailFoundErrorMessage = styled.p
@@ -523,7 +631,7 @@ const EmailFoundErrorMessage = styled.p
 const SendButton = styled.button
 `
     margin-left: 10px;
-    width: 100px;
+    max-width: 100px;
     height: 56.66px;
     border: none;
     box-shadow: "0 0 0 1px #dddddd inset";
@@ -532,7 +640,9 @@ const SendButton = styled.button
     cursor: pointer;
     color: white;
     font-size: 15px;
-    margin-top: -3px; 
+    margin-top: -3px;
+    margin-bottom: 20px;
+    margin-top: 20px;
     &:active
     {
       opacity: 90%;
@@ -547,13 +657,14 @@ const SendButton = styled.button
 
 const EmailAuthBox = styled.div
 `
-    display: ${props => props.show ? "inline-block" : "none"};
-    margin: 21px 0px 0px 0px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 3fr 1fr;
 `
+
 const EmailAuthInput = styled(EmailInput)
 `
     box-shadow: ${props => props.show ? props.check ?  `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
-    margin-top: 27px;
 
     &:focus
     {
@@ -564,7 +675,7 @@ const EmailAuthInput = styled(EmailInput)
 const EmailAuthBtn = styled.button
 `
     margin-left: 10px;
-    width: 100px;
+    max-width: 100px;
     height: 55px;
     border: none;
     background: ${props => props.theme.buttonColor};
@@ -573,7 +684,8 @@ const EmailAuthBtn = styled.button
     cursor: pointer;
     color:white;
     font-size: 15px;
-    margin-top: -3px;
+    margin-bottom: 20px;
+    margin-top: 20px;
     &:disabled
     {
         background: #aaaaaa;
@@ -585,28 +697,26 @@ const PasswordChangeT = styled.div
 `
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
-    margin-top: 7px;
+    margin-top: 20px;
 `
 
 const PasswordChangeConfirmT = styled.div
 `
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
-    margin-top: 7px;
-    margin-bottom: 21px;
+    margin-top: 26px;
+}
 `
 
 const Title = styled.label
 `
     color: ${(props) => props.theme.textColor};
     font-weight: bold;
-    position: ${props => props.position};
-    margin-top: ${props => props.marginTop};
 `
 
 const PasswordChangeInput = styled.input
 `
-    width: 385px;
+    max-width: 429px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -630,13 +740,15 @@ const PasswordChangeConfirmInput= styled(PasswordChangeInput)
 
 const SubmitBtnBox = styled.div
 `
-    margin-top: 13px;
+    margin-top: 25px;
     margin-bottom: 28px;
+    display: flex;
+    justify-content: center;
 `
 
-export const SumbitButton = styled.button
+const SumbitButton = styled.button
 `
-    width: 410px;
+    max-width: 480px;
     height: 55px;
     background: ${props => props.theme.buttonColor};
     border: none;
@@ -655,7 +767,6 @@ export const SumbitButton = styled.button
       background: #aaaaaa;
       pointer-events: none;
     }
-
 `
 const AnotherRoute = styled.div
 `

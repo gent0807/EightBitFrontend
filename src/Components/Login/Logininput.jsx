@@ -104,63 +104,97 @@ const Logininput = () =>
             navigate("/");
           }
         });
-
         /*if(loginCheck=="emailok"){   <- 위에 함수 호출로 인한 실행과 비동기적이기 때문에 위에서의 loginCheck와는 동기화되지 않는다. 즉 최초의 submit 이벤트 처리시에는 axios 함수에서의 loginCheck와 axios와 비동기적으로 실행되는 if문에서의 loginCheck는 다를 수 밖에 없다.
             console.log('까비');           
         }*/
-
-        
-        
       }
-
     }
 
  
 
     return(
-      <LoginT> 
-          <LoginTop>
-          <Link to='/'><LoginTopLOGO src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
-          </LoginTop>
-          <LoginInput>
+    <LoginT> 
+      <LoginTop>
+          <Link to='/'>
+            <LoginTopLOGO src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/>
+          </Link>
+      </LoginTop>
+
+      <LoginInput>
           <InputT>
-          <Sumbit onSubmit={OnCheckSubmit}>
-          <InputBox ref={inputRef} placeholder="E-mail" onChange={OnChangeEmail}/>
-          <PwInputBox placeholder="Password" onChange={OnChangePw} type='password'/>
-          <ErrorMessageShow>{message}</ErrorMessageShow>
-          <LoginMaintainT>
-          <LoginMaintainCheckBox type='checkbox' onClick={Show}/>
-          <LoginMaintain>로그인 유지</LoginMaintain>
-          <LoginMaintainMessageShow show={isShow}><span>개인정보 보호를 위해 개인 PC에서만 사용하세요.</span></LoginMaintainMessageShow>
-          </LoginMaintainT>
-          <LoginBtnT>
-          <LoginBtn type="submit"><span>로그인</span></LoginBtn>
-          </LoginBtnT>
-          </Sumbit>
+              <Sumbit 
+                  onSubmit={OnCheckSubmit}
+              >
+                  <InputAllBox>
+                      <InputBox 
+                          ref={inputRef} 
+                          placeholder="E-mail" 
+                          onChange={OnChangeEmail}
+                      />
+                      <PwInputBox
+                          placeholder="Password" 
+                          onChange={OnChangePw} 
+                          type='password'
+                      />
+                  </InputAllBox>
+
+                  <ErrorMessageShow show={message}>{message}</ErrorMessageShow>
+
+                  <LoginMaintainT>
+                      <LoginMaintainCheckBox type='checkbox' onClick={Show}/>
+                      <LoginMaintain>로그인 유지</LoginMaintain>
+                      <LoginMaintainMessageShow show={isShow}>
+                          <LoginMaintainText>개인정보 보호를 위해 개인 PC에서만 사용하세요.</LoginMaintainText>
+                      </LoginMaintainMessageShow>
+                  </LoginMaintainT>
+                  <LoginBtnT>
+                      <LoginBtn type="submit">로그인</LoginBtn>
+                  </LoginBtnT>
+              </Sumbit>
           </InputT>
+
           <LOGINAPI>
-          <Line><span>또는</span></Line>
-          <APIList>
-            <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
-            <APIListLI>< APIListA border={"#1877f2"} background={"#1877f2"} API="#"><FaFacebookF /></APIListA></APIListLI>
-            <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></ APIListA></APIListLI>
-            <APIListLI>< APIListA border={"#1da1f2"} background={"#1da1f2"} API="#"><AiOutlineTwitter /></ APIListA></APIListLI>
-          </APIList>
+              <Line><LineText>또는</LineText></Line>
+              <APIList>
+                  <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
+                  <APIListLI>< APIListA border={"#1877f2"} background={"#1877f2"} API="#"><FaFacebookF /></APIListA></APIListLI>
+                  <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></ APIListA></APIListLI>
+                  <APIListLI>< APIListA border={"#1da1f2"} background={"#1da1f2"} API="#"><AiOutlineTwitter /></ APIListA></APIListLI>
+              </APIList>
           </LOGINAPI>
+
           <EmPwFoundT>
-          <EmailPwFoundList>
-            <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/PhoneAuth'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
-            <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></EmailPwFoundListLI>
-          </EmailPwFoundList>
+              <EmailPwFoundList>
+                  <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/PhoneAuth'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
+                  <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></EmailPwFoundListLI>
+              </EmailPwFoundList>
           </EmPwFoundT>
-        </LoginInput>
-      </LoginT>
+
+      </LoginInput>
+    </LoginT>
     );
 }
 
+const LoginMaintainText = styled.div
+`
+
+`
+
+const LineText = styled.span
+`
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
+`
+
+const InputAllBox = styled.div
+`
+    display: flex;
+    flex-direction: column;
+`
+
 export const InputBox = styled.input
 `
-    width: 435px;
+    max-width: 435px;
     height: 20px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 10px;
@@ -219,7 +253,8 @@ export const LoginTopLOGO = styled.img
 
 const LoginInput = styled.div
 `
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
 `
 
 const InputT = styled.div
@@ -233,7 +268,7 @@ const Sumbit = styled.form
 
 const ErrorMessageShow = styled.p
 `
-    display: inline-block;
+    display: ${props => props.show === "" ? "none" :"inline-block"};
     margin: 0px;
     font-size: 15px;
     color: ${(props) => props.theme.errorColor};
@@ -250,7 +285,7 @@ const LoginMaintain = styled.p
 
 const LoginMaintainT = styled.div
 `
-    margin-bottom: 15px;
+    margin: -9px 0px 15px 0px;
     display: flex;
     height: 54px;
 `
@@ -278,10 +313,13 @@ const LoginMaintainMessageShow = styled.p
 
 const LoginBtnT = styled.div
 `
+    display: flex;
+    flex-direction: column;
 `
+
 const LoginBtn = styled.button
 `
-    width: 460px;
+    max-width: 460px;
     height: 51px;
     padding: 0px 16px;
     background: ${(props) => props.theme.buttonColor};
@@ -323,12 +361,6 @@ export const Line = styled.p
       content: "";
       background-color: ${(props) => props.theme.textColor};
     }
-    span
-    {
-      display: block;
-      padding-left: 1.6rem;
-      padding-right: 1.6rem;
-    }
 `
 
 const LOGINAPI = styled.div
@@ -358,7 +390,7 @@ export const APIListA = styled.a.attrs((props) => ({href : props.API}))
 `
     display: inline-block;
     padding: 5px;
-    margin: 0px 10px 0px 10px;
+    margin: 0px 5px 0px 5px;
     width: 44px;
     height: 44px;
     border-radius: 30px;
@@ -380,12 +412,11 @@ const APIListLI = styled.li
 
 const EmailPwFoundListLI = styled.li
 `
-    margin: 0px 10px 0px 10px;
+    padding: 0px 10px 0px 10px;
     a
     {
       color: ${props => props.theme.textColor};
       text-decoration: none;
-      margin: 0px 15px 0px 15px;
     }
 `
 

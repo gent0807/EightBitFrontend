@@ -503,7 +503,7 @@ const EmailInput = styled.input
     }
 `
 
-export const Title = styled.label
+const Title = styled.label
 `
   font-weight: bold;
   color: ${(props) => props.theme.textColor};
