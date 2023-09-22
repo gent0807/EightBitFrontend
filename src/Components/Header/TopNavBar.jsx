@@ -9,7 +9,7 @@ import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
 import { clearLoginState } from "../Redux/User";
 
-import LogoLight from "../../img/LOGO/8bit.png";
+import LogoLight from "../../img/LOGO/8bitLight.png";
 
 import Korean from "../../img/Lang/korea.png";
 import Japan from "../../img/Lang/japan.png";
@@ -480,45 +480,207 @@ const HeaderBox = () =>
             </MenuBox>])}
             </>
 
-            <LanguageListBox margin= {loginMaintain==null?false:loginMaintain=="true" ? ((userInfo!=null) ? (userInfo.loginState === "allok" ? true : false) : false):(user.login_state === "allok" ? true : false)} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
-                <ProfileUl>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={Korean}/><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={UK}/><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={Germany}/><ProfileliText  MediaLeft={"17px"}>Deutsch</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={Spain}/><ProfileliText  MediaLeft={"17px"}>Espanol</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={Japan}/><ProfileliText  MediaLeft={"17px"}>Japanese</ProfileliText></Profileli>
-                <Profileli padding="11.5px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={China}/><ProfileliText  MediaLeft={"17px"}>Chinese</ProfileliText></Profileli>
-                </ProfileUl>
+            <LanguageListBox 
+                margin={loginMaintain==null?false:loginMaintain=="true" ? 
+                ((userInfo!=null) ? (userInfo.loginState === "allok" ? 
+                true : false) : false) : 
+                (user.login_state === "allok" ? true : false)} 
+                zindex={languageTopZIndex.current} 
+                default={isDefaultLanguageScene} 
+                show={LanguageMenuShow}>
+            <ProfileUl>
+                <Profileli 
+                    padding="15px 0px 15px 13px" 
+                    onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), 
+                    setLanguageClickCheck(!LanguageClickCheck)]}
+                >
+                    <DropdownImg src={Korean}/>
+                        <ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText>
+            </Profileli>
+            <Profileli 
+                padding="15px 0px 15px 13px" 
+                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), 
+                setLanguageClickCheck(!LanguageClickCheck)]}
+            >
+                    <DropdownImg src={UK}/>
+                <ProfileliText  MediaLeft={"17px"}>English</ProfileliText>
+            </Profileli>
+            <Profileli 
+                padding="15px 0px 15px 13px" 
+                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), 
+                setLanguageClickCheck(!LanguageClickCheck)]}
+            >
+                    <DropdownImg src={Germany}/>
+                        <ProfileliText  MediaLeft={"17px"}>Deutsch</ProfileliText>
+            </Profileli>
+            <Profileli 
+                padding="15px 0px 15px 13px" 
+                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), 
+                setLanguageClickCheck(!LanguageClickCheck)]}
+            >
+                <DropdownImg src={Spain}/>
+                    <ProfileliText  MediaLeft={"17px"}>Espanol</ProfileliText>
+            </Profileli>
+            <Profileli 
+                padding="15px 0px 15px 13px" 
+                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), 
+                setLanguageClickCheck(!LanguageClickCheck)]}
+            >
+                <DropdownImg src={Japan}/>
+                    <ProfileliText  MediaLeft={"17px"}>Japanese</ProfileliText>
+            </Profileli>
+            <Profileli 
+                padding="11.5px 0px 15px 13px" 
+                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), 
+                setLanguageClickCheck(!LanguageClickCheck)]}
+            >
+                    <DropdownImg src={China}/>
+                        <ProfileliText  MediaLeft={"17px"}>Chinese</ProfileliText>
+            </Profileli>
+            </ProfileUl>
             </LanguageListBox>
+
             <FastListBox zindex={fastMenuTopZIndex.current} default={isDefaultFastScene} show={FastMenuShow}>
                 <ProfileUl>
                 
                 </ProfileUl>
             </FastListBox>
-            <ProfileListBox zindex={profileMenuTopZIndex.current} default={isDefaultProfileScene} logout={isProfileLogoutCheck} show={ProfileMenuShow}>
-                <ProfileUl>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src={User}/><ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText></Profileli></Link>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src={Bell}/><ProfileliText  MediaLeft={"17px"}>소식 알람</ProfileliText></Profileli>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src={Coding}/><ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src={Shop}/><ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText></Profileli></Link>
-                <Link to='/'><Profileli padding="15px 0px 15px 13px" onClick={() => [setProfileMenuShow(!ProfileMenuShow), setProfileClickCheck(!ProfileClickCheck)]}><DropdownImg src={Update}/><ProfileliText  MediaLeft={"17px"}>회원정보수정</ProfileliText></Profileli></Link>
-                <Profileli line="none" padding="10px 0px 15px 13px" onClick={LogoutFunc}><DropdownImg src={Logout}/><ProfileliText MediaLeft={"16px"}>로그아웃</ProfileliText></Profileli>
-                </ProfileUl>
+
+            <ProfileListBox 
+                zindex={profileMenuTopZIndex.current} 
+                default={isDefaultProfileScene} 
+                logout={isProfileLogoutCheck} 
+                show={ProfileMenuShow}
+            >
+            <ProfileUl>
+                <Link to='/'>
+                    <Profileli 
+                        padding="15px 0px 15px 13px" 
+                        onClick={() => [setProfileMenuShow(!ProfileMenuShow), 
+                        setProfileClickCheck(!ProfileClickCheck)]}
+                    >
+                        <DropdownImg src={User}/>
+                            <ProfileliText  MediaLeft={"17px"}>마이페이지</ProfileliText>
+                    </Profileli>
+                </Link>
+
+                <Profileli 
+                    padding="15px 0px 15px 13px" 
+                    onClick={() => [setProfileMenuShow(!ProfileMenuShow), 
+                    setProfileClickCheck(!ProfileClickCheck)]}
+                >
+                        <DropdownImg src={Bell}/>
+                            <ProfileliText  MediaLeft={"17px"}>소식 알람</ProfileliText>
+                </Profileli>
+
+                <Link to='/'>
+                    <Profileli 
+                        padding="15px 0px 15px 13px" 
+                        onClick={() => [setProfileMenuShow(!ProfileMenuShow), 
+                        setProfileClickCheck(!ProfileClickCheck)]}
+                    >
+                        <DropdownImg src={Coding}/>
+                            <ProfileliText  MediaLeft={"17px"}>개발자등록</ProfileliText>
+                    </Profileli>
+                </Link>
+
+                <Link to='/'>
+                    <Profileli 
+                        padding="15px 0px 15px 13px" 
+                        onClick={() => [setProfileMenuShow(!ProfileMenuShow), 
+                        setProfileClickCheck(!ProfileClickCheck)]}
+                    >
+                        <DropdownImg src={Shop}/>
+                            <ProfileliText  MediaLeft={"17px"}>굿즈샵 입점</ProfileliText>
+                    </Profileli>
+                </Link>
+
+                <Link to='/'>
+                    <Profileli 
+                        padding="15px 0px 15px 13px" 
+                        onClick={() => [setProfileMenuShow(!ProfileMenuShow), 
+                        setProfileClickCheck(!ProfileClickCheck)]}
+                    >
+                        <DropdownImg src={Update}/>
+                            <ProfileliText  MediaLeft={"17px"}>회원정보수정</ProfileliText>
+                    </Profileli>
+                </Link>
+
+                <Profileli 
+                    line="none" 
+                    padding="10px 0px 15px 13px" 
+                    onClick={LogoutFunc}
+                >
+                    <DropdownImg src={Logout}/>
+                        <ProfileliText MediaLeft={"16px"}>로그아웃</ProfileliText>
+                </Profileli>
+            </ProfileUl>
+
             </ProfileListBox>
-            <WriteListBox zindex={writeMemuTopZIndex.current} default={isDefaultWriteScene} show={WriteMenuShow}>
+
+            <WriteListBox 
+                zindex={writeMemuTopZIndex.current} 
+                default={isDefaultWriteScene} 
+                show={WriteMenuShow}
+            >
                 <ProfileUl>
-                <Link to="/WriteBoard"><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Essay}/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli></Link>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Discussion}/><ProfileliText  MediaLeft={"17px"}>토론게시판</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Strategy}/><ProfileliText  MediaLeft={"17px"}>공략게시판</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Rating}/><ProfileliText  MediaLeft={"17px"}>상품 리뷰</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Console}/><ProfileliText  MediaLeft={"17px"}>게임 리뷰</ProfileliText></Profileli>
-                <Profileli padding="10.5px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Digital}/><ProfileliText  MediaLeft={"17px"}>아트워크</ProfileliText></Profileli>
+                    <Link to="/WriteBoard">
+                        <Profileli 
+                            padding="15px 0px 15px 13px" 
+                            onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                        >
+                            <DropdownImg src={Essay}/>
+                                <ProfileliText MediaLeft={"17px"}>자유게시판</ProfileliText>
+                        </Profileli>
+                    </Link>
+
+                    <Profileli 
+                        padding="15px 0px 15px 13px" 
+                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                    >
+                        <DropdownImg src={Discussion}/>
+                            <ProfileliText MediaLeft={"17px"}>토론게시판</ProfileliText>
+                    </Profileli>
+
+                    <Profileli
+                        padding="15px 0px 15px 13px" 
+                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                    >
+                        <DropdownImg src={Strategy}/>
+                            <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
+                    </Profileli>
+
+                    <Profileli 
+                        padding="15px 0px 15px 13px" 
+                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                    >
+                            <DropdownImg src={Rating}/>
+                                <ProfileliText MediaLeft={"17px"}>상품 리뷰</ProfileliText>
+                    </Profileli>
+
+                    <Profileli 
+                        padding="15px 0px 15px 13px" 
+                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                    >
+                        <DropdownImg src={Console}/>
+                            <ProfileliText  MediaLeft={"17px"}>게임 리뷰</ProfileliText>
+                    </Profileli>
+
+                    <Profileli 
+                        padding="10.5px 0px 15px 13px" 
+                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                    >
+                        <DropdownImg src={Digital}/>
+                            <ProfileliText  MediaLeft={"17px"}>아트워크</ProfileliText>
+                    </Profileli>
+
                 </ProfileUl>
             </WriteListBox>
         </ButtonBox>
         </AllButtonBox>
         </Topnav>
         </BackgroudTopNav>
+        
         <BackgroudSubNav>
         <SubNavMenu>
             <GameSubNav display={isGameTabCheck}>

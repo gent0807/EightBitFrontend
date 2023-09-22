@@ -9,6 +9,15 @@ import SwiperCore, { Navigation, Pagination } from "swiper";
 import { FiArrowLeft } from "react-icons/fi";
 import { FiArrowRight } from "react-icons/fi";
 
+import test from "../../img/MainSlide/test.png";
+import test1 from "../../img/MainSlide/test1.png";
+import test2 from "../../img/MainSlide/test2.png";
+import test3 from "../../img/MainSlide/test3.png";
+import test4 from "../../img/MainSlide/test4.png";
+import test5 from "../../img/MainSlide/test5.png";
+
+SwiperCore.use([Navigation, Pagination]);
+
 const CenterPage = () =>
 {
     const navPrevRef = useRef(null);
@@ -21,31 +30,31 @@ const CenterPage = () =>
         {
             id : 1,
             lank : 1,
-            img : "img/test.jpg",
+            img : test,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
         {
             id : 2,
-            img : "img/test1.jpg",
+            img : test1,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
         {
             id : 3,
-            img : "img/test2.png",
+            img : test2,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
         {
             id : 4,
-            img : "img/test3.jpg",
+            img : test3,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
         {
             id : 5,
-            img : "img/test4.jpg",
+            img : test4,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
@@ -54,31 +63,7 @@ const CenterPage = () =>
         {
             id : 1,
             lank : 1,
-            img : "img/test.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 2,
-            img : "img/test1.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 3,
-            img : "img/test2.png",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 4,
-            img : "img/test3.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 5,
-            img : "img/test5.png",
+            img : test5,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
@@ -87,37 +72,11 @@ const CenterPage = () =>
         {
             id : 1,
             lank : 1,
-            img : "img/test.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 2,
-            img : "img/test1.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 3,
-            img : "img/test2.png",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 4,
-            img : "img/test3.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 5,
-            img : "img/test5.png",
+            img : test5,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
     ]);
-
-    SwiperCore.use([Navigation, Pagination]);
 
     const swiperParams = 
     {
@@ -126,7 +85,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -152,7 +111,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -178,7 +137,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -204,7 +163,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -230,7 +189,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -256,7 +215,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },

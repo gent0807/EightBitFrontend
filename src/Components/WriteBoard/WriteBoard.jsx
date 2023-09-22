@@ -9,12 +9,14 @@ import { styled } from 'styled-components';
 import axios from 'axios';
 import { ImageDrop } from "quill-image-drop-module";
 import { AiFillFileAdd } from "react-icons/ai";
-import { BsFiletypePptx } from "react-icons/bs";
-import { TbFileTypeTxt } from "react-icons/tb";
-import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
-import { RiFileHwpLine } from "react-icons/ri";
-import { PiFileJpgBold } from "react-icons/pi";
-import { PiFilePngBold } from "react-icons/pi";
+
+import PPTX from "../../img/FileList/pptx.png";
+import JPG from "../../img/FileList/jpg.png";
+import PNG from "../../img/FileList/png.png";
+import PDF from "../../img/FileList/pdf.png";
+import TXT from "../../img/FileList/txt.png";
+import ZIP from "../../img/FileList/zip.png";
+import Default from "../../img/FileList/defaultWhite.png"
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -22,7 +24,6 @@ Quill.register("modules/imageResize", ImageResize);
 const WriteBoard = () =>
 {
     const [ WriterChangeValue, setWriterChangeValue ] = useState("");
-    const [ StoryChangeValue, setStoryChangeValue ] = useState("");
     const [ isDragging, setIsDragging ] = useState(false);
     const [ files, setFiles ] = useState([]);
     const user=useSelector(state => state.user);
@@ -370,13 +371,13 @@ const WriteBoard = () =>
                                     <FileNumber key={id}>
                                         <>
                                         <Icon src={[
-                                        (name.includes("pptx") ? "img/pptx.png" : 
-                                        (name.includes("txt") ? "img/txt.png" : 
-                                        (name.includes("pdf") ? "img/pdf.png" : 
-                                        (name.includes("jpg") ? "img/jpg.png" : 
-                                        (name.includes("png") ? "img/png.png" :
-                                        (name.includes("zip") ? "img/zip.png" :  
-                                        "img/defaultWhite.png"))))))
+                                        (name.includes("pptx") ? PPTX : 
+                                        (name.includes("txt") ? TXT : 
+                                        (name.includes("pdf") ? PDF : 
+                                        (name.includes("jpg") ? JPG : 
+                                        (name.includes("png") ? PNG :
+                                        (name.includes("zip") ? ZIP :  
+                                        Default))))))
                                         ]}/>
                                         </>
                                         <FileName>{ name }</FileName>
@@ -404,7 +405,7 @@ const Icon = styled.img
 `
     width : 30px;
     height : 30px;
-    margin: -4px 0px 0px 0px;
+    margin: -6px 0px 0px 0px;
 `
 
 const FileBtnBox = styled.div
@@ -488,6 +489,7 @@ const FileNumber = styled.div
     color : ${props => props.theme.textColor};
     font-weight : bold;
     justify-content: space-between;
+    height: 44px;
 `
 
 const FileName = styled.div

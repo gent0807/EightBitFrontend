@@ -14,6 +14,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar';
 import { work } from '../Phone/PhoneAuthMode';
 
+import LogoLight from "../../img/LOGO/8bitLight.png";
+import LogoDark from "../../img/LOGO/8bitDark.png";
+
 const Logininput = () => 
 {                 
     const [ authMode, setAuthMode ]=useRecoilState(work);
@@ -117,7 +120,7 @@ const Logininput = () =>
     return(
       <LoginT> 
           <LoginTop>
-          <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+          <Link to='/'><LoginTopLOGO src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
           </LoginTop>
           <LoginInput>
           <InputT>

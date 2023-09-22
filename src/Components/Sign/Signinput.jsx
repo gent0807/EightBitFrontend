@@ -7,6 +7,8 @@ import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar'
 
+import LogoLight from "../../img/LOGO/8bitLight.png";
+import LogoDark from "../../img/LOGO/8bitDark.png";
 
 
 const Signinput = (props) => 
@@ -414,7 +416,7 @@ const Signinput = (props) =>
   return (
       <SignT>
         <SignTop>
-          <Link to='/'><SignTopLogo src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+          <Link to='/'><SignTopLogo src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
         </SignTop>
         <SubmitT onSubmit={register}>
             <SignInputT>

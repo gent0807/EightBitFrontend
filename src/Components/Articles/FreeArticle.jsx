@@ -1,16 +1,24 @@
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {BsHandThumbsUpFill} from "react-icons/bs";
 import {BsHandThumbsUp} from "react-icons/bs";
+import {AiOutlineComment} from "react-icons/ai";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
+import ReactQuill, { Quill } from "react-quill";
+import ImageResize from "quill-image-resize-module-react";
+import "react-quill/dist/quill.snow.css";
+import "./CustomEditer.css";
+import { ImageDrop } from "quill-image-drop-module";
 
+import Siren from "../../img/Siren/Siren.png";
 
-
+Quill.register("modules/imageDrop", ImageDrop);
+Quill.register("modules/imageResize", ImageResize);
 
 const FreeArticle = () => {
     const {writer}=useParams();
@@ -28,6 +36,25 @@ const FreeArticle = () => {
             src : "http://218.155.175.176:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
+
+    const [Comment, setComment]=useState([
+        {
+            id : 1,
+            Writer: "올빼미",
+            Comment: "ㅋㅋㅋㅋㅋ 개웃기네"
+        },
+        {
+            id : 2,
+            Writer: "라따뚜이",
+            Comment: "뭐라는 거임?"
+        },
+        {
+            id : 3,
+            Writer: "뷁?",
+            Comment: "뷁?뷁?뷁?뷁?뷁?뷁?뷁?뷁?ㅍ"
+        }
+    ]);
+
     const navigate=useNavigate();
     const ip=localStorage.getItem("ip");
     const user=useSelector(state=>state.user);
@@ -37,7 +64,99 @@ const FreeArticle = () => {
     userInfo=JSON.parse(userInfo);
     let likeMode=useRef(false);
 
+    const quillRef = useRef(null);
+    const [EditerValue, setEditerValue] = useState("");
+    const toolbarOptions = [
+        ["link", "image", "video"],
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        ["blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ color: [] }, { background: [] }],
+        [{ align: [] }],
+    ];
 
+      const modules = useMemo(
+        () => ({
+        toolbar: {
+          container: toolbarOptions,
+        },
+        imageResize: {
+            parchment: Quill.import("parchment"),
+            modules: ["Resize", "DisplaySize", "Toolbar"],
+        },
+        imageDrop: true,
+      }),[]);
+
+     /* useEffect(() => {
+        const quill = quillRef.current;
+        // console.log(quill);
+ 
+        const handleImage = () => {
+            // 이미지 핸들 로직
+            const input = document.createElement("input");
+            input.setAttribute("type", "file");
+            input.setAttribute("accept", "image/*");
+            input.click();
+ 
+            input.onchange = async () => {
+                const file = input.files[0];
+ 
+                // 현재 커서 위치 저장
+                // const range = getEditor().getSelection(true);
+                const range = quill.selection
+ 
+                // 서버에 올려질때까지 표시할 로딩 placeholder 삽입
+                quill.getEditor().insertEmbed(range.index, "image", `/img/loading.gif`);
+                
+                
+                try {
+                    // S3에 업로드 한뒤 이미지 태그에 삽입할 url을 반환받도록 구현
+                    const formData = new FormData();
+                    formData.append('file' , file)
+                    const result = await actionUploadEditorImage(formData); 
+                    const url = result.data
+                    console.log(url);
+                    // 정상적으로 업로드 됐다면 로딩 placeholder 삭제
+                    quill.getEditor().deleteText(range.index, 1);
+                    // 받아온 url을 이미지 태그에 삽입
+                    quill.getEditor().insertEmbed(range.index, "image", url);
+                    
+                    // 사용자 편의를 위해 커서 이미지 오른쪽으로 이동
+                    quill.getEditor().setSelection(range.index + 1);
+                } catch (e) {
+                    quill.getEditor().deleteText(range.index, 1);
+                }
+            };
+        }
+        
+        if (quillRef.current) {
+            // const { getEditor } = quillRef.current;
+            const toolbar = quill.getEditor().getModule("toolbar");
+            toolbar.addHandler("image", handleImage);
+        }
+    }, []); */
+
+const formats = [
+        "header",
+        "font",
+        "size",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "align",
+        "blockquote",
+        "list",
+        "bullet",
+        "indent",
+        "background",
+        "color",
+        "link",
+        "image",
+        "video",
+        "width",
+];
  
     useEffect( ()=>{
 
@@ -200,7 +319,7 @@ const FreeArticle = () => {
             <UserBox>
             <UserinformationBox>
             <UserProfileBox>
-            <UserProfile src={localStorage.getItem("profileImageDir")+profileImagePath} style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
+            <UserProfile src={localStorage.getItem("profileImageDir")+profileImagePath}/>
             <WriteViewBox>
             <WriterText>{writer}</WriterText>
             <LikeViewBox>
@@ -226,46 +345,263 @@ const FreeArticle = () => {
             {InformationImage.length > 0 &&
                         InformationImage.map(Image => { 
                                 return (
-                                    <InformaionImageBox key={Image.id} src={Image.src} style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
+                                    <InformaionImageBox 
+                                        key={Image.id} 
+                                        src={Image.src} 
+                                        style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
                                 );
                         })
-                    }
+            }
             </InformationAllBox>
             </InformationBox>
             <EditAllBox>
-            <LikeBtn  LoginMaintain={loginMaintain} UserInfo={userInfo==null? null : userInfo.loginState} User={user.login_state} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}>{likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}</LikeBtn>
+            <LikeBtn 
+                LoginMaintain={loginMaintain} 
+                UserInfo={userInfo==null? null : userInfo.loginState} 
+                User={user.login_state} 
+                onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}
+            >
+                {likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}
+            </LikeBtn>
 
-            <Link to={`/UpdateBoard/${writer}/${regdate}`} style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
-            (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}}>수정</Link> 
+            <Link 
+                to={`/UpdateBoard/${writer}/${regdate}`} 
+                style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? 
+                (userInfo==null ?
+                "none" : (userInfo.loginState==="allok" ? 
+                (userInfo.nickName==writer? "block" : "none" ) : "none" )) :
+                (user.login_state==="allok" ?
+                (user.nickname==writer ?
+                "block":"none" ) : "none" )}}
+            >
+                수정
+            </Link>
 
-            <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo==null ? null : userInfo.loginState} UserInfoNickname={userInfo==null ? (user.login_state==="allok" ? user.nickname : null): userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
+            <DeleteBtn 
+                LoginMaintain={loginMaintain} 
+                User={user.login_state} 
+                UserInfo={userInfo} 
+                UserInfoState={userInfo==null ?
+                null : userInfo.loginState} 
+                UserInfoNickname={userInfo==null ? 
+                (user.login_state==="allok" ? 
+                user.nickname : null) : userInfo.nickName} 
+                Writer={writer} 
+                onClick={deleteArticle}
+            >
+                삭제
+            </DeleteBtn>
+
             <Link to="/FreeBoard">목록</Link>
+
             </EditAllBox>
-            <CommentBox>
+
+        <CommentBox>
             <CommentForm 
-            LoginMaintain={loginMaintain} 
-            UserInfo={userInfo} User={userInfo==null ? null : userInfo.loginState} 
-            UserCheck={user.login_state}  UserNicknameCheck={user.nickname} 
-            UserNickname={userInfo==null ? null : userInfo.nickName} 
-            Writer={writer} 
-            onSubmit={registerReply}>
-            <CommentInputBox>
-                <CommentInput placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}/>
-                <CommentBtn>댓글입력</CommentBtn>
-            </CommentInputBox>
+                LoginMaintain={loginMaintain} 
+                UserInfo={userInfo} User={userInfo==null ? 
+                null : userInfo.loginState}
+                UserCheck={user.login_state} 
+                UserNicknameCheck={user.nickname} 
+                UserNickname={userInfo==null ? 
+                null : userInfo.nickName}
+                Writer={writer}
+                onSubmit={registerReply}
+            >
+                <CommentInputBox>
+                    <ReactQuill
+                        placeholder="댓글을 입력해 주세요!"
+                        value={EditerValue}
+                        onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
+                        theme="snow" 
+                        modules={modules}
+                        formats={formats}
+                    >
+                    </ReactQuill>
+                </CommentInputBox>
+                <CommentBtn>등록</CommentBtn>
             </CommentForm>
-            </CommentBox>
+            {Comment.length > 0 &&
+                Comment.map(Comment => { 
+                    return (
+                        <UserCommentBox key={Comment.id}>
+                            <CommentUserProfileBox>
+                                <CommentUserBox>
+                                    <CommentUserProfile src={localStorage.getItem("profileImageDir")+profileImagePath}/>
+                                        <CommentInformationAllBox>
+                                            <UserNicknameText>{Comment.Writer}</UserNicknameText>
+                                                    <Regdate>{dayjs(regdate).format("YY.MM.DD hh:mm")}</Regdate>
+                                        </CommentInformationAllBox>
+                                </CommentUserBox>
+                                    <RedateBox>
+                                        <SirenImg src={Siren}/>
+                                    </RedateBox>
+                                </CommentUserProfileBox>
+                                <CommentInformationBox>
+                                    <CommentText>{Comment.Comment}</CommentText>
+                                </CommentInformationBox>
+                                <CommentreplyBox>
+                                    <CommentreplyAllBox>
+                                        <CommentreplyIcon><AiOutlineComment/></CommentreplyIcon>
+                                        <CommentreplyCount>0</CommentreplyCount>
+                                        <CommentreplyBtn>답글</CommentreplyBtn>
+                                    </CommentreplyAllBox>
+                                    <CommentreplyLikeAllBox>
+                                        <CommentreplyLikeBtn
+                                            onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}
+                                        >
+                                            {likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}
+                                        </CommentreplyLikeBtn>
+                                    <CommentreplyLikeCount>{likecount}</CommentreplyLikeCount>
+                                    </CommentreplyLikeAllBox>
+                                </CommentreplyBox>
+                                <CommentLine/>
+                        </UserCommentBox>
+                            );
+                    })
+            }
+        </CommentBox>
         </FreeArticleBox >
     );
 }   
 
 export default FreeArticle;
 
+const CommentreplyBox = styled.div
+`
+    display: flex;
+    justify-content: space-between;
+    margin: 22px 10px 10px 67px;
+`
+
+const CommentreplyAllBox = styled.div
+`
+    display: flex;
+`
+
+const CommentreplyLikeAllBox = styled.div
+`
+    display: flex;
+`
+
+const CommentreplyCount = styled.span
+`
+    margin: 3px 0px 0px 0px;
+    font-size: 17px;
+    font-weight: bold;
+`
+
+const CommentreplyLikeCount = styled.span
+`
+    margin: 3px 0px 0px 0px;
+    font-size: 17px;
+    font-weight: bold;
+`
+
+const CommentreplyIcon = styled.i
+`
+    margin: 0px 6px 0px 0px;
+    font-size: 23px;
+`
+
+const CommentreplyLikeBtn = styled.div
+`
+    cursor: pointer;
+    font-size: 22px;
+    margin: 0px 10px 0px 0px;
+`
+
+const CommentreplyBtn = styled.div
+`
+    margin: 4px 0px 0px 18px;
+    font-weight: bold;
+`
+
+const CommentText = styled.span
+`
+
+`
+
+const CommentInformationBox = styled.div
+`
+    padding: 0px 0px 0px 67px;
+    font-size: 20px;
+    font-weight: bold;
+`
+
+const CommentLine = styled.div
+`
+    width: 100%;
+    height: 1px;
+    display: flex;
+    background: black;
+    margin: 12px 0px 12px 0px;
+}
+`
+
+const CommentUserBox = styled.div
+`
+    display: flex;
+`
+
+const SirenImg = styled.img
+`
+    width: 40px;
+    height: 40px;
+`
+
 const TitleLine = styled.div
 `
     height: 1px;
     background: black;
     margin: 15px 0px 15px 0px;
+`
+
+const UserNicknameText = styled.span
+`
+    font-size: 25px;
+    margin: 0px 0px 5px 0px;
+`
+
+const Regdate = styled.span
+`
+    font-size: 17px;
+`
+
+const RedateBox = styled.div
+`
+    display: flex;
+    align-items: end;
+    cursor: pointer;
+`
+
+const CommentInformationAllBox = styled.div
+`
+    display: flex;
+    flex-direction: column;
+    padding: 21px 0px 0px 15px;
+`
+
+const CommentUserProfileBox = styled.div
+`
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 0px 17px 0px;
+}
+`
+
+const CommentUserProfile = styled.img
+`
+    width: 50px;
+    height: 50px;
+    border: solid 2px black;
+    border-radius: 30px;
+    margin: 21px 0px 0px 0px;
+`
+
+const UserCommentBox = styled.div
+`
+
 `
 
 const CommentBox = styled.div
@@ -278,25 +614,23 @@ const CommentInputBox = styled.div
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 2fr;
-    grid-template-rows: 50px;
     border: solid 3px ${props => props.theme.borderColor};
     border-radius: 10px;
     overflow: hidden;
-`
-
-const CommentInput = styled.input
-`
-    padding: 10px;
-    outline: none;
-    border: none;
 `
 
 const CommentBtn = styled.button
 `
     background: #55AAFF;
     outline: none;
-    border: none;
-    border-left: solid 3px black;
+    width: 100%;
+    border-radius: 10px;
+    margin: 10px 0px 0px 0px;
+    border: solid 3px black;
+    font-size: 19px;
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
 `
 
 const CommentForm = styled.form
@@ -441,7 +775,9 @@ const UserinformationBox = styled.div
 
 const UserProfile = styled.img
 `
-
+    width: 70px;
+    height: 70px;
+    border-radius: 26px;
 `
 
 const UserProfileBox = styled.div

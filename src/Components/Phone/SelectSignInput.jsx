@@ -10,6 +10,9 @@ import { SiNaver } from "react-icons/si";
 import { AiOutlineTwitter } from "react-icons/ai";
 import { work } from '../Phone/PhoneAuthMode';
 
+import LogoLight from "../../img/LOGO/8bitLight.png";
+import LogoDark from "../../img/LOGO/8bitDark.png";
+
 
 const SelectSign = () => 
 {
@@ -22,7 +25,7 @@ const SelectSign = () =>
 
     return(
         <SelectSignBox>
-            <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+            <Link to='/'><LoginTopLOGO src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
             <IntroduceBox>
                 <MainText as="h1">8bit 가입을 시작합니다!</MainText>
                 <IntroduceText>회원가입을 위해 가입 방식을 선택하세요!</IntroduceText>

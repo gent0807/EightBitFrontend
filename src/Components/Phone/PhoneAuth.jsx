@@ -11,6 +11,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { EmPwInformation, SumbitButton } from "../EmailPwFound/EmailPwFound"
 import axios from "axios";
 
+import LogoLight from "../../img/LOGO/8bitLight.png";
+import LogoDark from "../../img/LOGO/8bitDark.png";
+
 
 const Phone = () =>
 {
@@ -176,7 +179,7 @@ const Phone = () =>
 
     return(
         <PhoneBox>
-            <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+            <Link to='/'><LoginTopLOGO src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
             <IntroduceBox>
                 <MainText as={"h1"}>서비스 이용을 위해 본인 확인이 필요합니다!</MainText>
                 <IntroduceText>만 18세 미만인 경우 보호자 동의가 필요합니다.</IntroduceText>
