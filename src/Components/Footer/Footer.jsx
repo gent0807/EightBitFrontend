@@ -40,4 +40,6 @@ const FooterBackground = styled.div
 const FooterText = styled.span
 `
     color: black;
+    padding: 0px 10px 0px 10px;
+    text-align: center;
 `

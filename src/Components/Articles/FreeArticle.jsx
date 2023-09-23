@@ -12,7 +12,6 @@ import DOMPurify from "dompurify";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
-import "./CustomEditer.css";
 import { ImageDrop } from "quill-image-drop-module";
 
 import Siren from "../../img/Siren/Siren.png";
@@ -397,30 +396,6 @@ const formats = [
             </EditAllBox>
 
         <CommentBox>
-            <CommentForm 
-                LoginMaintain={loginMaintain} 
-                UserInfo={userInfo} User={userInfo==null ? 
-                null : userInfo.loginState}
-                UserCheck={user.login_state} 
-                UserNicknameCheck={user.nickname} 
-                UserNickname={userInfo==null ? 
-                null : userInfo.nickName}
-                Writer={writer}
-                onSubmit={registerReply}
-            >
-                <CommentInputBox>
-                    <ReactQuill
-                        placeholder="댓글을 입력해 주세요!"
-                        value={EditerValue}
-                        onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
-                        theme="snow" 
-                        modules={modules}
-                        formats={formats}
-                    >
-                    </ReactQuill>
-                </CommentInputBox>
-                <CommentBtn>등록</CommentBtn>
-            </CommentForm>
             {Comment.length > 0 &&
                 Comment.map(Comment => { 
                     return (
@@ -460,12 +435,89 @@ const formats = [
                             );
                     })
             }
+            <CommentForm 
+                LoginMaintain={loginMaintain} 
+                UserInfo={userInfo} User={userInfo==null ? 
+                null : userInfo.loginState}
+                UserCheck={user.login_state} 
+                UserNicknameCheck={user.nickname} 
+                UserNickname={userInfo==null ? 
+                null : userInfo.nickName}
+                Writer={writer}
+                onSubmit={registerReply}
+            >
+                <CommentInputBox>
+                    <Editer
+                        placeholder="댓글을 입력해 주세요!"
+                        value={EditerValue}
+                        onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
+                        theme="snow" 
+                        modules={modules}
+                        formats={formats}
+                    >
+                    </Editer>
+                </CommentInputBox>
+                <CommentBtn>등록</CommentBtn>
+            </CommentForm>
         </CommentBox>
         </FreeArticleBox >
     );
 }   
 
 export default FreeArticle;
+
+const Editer = styled(ReactQuill)
+`
+    display: flex;
+    flex-direction: column;
+
+    .ql-editor
+    {
+        margin: 0px -2px -2px 0px;
+        min-height: 100px;
+        font-size: 20px;
+    }
+
+    .ql-editor::-webkit-scrollbar 
+    {
+        display: none;
+    }
+
+    .ql-container::-webkit-scrollbar{
+        background: gray;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-container::-webkit-scrollbar-thumb
+    {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+    }
+
+    .ql-container::-webkit-scrollbar-track
+    {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-video
+    {
+        width: 1280px;
+        height: 700px;
+    }
+
+    .ql-toolbar.ql-toolbar.ql-snow
+    {
+        order: 2;
+    }
+
+`
 
 const CommentreplyBox = styled.div
 `

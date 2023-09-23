@@ -59,11 +59,10 @@ const Signinput = (props) =>
   const authNum=useRef(null);
   const inputFocus = useRef(null);
   const textRef = useRef(null);
-  const inputRef = useRef();
+  const inputRef = useRef(null);
   
 
   useEffect(()=>{
-    console.log(props);
     inputRef.current.focus();
   }, []);
 
@@ -88,13 +87,13 @@ const Signinput = (props) =>
       console.log(innerText);
       setSelectValue(innerText);
       setInputDirect(innerText);
-      setIsInputDirect(false);
   }
 
   const readyToWirteInputDirect = () =>
   {
     setInputDirect("");
     setIsInputDirect(true);
+    setSelectValue("직접입력");
     return inputFocus.current.focus();
   }
 
@@ -103,7 +102,6 @@ const Signinput = (props) =>
     const InputDirect = e.target.value;
     const onlytext = InputDirect.replace(/[~!@#$%^&*()_+|<>?:{}]/g, '');
     setInputDirect(onlytext);
-    setSelectValue(InputDirect);
   }
 
   const checkAuthNumberRight = () =>
@@ -413,84 +411,213 @@ const Signinput = (props) =>
       });
     }
 
+    console.log(inputRef);
+
   return (
       <SignT>
-        <SignTop>
-          <Link to='/'><SignTopLogo src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
-        </SignTop>
-        <SubmitT onSubmit={register}>
-            <SignInputT>
-              <Information>
-              <SignTitle className='title'>회원가입</SignTitle>
-              </Information>
-              <EmailCheckT>
-              <Title htmlFor="email">이메일</Title>
-              <EmailBox>
-              <EmailInput ref={inputRef} disabled={isEmailCertCheck} value={Email} onChange={checkEmail} placeholder="이메일"/>
-              <SelectInput onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} disabled={isEmailCertCheck} ON={isInputDirect} value={InputDirect} ref={inputFocus} onChange={checkAndSetInputDirect}/>
-              <EmailText>@</EmailText>
-              <SelectBox ref={textRef} onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} show={isSelectBtnCheck} event={isEmailCertCheck}>
-                <SelectOption showli={isSelectBtnCheck}>
-                  <SelectOptionLI value="naver.com" onClick={setEmailDomain}>naver.com</SelectOptionLI>
-                  <SelectOptionLI value="gmail.com" onClick={setEmailDomain}>gmail.com</SelectOptionLI>
-                  <SelectOptionLI value="hanmail.net" onClick={setEmailDomain}>hanmail.net</SelectOptionLI>
-                  <SelectOptionLI value="nate.com" onClick={setEmailDomain}>nate.com</SelectOptionLI>
-                  <SelectOptionLI value="daum.net" onClick={setEmailDomain}>daum.net</SelectOptionLI>
-                  <SelectOptionLI value="outlook.com" onClick={setEmailDomain}>outlook.com</SelectOptionLI>
-                  <SelectOptionLI onClick={readyToWirteInputDirect}><span>직접입력</span></SelectOptionLI>
-                </SelectOption>
-                <SelectValueText>{SelectValue}</SelectValueText>
-              <ArrowBox direction={isSelectBtnCheck}>{isSelectBtnCheck ? "▼" : "▲"}</ ArrowBox>
-              </SelectBox>
-              <CertBtn show={isEmail} disabled={isEmailCertCheck} type="button" onClick={checkAlreadySigning}><span>{isVisibled ? "재요청" : "인증요청"}</span></CertBtn>
-              </EmailBox>
-              <ErrorMessage color={isVisibled}>{EmailMessage}</ErrorMessage>
-              <EmailAuthCheckT show={isVisibled}>
-              <Title htmlFor="emailCert">인증번호</Title>
-              <EmailCheckBtnT>
-                {/*<EmailAuthInput show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>*/}
-                <EmailAuthInput placeholder="인증번호를 입력해주세요!" show={isInputCheck} check={isEmailCertCheck} value={EmailCert} onChange={setAuthNumber}/>
-                <CertCheckBtn show={isEmailCertCheck} type="button" onClick={checkAuthNumberRight}><span>{isEmailCertCheck ? "인증완료" : "인증하기"}</span></CertCheckBtn>
-              </EmailCheckBtnT>
-              </EmailAuthCheckT>
-              <ErrorMessage color = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
-              </EmailCheckT>
-              <PwCofirmNicknameT top={"20px"}>
-              <Title htmlFor="Pw">비밀번호</Title>
-              <PwBox placeholder="비밀번호를 입력해주세요!" show={isPw} check={isInputPwCheck} type="password" value={Pw} onChange={OnChangePw}/>
-                {Pw.length > 0 && (<ErrorMessage show = {isPw}>{PwMessage}</ErrorMessage>)}
-              </PwCofirmNicknameT>
-              <PwCofirmNicknameT top={"20px"}>
-              <Title htmlFor="PwConfirm">비밀번호 확인</Title>
-                <PwCofirmBox  placeholder="비번번호를 다시 입력해주세요!" show={isPwConfirm} check={isInputPwConfirmCheck} type="password" value={PwConfirm} onChange={OnChangePwConfirm}/>
-                {PwConfirm.length > 0 && (<ErrorMessage show = {isPwConfirm}>{PwConfirmMessage}</ErrorMessage>)}
-              </PwCofirmNicknameT>
-              <PwCofirmNicknameT top={"20px"}>
-              <Title htmlFor="Nickname">닉네임</Title>
-                <NicknameBox placeholder="닉네임을 입력해주세요!" show={isNickname} check={isInputNicknameCheck} value={Nickname} onChange={checkAlreadyNickRegistered}/>
-                {Nickname.length > 0 && (<ErrorMessage color = {isNickname}>{NicknameMessage}</ErrorMessage>)}
-              </PwCofirmNicknameT>
-            </SignInputT>
-            <SumbitButtonBox>
-                  <SumbitButton type='submit' disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}><span>회원가입</span></SumbitButton>
-                  <EmPwFoundT>
+          <SignTop>
+              <Link to='/'>
+                  <SignTopLogo src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/>
+              </Link>
+          </SignTop>
+          <SubmitT onSubmit={register}>
+                <SignInputT>
+                    <InformaionLogoBox>
+                        <Information>
+                            <SignTitle className='title'>회원가입</SignTitle>
+                        </Information>
+                    </InformaionLogoBox>
+
+                    <Title htmlFor="email">이메일</Title>
+
+                    <EmailCheckT>
+                        <EmailBox>
+                          <EmailInputBox>
+                            <EmailInput 
+                                ref={inputRef} 
+                                disabled={isEmailCertCheck} 
+                                value={Email} 
+                                onChange={checkEmail} 
+                                placeholder="이메일"
+                            />
+
+                            <EmailText>@</EmailText>
+
+                            <SelectInput  
+                                disabled={isInputDirect ? false : true } 
+                                ON={isInputDirect} 
+                                value={InputDirect} 
+                                ref={inputFocus}
+                                onChange={checkAndSetInputDirect}
+                            />
+                          </EmailInputBox>
+                          <SelectBox
+                                ref={textRef}
+                                ON={isInputDirect}
+                                onClick={() => setIsSelectBtnCheck(!isSelectBtnCheck)} 
+                                show={isSelectBtnCheck} 
+                                event={isEmailCertCheck}
+                            >
+                            
+                            <SelectTextBox>
+                                <SelectValueText>{SelectValue}</SelectValueText>
+                                <ArrowBox direction={isSelectBtnCheck}>{isSelectBtnCheck ? "▼" : "▲"}</ ArrowBox>
+                            </SelectTextBox>
+
+                            <SelectOption showli={isSelectBtnCheck}>
+                                <SelectOptionLI value="naver.com" onClick={setEmailDomain}>naver.com</SelectOptionLI>
+                                <SelectOptionLI value="gmail.com" onClick={setEmailDomain}>gmail.com</SelectOptionLI>
+                                <SelectOptionLI value="hanmail.net" onClick={setEmailDomain}>hanmail.net</SelectOptionLI>
+                                <SelectOptionLI value="nate.com" onClick={setEmailDomain}>nate.com</SelectOptionLI>
+                                <SelectOptionLI value="daum.net" onClick={setEmailDomain}>daum.net</SelectOptionLI>
+                                <SelectOptionLI value="outlook.com" onClick={setEmailDomain}>outlook.com</SelectOptionLI>
+                                <SelectOptionLI onClick={readyToWirteInputDirect}><span>직접입력</span></SelectOptionLI>
+                            </SelectOption>
+                            </SelectBox>
+                          </EmailBox>
+
+                          <ErrorMessage color={isVisibled}>{EmailMessage}</ErrorMessage>
+
+                          <CertBtn
+                              show={isEmail} 
+                              disabled={isEmailCertCheck} 
+                              type="button" 
+                              onClick={checkAlreadySigning}
+                          >
+                              <CertText>{isVisibled ? "재요청" : "인증요청"}</CertText>
+                          </CertBtn>
+
+
+                          <EmailAuthCheckT show={isVisibled}>
+                          <Title htmlFor="emailCert">인증번호</Title>
+                              <EmailCheckBtnT>
+                                  {/*<EmailAuthInput show={isInputCheck} check={isEmailCertCheck} maxLength={6} value={EmailCert} onChange={OnChangeEmailCert}/>*/}
+                                  <EmailAuthInput 
+                                      placeholder="인증번호를 입력해주세요!" 
+                                      show={isInputCheck} 
+                                      check={isEmailCertCheck} 
+                                      value={EmailCert} 
+                                      onChange={setAuthNumber}
+                                  />
+
+                                  <CertCheckBtn 
+                                      show={isEmailCertCheck} 
+                                      type="button" 
+                                      onClick={checkAuthNumberRight}
+                                  >
+                                  <CertBtnText>{isEmailCertCheck ? "인증완료" : "인증하기"}</CertBtnText>
+                              </CertCheckBtn>
+                              </EmailCheckBtnT>
+
+                          </EmailAuthCheckT>
+
+                          <ErrorMessage color = {isEmailCertCheckBtn}>{EmailCertCheckMessage}</ErrorMessage>
+
+                    </EmailCheckT>
+
+                    <Title htmlFor="Pw">비밀번호</Title>
+
+                    <PwCofirmNicknameT>
+                        <PwBox 
+                            placeholder="비밀번호를 입력해주세요!" 
+                            show={isPw} 
+                            check={isInputPwCheck} 
+                            type="password" 
+                            value={Pw} 
+                            onChange={OnChangePw}
+                        />
+
+                        {Pw.length > 0 && (<ErrorMessage show = {isPw}>{PwMessage}</ErrorMessage>)}
+                    </PwCofirmNicknameT>
+
+                    <Title htmlFor="PwConfirm">비밀번호 확인</Title>
+
+                    <PwCofirmNicknameT>
+                        <PwCofirmBox
+                            placeholder="비번번호를 다시 입력해주세요!" 
+                            show={isPwConfirm} 
+                            check={isInputPwConfirmCheck} 
+                            type="password" 
+                            value={PwConfirm} 
+                            onChange={OnChangePwConfirm}
+                        />
+
+                        {PwConfirm.length > 0 && (<ErrorMessage show = {isPwConfirm}>{PwConfirmMessage}</ErrorMessage>)}
+                    </PwCofirmNicknameT>
+
+                    <Title htmlFor="Nickname">닉네임</Title>
+
+                    <PwCofirmNicknameT>
+                        <NicknameBox 
+                            placeholder="닉네임을 입력해주세요!" 
+                            show={isNickname} 
+                            check={isInputNicknameCheck} 
+                            value={Nickname} 
+                            onChange={checkAlreadyNickRegistered}
+                        />
+
+                        {Nickname.length > 0 && (<ErrorMessage color = {isNickname}>{NicknameMessage}</ErrorMessage>)}
+                    </PwCofirmNicknameT>
+
+                </SignInputT>
+
+                <SumbitButtonBox>
+                      <SumbitButton 
+                          type='submit' 
+                          disabled={!(!isEmail && isPw && isPwConfirm && isNickname && isConfirmCheck)}
+                      >
+                          <SumbitBtnText>회원가입</SumbitBtnText>
+                      </SumbitButton>
+                </SumbitButtonBox>
+
+                <EmPwFoundT>
                     <EmailPwFoundList>
-                      <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></EmailPwFoundListLiBar>
-                      <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLI>
+                        <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></EmailPwFoundListLiBar>
+                        <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/EmailPwFound'>이메일/비밀번호 찾기</Link></EmailPwFoundListLI>
                     </EmailPwFoundList>
-                  </EmPwFoundT>
-            </SumbitButtonBox>
-        </SubmitT>
+                </EmPwFoundT>
+          </SubmitT>
       </SignT>
       
   );
 }
 
+const SelectTextBox = styled.div
+`
+    display: flex;
+    justify-content: end;
+    @media (min-width:250px) and (max-width:420px)
+    {
+      justify-content: center;
+    }
+`
+
+const EmailInputBox = styled.div
+`
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: minmax(0px, 153px) minmax(0px, 41px) minmax(0px, 153px);
+`
+
+const SumbitBtnText = styled.span
+`
+
+`
+
+const CertBtnText = styled.span
+`
+
+`
+
+const CertText = styled.span
+`
+
+`
+
 const EmailInput = styled.input
 `
-    width: 130px;
     height: 20px;
-    padding: 20px 5px 20px 20px;
+    padding: 20px 5px 20px 15px;
     border: none;
     border-radius: 10px;
     caret-color: ${(props) => props.theme.textColor};
@@ -507,6 +634,7 @@ const Title = styled.label
 `
   font-weight: bold;
   color: ${(props) => props.theme.textColor};
+  margin: 14px 0px 0px 0px;
 `
 
 const SignTitle = styled.span
@@ -523,13 +651,14 @@ const SignT = styled.div
 
 const SignInputT = styled.div
 `
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
 `
 
 const SignTop = styled.div
 `
-    text-align: center;
-    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
 `
 
 const SignTopLogo = styled.img
@@ -547,7 +676,8 @@ const EmailCheckT = styled.div
 
 const EmailBox = styled.div
 `
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     margin: 20px 0px 20px 0px;
 `
 
@@ -555,9 +685,15 @@ const SubmitT = styled.form
 `
 `
 
+const InformaionLogoBox = styled.div
+`
+    display: flex;
+    justify-content: center;
+    margin: 20px 0px 20px 0px;
+`
+
 const Information = styled.div
 `
-    margin: 0px 154px 45px 154px;
     width: 130px;
     border: solid 3px ${(props) => props.theme.borderColor};
     padding: 10px;
@@ -567,17 +703,14 @@ const Information = styled.div
 
 const SelectInput = styled.input
 `
-    position: absolute;
-    width: 130px;
     height: 20px;
     border: none;
     background-color: #dee2e6;
     font-size:15px;
     border-radius: 10px;
     outline: none;
-    padding: 20px 5px 20px 20px;
+    padding: 20px 5px 20px 15px;
     cursor: pointer;
-    margin: 0px 0px 0px 194px;
     z-index: ${props => props.ON ? "2" : "0"};
     caret-color: ${(props) => props.theme.checkBoxColor};
     outline: none;
@@ -589,8 +722,7 @@ const SelectInput = styled.input
 
 const SelectBox = styled.div
 `
-    display: block;
-    width: 130px;
+    overflow: hidden;
     height: 20px;
     background-color: #dee2e6;
     font-size:15px;
@@ -599,9 +731,14 @@ const SelectBox = styled.div
     outline: none;
     border: none;
     padding: 20px 5px 20px 20px;
+    margin: 0px 0px 0px 13px;
     z-index: 1;
     cursor: ${props => props.event ? "none" : "pointer"};
     pointer-events: ${props => props.event ? "none" : ""};
+    @media (min-width:250px) and (max-width:420px)
+    {
+        padding: 20px 5px 20px 5px;
+    }
 `
 
 const EmailText = styled.span
@@ -639,36 +776,47 @@ const SelectOption = styled.ul
     display: ${props => props.showli ? "none" : "block"};
     position: absolute;
     background: #dee2e6;
-    margin: ${props => props.showli ? "0" : "42px 0px 0px -20px"};
     list-style: none;
     padding: 0px 0px 0px 0px;
-    width: ${props => props.showli ? "145px" : "155px"};
+    width: 128px;
     border-radius: 10px;
     border: none;
+    margin: 28px 0px 0px -19px;
     box-shadow: ${props => props.showli ? "none" : `0 0 0 2px ${props.theme.borderColor} inset`};
     animation: ${slide} 0.5s;
     overflow: hidden;
+    @media (min-width:250px) and (max-width:420px)
+    {
+        margin: 28px 0px 0px -108px;
+    }
 `
 
 const SelectValueText = styled.span
 `
-    position: absolute;
-    margin: 1px 0px 0px 0px;
+    width: 80px;
+    margin: 1px 10px 0px 0px;
     color: black;
+    @media (min-width:250px) and (max-width:420px)
+    {
+        display: none;
+    }
 `
 
 export const ArrowBox = styled.div
 `
+    margin: 3px 0px 0px 0px;
     color: ${(props) => props.theme.textColor};
-    position: absolute;
-    margin-left: 110px;
-    margin-top: ${props => props.direction ? "1px" : "0px"};
+    @media (min-width:250px) and (max-width:420px)
+    {
+        display: flex;
+        justify-content: center;
+    }
 `
 
 const CertBtn = styled.button
 `
-    width: 100px;
-    height: 59px;
+    max-width: 460px;
+    height: 50px;
     border: none;
     box-shadow: ${props => props.show ? "none" : "0 0 0 1px #dddddd inset"};
     background: ${props => props.show ? props.theme.buttonColor : "#aaaaaa"};
@@ -676,7 +824,7 @@ const CertBtn = styled.button
     cursor: pointer;
     color:white;
     font-size: 15px;
-    margin: 0px 0px 0px 11px;
+    margin: 21px 0px 21px 0px;
     pointer-events: ${props => props.show ? "true" : "none"};
     &:active
     {
@@ -697,18 +845,19 @@ export const ErrorMessage = styled.p
 
 const EmailAuthCheckT = styled.div
 `
-    display: ${props => props.show ? "block" : "none"};
-    margin-top: 20px;
+    display: ${props => props.show ? "flex" : "none"};
+    flex-direction: column;
 `
 
 const PwCofirmNicknameT = styled.div
 `
-    margin-top: ${props => props.top};
+    display: flex;
+    flex-direction: column;
 `
 
 const EmailAuthInput = styled.input
 `
-  width: 324px;
+  max-width: 324px;
   height: 19px;
   padding: 20px 5px 20px 20px;
   border: none;
@@ -727,13 +876,15 @@ const EmailAuthInput = styled.input
 
 const EmailCheckBtnT = styled.div
 `
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 3fr 1fr;
     margin: 20px 0px 20px 0px;
 `
 
 const CertCheckBtn = styled.button
 `
-  width: 100px;
+  max-width: 100px;
   height: 60px;
   box-shadow: ${props => props.show ? "0 0 0 1px #dddddd inset" : "none"};
   border: none;
@@ -752,7 +903,7 @@ const CertCheckBtn = styled.button
 
 const PwBox = styled.input
 `
-  width: 435px;
+  max-width: 435px;
   padding: 20px 5px 20px 20px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -782,7 +933,7 @@ const NicknameBox = styled(PwBox)
 const SumbitButton = styled.button
 `
    
-    width: 460px;
+    max-width: 460px;
     padding: 15px;
     background: ${props => props.theme.buttonColor};
     border: none;
@@ -805,6 +956,8 @@ const SumbitButton = styled.button
 
 const SumbitButtonBox = styled.div
 `
+    display: flex;
+    flex-direction: column;
     margin-top: 50px;
 `
 
@@ -832,12 +985,11 @@ const EmPwFoundT = styled.div
 
 const EmailPwFoundListLI = styled.li
 `
-    margin: 0px 10px 0px 10px;
+    padding: 0px 10px 0px 10px;
     a
     {
       color:${props => props.theme.textColor};
       text-decoration: none;
-      margin: 0px 15px 0px 15px;
     }
 `
 
@@ -854,6 +1006,7 @@ const EmailPwFoundList = styled.ul
 
 const EmailPwFoundListLiBar = styled(EmailPwFoundListLI)
 `
+  
   &::after {
     background: ${props => props.theme.textColor};
     position: absolute;
