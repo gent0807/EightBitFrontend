@@ -223,10 +223,12 @@ const FreeArticle = () => {
             </TitleBox>
             <TitleLine></TitleLine>
             <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content)}}/>
+            <br></br>
+            <br></br>
             {InformationImage.length > 0 &&
                         InformationImage.map(Image => { 
                                 return (
-                                    <InformaionImageBox key={Image.id} src={Image.src} style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
+                                    <InformaionImageBox key={Image.id} src={Image.src} style={{width:"700px", height:"500px", borderRadius:"12px"}}/>
                                 );
                         })
                     }
@@ -236,10 +238,10 @@ const FreeArticle = () => {
                 <LikeBtn  LoginMaintain={loginMaintain} UserInfo={userInfo==null? null : userInfo.loginState} User={user.login_state} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}>{likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}</LikeBtn>
 
                 <Link to={`/UpdateBoard/${writer}/${regdate}`} style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
-                (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" ), color:"black"}}>수정</Link> 
+                (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}}>수정</Link> 
 
                 <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo==null ? null : userInfo.loginState} UserInfoNickname={userInfo==null ? (user.login_state==="allok" ? user.nickname : null): userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
-                <Link to="/FreeBoard" style={{color:"black"}}>목록</Link>
+                <Link to="/FreeBoard">목록</Link>
             </EditAllBox>
             <CommentBox>
             <CommentForm 
@@ -301,8 +303,8 @@ const CommentBtn = styled.button
 
 const CommentForm = styled.form
 `
-    display: ${props => props.LoginMaintain == null  ? "none" : props.LoginMaintain=="true" ? (props.UserInfo==null ? "none" : (props.User==="allok"? (props.UserNickname==props.Writer? "block" :"none" ): "none" )):
-    (props.UserCheck==="allok" ? (props.UserNicknameCheck==props.Writer ? "block":"none" ):"none" )};
+    display: ${props => props.LoginMaintain == null  ? "none" : props.LoginMaintain=="true" ? (props.UserInfo==null ? "none" : (props.User==="allok"? "block" : "none" )):
+    (props.UserCheck==="allok" ? "block" : "none" )};
 `
 
 const InformaionImageBox = styled.img
@@ -327,14 +329,14 @@ const LikeBtn = styled.div
     display: ${props => props.LoginMaintain==null ? "none":(props.LoginMaintain=="true" ? (props.UserInfo==="allok" ? "block":"none"):(props.User==="allok" ? "block":"none"))};
     cursor : pointer;
     color: orange;
-    font-size: 45px;
+    font-size: 37.2px;
     margin: -8px 0px 0px 0px;
 `
 
 const EditAllBox = styled.div
 `
     display: flex;
-    font-size: 30px;
+    font-size: 22px;
     justify-content: end;
     color: ${props => props.theme.textColor};
     a{
