@@ -4,18 +4,36 @@ import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineSearch } from "react-icons/hi";
 import { CgMenuGridR } from "react-icons/cg";
 import { MdLanguage } from "react-icons/md";
-import { FaRegUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { MdOutlineDeveloperMode } from "react-icons/md";
-import { AiTwotoneShop } from "react-icons/ai";
-import { GrLogout } from "react-icons/gr";
-import { AiOutlineUserSwitch } from "react-icons/ai";
 import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
-import { BiBell} from "react-icons/bi";
-import { RiEnglishInput } from "react-icons/ri";
 import { clearLoginState } from "../Redux/User";
+
+import LogoLight from "../../img/LOGO/8bit.png";
+
+import Korean from "../../img/Lang/korea.png";
+import Japan from "../../img/Lang/japan.png";
+import Germany from "../../img/Lang/germany.png";
+import China from "../../img/Lang/china.png";
+import Spain from "../../img/Lang/spain.png";
+import UK from "../../img/Lang/uk.png";
+
+import User from "../../img/MySlide/user.png";
+import Bell from "../../img/MySlide/bell.png";
+import Coding from "../../img/MySlide/coding.png";
+import Shop from "../../img/MySlide/store.png";
+import Update from "../../img/MySlide/update.png";
+import Logout from "../../img/MySlide/logout.png";
+
+import Essay from "../../img/BoardSlide/essay.png";
+import Discussion from "../../img/BoardSlide/discussion.png";
+import Strategy from "../../img/BoardSlide/strategy.png";
+import Rating from "../../img/BoardSlide/rating.png";
+import Console from "../../img/BoardSlide/console.png";
+import Digital from "../../img/BoardSlide/digital.png";
+
 import axios from 'axios';
+import Store from "../Redux/Store";
 
 const HeaderBox = () =>
 {
@@ -285,7 +303,7 @@ const HeaderBox = () =>
         <Topnav>
         <NavBox>
         <LogoBox>
-            <Link to='/'><Logo src="img/8bit.png" alt='로고'/></Link>
+            <Link to='/'><Logo src={LogoLight} alt='로고'/></Link>
         </LogoBox>
             <NavUl>
                 <GameLi onClick={() => ScrollTop()} active = {isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
@@ -301,32 +319,175 @@ const HeaderBox = () =>
                 <SearchButton><HiOutlineSearch/></SearchButton>
                 </SearchInputIconBox>
             </SearchInputBox>
-        <ButtonBox menucheck={loginMaintain==null ? false : loginMaintain === "true" ? (userInfo == null ? false : userInfo.loginState==="allok" ? true : false): (user.login_state === "allok" ? true:false)}>
-            {loginMaintain == null ? [] : loginMaintain == "true" ? (userInfo==null ? [] :  userInfo.loginState === "allok" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: []): (user.login_state === "allok" ? [<MenuBox left={"21px"} top={"8.3px"} size={"33px"} padding={"5.4px 0px 0px 0px"}><AiOutlineShopping/></MenuBox>]: [])}
-            <MenuBox click={LanguageClickCheck} left={"19px"} top={"10px"} size={"30px"} ref={LanguageRef} padding={"6px 0px 0px 0px"} onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}><MdLanguage/></MenuBox>
-            <MenuBox click={FastClickCheck} left={"16px"} top={"9px"} size={"33px"} ref={FastRef} padding={"4.8px 0px 0px 0px"} onClick={() => FastMenuCheck()}><CgMenuGridR/></MenuBox>
+        <ButtonBox
+            menucheck={ loginMaintain==null ?
+            false : loginMaintain === "true" ? 
+            (userInfo == null ? false : userInfo.loginState==="allok" ? true : false) : (user.login_state === "allok" ? true:false)}
+        >
+
+        {loginMaintain == null ? [] : loginMaintain == "true" ?
+        (userInfo==null ? [] : userInfo.loginState === "allok" ?
+        [<MenuBox 
+            left={"21px"} 
+            top={"8.3px"} 
+            size={"33px"} 
+            padding={"5.4px 0px 0px 0px"}
+        >
+            <AiOutlineShopping/>
+        </MenuBox>]: []) :
+
+        (user.login_state === "allok" ?
+        [<MenuBox 
+            left={"21px"} 
+            top={"8.3px"} 
+            size={"33px"} 
+            padding={"5.4px 0px 0px 0px"}
+        >
+            <AiOutlineShopping/>
+        </MenuBox>]: [])}
+
+        <MenuBox 
+            click={LanguageClickCheck} 
+            left={"19px"} 
+            top={"10px"} 
+            size={"30px"} 
+            ref={LanguageRef} 
+            padding={"6px 0px 0px 0px"} 
+            onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}
+        >
+            <MdLanguage/>
+        </MenuBox>
+
+            <MenuBox 
+                click={FastClickCheck} 
+                left={"16px"} 
+                top={"9px"} 
+                size={"33px"} 
+                ref={FastRef} 
+                padding={"4.8px 0px 0px 0px"} 
+                onClick={() => FastMenuCheck()}
+            >
+                <CgMenuGridR/>
+            </MenuBox>
+
             <>
-            {loginMaintain == null ?  [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>]
-            :loginMaintain=="true" ? (userInfo==null? [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>] :
-            userInfo.loginState === "allok" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src={localStorage.getItem("profileImageDir")+userInfo.profileImgPath}/></Profile>,
-            <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] :
-            [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>])    
-            :(user.login_state === "allok" ? [<Profile click={ProfileClickCheck} ref={ProfileRef} onClick={() => ProfileMenuCheck()}><Profileimg src={localStorage.getItem("profileImageDir")+user.profile_img_path}/></Profile>,
-            <WriteBox click={WriteClickCheck} onClick={()=> WriteMenuCheck()} ref={WriteRef}><WriteBoxText >글쓰기</WriteBoxText></WriteBox>] 
-            :  [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/Login'>로그인</Link></LineBox>,
-            <MenuBox onClick={() => ScrollTop()} left={"9px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}><Link to='/SelectSign'>회원가입</Link></MenuBox>])}
-            </> 
+            {loginMaintain == null ?  
+            [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}>
+                <Link to='/Login'>로그인</Link>
+            </LineBox>,
+            <MenuBox 
+                onClick={() => ScrollTop()} 
+                left={"9px"} 
+                top={"7px"} 
+                size={"15px"} 
+                padding={"10px 0px 10px 0px"}
+            >
+                <Link to='/SelectSign'>회원가입</Link>
+            </MenuBox>] : 
+
+            loginMaintain=="true" ? 
+            (userInfo==null? 
+            [<LineBox 
+                onClick={() => ScrollTop()} 
+                left={"20px"} 
+                top={"7px"} 
+                size={"15px"} 
+                padding={"10px 0px 10px 0px"}
+            >
+                <Link to='/Login'>로그인</Link>
+            </LineBox>,
+
+            <MenuBox 
+                onClick={() => ScrollTop()} 
+                left={"9px"} 
+                top={"7px"} 
+                size={"15px"} 
+                padding={"10px 0px 10px 0px"}
+            >
+                <Link to='/SelectSign'>회원가입</Link>
+            </MenuBox>] :
+
+            userInfo.loginState === "allok" ?
+            [<Profile 
+                click={ProfileClickCheck} 
+                ref={ProfileRef} 
+                onClick={() => ProfileMenuCheck()}
+            >
+                <Profileimg src={localStorage.getItem("profileImageDir")+userInfo.profileImgPath}/>
+            </Profile>,
+
+            <WriteBox
+                click={WriteClickCheck} 
+                onClick={()=> WriteMenuCheck()} 
+                ref={WriteRef}
+            >
+                <WriteBoxText >글쓰기</WriteBoxText>
+            </WriteBox>] :
+
+            [<LineBox 
+                onClick={() => ScrollTop()} 
+                left={"20px"} 
+                top={"7px"} 
+                size={"15px"} 
+                padding={"10px 0px 10px 0px"}
+            >
+                <Link to='/Login'>로그인</Link>
+            </LineBox>,
+
+            <MenuBox 
+                onClick={() => ScrollTop()} 
+                left={"9px"} 
+                top={"7px"} 
+                size={"15px"} 
+                padding={"10px 0px 10px 0px"}
+            >
+                <Link to='/SelectSign'>회원가입</Link>
+            </MenuBox>]) : 
+            (user.login_state === "allok" ? 
+            [<Profile 
+                click={ProfileClickCheck} 
+                ref={ProfileRef} 
+                onClick={() => ProfileMenuCheck()}
+            >
+                <Profileimg src={localStorage.getItem("profileImageDir")+user.profile_img_path}/>
+            </Profile>,
+
+            <WriteBox 
+                click={WriteClickCheck} 
+                onClick={()=> WriteMenuCheck()} 
+                ref={WriteRef}
+            >
+                <WriteBoxText >글쓰기</WriteBoxText>
+            </WriteBox>] : 
+            [<LineBox 
+                onClick={() => ScrollTop()} 
+                left={"20px"} 
+                top={"7px"} 
+                size={"15px"} 
+                padding={"10px 0px 10px 0px"}
+            >
+                <Link to='/Login'>로그인</Link>
+            </LineBox>,
+
+            <MenuBox 
+                onClick={() => ScrollTop()} 
+                left={"9px"} 
+                top={"7px"} 
+                size={"15px"} 
+                padding={"10px 0px 10px 0px"}
+            >
+                <Link to='/SelectSign'>회원가입</Link>
+            </MenuBox>])}
+            </>
+
             <LanguageListBox margin= {loginMaintain==null?false:loginMaintain=="true" ? ((userInfo!=null) ? (userInfo.loginState === "allok" ? true : false) : false):(user.login_state === "allok" ? true : false)} zindex={languageTopZIndex.current} default={isDefaultLanguageScene} show={LanguageMenuShow}>
                 <ProfileUl>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/korea.png"/><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/uk.png"/><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/germany.png"/><ProfileliText  MediaLeft={"17px"}>Deutsch</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/spain.png"/><ProfileliText  MediaLeft={"17px"}>Espanol</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/japan.png"/><ProfileliText  MediaLeft={"17px"}>Japanese</ProfileliText></Profileli>
-                <Profileli padding="11.5px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src="img/china.png"/><ProfileliText  MediaLeft={"17px"}>Chinese</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={Korean}/><ProfileliText  MediaLeft={"17px"}>Korean</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={UK}/><ProfileliText  MediaLeft={"17px"}>English</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={Germany}/><ProfileliText  MediaLeft={"17px"}>Deutsch</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={Spain}/><ProfileliText  MediaLeft={"17px"}>Espanol</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={Japan}/><ProfileliText  MediaLeft={"17px"}>Japanese</ProfileliText></Profileli>
+                <Profileli padding="11.5px 0px 15px 13px" onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow), setLanguageClickCheck(!LanguageClickCheck)]}><DropdownImg src={China}/><ProfileliText  MediaLeft={"17px"}>Chinese</ProfileliText></Profileli>
                 </ProfileUl>
             </LanguageListBox>
             <FastListBox zindex={fastMenuTopZIndex.current} default={isDefaultFastScene} show={FastMenuShow}>
@@ -346,12 +507,12 @@ const HeaderBox = () =>
             </ProfileListBox>
             <WriteListBox zindex={writeMemuTopZIndex.current} default={isDefaultWriteScene} show={WriteMenuShow}>
                 <ProfileUl>
-                <Link to="/WriteBoard"><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/essay.png"/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli></Link>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/discussion.png"/><ProfileliText  MediaLeft={"17px"}>토론게시판</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/strategy.png"/><ProfileliText  MediaLeft={"17px"}>공략게시판</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/rating.png"/><ProfileliText  MediaLeft={"17px"}>상품 리뷰</ProfileliText></Profileli>
-                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/console.png"/><ProfileliText  MediaLeft={"17px"}>게임 리뷰</ProfileliText></Profileli>
-                <Profileli padding="10.5px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src="img/digital.png"/><ProfileliText  MediaLeft={"17px"}>아트워크</ProfileliText></Profileli>
+                <Link to="/WriteBoard"><Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Essay}/><ProfileliText  MediaLeft={"17px"}>자유게시판</ProfileliText></Profileli></Link>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Discussion}/><ProfileliText  MediaLeft={"17px"}>토론게시판</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Strategy}/><ProfileliText  MediaLeft={"17px"}>공략게시판</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Rating}/><ProfileliText  MediaLeft={"17px"}>상품 리뷰</ProfileliText></Profileli>
+                <Profileli padding="15px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Console}/><ProfileliText  MediaLeft={"17px"}>게임 리뷰</ProfileliText></Profileli>
+                <Profileli padding="10.5px 0px 15px 13px" onClick={() => setIsWriteMenuShow(!WriteMenuShow)}><DropdownImg src={Digital}/><ProfileliText  MediaLeft={"17px"}>아트워크</ProfileliText></Profileli>
                 </ProfileUl>
             </WriteListBox>
         </ButtonBox>

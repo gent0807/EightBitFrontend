@@ -332,7 +332,7 @@ const UpdateBoard = () =>
             <WriterInformation><WriterInformationText>글쓰기</WriterInformationText></WriterInformation>
             </WriterInformationTextAllBox>
             <WriteBoardSubmit onSubmit={OncheckSubmit}>
-            <WriterInput placeholder='제목' onChange={WriterChange} value={WriterChangeValue}/>
+            <WriterInput placeholder='제목' maxLength={50} onChange={WriterChange} value={WriterChangeValue}/>
             <EditerBox>
                 <ReactQuill
                     placeholder="내용을 입력해 주세요!"

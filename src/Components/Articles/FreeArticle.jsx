@@ -219,13 +219,18 @@ const FreeArticle = () => {
             </UserinformationBox>
             </UserBox>
             <InformationBox>
-            <TitleText>{title}</TitleText>
             <InformationAllBox>
+            <TitleBox>
+            <TitleText>{title}</TitleText>
+            </TitleBox>
+            <TitleLine></TitleLine>
             <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content)}}/>
+            <br></br>
+            <br></br>
             {InformationImage.length > 0 &&
                         InformationImage.map(Image => { 
                                 return (
-                                    <InformaionImageBox key={Image.id} src={Image.src} style={{width:"70px", height:"70px", borderRadius:"26px"}}/>
+                                    <InformaionImageBox key={Image.id} src={Image.src} style={{width:"700px", height:"500px", borderRadius:"12px"}}/>
                                 );
                         })
                     }
@@ -235,25 +240,82 @@ const FreeArticle = () => {
                 <LikeBtn  LoginMaintain={loginMaintain} UserInfo={userInfo==null? null : userInfo.loginState} User={user.login_state} onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}>{likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}</LikeBtn>
 
                 <Link to={`/UpdateBoard/${writer}/${regdate}`} style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? (userInfo.nickName==writer? "block" :"none" ): "none" )):
-                (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" ), color:"black"}}>수정</Link> 
+                (user.login_state==="allok" ? (user.nickname==writer ? "block":"none" ):"none" )}}>수정</Link> 
 
                 <DeleteBtn LoginMaintain={loginMaintain} User={user.login_state} UserInfo={userInfo} UserInfoState={userInfo==null ? null : userInfo.loginState} UserInfoNickname={userInfo==null ? (user.login_state==="allok" ? user.nickname : null): userInfo.nickName} Writer={writer} onClick={deleteArticle}>삭제</DeleteBtn>
-                <Link to="/FreeBoard" style={{color:"black"}}>목록</Link>
+                <Link to="/FreeBoard">목록</Link>
             </EditAllBox>
-                <form style={{display:loginMaintain == null  ? "none" : loginMaintain=="true" ? (userInfo==null ? "none" : (userInfo.loginState==="allok"? "block": "none" )):
-                (user.login_state==="allok" ? "block" :"none" )}} onSubmit={registerReply}>
-                    <textarea placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}></textarea>
-                    <input type="button" value="댓글 등록"/>  
-                </form>
+            <CommentBox>
+            <CommentForm 
+            LoginMaintain={loginMaintain} 
+            UserInfo={userInfo} User={userInfo==null ? null : userInfo.loginState} 
+            UserCheck={user.login_state}  UserNicknameCheck={user.nickname} 
+            UserNickname={userInfo==null ? null : userInfo.nickName} 
+            Writer={writer} 
+            onSubmit={registerReply}>
+            <CommentInputBox>
+                <CommentInput placeholder='댓글 내용' onChange={replyChange} value={replyChangeValue}/>
+                <CommentBtn>댓글입력</CommentBtn>
+            </CommentInputBox>
+            </CommentForm>
+            </CommentBox>
         </FreeArticleBox >
     );
 }   
 
 export default FreeArticle;
 
+const TitleLine = styled.div
+`
+    height: 1px;
+    background: black;
+    margin: 15px 0px 15px 0px;
+`
+
+const CommentBox = styled.div
+`
+
+`
+
+const CommentInputBox = styled.div
+`
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 2fr;
+    grid-template-rows: 50px;
+    border: solid 3px ${props => props.theme.borderColor};
+    border-radius: 10px;
+    overflow: hidden;
+`
+
+const CommentInput = styled.input
+`
+    padding: 10px;
+    outline: none;
+    border: none;
+`
+
+const CommentBtn = styled.button
+`
+    background: #55AAFF;
+    outline: none;
+    border: none;
+    border-left: solid 3px black;
+`
+
+const CommentForm = styled.form
+`
+    display: ${props => props.LoginMaintain == null  ? "none" : props.LoginMaintain=="true" ? (props.UserInfo==null ? "none" : (props.User==="allok"? "block" : "none" )):
+    (props.UserCheck==="allok" ? "block" : "none" )};
+`
+
 const InformaionImageBox = styled.img
 `
 
+`
+
+const TitleBox = styled.div
+`
 `
 
 const DeleteBtn = styled.div
@@ -270,18 +332,20 @@ const LikeBtn = styled.div
     display: ${props => props.LoginMaintain==null ? "none":(props.LoginMaintain=="true" ? (props.UserInfo==="allok" ? "block":"none"):(props.User==="allok" ? "block":"none"))};
     cursor : pointer;
     color: orange;
-    font-size: 45px;
+    font-size: 37.2px;
     margin: -8px 0px 0px 0px;
 `
 
 const EditAllBox = styled.div
 `
     display: flex;
-    font-size: 30px;
+    font-size: 22px;
     justify-content: end;
+    color: ${props => props.theme.textColor};
     a{
         margin: 0px 0px 0px 13px;
         text-decoration: none;
+        color: ${props => props.theme.textColor};
     }
     }
 `
@@ -314,9 +378,10 @@ const EditText = styled.span
 
 `
 
-const TitleText = styled.h1
+const TitleText = styled.span
 `
-
+    font-size: 28px;
+    font-weight: bold;
 `
 
 const Information = styled.div
@@ -326,7 +391,12 @@ const Information = styled.div
 
 const InformationAllBox = styled.div
 `
-    max-height: 800px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 200px;
+    border: none;
+    box-shadow: 0 0 0 3px ${(props) => props.theme.WriterBorder} inset;
 `
 
 const FreeArticleBox = styled.div
@@ -344,6 +414,7 @@ const InformationBox = styled.div
     display: flex;
     flex-direction: column;
     margin: 20px 0px 86px 0px;
+    word-break: break-all;
 `
 
 const LikeViewBox = styled.div
@@ -363,6 +434,7 @@ const UserinformationBox = styled.div
     display: flex;
     justify-content: space-between;
     margin: 0px 0px 10px 0px;
+    color: ${props => props.theme.textColor};
     @media (min-width:250px) and (max-width:666px)
     {
         display: flex;
@@ -396,7 +468,7 @@ const DayBoxBar = styled.div
     display: inline-block;
     width: 2px;
     height: 11px;
-    background: black;
+    background: ${props => props.theme.textColor};
     margin: 0px 7px 6px 7px;
     @media (min-width:667px) and (max-width:910px)
     {
