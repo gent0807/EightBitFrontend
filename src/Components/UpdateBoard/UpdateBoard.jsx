@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
-import "../WriteBoard/CustomEditer.css";
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { styled } from 'styled-components';
@@ -334,14 +333,14 @@ const UpdateBoard = () =>
             <WriteBoardSubmit onSubmit={OncheckSubmit}>
             <WriterInput placeholder='제목' maxLength={50} onChange={WriterChange} value={WriterChangeValue}/>
             <EditerBox>
-                <ReactQuill
+                <Editer
                     placeholder="내용을 입력해 주세요!"
                     value={EditerValue}
                     onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
                     theme="snow" 
                     modules={modules}
                     formats={formats}
-                ></ReactQuill>
+                ></Editer>
             </EditerBox>
             <FileUploadBox ref={dragRef} checkFile={isDragging}>
             <FileUploadLabel checkFile={isDragging} htmlFor='fileUpload'>
@@ -376,6 +375,55 @@ const UpdateBoard = () =>
 }
 
 export default UpdateBoard;
+
+const Editer = styled(ReactQuill)
+`
+    .ql-editor
+    {
+        margin: 0px -2px -2px 0px;
+        min-height: 600px;
+        font-size: 20px;
+    }
+
+    .ql-editor::-webkit-scrollbar 
+    {
+        display: none;
+    }
+
+    .ql-container::-webkit-scrollbar
+    {
+        background: gray;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-container::-webkit-scrollbar-thumb
+    {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+    }
+    .ql-container::-webkit-scrollbar-track
+    {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-video
+    {
+        width: 1280px;
+        height: 700px;
+    }
+
+    .ql-toolbar.ql-toolbar.ql-snow
+    {
+        order: 0;
+    }
+`
 
 const EditerBox = styled.div
 `

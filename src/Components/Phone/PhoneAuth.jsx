@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { styled } from 'styled-components';
-import { LoginTopLOGO, InputBox } from "../Login/Logininput"
-import { Title, ErrorMessageBox, ErrorMessageIcon, ErrorMessageText, ErrorMessage } from "../Sign/Signinput"
-import { IntroduceBox, IntroduceText, SelectSignBox } from "./SelectSignInput"
+import { ErrorMessageBox, ErrorMessageIcon, ErrorMessageText, ErrorMessage } from "../Sign/Signinput"
 import { isDark } from '../Darkmode/Darkmode';
 import { work } from './PhoneAuthMode';
 import { useRecoilValue } from 'recoil';
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { EmPwInformation, SumbitButton } from "../EmailPwFound/EmailPwFound"
 import axios from "axios";
+
+import LogoLight from "../../img/LOGO/8bitLight.png";
+import LogoDark from "../../img/LOGO/8bitDark.png";
 
 
 const Phone = () =>
@@ -176,15 +176,23 @@ const Phone = () =>
 
     return(
         <PhoneBox>
-            <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+            <LogoBox>
+                <Link to='/'><PhoneAuthLOGO src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
+            </LogoBox>
+
             <IntroduceBox>
                 <MainText as={"h1"}>서비스 이용을 위해 본인 확인이 필요합니다!</MainText>
                 <IntroduceText>만 18세 미만인 경우 보호자 동의가 필요합니다.</IntroduceText>
             </IntroduceBox>
-            <PhoneInformation>
-                <PhoneInformationText>휴대폰 인증</PhoneInformationText>
-            </PhoneInformation>
-            <PhoneForm onSubmit={PhoneData}>
+
+            <PhoneInformationBox>
+                <PhoneInformation>
+                    <PhoneInformationText>휴대폰 인증</PhoneInformationText>
+                </PhoneInformation>
+            </PhoneInformationBox>
+
+            <PhoneInformationInputBox>
+                <PhoneForm onSubmit={PhoneData}>
                 <PhoneInputBox>
                     <PhoneTitle>휴대폰</PhoneTitle>
                     <PhoneInputAllBox>
@@ -197,23 +205,50 @@ const Phone = () =>
                     <PhoneTitle>인증번호</PhoneTitle>
                     <PhoneInputAllBox>
                         <PhoneInput value={PhoneAuth} show={isPhoneAuth} check={isPhoneAuthCheck} onChange={OnPhoneAuthChange}/>
-                        <PhoneSendBtn type="button" show={isPhoneAuthBtnCheck} onClick={PhoneAuthCheck}><span>인증확인</span></PhoneSendBtn>
+                        <PhoneSendBtn type="button" show={isPhoneAuthBtnCheck} onClick={PhoneAuthCheck}><span>확인</span></PhoneSendBtn>
                     </PhoneInputAllBox>
                     <MessageBox show={isPhoneAuthCheck} color={isPhoneAuth}>{PhoneAuthMessage}</MessageBox>
                 </PhoneAuthBox>
                 <SubmitBox>
                     <SubmitBtn disabled={!(isPhone && isPhoneAuth)} onClick={deletePhoneNum}><span>완료</span></SubmitBtn>
                 </SubmitBox>
-            </PhoneForm>
+                </PhoneForm>
+            </PhoneInformationInputBox>
         </PhoneBox>
     );
 }
 
 export default Phone;
 
-const PhoneBox = styled(SelectSignBox)
-`p
+const PhoneAuthLOGO = styled.img
+`
+    width: 192px;
+    height: 102px;
+    -webkit-user-select: none;
+`
 
+const PhoneInformationBox = styled.div
+`
+    display: flex;
+    justify-content: center;
+    margin: 22px 0px 22px 0px;
+`
+
+const PhoneInformationInputBox = styled.div
+`
+    display: flex;
+    flex-direction: column;
+`
+
+const LogoBox = styled.div
+`
+    display: flex;
+    justify-content: center;
+}
+`
+
+const PhoneBox = styled.div
+`
 `
 
 const MessageBox = styled(ErrorMessage)
@@ -234,43 +269,73 @@ const PhoneForm = styled.form
 
 const SubmitBox = styled.div
 `
+    display: flex;
+    flex-direction: column;
+    margin: 36px 0px 0px 0px;
 `
 
-const SubmitBtn = styled(SumbitButton)
+const SubmitBtn = styled.button
 `
-    width: 460px;
-    margin: 13px 0px 0px 0px;
+    max-width: 480px;
+    height: 55px;
+    background: ${props => props.theme.buttonColor};
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    &:active
+    {
+      font-size: 15px;
+      opacity: 90%;
+    }
+    &:disabled
+    {
+      box-shadow: 0 0 0 1px #dddddd inset;
+      background: #aaaaaa;
+      pointer-events: none;
+    }
 `
 
 const PhoneInputAllBox = styled.div
 `
-    display: flex;
-    margin: 20px 0px 20px 0px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 3fr 1fr;
+    margin: 0px 0px 20px 0px;
 `
 
-const PhoneTitle = styled(Title)
+const PhoneTitle = styled.span
 `
-
+    font-weight: bold;
 `
 
 const PhoneInputBox = styled.div
 `
     display: flex;
     flex-direction: column;
-    width: 460px;
-    margin: 50px 0px 0px 0px;
+    max-width: 460px;
 `
 
-const PhoneAuthBox = styled(PhoneInputBox)
+const PhoneAuthBox = styled.div
 `
     display: ${props => props.show ? "block" : "none"};
     margin: 20px 0px 0px 0px;
 `
 
-const PhoneInput = styled(InputBox)
+const PhoneInput = styled.input
 `
+    max-width: 385px;
+    padding: 20px 5px 20px 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    caret-color: ${(props) => props.theme.textColor};
+    background-color: #dee2e6;
+    font-size:15px;
     box-shadow: ${props => props.check ? props.show ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
-    width: 335px;
 
     &:focus
     {
@@ -278,9 +343,9 @@ const PhoneInput = styled(InputBox)
     }
 `
 
-const PhoneSendBtn = styled.button 
+const PhoneSendBtn = styled.button
 `
-    width: 100px;
+    max-width: 100px;
     height: 60px;
     border: none;
     background: ${(props) => props.show ? props.theme.buttonColor : "#aaaaaa"};
@@ -288,7 +353,7 @@ const PhoneSendBtn = styled.button
     border-radius: 0.4rem;
     font-size: 15px;
     cursor: pointer;
-    margin: 0px 0px 0px 10px;
+    margin: 20px 0px 20px 10px;
     pointer-events: ${(props) => props.show ? "true" : "none"};
     &:active
     {
@@ -304,9 +369,13 @@ const PhoneSendBtn = styled.button
     }
 `
 
-const PhoneInformation = styled(EmPwInformation)
+const PhoneInformation = styled.div
 `
     width: 100px;
+    border: solid 3px ${(props) => props.theme.borderColor};
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px;
 `
 
 const PhoneInformationText = styled.span
@@ -315,9 +384,20 @@ const PhoneInformationText = styled.span
     color: ${(props) => props.theme.textColor};
 `
 
-const MainText = styled(IntroduceText)
+const MainText = styled.span
 `
     font-size: 25px;
     opacity: 100%;
-    white-space: nowrap;
+`
+
+const IntroduceText = styled.span
+`
+
+`
+
+const IntroduceBox = styled.div
+`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `

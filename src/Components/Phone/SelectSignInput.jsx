@@ -12,6 +12,9 @@ import { work } from '../Phone/PhoneAuthMode';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { BsGithub } from 'react-icons/bs';
 
+import LogoLight from "../../img/LOGO/8bitLight.png";
+import LogoDark from "../../img/LOGO/8bitDark.png";
+
 
 const SelectSign = () => 
 {
@@ -24,14 +27,18 @@ const SelectSign = () =>
 
     return(
         <SelectSignBox>
-            <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
+            <LogoBox>
+                <Link to='/'><LoginTopLOGO src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
+            </LogoBox>
             <IntroduceBox>
                 <MainText as="h1">8bit 가입을 시작합니다!</MainText>
                 <IntroduceText>회원가입을 위해 가입 방식을 선택하세요!</IntroduceText>
             </IntroduceBox>
-            <Link to='/PhoneAuth'>
-            <EmailButton><EmailButtonText>이메일로 가입</EmailButtonText></EmailButton>
-            </Link>
+            <EmailBtnBox>
+                <Link to='/PhoneAuth'>
+                    <EmailButton><EmailButtonText>이메일로 가입</EmailButtonText></EmailButton>
+                </Link>
+            </EmailBtnBox>
             <LOGINAPI>
             <Line><span>또는</span></Line>
             <APIList>
@@ -47,18 +54,29 @@ const SelectSign = () =>
 
 export default SelectSign;
 
-export  const SelectSignBox = styled.div
+const LogoBox = styled.div
+`
+    display: flex;
+    justify-content: center;
+`
+
+const EmailBtnBox = styled.div
 `
     display: flex;
     flex-direction: column;
-    align-items: center;
+`
+
+const SelectSignBox = styled.div
+`
+    display: flex;
+    flex-direction: column;
     a
     {
         text-decoration: none;
     }
 `
 
-export const IntroduceBox = styled.div
+const IntroduceBox = styled.div
 `
     display: flex;
     flex-direction: column;
@@ -78,7 +96,7 @@ const LOGINAPI = styled.div
 
 const EmailButton = styled.div
 `
-    width: 416px;
+    max-width: 416px;
     border: solid 2px ${(props) => props.theme.borderColor};
     display: flex;
     justify-content: center;

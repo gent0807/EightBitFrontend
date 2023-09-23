@@ -23,7 +23,7 @@ const FooterContainer = styled.div
     justify-content: center;
     @media (min-width:250px) and (max-width:480px)
     {
-        width: 480px;
+        max-width: 480px;
     }
 `
 
@@ -33,11 +33,13 @@ const FooterBackground = styled.div
     background-color: gray;
     @media (min-width:250px) and (max-width:480px)
     {
-        width: 480px;
+        max-width: 480px;
     }
 `
 
 const FooterText = styled.span
 `
     color: black;
+    padding: 0px 10px 0px 10px;
+    text-align: center;
 `

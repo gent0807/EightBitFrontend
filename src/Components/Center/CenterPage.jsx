@@ -4,10 +4,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.scss";
 import "swiper/components/navigation/navigation.scss";
 import "swiper/components/pagination/pagination.scss";
-import "./Custom.css";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { FiArrowLeft } from "react-icons/fi";
 import { FiArrowRight } from "react-icons/fi";
+
+import test from "../../img/MainSlide/test.png";
+import test1 from "../../img/MainSlide/test1.png";
+import test2 from "../../img/MainSlide/test2.png";
+import test3 from "../../img/MainSlide/test3.png";
+import test4 from "../../img/MainSlide/test4.png";
+import test5 from "../../img/MainSlide/test5.png";
+
+SwiperCore.use([Navigation, Pagination]);
 
 const CenterPage = () =>
 {
@@ -21,31 +29,31 @@ const CenterPage = () =>
         {
             id : 1,
             lank : 1,
-            img : "img/test.jpg",
+            img : test,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
         {
             id : 2,
-            img : "img/test1.jpg",
+            img : test1,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
         {
             id : 3,
-            img : "img/test2.png",
+            img : test2,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
         {
             id : 4,
-            img : "img/test3.jpg",
+            img : test3,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
         {
             id : 5,
-            img : "img/test4.jpg",
+            img : test4,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
@@ -54,31 +62,7 @@ const CenterPage = () =>
         {
             id : 1,
             lank : 1,
-            img : "img/test.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 2,
-            img : "img/test1.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 3,
-            img : "img/test2.png",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 4,
-            img : "img/test3.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 5,
-            img : "img/test5.png",
+            img : test5,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
@@ -87,37 +71,11 @@ const CenterPage = () =>
         {
             id : 1,
             lank : 1,
-            img : "img/test.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 2,
-            img : "img/test1.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 3,
-            img : "img/test2.png",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 4,
-            img : "img/test3.jpg",
-            informaion : "질리지 않는 8비트 공식게임!",
-            title : "모험가키우기"
-        },
-        {
-            id : 5,
-            img : "img/test5.png",
+            img : test5,
             informaion : "질리지 않는 8비트 공식게임!",
             title : "모험가키우기"
         },
     ]);
-
-    SwiperCore.use([Navigation, Pagination]);
 
     const swiperParams = 
     {
@@ -126,7 +84,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -152,7 +110,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -178,7 +136,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -204,7 +162,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -230,7 +188,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -256,7 +214,7 @@ const CenterPage = () =>
         loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
-            300: {
+            250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
@@ -313,7 +271,7 @@ const CenterPage = () =>
         <SwiperBox>
         <GameSlideBox>
         <PopTitleBox>인기 게임 차트</PopTitleBox>
-        <Swiper {...swiperParams} ref={setSwiper}>
+        <Slider {...swiperParams} ref={setSwiper}>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
@@ -326,9 +284,9 @@ const CenterPage = () =>
                 </SlideBox>
             </SwiperSlide>
             ))}
-        </Swiper>
+        </Slider>
         <PopTitleBox>인기 게임 차트</PopTitleBox>
-        <Swiper {...swiperParams2} ref={setSwiper}>
+        <Slider {...swiperParams2} ref={setSwiper}>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
@@ -341,9 +299,9 @@ const CenterPage = () =>
                 </SlideBox>
             </SwiperSlide>
             ))}
-        </Swiper>
+        </Slider>
         <PopTitleBox>인기 게임 차트</PopTitleBox>
-        <Swiper {...swiperParams3} ref={setSwiper}>
+        <Slider {...swiperParams3} ref={setSwiper}>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
@@ -356,10 +314,10 @@ const CenterPage = () =>
                 </SlideBox>
             </SwiperSlide>
             ))}
-        </Swiper>
+        </Slider>
         </GameSlideBox>
         <AdSlideBox>
-        <Swiper {...AdSwiper} ref={setSwiper}>
+        <Slider {...AdSwiper} ref={setSwiper}>
         {AdSlide.length !== 0 && AdSlide.map(({ id, img, informaion, title} ) => (
         <SwiperSlide key={id}>
             <ImgAdBox src={img}/>
@@ -373,11 +331,11 @@ const CenterPage = () =>
         <PrevBtn ref={navPrevRef}><FiArrowLeft/></PrevBtn>
         <NextBtn ref={navNextRef}><FiArrowRight/></NextBtn>
         </ButtonBox>
-        </Swiper>
+        </Slider>
         </AdSlideBox>
         <GameSlideBox>
         <PopTitleBox>인기 게임 차트</PopTitleBox>
-        <Swiper {...swiperParams4} ref={setSwiper}>
+        <Slider {...swiperParams4} ref={setSwiper}>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
@@ -390,9 +348,9 @@ const CenterPage = () =>
                 </SlideBox>
             </SwiperSlide>
             ))}
-        </Swiper>
+        </Slider>
         <PopTitleBox>인기 게임 차트</PopTitleBox>
-        <Swiper {...swiperParams5} ref={setSwiper}>
+        <Slider {...swiperParams5} ref={setSwiper}>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
@@ -405,9 +363,9 @@ const CenterPage = () =>
                 </SlideBox>
             </SwiperSlide>
             ))}
-        </Swiper>
+        </Slider>
         <PopTitleBox>인기 게임 차트</PopTitleBox>
-        <Swiper {...swiperParams6} ref={setSwiper}>
+        <Slider {...swiperParams6} ref={setSwiper}>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
@@ -420,10 +378,10 @@ const CenterPage = () =>
                 </SlideBox>
             </SwiperSlide>
             ))}
-        </Swiper>
+        </Slider>
         </GameSlideBox>
         <AdSlideBox>
-        <Swiper {...AdSwiper2} ref={setSwiper}>
+        <Slider {...AdSwiper2} ref={setSwiper}>
         {AdSlide2.length !== 0 && AdSlide.map(({ id, img, informaion, title} ) => (
         <SwiperSlide key={id}>
             <ImgAdBox src={img}/>
@@ -437,15 +395,64 @@ const CenterPage = () =>
         <PrevBtn ref={navPrevRef2}><FiArrowLeft/></PrevBtn>
         <NextBtn ref={navNextRef2}><FiArrowRight/></NextBtn>
         </ButtonBox>
-        </Swiper>
+        </Slider>
         </AdSlideBox>
         </SwiperBox>
     );
 }
 
+const Slider = styled(Swiper)
+`
+.swiper-pagination
+{
+    
+}
+
+.swiper-slide
+{
+    box-sizing: border-box;
+    height: 250px;
+}
+
+.swiper-wrapper
+{
+    height: 537px;
+}
+
+.swiper-button-next, .swiper-button-prev
+{
+    top: 40%;
+    background: white;
+    background: white;
+    border-radius: 30px;
+    padding: 10px;
+    border: solid 3px #55AAFF;
+    width: 30px;
+    height: 30px;
+}
+
+.swiper-container
+{
+
+}
+
+.swiper-button-prev.swiper-button-disabled,
+.swiper-button-next.swiper-button-disabled
+{
+    display: none;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after
+{
+    font-size: 22px;
+}
+`
+
 const AdContainerBox = styled.div
 `
 `
+
 const ButtonBox = styled.div
 `
     width: 1600px;

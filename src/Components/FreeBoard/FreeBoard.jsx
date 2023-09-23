@@ -1,6 +1,5 @@
 import { styled, keyframes } from "styled-components";
 import { useState, useRef, useEffect } from "react";
-import { EmPwInformation } from "../EmailPwFound/EmailPwFound";
 import { SearchInputBox, SearchInput, SearchInputIconBox, SearchButton } from "../Header/TopNavBar";
 import { ArrowBox } from "../Sign/Signinput";
 import { HiOutlineSearch } from "react-icons/hi";
@@ -447,8 +446,12 @@ const FreeBoardSearchBtn = styled(SearchButton)
     padding: 5px 8px 0px 0px;
 `
 
-const FreeBoardInformation = styled(EmPwInformation)
+const FreeBoardInformation = styled.div
 `
+    width: 191px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px;
     border: solid 2px ${props => props.theme.BoardInformaiton};
     margin: 0px 0px 20px 0px;
 `

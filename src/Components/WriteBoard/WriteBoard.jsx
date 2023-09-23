@@ -1,20 +1,22 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-import "react-quill/dist/quill.snow.css";
-import "./CustomEditer.css";
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
 import { ImageDrop } from "quill-image-drop-module";
 import { AiFillFileAdd } from "react-icons/ai";
-import { BsFiletypePptx } from "react-icons/bs";
-import { TbFileTypeTxt } from "react-icons/tb";
-import { BsFillFileEarmarkPdfFill } from "react-icons/bs";
-import { RiFileHwpLine } from "react-icons/ri";
-import { PiFileJpgBold } from "react-icons/pi";
-import { PiFilePngBold } from "react-icons/pi";
+import "react-quill/dist/quill.snow.css";
+
+import PPTX from "../../img/FileList/pptx.png";
+import JPG from "../../img/FileList/jpg.png";
+import PNG from "../../img/FileList/png.png";
+import PDF from "../../img/FileList/pdf.png";
+import TXT from "../../img/FileList/txt.png";
+import ZIP from "../../img/FileList/zip.png";
+import Default from "../../img/FileList/defaultWhite.png"
+
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -22,7 +24,6 @@ Quill.register("modules/imageResize", ImageResize);
 const WriteBoard = () =>
 {
     const [ WriterChangeValue, setWriterChangeValue ] = useState("");
-    const [ StoryChangeValue, setStoryChangeValue ] = useState("");
     const [ isDragging, setIsDragging ] = useState(false);
     const [ files, setFiles ] = useState([]);
     const user=useSelector(state => state.user);
@@ -331,6 +332,8 @@ const WriteBoard = () =>
 
     }
 
+    console.log(EditerValue);
+
 
     return(
         <WriterInputBox>
@@ -342,14 +345,14 @@ const WriteBoard = () =>
             <WriterInput placeholder='제목을 입력해 주세요!' maxLength={50} onChange={WriterChange} value={WriterChangeValue}/>
             <TagTextBox><TagText>본문</TagText></TagTextBox>
             <EditerBox>
-                <ReactQuill
+                <Editer
                     placeholder="내용을 입력해 주세요!"
                     value={EditerValue}
                     onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
                     theme="snow" 
                     modules={modules}
                     formats={formats}
-                ></ReactQuill>
+                ></Editer>
             </EditerBox>
             <TagTextBox><TagText>파일첨부</TagText></TagTextBox>
             <FileUploadBox ref={dragRef} checkFile={isDragging}>
@@ -370,13 +373,13 @@ const WriteBoard = () =>
                                     <FileNumber key={id}>
                                         <>
                                         <Icon src={[
-                                        (name.includes("pptx") ? "img/pptx.png" : 
-                                        (name.includes("txt") ? "img/txt.png" : 
-                                        (name.includes("pdf") ? "img/pdf.png" : 
-                                        (name.includes("jpg") ? "img/jpg.png" : 
-                                        (name.includes("png") ? "img/png.png" :
-                                        (name.includes("zip") ? "img/zip.png" :  
-                                        "img/defaultWhite.png"))))))
+                                        (name.includes("pptx") ? PPTX : 
+                                        (name.includes("txt") ? TXT : 
+                                        (name.includes("pdf") ? PDF : 
+                                        (name.includes("jpg") ? JPG : 
+                                        (name.includes("png") ? PNG :
+                                        (name.includes("zip") ? ZIP :  
+                                        Default))))))
                                         ]}/>
                                         </>
                                         <FileName>{ name }</FileName>
@@ -400,11 +403,63 @@ const WriteBoard = () =>
 
 export default WriteBoard;
 
+const Editer = styled(ReactQuill)
+`
+    display: flex;
+    flex-direction: column;
+    
+    .ql-editor
+    {
+        margin: 0px -2px -2px 0px;
+        min-height: 600px;
+        font-size: 20px;
+    }
+
+    .ql-editor::-webkit-scrollbar 
+    {
+        display: none;
+    }
+
+    .ql-container::-webkit-scrollbar
+    {
+        background: gray;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-container::-webkit-scrollbar-thumb
+    {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+    }
+    .ql-container::-webkit-scrollbar-track
+    {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-video
+    {
+        width: 1280px;
+        height: 700px;
+    }
+
+    .ql-toolbar.ql-toolbar.ql-snow
+    {
+        order: 0;
+    }
+`
+
 const Icon = styled.img
 `
     width : 30px;
     height : 30px;
-    margin: -4px 0px 0px 0px;
+    margin: -6px 0px 0px 0px;
 `
 
 const FileBtnBox = styled.div
@@ -488,6 +543,7 @@ const FileNumber = styled.div
     color : ${props => props.theme.textColor};
     font-weight : bold;
     justify-content: space-between;
+    height: 44px;
 `
 
 const FileName = styled.div

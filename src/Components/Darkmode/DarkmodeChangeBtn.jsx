@@ -3,6 +3,9 @@ import { isDark } from "../Darkmode/Darkmode";
 import { styled } from "styled-components";
 import { icons } from "react-icons/lib";
 
+import Dark from "../../img/Darkmode/dark.png";
+import light from "../../img/Darkmode/light.png";
+
 const Darkmode = () =>
 {
 
@@ -15,7 +18,7 @@ const ToggleBtn = () =>
 };
 
 return (
-    <IconsBox onClick={ToggleBtn}><Icons src={ Darkmode ? "img/light.png" : "img/dark.png" }/></IconsBox>
+    <IconsBox onClick={ToggleBtn}><Icons src={ Darkmode ? light : Dark }/></IconsBox>
 );
 
 }
