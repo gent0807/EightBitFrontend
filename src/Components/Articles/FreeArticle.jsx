@@ -29,6 +29,7 @@ const FreeArticle = () => {
     const [likecount, setLikecount]=useState(0);
     const [profileImagePath, setProfileImagePath]=useState("");
     const [replyChangeValue, setReplyChangeValue ]=useState("");
+    const [reCommentValue, setReCommentValue ] = useState("");
     const [InformationImage, setInformationImage]=useState([
         {
             id : 1,
@@ -308,11 +309,9 @@ const formats = [
             return;
         }
     }
-
-    const replyChange=(e)=>{
-        setReplyChangeValue(e.target.value);
-    }
     
+    console.log(reCommentValue);
+
     return(
         <FreeArticleBox>
             <UserBox>
@@ -431,6 +430,17 @@ const formats = [
                                     </CommentreplyLikeAllBox>
                                 </CommentreplyBox>
                                 <CommentLine/>
+                                <CommentInputBox>
+                    <Editer2
+                        placeholder="댓글을 입력해 주세요!"
+                        onFocus={(e) => setReCommentValue(e)}
+                        onChange={(content, delta, source, editor) => setReCommentValue(editor.getHTML())}
+                        theme="snow" 
+                        modules={modules}
+                        formats={formats}
+                    >
+                    </Editer2>
+                </CommentInputBox>
                         </UserCommentBox>
                             );
                     })
@@ -467,6 +477,59 @@ const formats = [
 export default FreeArticle;
 
 const Editer = styled(ReactQuill)
+`
+    display: flex;
+    flex-direction: column;
+
+    .ql-editor
+    {
+        margin: 0px -2px -2px 0px;
+        min-height: 100px;
+        font-size: 20px;
+    }
+
+    .ql-editor::-webkit-scrollbar 
+    {
+        display: none;
+    }
+
+    .ql-container::-webkit-scrollbar{
+        background: gray;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-container::-webkit-scrollbar-thumb
+    {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+    }
+
+    .ql-container::-webkit-scrollbar-track
+    {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-video
+    {
+        width: 1280px;
+        height: 700px;
+    }
+
+    .ql-toolbar.ql-toolbar.ql-snow
+    {
+        order: 2;
+    }
+
+`
+
+const Editer2 = styled(ReactQuill)
 `
     display: flex;
     flex-direction: column;
