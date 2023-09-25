@@ -807,7 +807,7 @@ const ReCommentBtn = styled(CommentBtn)
 const CancelBtn=styled(ReCommentBtn)
 `
     background: white;
-    margin : 0px 10px 0px 0px;  
+    margin : 10px 10px 0px 0px;  
 `
 
 const InformaionImageBox = styled.img
