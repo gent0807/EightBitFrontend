@@ -4,6 +4,9 @@ import { FaFacebookF } from "react-icons/fa";
 import { SiNaver } from "react-icons/si";
 import { AiOutlineTwitter } from "react-icons/ai";
 import { RiErrorWarningFill } from "react-icons/ri";
+import { RiKakaoTalkFill } from 'react-icons/ri';
+import { BsGithub } from 'react-icons/bs';
+import { AiFillGithub } from 'react-icons/ai';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';
@@ -154,13 +157,13 @@ const Logininput = () =>
           </InputT>
 
           <LOGINAPI>
-              <Line><LineText>또는</LineText></Line>
-              <APIList>
-                  <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
-                  <APIListLI>< APIListA border={"#1877f2"} background={"#1877f2"} API="#"><FaFacebookF /></APIListA></APIListLI>
-                  <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></ APIListA></APIListLI>
-                  <APIListLI>< APIListA border={"#1da1f2"} background={"#1da1f2"} API="#"><AiOutlineTwitter /></ APIListA></APIListLI>
-              </APIList>
+          <Line><span>또는</span></Line>
+          <APIList>
+            <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#edf511"} background={"#edf511"} API="#"><RiKakaoTalkFill style={{color:"black"}}/><SiNaver /></ APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#0d0c0c"} background={"#0d0c0c"} API="#"><BsGithub /></ APIListA></APIListLI>
+          </APIList>
           </LOGINAPI>
 
           <EmPwFoundT>

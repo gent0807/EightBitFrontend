@@ -1140,6 +1140,11 @@ const DropdownImg = styled.img
     height: 33px;
 `
 
+const UserImg = styled(DropdownImg)
+`
+    border-radius: 26px;
+`
+
 
 const ProFileSlideDown = keyframes
 `
