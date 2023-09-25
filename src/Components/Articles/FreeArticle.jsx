@@ -29,6 +29,9 @@ const FreeArticle = () => {
     const [likecount, setLikecount]=useState(0);
     const [profileImagePath, setProfileImagePath]=useState("");
     const [replyChangeValue, setReplyChangeValue ]=useState("");
+    const [reCommentChangeValue, setReCommentChangeValue ]=useState("");
+    const [showButton, setShowButton]=useState("display:block");
+    const [replycnt, setReplycnt]=useState(0);
     const [InformationImage, setInformationImage]=useState([
         {
             id : 1,
@@ -36,35 +39,35 @@ const FreeArticle = () => {
         }
     ]);
 
+
     const [Comment, setComment]=useState([
         {
             id : 1,
-            Writer: "올빼미",
-            Comment: "ㅋㅋㅋㅋㅋ 개웃기네"
+            writer: "올빼미",
+            content: "ㅋㅋㅋㅋㅋ 개웃기네"
         },
         {
             id : 2,
-            Writer: "라따뚜이",
-            Comment: "뭐라는 거임?"
+            writer: "라따뚜이",
+            content: "뭐라는 거임?"
         },
         {
             id : 3,
-            Writer: "뷁?",
-            Comment: "뷁?뷁?뷁?뷁?뷁?뷁?뷁?뷁?ㅍ"
+            writer: "누구세요",
+            content: "누구세요??"
         }
     ]);
+
 
     const navigate=useNavigate();
     const ip=localStorage.getItem("ip");
     const user=useSelector(state=>state.user);
-    const [showButton, setShowButton]=useState("display:block");
     const loginMaintain=localStorage.getItem("loginMaintain");
     let userInfo=localStorage.getItem("userInfo");
     userInfo=JSON.parse(userInfo);
     let likeMode=useRef(false);
 
     const quillRef = useRef(null);
-    const [EditerValue, setEditerValue] = useState("");
     const toolbarOptions = [
         ["link", "image", "video"],
         [{ header: [1, 2, 3, false] }],
@@ -309,8 +312,17 @@ const formats = [
         }
     }
 
-    const replyChange=(e)=>{
-        setReplyChangeValue(e.target.value);
+    const registerRecomment= async (e)=>{
+        e.preventDefault();
+
+        if(reCommentChangeValue.length>0){
+
+        }
+        else if(reCommentChangeValue.length==0){
+            alert("댓글 내용을 입력해주세요.");
+            return; 
+        }
+
     }
     
     return(
@@ -324,6 +336,7 @@ const formats = [
             <LikeViewBox>
             <LikeText>좋아요 수 : {likecount}</LikeText>
             <ViewText>조회 수 : {visitcnt}</ViewText>
+            <ReplyText>댓글 수 : {replycnt}</ReplyText>
             </LikeViewBox>
             </WriteViewBox>
             </UserProfileBox>
@@ -402,26 +415,26 @@ const formats = [
                 Comment.map(Comment => { 
                     return (
                         <UserCommentBox key={Comment.id}>
-                            <CommentUserProfileBox>
-                                <CommentUserBox>
-                                    <CommentUserProfile src={localStorage.getItem("profileImageDir")+profileImagePath}/>
-                                        <CommentInformationAllBox>
-                                            <UserNicknameText>{Comment.Writer}</UserNicknameText>
-                                                    <Regdate>{dayjs(regdate).format("YY.MM.DD hh:mm")}</Regdate>
-                                        </CommentInformationAllBox>
-                                </CommentUserBox>
-                                    <RedateBox>
-                                        <SirenImg src={Siren}/>
-                                    </RedateBox>
+                                <CommentUserProfileBox>
+                                    <CommentUserBox>
+                                        <CommentUserProfile src={localStorage.getItem("profileImageDir")+profileImagePath}/>
+                                            <CommentInformationAllBox>
+                                                <UserNicknameText>{Comment.writer}</UserNicknameText>
+                                                        <Regdate>{dayjs(regdate).format("YY.MM.DD hh:mm")}</Regdate>
+                                            </CommentInformationAllBox>
+                                    </CommentUserBox>
+                                        <RedateBox>
+                                            <SirenImg src={Siren}/>
+                                        </RedateBox>
                                 </CommentUserProfileBox>
                                 <CommentInformationBox>
-                                    <CommentText>{Comment.Comment}</CommentText>
+                                    <CommentText>{Comment.content}</CommentText>
                                 </CommentInformationBox>
                                 <CommentreplyBox>
                                     <CommentreplyAllBox>
                                         <CommentreplyIcon><AiOutlineComment/></CommentreplyIcon>
                                         <CommentreplyCount>0</CommentreplyCount>
-                                        <CommentreplyBtn>답글</CommentreplyBtn>
+                                        <CommentreplyBtn>댓글 쓰기</CommentreplyBtn>
                                     </CommentreplyAllBox>
                                     <CommentreplyLikeAllBox>
                                         <CommentreplyLikeBtn
@@ -432,11 +445,40 @@ const formats = [
                                     <CommentreplyLikeCount>{likecount}</CommentreplyLikeCount>
                                     </CommentreplyLikeAllBox>
                                 </CommentreplyBox>
-                                <CommentLine/>
+                                
+                                <ReCommentForm 
+                                    LoginMaintain={loginMaintain} 
+                                    UserInfo={userInfo} User={userInfo==null ? 
+                                    null : userInfo.loginState}
+                                    UserCheck={user.login_state} 
+                                    UserNicknameCheck={user.nickname} 
+                                    UserNickname={userInfo==null ? 
+                                    null : userInfo.nickName}
+                                    Writer={writer}
+                                    onSubmit={registerRecomment}>
+                                        <ReCommentInputBox>
+                                        <Editer2
+                                            placeholder="댓글을 입력해 주세요!"
+                                            value={reCommentChangeValue}
+                                            onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                                            theme="snow" 
+                                            modules={modules}
+                                            formats={formats}>
+                                        </Editer2>
+                                        </ReCommentInputBox>
+                                        <ReCommentBtnBox>
+                                            <CancelBtn type="button">취소</CancelBtn>
+                                            <ReCommentBtn>등록</ReCommentBtn>
+                                        </ReCommentBtnBox>
+                                </ReCommentForm>
+                                <CommentLine></CommentLine>
+                                
                         </UserCommentBox>
                             );
                     })
             }
+            <br></br>
+            <br></br>
             <CommentForm 
                 LoginMaintain={loginMaintain} 
                 UserInfo={userInfo} User={userInfo==null ? 
@@ -446,17 +488,15 @@ const formats = [
                 UserNickname={userInfo==null ? 
                 null : userInfo.nickName}
                 Writer={writer}
-                onSubmit={registerReply}
-            >
+                onSubmit={registerReply}>   
                 <CommentInputBox>
                     <Editer
                         placeholder="댓글을 입력해 주세요!"
-                        value={EditerValue}
-                        onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
+                        value={replyChangeValue}
+                        onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
                         theme="snow" 
                         modules={modules}
-                        formats={formats}
-                    >
+                        formats={formats}>
                     </Editer>
                 </CommentInputBox>
                 <CommentBtn>등록</CommentBtn>
@@ -468,6 +508,12 @@ const formats = [
 
 export default FreeArticle;
 
+const ReCommentBtnBox = styled.div
+`
+    display: flex;
+    justify-content: end;
+`
+
 const Editer = styled(ReactQuill)
 `
     display: flex;
@@ -476,7 +522,60 @@ const Editer = styled(ReactQuill)
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
-        min-height: 100px;
+        min-height: 200px;
+        font-size: 20px;
+    }
+
+    .ql-editor::-webkit-scrollbar 
+    {
+        display: none;
+    }
+
+    .ql-container::-webkit-scrollbar{
+        background: gray;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-container::-webkit-scrollbar-thumb
+    {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+    }
+
+    .ql-container::-webkit-scrollbar-track
+    {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-video
+    {
+        width: 1280px;
+        height: 700px;
+    }
+
+    .ql-toolbar.ql-toolbar.ql-snow
+    {
+        order: 2;
+    }
+
+`
+
+const Editer2 = styled(ReactQuill)
+`
+    display: flex;
+    flex-direction: column;
+
+    .ql-editor
+    {
+        margin: 0px -2px -2px 0px;
+        min-height: 80px;
         font-size: 20px;
     }
 
@@ -569,6 +668,7 @@ const CommentreplyBtn = styled.div
 `
     margin: 4px 0px 0px 18px;
     font-weight: bold;
+    cursor: pointer;
 `
 
 const CommentText = styled.span
@@ -693,6 +793,23 @@ const CommentForm = styled.form
     (props.UserCheck==="allok" ? "block" : "none" )};
 `
 
+const ReCommentForm=styled(CommentForm)
+`
+`
+const ReCommentInputBox = styled(CommentInputBox)
+`
+`
+const ReCommentBtn = styled(CommentBtn)
+`
+    width: 8%;
+`
+
+const CancelBtn=styled(ReCommentBtn)
+`
+    background: white;
+    margin : 0px 10px 0px 0px;  
+`
+
 const InformaionImageBox = styled.img
 `
 
@@ -745,7 +862,11 @@ const LikeText = styled.span
 
 const ViewText = styled.span
 `
+    margin: 0px 9px 0px 0px;    
+`
 
+const ReplyText = styled.span
+`
 `
 
 const RegdateText = styled.span
