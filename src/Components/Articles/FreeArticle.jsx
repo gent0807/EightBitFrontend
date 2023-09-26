@@ -13,6 +13,7 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
+import SingleComment from "./SingleComment";
 
 import Siren from "../../img/Siren/Siren.png";
 
@@ -35,7 +36,7 @@ const FreeArticle = () => {
     const [InformationImage, setInformationImage]=useState([
         {
             id : 1,
-            src : "http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+            src : "http://218.155.175.176:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
 
@@ -311,19 +312,6 @@ const formats = [
             return;
         }
     }
-
-    const registerRecomment= async (e)=>{
-        e.preventDefault();
-
-        if(reCommentChangeValue.length>0){
-
-        }
-        else if(reCommentChangeValue.length==0){
-            alert("댓글 내용을 입력해주세요.");
-            return; 
-        }
-
-    }
     
     return(
         <FreeArticleBox>
@@ -414,66 +402,10 @@ const formats = [
             {Comment.length > 0 &&
                 Comment.map(Comment => { 
                     return (
-                        <UserCommentBox key={Comment.id}>
-                                <CommentUserProfileBox>
-                                    <CommentUserBox>
-                                        <CommentUserProfile src={localStorage.getItem("profileImageDir")+profileImagePath}/>
-                                            <CommentInformationAllBox>
-                                                <UserNicknameText>{Comment.writer}</UserNicknameText>
-                                                        <Regdate>{dayjs(regdate).format("YY.MM.DD hh:mm")}</Regdate>
-                                            </CommentInformationAllBox>
-                                    </CommentUserBox>
-                                        <RedateBox>
-                                            <SirenImg src={Siren}/>
-                                        </RedateBox>
-                                </CommentUserProfileBox>
-                                <CommentInformationBox>
-                                    <CommentText>{Comment.content}</CommentText>
-                                </CommentInformationBox>
-                                <CommentreplyBox>
-                                    <CommentreplyAllBox>
-                                        <CommentreplyIcon><AiOutlineComment/></CommentreplyIcon>
-                                        <CommentreplyCount>0</CommentreplyCount>
-                                        <CommentreplyBtn>댓글 쓰기</CommentreplyBtn>
-                                    </CommentreplyAllBox>
-                                    <CommentreplyLikeAllBox>
-                                        <CommentreplyLikeBtn
-                                            onClick={ () => {likeMode.current === false ? countUpLike() : countDownLike()}}
-                                        >
-                                            {likeMode.current === false ? <BsHandThumbsUp/> : <BsHandThumbsUpFill/>}
-                                        </CommentreplyLikeBtn>
-                                    <CommentreplyLikeCount>{likecount}</CommentreplyLikeCount>
-                                    </CommentreplyLikeAllBox>
-                                </CommentreplyBox>
-                                
-                                <ReCommentForm 
-                                    LoginMaintain={loginMaintain} 
-                                    UserInfo={userInfo} User={userInfo==null ? 
-                                    null : userInfo.loginState}
-                                    UserCheck={user.login_state} 
-                                    UserNicknameCheck={user.nickname} 
-                                    UserNickname={userInfo==null ? 
-                                    null : userInfo.nickName}
-                                    Writer={writer}
-                                    onSubmit={registerRecomment}>
-                                        <ReCommentInputBox>
-                                        <Editer2
-                                            placeholder="댓글을 입력해 주세요!"
-                                            value={reCommentChangeValue}
-                                            onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
-                                            theme="snow" 
-                                            modules={modules}
-                                            formats={formats}>
-                                        </Editer2>
-                                        </ReCommentInputBox>
-                                        <ReCommentBtnBox>
-                                            <CancelBtn type="button">취소</CancelBtn>
-                                            <ReCommentBtn>등록</ReCommentBtn>
-                                        </ReCommentBtnBox>
-                                </ReCommentForm>
-                                <CommentLine></CommentLine>
-                                
-                        </UserCommentBox>
+                        <SingleComment
+                            Comment={Comment}
+                            profileImagePath={profileImagePath}
+                        />
                             );
                     })
             }

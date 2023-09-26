@@ -88,7 +88,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            965: {
+            667: {
+                spaceBetween : 30,
+                slidesPerView : 3,
+            },
+            1060: {
                 spaceBetween : 30,
                 slidesPerView : 4,
             },
@@ -114,14 +118,18 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            965: {
+            667: {
+                spaceBetween : 30,
+                slidesPerView : 3,
+            },
+            1060: {
                 spaceBetween : 30,
                 slidesPerView : 4,
             },
             1342: {
                 spaceBetween : 30,
                 slidesPerView : 5,
-            }
+            }  
         },
         navigation : true,
         pagination : { clickable: true },
@@ -140,7 +148,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            965: {
+            667: {
+                spaceBetween : 30,
+                slidesPerView : 3,
+            },
+            1060: {
                 spaceBetween : 30,
                 slidesPerView : 4,
             },
@@ -166,7 +178,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            965: {
+            667: {
+                spaceBetween : 30,
+                slidesPerView : 3,
+            },
+            1060: {
                 spaceBetween : 30,
                 slidesPerView : 4,
             },
@@ -192,7 +208,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            965: {
+            667: {
+                spaceBetween : 30,
+                slidesPerView : 3,
+            },
+            1060: {
                 spaceBetween : 30,
                 slidesPerView : 4,
             },
@@ -218,7 +238,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            965: {
+            667: {
+                spaceBetween : 30,
+                slidesPerView : 3,
+            },
+            1060: {
                 spaceBetween : 30,
                 slidesPerView : 4,
             },
@@ -403,6 +427,16 @@ const CenterPage = () =>
 
 const Slider = styled(Swiper)
 `
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
+    margin-bottom: 20px;
+    height: 382px;
+
 .swiper-pagination
 {
     
@@ -410,18 +444,17 @@ const Slider = styled(Swiper)
 
 .swiper-slide
 {
-    box-sizing: border-box;
-    height: 250px;
+
 }
 
 .swiper-wrapper
 {
-    height: 537px;
+    
 }
 
 .swiper-button-next, .swiper-button-prev
 {
-    top: 40%;
+    top: 41%;
     background: white;
     background: white;
     border-radius: 30px;
@@ -429,11 +462,6 @@ const Slider = styled(Swiper)
     border: solid 3px #55AAFF;
     width: 30px;
     height: 30px;
-}
-
-.swiper-container
-{
-
 }
 
 .swiper-button-prev.swiper-button-disabled,
@@ -446,6 +474,19 @@ const Slider = styled(Swiper)
 .swiper-button-next:after
 {
     font-size: 22px;
+}
+
+.swiper-pagination.swiper-pagination-clickable.swiper-pagination-bullets
+{
+    bottom: 18px;
+    left: 0;
+    width: 100%;
+}
+
+.swiper-pagination-bullet
+{
+    cursor: pointer;
+    margin: 0px 8px 0px 0px;
 }
 `
 
@@ -538,9 +579,7 @@ const SwiperBox = styled.div
 const ImgBox = styled.img
 `
     width: 100%;
-    height: 100%;
-    border-top-right-radius: 20px;
-    border-top-left-radius: 20px;
+    height: 222px;
 `
 
 const ImgAdBox = styled.img
@@ -599,18 +638,19 @@ const AdAllBox = styled.div
 
 const AllBox = styled.div
 `
+    position: relative;
     display: flex;
     flex-direction: column;
     background: gray;
     margin: -5px 0px 0px 0px;
     padding: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
 `
 
 const SlideBox = styled.div
 `
-    height: 384px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: solid 0.5px black;
 `
 
 export default CenterPage;
