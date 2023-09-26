@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {BsHandThumbsUpFill} from "react-icons/bs";
 import {BsHandThumbsUp} from "react-icons/bs";
-import {AiOutlineComment} from "react-icons/ai";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import ReactQuill, { Quill } from "react-quill";
@@ -14,8 +13,6 @@ import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
 import SingleComment from "./SingleComment";
-
-import Siren from "../../img/Siren/Siren.png";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -30,9 +27,8 @@ const FreeArticle = () => {
     const [likecount, setLikecount]=useState(0);
     const [profileImagePath, setProfileImagePath]=useState("");
     const [replyChangeValue, setReplyChangeValue ]=useState("");
-    const [reCommentChangeValue, setReCommentChangeValue ]=useState("");
-    const [showButton, setShowButton]=useState("display:block");
     const [replycnt, setReplycnt]=useState(0);
+
     const [InformationImage, setInformationImage]=useState([
         {
             id : 1,
@@ -69,6 +65,7 @@ const FreeArticle = () => {
     let likeMode=useRef(false);
 
     const quillRef = useRef(null);
+
     const toolbarOptions = [
         ["link", "image", "video"],
         [{ header: [1, 2, 3, false] }],
@@ -342,8 +339,7 @@ const formats = [
             </TitleBox>
             <TitleLine></TitleLine>
             <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content)}}/>
-            <br></br>
-            <br></br>
+
             {InformationImage.length > 0 &&
                         InformationImage.map(Image => { 
                                 return (
@@ -493,195 +489,11 @@ const Editer = styled(ReactQuill)
 
 `
 
-const Editer2 = styled(ReactQuill)
-`
-    display: flex;
-    flex-direction: column;
-
-    .ql-editor
-    {
-        margin: 0px -2px -2px 0px;
-        min-height: 80px;
-        font-size: 20px;
-    }
-
-    .ql-editor::-webkit-scrollbar 
-    {
-        display: none;
-    }
-
-    .ql-container::-webkit-scrollbar{
-        background: gray;
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-    }
-
-    .ql-container::-webkit-scrollbar-thumb
-    {
-        background: #55AAFF;
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
-        background-clip: padding-box;
-        border: 5px solid transparent;
-    }
-
-    .ql-container::-webkit-scrollbar-track
-    {
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-    }
-
-    .ql-video
-    {
-        width: 1280px;
-        height: 700px;
-    }
-
-    .ql-toolbar.ql-toolbar.ql-snow
-    {
-        order: 2;
-    }
-
-`
-
-const CommentreplyBox = styled.div
-`
-    display: flex;
-    justify-content: space-between;
-    margin: 22px 10px 10px 67px;
-`
-
-const CommentreplyAllBox = styled.div
-`
-    display: flex;
-`
-
-const CommentreplyLikeAllBox = styled.div
-`
-    display: flex;
-`
-
-const CommentreplyCount = styled.span
-`
-    margin: 3px 0px 0px 0px;
-    font-size: 17px;
-    font-weight: bold;
-`
-
-const CommentreplyLikeCount = styled.span
-`
-    margin: 3px 0px 0px 0px;
-    font-size: 17px;
-    font-weight: bold;
-`
-
-const CommentreplyIcon = styled.i
-`
-    margin: 0px 6px 0px 0px;
-    font-size: 23px;
-`
-
-const CommentreplyLikeBtn = styled.div
-`
-    cursor: pointer;
-    font-size: 22px;
-    margin: 0px 10px 0px 0px;
-`
-
-const CommentreplyBtn = styled.div
-`
-    margin: 4px 0px 0px 18px;
-    font-weight: bold;
-    cursor: pointer;
-`
-
-const CommentText = styled.span
-`
-
-`
-
-const CommentInformationBox = styled.div
-`
-    padding: 0px 0px 0px 67px;
-    font-size: 20px;
-    font-weight: bold;
-`
-
-const CommentLine = styled.div
-`
-    width: 100%;
-    height: 1px;
-    display: flex;
-    background: black;
-    margin: 12px 0px 12px 0px;
-}
-`
-
-const CommentUserBox = styled.div
-`
-    display: flex;
-`
-
-const SirenImg = styled.img
-`
-    width: 40px;
-    height: 40px;
-`
-
 const TitleLine = styled.div
 `
     height: 1px;
     background: black;
     margin: 15px 0px 15px 0px;
-`
-
-const UserNicknameText = styled.span
-`
-    font-size: 25px;
-    margin: 0px 0px 5px 0px;
-`
-
-const Regdate = styled.span
-`
-    font-size: 17px;
-`
-
-const RedateBox = styled.div
-`
-    display: flex;
-    align-items: end;
-    cursor: pointer;
-`
-
-const CommentInformationAllBox = styled.div
-`
-    display: flex;
-    flex-direction: column;
-    padding: 21px 0px 0px 15px;
-`
-
-const CommentUserProfileBox = styled.div
-`
-    display: flex;
-    justify-content: space-between;
-    margin: 0px 0px 17px 0px;
-}
-`
-
-const CommentUserProfile = styled.img
-`
-    width: 50px;
-    height: 50px;
-    border: solid 2px black;
-    border-radius: 30px;
-    margin: 21px 0px 0px 0px;
-`
-
-const UserCommentBox = styled.div
-`
-
 `
 
 const CommentBox = styled.div
@@ -719,23 +531,6 @@ const CommentForm = styled.form
     (props.UserCheck==="allok" ? "block" : "none" )};
 `
 
-const ReCommentForm=styled(CommentForm)
-`
-`
-const ReCommentInputBox = styled(CommentInputBox)
-`
-`
-const ReCommentBtn = styled(CommentBtn)
-`
-    width: 8%;
-`
-
-const CancelBtn=styled(ReCommentBtn)
-`
-    background: white;
-    margin : 10px 10px 0px 0px;  
-`
-
 const InformaionImageBox = styled.img
 `
 
@@ -743,6 +538,7 @@ const InformaionImageBox = styled.img
 
 const TitleBox = styled.div
 `
+
 `
 
 const DeleteBtn = styled.div
@@ -772,7 +568,6 @@ const EditAllBox = styled.div
         margin: 0px 0px 0px 13px;
         text-decoration: none;
         color: ${props => props.theme.textColor};
-    }
     }
 `
 
