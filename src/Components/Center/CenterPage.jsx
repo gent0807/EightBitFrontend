@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.scss";
 import "swiper/components/navigation/navigation.scss";
 import "swiper/components/pagination/pagination.scss";
-import SwiperCore, { Navigation, Pagination } from "swiper";
+import SwiperCore, { Navigation, Pagination, EffectCoverflow } from "swiper";
 import { FiArrowLeft } from "react-icons/fi";
 import { FiArrowRight } from "react-icons/fi";
 
@@ -15,7 +15,7 @@ import test3 from "../../img/MainSlide/test3.png";
 import test4 from "../../img/MainSlide/test4.png";
 import test5 from "../../img/MainSlide/test5.png";
 
-SwiperCore.use([Navigation, Pagination]);
+SwiperCore.use([Navigation, Pagination, EffectCoverflow]);
 
 const CenterPage = () =>
 {
@@ -82,13 +82,68 @@ const CenterPage = () =>
         spaceBetween : 30,
         slidesPerView : 5,
         loop: true,
+        centeredSlides: true,
+        loopAdditionalSlides: 1,
+        effect: "coverflow",
+        coverflowEffect: {
+          rotate: 20,
+          stretch: 10,
+          depth: 115,
+          modifier: 1,
+          scale: 1,
+          slideShadows: false
+        },
+        breakpoints : {
+            250: {
+                spaceBetween : 30,
+                slidesPerView : 1,
+            },
+            561: {
+                spaceBetween : 30,
+                slidesPerView : 2,
+            },
+            794: {
+                spaceBetween : 30,
+                slidesPerView : 3,
+            },
+            1060: {
+                spaceBetween : 30,
+                slidesPerView : 4,
+            },
+            1342: {
+                spaceBetween : 30,
+                slidesPerView : 5,
+            }
+        },
+        navigation : true,
+        pagination : { clickable: true },
+        onSwiper : setSwiper,
+        allowSlidePrev : { Slidelength: false},
+        coverflow: {
+			rotate: 0,
+			stretch: 100,
+			depth: 150,
+			modifier: 1.5,
+			slideShadows : false,
+		}
+    }
+
+    const swiperParams2 = 
+    {
+        spaceBetween : 30,
+        slidesPerView : 5,
+        loop: true,
         loopAdditionalSlides: 1,
         breakpoints : {
             250: {
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            667: {
+            561: {
+                spaceBetween : 30,
+                slidesPerView : 2,
+            },
+            794: {
                 spaceBetween : 30,
                 slidesPerView : 3,
             },
@@ -107,36 +162,6 @@ const CenterPage = () =>
         allowSlidePrev : { Slidelength: false},
     }
 
-    const swiperParams2 = 
-    {
-        spaceBetween : 30,
-        slidesPerView : 5,
-        loop: true,
-        loopAdditionalSlides: 1,
-        breakpoints : {
-            250: {
-                spaceBetween : 30,
-                slidesPerView : 1,
-            },
-            667: {
-                spaceBetween : 30,
-                slidesPerView : 3,
-            },
-            1060: {
-                spaceBetween : 30,
-                slidesPerView : 4,
-            },
-            1342: {
-                spaceBetween : 30,
-                slidesPerView : 5,
-            }  
-        },
-        navigation : true,
-        pagination : { clickable: true },
-        onSwiper : setSwiper,
-        allowSlidePrev : { Slidelength: false},
-    }
-
     const swiperParams3 = 
     {
         spaceBetween : 30,
@@ -148,7 +173,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            667: {
+            561: {
+                spaceBetween : 30,
+                slidesPerView : 2,
+            },
+            794: {
                 spaceBetween : 30,
                 slidesPerView : 3,
             },
@@ -178,7 +207,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            667: {
+            561: {
+                spaceBetween : 30,
+                slidesPerView : 2,
+            },
+            794: {
                 spaceBetween : 30,
                 slidesPerView : 3,
             },
@@ -208,7 +241,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            667: {
+            561: {
+                spaceBetween : 30,
+                slidesPerView : 2,
+            },
+            794: {
                 spaceBetween : 30,
                 slidesPerView : 3,
             },
@@ -238,7 +275,11 @@ const CenterPage = () =>
                 spaceBetween : 30,
                 slidesPerView : 1,
             },
-            667: {
+            561: {
+                spaceBetween : 30,
+                slidesPerView : 2,
+            },
+            794: {
                 spaceBetween : 30,
                 slidesPerView : 3,
             },
@@ -299,11 +340,13 @@ const CenterPage = () =>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
-                <Lanking>{id}</Lanking>
                 <ImgBox src={img}/>
                 <AllBox>
+                <Lanking>{id}</Lanking>
+                <InformaionBoxTextBox>
                 <TitleBox>{title}</TitleBox>
                 <InformaionBox>{informaion}</InformaionBox>
+                </InformaionBoxTextBox>
                 </AllBox>
                 </SlideBox>
             </SwiperSlide>
@@ -314,11 +357,13 @@ const CenterPage = () =>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
-                <Lanking>{id}</Lanking>
                 <ImgBox src={img}/>
                 <AllBox>
+                <Lanking>{id}</Lanking>
+                <InformaionBoxTextBox>
                 <TitleBox>{title}</TitleBox>
                 <InformaionBox>{informaion}</InformaionBox>
+                </InformaionBoxTextBox>
                 </AllBox>
                 </SlideBox>
             </SwiperSlide>
@@ -329,11 +374,13 @@ const CenterPage = () =>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
-                <Lanking>{id}</Lanking>
                 <ImgBox src={img}/>
                 <AllBox>
+                <Lanking>{id}</Lanking>
+                <InformaionBoxTextBox>
                 <TitleBox>{title}</TitleBox>
                 <InformaionBox>{informaion}</InformaionBox>
+                </InformaionBoxTextBox>
                 </AllBox>
                 </SlideBox>
             </SwiperSlide>
@@ -363,11 +410,13 @@ const CenterPage = () =>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
-                <Lanking>{id}</Lanking>
                 <ImgBox src={img}/>
                 <AllBox>
+                <Lanking>{id}</Lanking>
+                <InformaionBoxTextBox>
                 <TitleBox>{title}</TitleBox>
                 <InformaionBox>{informaion}</InformaionBox>
+                </InformaionBoxTextBox>
                 </AllBox>
                 </SlideBox>
             </SwiperSlide>
@@ -378,11 +427,13 @@ const CenterPage = () =>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
-                <Lanking>{id}</Lanking>
                 <ImgBox src={img}/>
                 <AllBox>
+                <Lanking>{id}</Lanking>
+                <InformaionBoxTextBox>
                 <TitleBox>{title}</TitleBox>
                 <InformaionBox>{informaion}</InformaionBox>
+                </InformaionBoxTextBox>
                 </AllBox>
                 </SlideBox>
             </SwiperSlide>
@@ -393,11 +444,13 @@ const CenterPage = () =>
             {Slide.length !== 0 && Slide.map(({ id, img, informaion, title} ) => (
             <SwiperSlide key={id}>
                 <SlideBox>
-                <Lanking>{id}</Lanking>
                 <ImgBox src={img}/>
                 <AllBox>
+                <Lanking>{id}</Lanking>
+                <InformaionBoxTextBox>
                 <TitleBox>{title}</TitleBox>
                 <InformaionBox>{informaion}</InformaionBox>
+                </InformaionBoxTextBox>
                 </AllBox>
                 </SlideBox>
             </SwiperSlide>
@@ -424,6 +477,11 @@ const CenterPage = () =>
         </SwiperBox>
     );
 }
+
+const InformaionBoxTextBox = styled.div
+`
+
+`
 
 const Slider = styled(Swiper)
 `
@@ -579,7 +637,7 @@ const SwiperBox = styled.div
 const ImgBox = styled.img
 `
     width: 100%;
-    height: 222px;
+    height: 285px;
 `
 
 const ImgAdBox = styled.img
@@ -638,12 +696,17 @@ const AdAllBox = styled.div
 
 const AllBox = styled.div
 `
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background: gray;
-    margin: -5px 0px 0px 0px;
+    position: absolute;
+    background: rgba(0,0,0,0.3);
     padding: 20px;
+    top: 0%;
+    height: 66%;
+    left: 0%;
+    border-radius: 8px;
+     @media (min-width:250px) and (max-width:560px)
+    {
+        width: 92%;
+    }
 `
 
 const SlideBox = styled.div

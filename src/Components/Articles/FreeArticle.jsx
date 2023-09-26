@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {BsHandThumbsUpFill} from "react-icons/bs";
 import {BsHandThumbsUp} from "react-icons/bs";
-import {AiOutlineComment} from "react-icons/ai";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import ReactQuill, { Quill } from "react-quill";
@@ -14,8 +13,6 @@ import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
 import SingleComment from "./SingleComment";
-
-import Siren from "../../img/Siren/Siren.png";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -30,9 +27,8 @@ const FreeArticle = () => {
     const [likecount, setLikecount]=useState(0);
     const [profileImagePath, setProfileImagePath]=useState("");
     const [replyChangeValue, setReplyChangeValue ]=useState("");
-    const [reCommentChangeValue, setReCommentChangeValue ]=useState("");
-    const [showButton, setShowButton]=useState("display:block");
     const [replycnt, setReplycnt]=useState(0);
+
     const [InformationImage, setInformationImage]=useState([
         {
             id : 1,
@@ -69,6 +65,7 @@ const FreeArticle = () => {
     let likeMode=useRef(false);
 
     const quillRef = useRef(null);
+
     const toolbarOptions = [
         ["link", "image", "video"],
         [{ header: [1, 2, 3, false] }],
@@ -342,8 +339,7 @@ const formats = [
             </TitleBox>
             <TitleLine></TitleLine>
             <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content)}}/>
-            <br></br>
-            <br></br>
+
             {InformationImage.length > 0 &&
                         InformationImage.map(Image => { 
                                 return (
@@ -648,53 +644,6 @@ const TitleLine = styled.div
     margin: 15px 0px 15px 0px;
 `
 
-const UserNicknameText = styled.span
-`
-    font-size: 25px;
-    margin: 0px 0px 5px 0px;
-`
-
-const Regdate = styled.span
-`
-    font-size: 17px;
-`
-
-const RedateBox = styled.div
-`
-    display: flex;
-    align-items: end;
-    cursor: pointer;
-`
-
-const CommentInformationAllBox = styled.div
-`
-    display: flex;
-    flex-direction: column;
-    padding: 21px 0px 0px 15px;
-`
-
-const CommentUserProfileBox = styled.div
-`
-    display: flex;
-    justify-content: space-between;
-    margin: 0px 0px 17px 0px;
-}
-`
-
-const CommentUserProfile = styled.img
-`
-    width: 50px;
-    height: 50px;
-    border: solid 2px black;
-    border-radius: 30px;
-    margin: 21px 0px 0px 0px;
-`
-
-const UserCommentBox = styled.div
-`
-
-`
-
 const CommentBox = styled.div
 `
 
@@ -730,23 +679,6 @@ const CommentForm = styled.form
     (props.UserCheck==="allok" ? "block" : "none" )};
 `
 
-const ReCommentForm=styled(CommentForm)
-`
-`
-const ReCommentInputBox = styled(CommentInputBox)
-`
-`
-const ReCommentBtn = styled(CommentBtn)
-`
-    width: 8%;
-`
-
-const CancelBtn=styled(ReCommentBtn)
-`
-    background: white;
-    margin : 10px 10px 0px 0px;  
-`
-
 const InformaionImageBox = styled.img
 `
 
@@ -754,6 +686,7 @@ const InformaionImageBox = styled.img
 
 const TitleBox = styled.div
 `
+
 `
 
 const DeleteBtn = styled.div
@@ -783,7 +716,6 @@ const EditAllBox = styled.div
         margin: 0px 0px 0px 13px;
         text-decoration: none;
         color: ${props => props.theme.textColor};
-    }
     }
 `
 
