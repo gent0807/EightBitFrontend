@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { BsEye, BsHandThumbsUpFill } from "react-icons/bs";
-import { BsHandThumbsUp } from "react-icons/bs";
+import {BsHandThumbsUpFill} from "react-icons/bs";
+import {BsHandThumbsUp} from "react-icons/bs";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import ReactQuill, { Quill } from "react-quill";
@@ -773,14 +773,9 @@ const CancelBtn = styled(CommentBtn)
 `
 
 const CommentForm = styled.form
-    `
-    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
-        (props.UserCheck === "allok" ? "block" : "none")};
 `
-
-const CommentForm2 = styled(CommentForm)
-`
-    display: ${props => props.OnReplyBtn == false ? "none" : "block"};
+    display: ${props => props.LoginMaintain == null  ? "none" : props.LoginMaintain=="true" ? (props.UserInfo==null ? "none" : (props.User==="allok"? "block" : "none" )):
+    (props.UserCheck==="allok" ? "block" : "none" )};
 `
 
 const InformaionImageBox = styled.img
@@ -789,9 +784,8 @@ const InformaionImageBox = styled.img
 `
 
 const TitleBox = styled.div
-    `
-    display: flex;
-    justify-content: space-between;
+`
+
 `
 
 const DeleteBtn = styled.div

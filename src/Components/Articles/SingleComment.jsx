@@ -185,16 +185,16 @@ const SingleComment = ({ Comment, profileImagePath }) => {
         "width",
     ];
 
-    const registerReComment = async (e) => {
-        e.preventDefault();
+const registerRecomment= async (e)=>{
+    e.preventDefault();
 
-        if (reCommentChangeValue.length > 0) {
-            await axios.post()
-        }
-        else if (reCommentChangeValue.length == 0) {
-            alert("댓글 내용을 입력해주세요.");
-            return;
-        }
+    if(reCommentChangeValue.length>0){
+
+    }
+    else if(reCommentChangeValue.length==0){
+        alert("댓글 내용을 입력해주세요.");
+        return; 
+    }
 
     }
 
@@ -386,7 +386,7 @@ const CommentreplyLikeBtn = styled.div
 `
 
 const CommentreplyBtn = styled.div
-`
+    `
     margin: 4px 0px 0px 18px;
     font-weight: bold;
     cursor: pointer;
@@ -400,13 +400,13 @@ const CommentText = styled.span
 `
 
 const CommentInformationBox = styled.div
-    `
-    padding: 0px 0px 0px 0px;
+`
+    padding: 0px 0px 0px 67px;
     font-size: 20px;
     font-weight: bold;
 `
 
-const CommentLine = styled.hr
+const CommentLine = styled.div
 `
     width: 100%;
     border: 1px dashed black;
@@ -418,10 +418,9 @@ const CommentUserBox = styled.div
 `
 
 const SirenImg = styled.img
-    `
-    width: 26px;
-    height: 26px;
-    margin: 0px 0px 0px 5px;
+`
+    width: 40px;
+    height: 40px;
 `
 
 const TitleLine = styled.div
@@ -458,7 +457,7 @@ const CommentInformationAllBox = styled.div
 `
 
 const CommentUserProfileBox = styled.div
-`
+    `
     display: flex;
     justify-content: space-between;
     margin: 0px 0px 17px 0px;
@@ -502,8 +501,8 @@ const ReCommentInputBox = styled.div
 `
 
 const ReCommentBtn = styled.button
-    `
-    width: 9%;
+`
+    width: 8%;
     background: #55AAFF;
     outline: none;
     border-radius: 10px;

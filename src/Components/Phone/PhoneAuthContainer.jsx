@@ -13,11 +13,11 @@ const Containerbox = styled.div`
 `
 
 const Phone = () => {
-    return (
-      <Containerbox>
-        <PhoneAuth/>
-      </Containerbox>
-    );
+  return (
+    <Containerbox>
+      <PhoneAuth />
+    </Containerbox>
+  );
 }
 
 export default Phone;

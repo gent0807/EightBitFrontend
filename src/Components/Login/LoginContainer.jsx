@@ -15,9 +15,9 @@ const Containerbox = styled.div`
 const LoginContainer = () => {
   return (
     <Containerbox>
-      <Logininput/>
+      <Logininput />
     </Containerbox>
   );
-} 
+}
 
 export default LoginContainer;

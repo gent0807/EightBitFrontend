@@ -16,35 +16,34 @@ import FreeArticle from "./Articles/FreeArticleContainer";
 import UpdateBoard from "./UpdateBoard/UpdateBoardContainer";
 import Center from "./Center/CenterContainer";
 
-const Router = () =>
-{
-    
-return(
-    <BrowserRouter>
-    <FooterSetContent>
-        <TopNavBar/>
-        <Routes>
-            <Route path="/Login" element={<Login />} />
-            <Route path="/Sign" element={<Sign />} />
-            <Route path="/EmailPwFound" element={<EmailPwFound />} />
-            <Route path="/PhoneAuth" element={<PhoneAuth />} />
-            <Route path="/SelectSign" element={<SelectSign />} />
-            <Route path="/FreeBoard" element={<FreeBoard />} />
-            <Route path="/WriteBoard" element={<WriteBoard />} />
-            <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
-            <Route path="/UpdateBoard/:writer/:regdate" element={<UpdateBoard/>} />
-            <Route path="/" element={<Center />}/>
-            <Route path="*" element={<NotFound />} />
-        </Routes> 
-    </FooterSetContent>
-    <Footer/>
-    </BrowserRouter>
+const Router = () => {
+
+    return (
+        <BrowserRouter>
+            <FooterSetContent>
+                <TopNavBar />
+                <Routes>
+                    <Route path="/Login" element={<Login />} />
+                    <Route path="/Sign" element={<Sign />} />
+                    <Route path="/EmailPwFound" element={<EmailPwFound />} />
+                    <Route path="/PhoneAuth" element={<PhoneAuth />} />
+                    <Route path="/SelectSign" element={<SelectSign />} />
+                    <Route path="/FreeBoard" element={<FreeBoard />} />
+                    <Route path="/WriteBoard" element={<WriteBoard />} />
+                    <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
+                    <Route path="/UpdateBoard/:writer/:regdate" element={<UpdateBoard />} />
+                    <Route path="/" element={<Center />} />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </FooterSetContent>
+            <Footer />
+        </BrowserRouter>
     );
 }
 
 export default Router;
 
 const FooterSetContent = styled.div
-`
+    `
     padding-bottom: 285px;
 `

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import CenterPage from "./CenterPage"
 
 let Containerbox = styled.div
-`
+    `
     width: 100%;
     padding: 169px 0px 54px 0px;
     @media (min-width:250px) and (max-width:666px)
@@ -15,9 +15,8 @@ let Containerbox = styled.div
     }
 `
 
-const CenterContainer = () =>
-{
-    return(
+const CenterContainer = () => {
+    return (
         <Containerbox>
             <CenterPage />
         </Containerbox>

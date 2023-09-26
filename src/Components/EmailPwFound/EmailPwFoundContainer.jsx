@@ -15,9 +15,9 @@ const Containerbox = styled.div`
 const EmailPwFoundContainer = () => {
   return (
     <Containerbox>
-      <EmailPwFound/>
+      <EmailPwFound />
     </Containerbox>
   );
-} 
+}
 
 export default EmailPwFoundContainer;

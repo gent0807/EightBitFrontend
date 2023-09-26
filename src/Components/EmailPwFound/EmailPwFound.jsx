@@ -319,163 +319,163 @@ function EmailPwFound() {
       <EmPwFoundTop>
         <Link to='/'><EmPwLogo src={isDarkmode ? LogoDark : LogoLight} alt='로고' /></Link>
       </EmPwFoundTop>
-    <EwPwBox>
-      <EmPwForm onSubmit={update}>
+      <EwPwBox>
+        <EmPwForm onSubmit={update}>
           <InformationAllBox>
-              <EmPwInformation>
-                  <EmPwFoundTitle>이메일/비밀번호 찾기</EmPwFoundTitle>
-              </EmPwInformation>
+            <EmPwInformation>
+              <EmPwFoundTitle>이메일/비밀번호 찾기</EmPwFoundTitle>
+            </EmPwInformation>
           </InformationAllBox>
 
-      <EmPwInputT>
-          <EmailInputT>
+          <EmPwInputT>
+            <EmailInputT>
               <Title>이메일</Title>
               <EmailAuthInputBox>
-                  <EmailAuthAllBox>
-                      <EmailInput 
-                          ref={inputRef} 
-                          disabled={isEmailauthBtn} 
-                          revert={MessageRevert} 
-                          show={isEmail} 
-                          check={isInputEmailCheck} 
-                          placeholder='이메일을 입력해 주세요!' 
-                          value={Email} 
-                          onChange={Emailuser} 
-                      />
-                      <SendButton 
-                          show={isEmail} 
-                          type="button" 
-                          onClick={EmailCheck} 
-                          disabled={isEmailAuthInputCheck ? 
-                          isEmailauthBtn : true}
-                      >
-                          <SendText>{isEmailBtn ? "재전송" : "전송"}</SendText>
-                      </SendButton>
-                  </EmailAuthAllBox>
+                <EmailAuthAllBox>
+                  <EmailInput
+                    ref={inputRef}
+                    disabled={isEmailauthBtn}
+                    revert={MessageRevert}
+                    show={isEmail}
+                    check={isInputEmailCheck}
+                    placeholder='이메일을 입력해 주세요!'
+                    value={Email}
+                    onChange={Emailuser}
+                  />
+                  <SendButton
+                    show={isEmail}
+                    type="button"
+                    onClick={EmailCheck}
+                    disabled={isEmailAuthInputCheck ?
+                      isEmailauthBtn : true}
+                  >
+                    <SendText>{isEmailBtn ? "재전송" : "전송"}</SendText>
+                  </SendButton>
+                </EmailAuthAllBox>
               </EmailAuthInputBox>
 
-            <>
-              {MessageChangeCheck ?
-                <EmailFoundErrorMessage 
-                    show={MessageRevert} 
+              <>
+                {MessageChangeCheck ?
+                  <EmailFoundErrorMessage
+                    show={MessageRevert}
                     check={isEmailPoundCheck}
-                >
+                  >
                     {EmailFoundCheckMessage}
-                </EmailFoundErrorMessage> :
-                Email.length > 0 && (<ErrorMessage color={isEmail}>{EmailMessage}</ErrorMessage>)}
-            </>
-            
-            <EmailAuthAllInputBox show={isEmailBtn}>
-            <Title>인증번호</Title>
-            <EmailAuthBox>
-              <EmailAuthInput 
-                  show={isInputEmailAuthCheck} 
-                  check={isEmailauthBtn} 
-                  disabled={isEmailauthBtn} 
-                  placeholder='인증번호를 입력해 주세요!' 
-                  value={Emailauth} 
-                  onChange={EmailAuth} 
-              />
-              <EmailAuthBtn 
-                  show={isEmailauthBtn} 
-                  type="button" 
-                  onClick={EmailAuthCheck} 
-                  disabled={isEmailauthBtn}
-              >
-                  <AuthText>{isButtonCheck ? "완료" : "확인"}</AuthText>
-              </EmailAuthBtn>
-            </EmailAuthBox>
+                  </EmailFoundErrorMessage> :
+                  Email.length > 0 && (<ErrorMessage color={isEmail}>{EmailMessage}</ErrorMessage>)}
+              </>
 
-            <ErrorMessage2 check={isButtonCheck} color={isEmailauthBtn}>{EmailauthMessage}</ErrorMessage2>
+              <EmailAuthAllInputBox show={isEmailBtn}>
+                <Title>인증번호</Title>
+                <EmailAuthBox>
+                  <EmailAuthInput
+                    show={isInputEmailAuthCheck}
+                    check={isEmailauthBtn}
+                    disabled={isEmailauthBtn}
+                    placeholder='인증번호를 입력해 주세요!'
+                    value={Emailauth}
+                    onChange={EmailAuth}
+                  />
+                  <EmailAuthBtn
+                    show={isEmailauthBtn}
+                    type="button"
+                    onClick={EmailAuthCheck}
+                    disabled={isEmailauthBtn}
+                  >
+                    <AuthText>{isButtonCheck ? "완료" : "확인"}</AuthText>
+                  </EmailAuthBtn>
+                </EmailAuthBox>
 
-            </EmailAuthAllInputBox>
+                <ErrorMessage2 check={isButtonCheck} color={isEmailauthBtn}>{EmailauthMessage}</ErrorMessage2>
 
-            <PasswordChangeT show={changeVisibled}>
+              </EmailAuthAllInputBox>
+
+              <PasswordChangeT show={changeVisibled}>
                 <Title>새 비밀번호</Title>
                 <PasswordChangeBox>
-                  <PasswordChangeInput 
-                      type="password" 
-                      show={isPasswordChange} 
-                      check={isInputPasswordChangeCheck} 
-                      placeholder='새 비밀번호를 입력해 주세요!' 
-                      value={PasswordChangeE} 
-                      onChange={PasswordChange} 
+                  <PasswordChangeInput
+                    type="password"
+                    show={isPasswordChange}
+                    check={isInputPasswordChangeCheck}
+                    placeholder='새 비밀번호를 입력해 주세요!'
+                    value={PasswordChangeE}
+                    onChange={PasswordChange}
                   />
                 </PasswordChangeBox>
-            </PasswordChangeT>
+              </PasswordChangeT>
 
-            {PasswordChangeE.length > 0 && (<ErrorMessage show={isPasswordChange}>{PasswordChangeMessage}</ErrorMessage>)}
+              {PasswordChangeE.length > 0 && (<ErrorMessage show={isPasswordChange}>{PasswordChangeMessage}</ErrorMessage>)}
 
-            <PasswordChangeConfirmT show={changeVisibled}>
+              <PasswordChangeConfirmT show={changeVisibled}>
                 <Title>새 비밀번호 확인</Title>
                 <PasswordChangeBox>
-                  <PasswordChangeConfirmInput 
-                      type="password" 
-                      show={isPasswordChangeConfirm} 
-                      check={isInputPasswordChangeConfirmCheck} 
-                      placeholder='새 비밀번호를 다시 입력해 주세요!' 
-                      value={PasswordChangeConfirmM} 
-                      onChange={PasswordChangeConfirm} 
+                  <PasswordChangeConfirmInput
+                    type="password"
+                    show={isPasswordChangeConfirm}
+                    check={isInputPasswordChangeConfirmCheck}
+                    placeholder='새 비밀번호를 다시 입력해 주세요!'
+                    value={PasswordChangeConfirmM}
+                    onChange={PasswordChangeConfirm}
                   />
                 </PasswordChangeBox>
-            </PasswordChangeConfirmT>
+              </PasswordChangeConfirmT>
 
-            {PasswordChangeConfirmM.length > 0 && (<ErrorMessage show={isPasswordChangeConfirm}>{PasswordChangeConfirmMessage}</ErrorMessage>)}
+              {PasswordChangeConfirmM.length > 0 && (<ErrorMessage show={isPasswordChangeConfirm}>{PasswordChangeConfirmMessage}</ErrorMessage>)}
 
-          </EmailInputT>
-      </EmPwInputT>
+            </EmailInputT>
+          </EmPwInputT>
 
-        <SubmitBtnBox>
-            <SumbitButton 
-                type="submit" 
-                disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}
+          <SubmitBtnBox>
+            <SumbitButton
+              type="submit"
+              disabled={!(isEmail && isEmailauthBtn && isPasswordChange && isPasswordChangeConfirm)}
             >
-                <SumbitText>비밀번호 수정완료</SumbitText>
+              <SumbitText>비밀번호 수정완료</SumbitText>
             </SumbitButton>
-        </SubmitBtnBox>
+          </SubmitBtnBox>
 
-        <AnotherRoute>
+          <AnotherRoute>
             <AnotherList>
-                <Login onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></Login>
-                <Sign onClick={() => ScrollTop()}><Link to='/Sign'>회원가입</Link></Sign>
+              <Login onClick={() => ScrollTop()}><Link to='/Login'>로그인</Link></Login>
+              <Sign onClick={() => ScrollTop()}><Link to='/Sign'>회원가입</Link></Sign>
             </AnotherList>
-        </AnotherRoute>
-      </EmPwForm>
+          </AnotherRoute>
+        </EmPwForm>
       </EwPwBox>
     </EmPwFoundT>
   );
 }
 
 const PasswordChangeBox = styled.div
-`
+  `
     display: flex;
     flex-direction: column;
 `
 
 const EmailAuthAllInputBox = styled.div
-`
-    display: ${props => props.show ? "flex" : "none" };
+  `
+    display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
     margin: 18px 0px 0px 0px;
 `
 
 const SumbitText = styled.span
-`
+  `
 
 `
 
 const SendText = styled.span
-`
+  `
 
 `
 
 const AuthText = styled.span
-`
+  `
 
 `
 
 const EmPwInformation = styled.div
-`
+  `
     width: 191px;
     border: solid 3px ${(props) => props.theme.borderColor};
     padding: 10px;
@@ -484,54 +484,54 @@ const EmPwInformation = styled.div
 `
 
 const EmPwFoundT = styled.div
-`
+  `
     display: flex;
     flex-direction: column;
 `
 
 const InformationAllBox = styled.div
-`
+  `
     display: flex;
     justify-content: center;
 `
 
 const EmailAuthInputBox = styled.div
-`
+  `
     
 `
 
 const EmailAuthAllBox = styled.div
-`
+  `
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 3fr 1fr;
 `
 
 const EmPwFoundTop = styled.div
-`
+  `
     text-align: center;
     margin-bottom: 50px;
 `
 
 const EmPwLogo = styled.img
-`
+  `
     width: 192px;
     height: 102px;
     -webkit-user-select: none;
 `
 
 const EmPwForm = styled.form
-`
+  `
     
 `
 
 const EwPwBox = styled.div
-`
+  `
 
 `
 
 const EmPwInputContainer = styled.div
-`
+  `
     width: 460px;
     
     padding: 20px;
@@ -544,7 +544,7 @@ const EmPwInputContainer = styled.div
 `
 
 const Information = styled.div
-`
+  `
     margin: 0px 154px 45px 154px;
     width: 250px;
     border: solid 3px #3c3c3c;
@@ -554,25 +554,25 @@ const Information = styled.div
 `
 
 const EmPwFoundTitle = styled.span
-`
+  `
     color: ${(props) => props.theme.textColor};
     font-weight: bold;
     font-size: 20px;
 `
 
 const EmPwInputT = styled.div
-`
+  `
 `
 
 const EmailInputT = styled.div
-`
+  `
     display: flex;
     flex-direction: column;
     margin: 20px 0px 0px 0px;
 `
 
 const EmailInput = styled.input
-`
+  `
     max-width: 322px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
@@ -591,37 +591,37 @@ const EmailInput = styled.input
 `
 
 const ErrorMessageBox = styled.div
-`
+  `
     margin: ${props => props.margin};
     display: flex;
     position: absolute;
 `
 
 const ErrorMessageIcon = styled.i
-`
+  `
     margin: -2px -2px 5px;
 `
 
 const ErrorMessageText = styled.span
-`
+  `
     margin: -3px 6px 6px 7px;
 `
 
 const ErrorMessage = styled.p
-`
+  `
     margin: 0px;
     padding: 0px;
     color: ${(props) => props.color ? props.theme.successColor : props.theme.errorColor};
     font-size: 15px;
 `
-const ErrorMessage2=styled(ErrorMessage)
-`
+const ErrorMessage2 = styled(ErrorMessage)
+  `
     display: "block";
 `
 
 const EmailFoundErrorMessage = styled.p
-`
-    display: ${props => props.show ? "none" : props.check ? "block" : "none" };
+  `
+    display: ${props => props.show ? "none" : props.check ? "block" : "none"};
     margin: 0px;
     padding: 0px;
     color:${(props) => props.theme.errorColor};;
@@ -629,7 +629,7 @@ const EmailFoundErrorMessage = styled.p
 `
 
 const SendButton = styled.button
-`
+  `
     margin-left: 10px;
     max-width: 100px;
     height: 56.66px;
@@ -656,24 +656,24 @@ const SendButton = styled.button
 `
 
 const EmailAuthBox = styled.div
-`
+  `
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 3fr 1fr;
 `
 
 const EmailAuthInput = styled(EmailInput)
-`
-    box-shadow: ${props => props.show ? props.check ?  `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
+  `
+    box-shadow: ${props => props.show ? props.check ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : "none"};
 
     &:focus
     {
-      box-shadow: ${props => props.show ? props.check ?  `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : `0 0 0 2px ${props.theme.borderColor} inset`};
+      box-shadow: ${props => props.show ? props.check ? `0 0 0 2px ${props.theme.successColor} inset` : `0 0 0 2px ${props.theme.errorColor} inset` : `0 0 0 2px ${props.theme.borderColor} inset`};
     }
 `
 
 const EmailAuthBtn = styled.button
-`
+  `
     margin-left: 10px;
     max-width: 100px;
     height: 55px;
@@ -694,14 +694,14 @@ const EmailAuthBtn = styled.button
 `
 
 const PasswordChangeT = styled.div
-`
+  `
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
     margin-top: 20px;
 `
 
 const PasswordChangeConfirmT = styled.div
-`
+  `
     display: ${props => props.show ? "flex" : "none"};
     flex-direction: column;
     margin-top: 26px;
@@ -709,13 +709,13 @@ const PasswordChangeConfirmT = styled.div
 `
 
 const Title = styled.label
-`
+  `
     color: ${(props) => props.theme.textColor};
     font-weight: bold;
 `
 
 const PasswordChangeInput = styled.input
-`
+  `
     max-width: 429px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 20px;
@@ -733,13 +733,13 @@ const PasswordChangeInput = styled.input
     }
 `
 
-const PasswordChangeConfirmInput= styled(PasswordChangeInput)
-`
+const PasswordChangeConfirmInput = styled(PasswordChangeInput)
+  `
     margin-top: 23px;
 `
 
 const SubmitBtnBox = styled.div
-`
+  `
     margin-top: 25px;
     margin-bottom: 28px;
     display: flex;
@@ -747,7 +747,7 @@ const SubmitBtnBox = styled.div
 `
 
 const SumbitButton = styled.button
-`
+  `
     max-width: 480px;
     height: 55px;
     background: ${props => props.theme.buttonColor};
@@ -769,11 +769,11 @@ const SumbitButton = styled.button
     }
 `
 const AnotherRoute = styled.div
-`
+  `
 `
 
 const AnotherList = styled.ul
-`
+  `
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -783,7 +783,7 @@ const AnotherList = styled.ul
 `
 
 const Sign = styled.li
-`
+  `
     margin: 0px 10px 0px 10px;
     a
     {
@@ -794,7 +794,7 @@ const Sign = styled.li
 `
 
 const Login = styled(Sign)
-`
+  `
   &::after {
   background: ${props => props.theme.textColor};
   position: absolute;
