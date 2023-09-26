@@ -397,6 +397,7 @@ const formats = [
             <Link to="/FreeBoard">목록</Link>
 
             </EditAllBox>
+            <CommentLine></CommentLine>
 
         <CommentBox>
             {Comment.length > 0 &&
@@ -432,7 +433,7 @@ const formats = [
                     </Editer>
                 </CommentInputBox>
                 <CommentBtnBox>
-                    <CommentBtn>등록</CommentBtn>
+                    <CommentBtn>댓글 쓰기</CommentBtn>
                 </CommentBtnBox>
             </CommentForm>
         </CommentBox>
@@ -623,14 +624,10 @@ const CommentInformationBox = styled.div
     font-weight: bold;
 `
 
-const CommentLine = styled.div
+const CommentLine = styled.hr
 `
     width: 100%;
-    height: 1px;
-    display: flex;
-    background: black;
-    margin: 12px 0px 12px 0px;
-}
+    border: 0.1px solid black;
 `
 
 const CommentUserBox = styled.div
@@ -717,7 +714,7 @@ const CommentBtn = styled.button
 `
     background: #55AAFF;
     outline: none;
-    width: 8%;
+    width: 11%;
     border-radius: 10px;
     margin: 10px 0px 0px 0px;
     border: solid 3px black;
@@ -789,6 +786,8 @@ const EditAllBox = styled.div
     }
     }
 `
+
+
 
 const WriterText = styled.span
 `

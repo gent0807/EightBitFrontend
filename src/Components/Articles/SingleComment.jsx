@@ -187,11 +187,11 @@ const formats = [
         "width",
 ];
 
-const registerRecomment= async (e)=>{
+const registerReComment= async (e)=>{
     e.preventDefault();
 
     if(reCommentChangeValue.length>0){
-
+        await axios.post()
     }
     else if(reCommentChangeValue.length==0){
         alert("댓글 내용을 입력해주세요.");
@@ -219,12 +219,12 @@ return (
                                 </CommentInformationBox>
                                 <CommentreplyBox>
                                     <CommentreplyAllBox>
-                                        <CommentreplyIcon><AiOutlineComment/></CommentreplyIcon>
+                                        <CommentreplyIcon onClick={()=>{}}><AiOutlineComment/></CommentreplyIcon>
                                         <CommentreplyCount>0</CommentreplyCount>
                                         <CommentreplyBtn
                                             onClick={() => setOnReplyBtn(!onReplyBtn)}
                                         >
-                                            댓글 쓰기
+                                            {onReplyBtn==false? "댓글쓰기" : "댓글 취소"}
                                         </CommentreplyBtn>
                                     </CommentreplyAllBox>
                                     <CommentreplyLikeAllBox>
@@ -252,7 +252,7 @@ return (
 
                                     Writer={writer}
 
-                                    onSubmit={registerRecomment}>
+                                    onSubmit={registerReComment}>
                                         <ReCommentInputBox>
                                         <Editer2
                                             placeholder="댓글을 입력해 주세요!"
@@ -264,12 +264,13 @@ return (
                                         </Editer2>
                                         </ReCommentInputBox>
                                         <ReCommentBtnBox>
-                                            <CancelBtn type="button">취소</CancelBtn>
-                                            <ReCommentBtn>등록</ReCommentBtn>
+                                            <CancelBtn type="button" onClick={()=>{setOnReplyBtn(!onReplyBtn)}}>취소</CancelBtn>
+                                            <ReCommentBtn>댓글 쓰기</ReCommentBtn>
                                         </ReCommentBtnBox>
-                                        <CommentLine></CommentLine>
                                 </ReCommentForm>
-                                )}         
+                                )}
+
+                               <CommentLine/>         
     </UserCommentBox>
     );
 }
@@ -364,6 +365,7 @@ const CommentreplyIcon = styled.i
 `
     margin: 0px 6px 0px 0px;
     font-size: 23px;
+    cursor: pointer;    
 `
 
 const CommentreplyLikeBtn = styled.div
@@ -392,14 +394,10 @@ const CommentInformationBox = styled.div
     font-weight: bold;
 `
 
-const CommentLine = styled.div
+const CommentLine = styled.hr
 `
     width: 100%;
-    height: 1px;
-    display: flex;
-    background: black;
-    margin: 12px 0px 12px 0px;
-}
+    border: 0.1px solid black;
 `
 
 const CommentUserBox = styled.div
@@ -409,8 +407,8 @@ const CommentUserBox = styled.div
 
 const SirenImg = styled.img
 `
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
 `
 
 const TitleLine = styled.div
@@ -483,29 +481,11 @@ const ReCommentInputBox = styled.div
     overflow: hidden;
 `
 
-const CancelBtn=styled.div
-`
-    width: 8%;
-    background: #55AAFF;
-    outline: none;
-    width: 100%;
-    border-radius: 10px;
-    margin: 10px 0px 0px 0px;
-    border: solid 3px black;
-    font-size: 19px;
-    font-weight: bold;
-    padding: 10px;
-    cursor: pointer;
-    background: white;
-    margin : 10px 10px 0px 0px;
-`
-
 const ReCommentBtn = styled.button
 `
-    width: 8%;
+    width: 11%;
     background: #55AAFF;
     outline: none;
-    width: 100%;
     border-radius: 10px;
     margin: 10px 0px 0px 0px;
     border: solid 3px black;
@@ -513,6 +493,13 @@ const ReCommentBtn = styled.button
     font-weight: bold;
     padding: 10px;
     cursor: pointer;
+`
+
+const CancelBtn=styled(ReCommentBtn)
+`
+    width: 7%;
+    background: white;
+    margin : 10px 10px 0px 0px;
 `
 
 const ReCommentBtnBox = styled.div
