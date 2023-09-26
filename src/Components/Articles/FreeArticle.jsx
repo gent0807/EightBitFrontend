@@ -499,7 +499,9 @@ const formats = [
                         formats={formats}>
                     </Editer>
                 </CommentInputBox>
-                <CommentBtn>등록</CommentBtn>
+                <CommentBtnBox>
+                    <CommentBtn>등록</CommentBtn>
+                </CommentBtnBox>
             </CommentForm>
         </CommentBox>
         </FreeArticleBox >
@@ -509,6 +511,12 @@ const formats = [
 export default FreeArticle;
 
 const ReCommentBtnBox = styled.div
+`
+    display: flex;
+    justify-content: end;
+`
+
+const CommentBtnBox = styled.div
 `
     display: flex;
     justify-content: end;
@@ -777,7 +785,7 @@ const CommentBtn = styled.button
 `
     background: #55AAFF;
     outline: none;
-    width: 100%;
+    width: 8%;
     border-radius: 10px;
     margin: 10px 0px 0px 0px;
     border: solid 3px black;
