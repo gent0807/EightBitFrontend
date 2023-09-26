@@ -17,11 +17,10 @@ let Containerbox = styled.div`
     }
 `
 
-const WriteBoardContainer = () =>
-{
-    return(
+const WriteBoardContainer = () => {
+    return (
         <Containerbox>
-            <WriteBoard/>
+            <WriteBoard />
         </Containerbox>
     );
 }

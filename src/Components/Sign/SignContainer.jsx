@@ -13,11 +13,11 @@ let Containerbox = styled.div`
 
 const SignContainer = () => {
 
-    return (
-      <Containerbox>
-        <Signinput />
-      </Containerbox>
-    );
+  return (
+    <Containerbox>
+      <Signinput />
+    </Containerbox>
+  );
 }
 
 export default SignContainer;

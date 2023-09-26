@@ -13,13 +13,12 @@ let Containerbox = styled.div`
     }
 `
 
-const FreeArticleContainer = () => 
-{
-    return(
-       <Containerbox>
-            <FreeArticle/>
-       </Containerbox>
+const FreeArticleContainer = () => {
+    return (
+        <Containerbox>
+            <FreeArticle />
+        </Containerbox>
     );
-}    
+}
 
 export default FreeArticleContainer;

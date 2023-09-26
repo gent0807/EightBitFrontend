@@ -5,24 +5,24 @@ import { isDark } from './Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-const ip= `http://218.155.175.176:8033/EightBitBackend`;
+const ip = `http://218.155.175.176:8033/EightBitBackend`;
 
-const profileImageDir="http://218.155.175.176:8033/EightBitBackend/resources/Users/profileImage/"
+const profileImageDir = "http://218.155.175.176:8033/EightBitBackend/resources/Users/profileImage/"
 
 const Main = () => {
 
   localStorage.setItem("ip", ip);
   localStorage.setItem("profileImageDir", profileImageDir);
-  
+
 
   const isDarkmode = useRecoilValue(isDark);
 
   return (
-    <ThemeProvider theme={ isDarkmode ? lightTheme : darkTheme }>
-    <GlobalStyle />
-    <FooterSet>
-    <Router />
-    </FooterSet>
+    <ThemeProvider theme={isDarkmode ? lightTheme : darkTheme}>
+      <GlobalStyle />
+      <FooterSet>
+        <Router />
+      </FooterSet>
     </ThemeProvider>
   );
 }
@@ -30,7 +30,7 @@ const Main = () => {
 export default Main;
 
 const FooterSet = styled.div
-`
+  `
   min-height: calc(100% - 120px);
   @media (min-width:250px) and (max-width:480px)
     {
@@ -38,9 +38,9 @@ const FooterSet = styled.div
     }
 `
 
-const darkTheme = 
+const darkTheme =
 {
-  backgroundColor: "#1d2024",
+  backgroundColor: "rgba(31,41,55,1)",
   textColor: "#6a9dda",
   successColor: "#6a9dda",
   errorColor: "orange",
@@ -54,7 +54,7 @@ const darkTheme =
   WriterBorder: "#55aaff"
 };
 
-const lightTheme = 
+const lightTheme =
 {
   backgroundColor: "white",
   textColor: "black",
@@ -71,7 +71,7 @@ const lightTheme =
 };
 
 const GlobalStyle = createGlobalStyle
-`
+  `
   ${FooterSet}
   {
     background-color: ${(props) => props.theme.backgroundColor};

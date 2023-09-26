@@ -13,11 +13,11 @@ let Containerbox = styled.div`
 
 const SelectSign = () => {
 
-    return (
-      <Containerbox>
-        <SelectSignInput />
-      </Containerbox>
-    );
+  return (
+    <Containerbox>
+      <SelectSignInput />
+    </Containerbox>
+  );
 }
 
 export default SelectSign;

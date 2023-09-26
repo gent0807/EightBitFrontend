@@ -16,19 +16,18 @@ import LogoLight from "../../img/LOGO/8bitLight.png";
 import LogoDark from "../../img/LOGO/8bitDark.png";
 
 
-const SelectSign = () => 
-{
+const SelectSign = () => {
     const isDarkmode = useRecoilValue(isDark);
-    const [authMode, setAuthMode]=useRecoilState(work);
-    
+    const [authMode, setAuthMode] = useRecoilState(work);
+
     useEffect(() => {
         setAuthMode('register');
-    },[]);
+    }, []);
 
-    return(
+    return (
         <SelectSignBox>
             <LogoBox>
-                <Link to='/'><LoginTopLOGO src={ isDarkmode ? LogoDark : LogoLight } alt='로고'/></Link>
+                <Link to='/'><LoginTopLOGO src={isDarkmode ? LogoDark : LogoLight} alt='로고' /></Link>
             </LogoBox>
             <IntroduceBox>
                 <MainText as="h1">8bit 가입을 시작합니다!</MainText>
@@ -40,13 +39,13 @@ const SelectSign = () =>
                 </Link>
             </EmailBtnBox>
             <LOGINAPI>
-            <Line><span>또는</span></Line>
-            <APIList>
-                <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
-                <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></APIListA></APIListLI>
-                <APIListLI>< APIListA border={"#edf511"} background={"#edf511"} API="#"><RiKakaoTalkFill style={{color:"black"}}/><SiNaver /></ APIListA></APIListLI>
-                <APIListLI>< APIListA border={"#0d0c0c"} background={"#0d0c0c"} API="#"><BsGithub /></ APIListA></APIListLI>
-            </APIList>
+                <Line><span>또는</span></Line>
+                <APIList>
+                    <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
+                    <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></APIListA></APIListLI>
+                    <APIListLI>< APIListA border={"#edf511"} background={"#edf511"} API="#"><RiKakaoTalkFill style={{ color: "black" }} /><SiNaver /></ APIListA></APIListLI>
+                    <APIListLI>< APIListA border={"#0d0c0c"} background={"#0d0c0c"} API="#"><BsGithub /></ APIListA></APIListLI>
+                </APIList>
             </LOGINAPI>
         </SelectSignBox>
     );
@@ -55,19 +54,19 @@ const SelectSign = () =>
 export default SelectSign;
 
 const LogoBox = styled.div
-`
+    `
     display: flex;
     justify-content: center;
 `
 
 const EmailBtnBox = styled.div
-`
+    `
     display: flex;
     flex-direction: column;
 `
 
 const SelectSignBox = styled.div
-`
+    `
     display: flex;
     flex-direction: column;
     a
@@ -77,7 +76,7 @@ const SelectSignBox = styled.div
 `
 
 const IntroduceBox = styled.div
-`
+    `
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -86,16 +85,16 @@ const IntroduceBox = styled.div
 `
 
 const APIListLI = styled.li
-`
+    `
 `
 
 const LOGINAPI = styled.div
-`
+    `
     width: 100%;
 `
 
 const EmailButton = styled.div
-`
+    `
     max-width: 416px;
     border: solid 2px ${(props) => props.theme.borderColor};
     display: flex;
@@ -113,24 +112,24 @@ const EmailButton = styled.div
 `
 
 const EmailButtonText = styled.span
-`
+    `
     font-weight: bold;
 `
 
 const APIList = styled(EmailPwFoundList)
-`
+    `
     margin:40px 0px 40px 0px;
 `
 
 
 export const IntroduceText = styled.span
-`
+    `
     font-size: 20px;
     opacity: 50%;
 `
 
 const MainText = styled(IntroduceText)
-`
+    `
     font-size: 25px;
     opacity: 100%;
 `

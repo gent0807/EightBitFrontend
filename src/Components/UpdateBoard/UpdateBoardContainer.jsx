@@ -13,11 +13,10 @@ let Containerbox = styled.div`
     }
 `
 
-const UpdateBoardContainer = () =>
-{
-    return(
+const UpdateBoardContainer = () => {
+    return (
         <Containerbox>
-            <UpdateBoard/>
+            <UpdateBoard />
         </Containerbox>
     );
 }

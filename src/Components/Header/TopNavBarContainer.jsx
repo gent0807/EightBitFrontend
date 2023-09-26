@@ -8,11 +8,10 @@ const Containerbox = styled.div`
     width: 100%;
 `
 
-const TopNavBarContainer = () =>
-{
-    return(
+const TopNavBarContainer = () => {
+    return (
         <Containerbox>
-            <TopNavBar/>
+            <TopNavBar />
         </Containerbox>
     );
 }

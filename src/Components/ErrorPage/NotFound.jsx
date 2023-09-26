@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
-const NotFound = () =>
-{   
-    
-    return(
+const NotFound = () => {
+
+    return (
         <NotFoundContainer>
             <NotFoundText>not found!</NotFoundText>
         </NotFoundContainer>
@@ -13,7 +12,7 @@ const NotFound = () =>
 export default NotFound;
 
 const NotFoundContainer = styled.div
-`
+    `
     display: flex;
     margin: 0 auto;
     width: 460px;
@@ -28,7 +27,7 @@ const NotFoundContainer = styled.div
 `
 
 const NotFoundText = styled.span
-`
+    `
     color: ${(props) => props.theme.textColor};
     font-size: 25px;
 `
