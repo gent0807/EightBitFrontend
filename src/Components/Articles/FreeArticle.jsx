@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {BsHandThumbsUpFill} from "react-icons/bs";
-import {BsHandThumbsUp} from "react-icons/bs";
+import { BsHandThumbsUpFill } from "react-icons/bs";
+import { BsHandThumbsUp } from "react-icons/bs";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import ReactQuill, { Quill } from "react-quill";
@@ -361,24 +361,24 @@ const FreeArticle = () => {
                             );
                         })
                     }
-                    <div style={{height:"300px"}}>
+                    <div style={{ height: "300px" }}>
                     </div>
-                    <div style={{display:"flex"}}>
+                    <div style={{ display: "flex" }}>
                         <CommentreplyBtn2
-                        LoginMaintain={loginMaintain}
-                        UserInfo={userInfo} User={userInfo == null ?
-                            null : userInfo.loginState}
-                        UserCheck={user.login_state}
-                        UserNicknameCheck={user.nickname}
-                        UserNickname={userInfo == null ?
-                            null : userInfo.nickName}
-                        Writer={writer}
-                        onClick={() => setOnReplyBtn(!onReplyBtn)}>
-                        {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
+                            LoginMaintain={loginMaintain}
+                            UserInfo={userInfo} User={userInfo == null ?
+                                null : userInfo.loginState}
+                            UserCheck={user.login_state}
+                            UserNicknameCheck={user.nickname}
+                            UserNickname={userInfo == null ?
+                                null : userInfo.nickName}
+                            Writer={writer}
+                            onClick={() => setOnReplyBtn(!onReplyBtn)}>
+                            {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
                         </CommentreplyBtn2>
                     </div>
-                    
-                    <div style={{height:"70px"}}>
+
+                    <div style={{ height: "70px" }}>
                     </div>
                     <CommentForm2
                         OnReplyBtn={onReplyBtn}
@@ -405,8 +405,8 @@ const FreeArticle = () => {
                     </CommentForm2>
                 </InformationAllBox>
             </InformationBox>
-            <div style={{display:"flex", fontSize:"22px", justifyContent:"start", margin:"0px 0px -25.5px 0px"}}>
-              총 {totalComment}개 답글  
+            <div style={{ display: "flex", fontSize: "22px", justifyContent: "start", margin: "0px 0px -25.5px 0px" }}>
+                총 {totalComment}개 답글
             </div>
             <EditAllBox>
                 <LikeBtn
@@ -676,7 +676,7 @@ const CommentreplyBtn = styled.div
 `
 
 const CommentreplyBtn2 = styled(CommentreplyBtn)
-`
+    `
     margin: 0px 0px 0px 0px;
 `
 const CommentText = styled.span
@@ -773,9 +773,13 @@ const CancelBtn = styled(CommentBtn)
 `
 
 const CommentForm = styled.form
+    `
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+        (props.UserCheck === "allok" ? "block" : "none")};
 `
-    display: ${props => props.LoginMaintain == null  ? "none" : props.LoginMaintain=="true" ? (props.UserInfo==null ? "none" : (props.User==="allok"? "block" : "none" )):
-    (props.UserCheck==="allok" ? "block" : "none" )};
+const CommentForm2 = styled(CommentForm)
+    `
+    display: ${props => props.OnReplyBtn == false ? "none" : "block"};
 `
 
 const InformaionImageBox = styled.img
@@ -785,7 +789,8 @@ const InformaionImageBox = styled.img
 
 const TitleBox = styled.div
 `
-
+    display: flex;
+    justify-content: space-between;
 `
 
 const DeleteBtn = styled.div
@@ -976,7 +981,7 @@ const DayBox = styled.div
 `
 
 const ShareArea = styled.div
-    `
+`
     display: flex;
     align-items: end;
 `

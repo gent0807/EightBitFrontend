@@ -185,7 +185,7 @@ const SingleComment = ({ Comment, profileImagePath }) => {
         "width",
     ];
 
-const registerRecomment= async (e)=>{
+const registerReComment= async (e)=>{
     e.preventDefault();
 
     if(reCommentChangeValue.length>0){
@@ -419,8 +419,8 @@ const CommentUserBox = styled.div
 
 const SirenImg = styled.img
 `
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
 `
 
 const TitleLine = styled.div
