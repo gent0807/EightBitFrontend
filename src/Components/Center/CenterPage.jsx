@@ -334,7 +334,7 @@ const CenterPage = () => {
     return (
         <SwiperBox>
             <GameSlideBox>
-                <PopTitleBox>인기 게임 차트</PopTitleBox>
+                <PopTitleBox>인기 게임</PopTitleBox>
                 <Slider {...swiperParams} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
@@ -353,7 +353,7 @@ const CenterPage = () => {
                         </SwiperSlide>
                     ))}
                 </Slider>
-                <PopTitleBox>인기 게임 차트</PopTitleBox>
+                <PopTitleBox>신작 게임</PopTitleBox>
                 <Slider {...swiperParams2} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
@@ -372,7 +372,7 @@ const CenterPage = () => {
                         </SwiperSlide>
                     ))}
                 </Slider>
-                <PopTitleBox>인기 게임 차트</PopTitleBox>
+                <PopTitleBox>테마 게임</PopTitleBox>
                 <Slider {...swiperParams3} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>

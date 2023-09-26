@@ -17,6 +17,7 @@ import { FiShare } from "react-icons/fi";
 import { FcOpenedFolder } from "react-icons/fc";
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineComment } from "react-icons/ai";
+import Siren from "../../img/Siren/Siren.png";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -47,17 +48,17 @@ const FreeArticle = () => {
     const [Comment, setComment] = useState([
         {
             id: 1,
-            writer: "올빼미",
+            writer: "eight",
             content: "ㅋㅋㅋㅋㅋ 개웃기네"
         },
         {
             id: 2,
-            writer: "라따뚜이",
+            writer: "ㅎㅇㄹ",
             content: "뭐라는 거임?"
         },
         {
             id: 3,
-            writer: "누구세요",
+            writer: "란토",
             content: "누구세요??"
         }
     ]);
@@ -327,16 +328,23 @@ const FreeArticle = () => {
                             <WriterText>{writer}</WriterText>
                             <LikeViewBox>
                                 <LikeText><BsHandThumbsUp size={24} style={{ margin: "0px 0px -4px 0px" }}></BsHandThumbsUp> {likecount}</LikeText>
-                                <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -5px 0px" }}></AiOutlineEye> {visitcnt}</ViewText>
-                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -5px 0px" }}></AiOutlineComment> {replycnt}</ReplyText>
+                                <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px 0px" }}></AiOutlineEye> {visitcnt}</ViewText>
+                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px 0px" }}></AiOutlineComment> {replycnt}</ReplyText>
                             </LikeViewBox>
                         </WriteViewBox>
                     </UserProfileBox>
-                    <DayBox>
-                        <RegdateText>등록일 : {dayjs(regdate).format("YY.MM.DD hh:mm")}</RegdateText>
-                        <DayBoxBar></DayBoxBar>
-                        <EditText>수정일 : {dayjs(updatedate).format("YY.MM.DD hh:mm")}</EditText>
-                    </DayBox>
+                    <div>
+                        <RedateBox>
+                            신고
+                            <SirenImg src={Siren} />
+                        </RedateBox>
+                        <DayBox>
+                            <RegdateText>등록일 : {dayjs(regdate).format("YY.MM.DD hh:mm")}</RegdateText>
+                            <DayBoxBar></DayBoxBar>
+                            <EditText>수정일 : {dayjs(updatedate).format("YY.MM.DD hh:mm")}</EditText>
+                        </DayBox>
+                    </div>
+
                 </UserinformationBox>
             </UserBox>
             <InformationBox>
@@ -361,7 +369,7 @@ const FreeArticle = () => {
                             );
                         })
                     }
-                    <div style={{ height: "300px" }}>
+                    <div style={{ height: "250px" }}>
                     </div>
                     <div style={{ display: "flex" }}>
                         <CommentreplyBtn2
@@ -405,16 +413,15 @@ const FreeArticle = () => {
                     </CommentForm2>
                 </InformationAllBox>
             </InformationBox>
-            <div style={{ display: "flex", fontSize: "22px", justifyContent: "start", margin: "0px 0px -25.5px 0px" }}>
-                총 {totalComment}개 답글
+            <div style={{ display: "flex", fontSize: "20px", justifyContent: "start", margin: "0px 0px -22.5px 0px" }}>
+                총 {totalComment}개 댓글
             </div>
             <EditAllBox>
                 <LikeBtn
                     LoginMaintain={loginMaintain}
                     UserInfo={userInfo == null ? null : userInfo.loginState}
                     User={user.login_state}
-                    onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}
-                >
+                    onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}>
                     {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                 </LikeBtn>
 
@@ -428,8 +435,7 @@ const FreeArticle = () => {
                             (user.login_state === "allok" ?
                                 (user.nickname == writer ?
                                     "block" : "none") : "none")
-                    }}
-                >
+                    }}>
                     수정
                 </Link>
 
@@ -718,15 +724,16 @@ const CommentUserProfile = styled.img
     `
     width: 43px;
     height: 43px;
-    border: solid 2px black;
+    border: none;
     border-radius: 30px;
     margin: 21px 0px 0px 0px;
 `
 
 const SirenImg = styled.img
     `
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
+    margin: 0px 0px 0px 7px;
 `
 
 const TitleLine = styled.div
@@ -788,7 +795,7 @@ const InformaionImageBox = styled.img
 `
 
 const TitleBox = styled.div
-`
+    `
     display: flex;
     justify-content: space-between;
 `
@@ -806,8 +813,8 @@ const LikeBtn = styled.div
     display: ${props => props.LoginMaintain == null ? "none" : (props.LoginMaintain == "true" ? (props.UserInfo === "allok" ? "block" : "none") : (props.User === "allok" ? "block" : "none"))};
     cursor : pointer;
     color: orange;
-    font-size: 37.2px;
-    margin: -8px 0px 0px 0px;
+    font-size: 28.2px;
+    margin: -3.5px 0px 0px 0px;
 `
 
 const EditAllBox = styled.div
@@ -827,7 +834,7 @@ const EditAllBox = styled.div
 
 const WriterText = styled.span
     `
-    font-size: 27px;
+    font-size: 25px;
 `
 
 const LikeText = styled.span
@@ -850,6 +857,15 @@ const RegdateText = styled.span
     {
         margin: 0px 0px 0px 0px;
     }
+`
+
+const RedateBox = styled.div
+    `
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    cursor: pointer;
+    margin: 0px 0px 17px 0px;
 `
 
 const EditText = styled.span
@@ -892,7 +908,7 @@ const InformationBox = styled.div
     `
     display: flex;
     flex-direction: column;
-    margin: 20px 0px 86px 0px;
+    margin: 20px 0px 50px 0px;
     word-break: break-all;
 `
 
@@ -981,7 +997,7 @@ const DayBox = styled.div
 `
 
 const ShareArea = styled.div
-`
+    `
     display: flex;
     align-items: end;
 `

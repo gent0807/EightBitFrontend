@@ -7,12 +7,14 @@ import styled from "styled-components";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { AiOutlineComment } from "react-icons/ai";
+import { SlOptions } from "react-icons/sl";
 import dayjs from "dayjs";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
 import Siren from "../../img/Siren/Siren.png";
+
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -185,16 +187,16 @@ const SingleComment = ({ Comment, profileImagePath }) => {
         "width",
     ];
 
-const registerReComment= async (e)=>{
-    e.preventDefault();
+    const registerReComment = async (e) => {
+        e.preventDefault();
 
-    if(reCommentChangeValue.length>0){
+        if (reCommentChangeValue.length > 0) {
 
-    }
-    else if(reCommentChangeValue.length==0){
-        alert("댓글 내용을 입력해주세요.");
-        return; 
-    }
+        }
+        else if (reCommentChangeValue.length == 0) {
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
 
     }
 
@@ -218,7 +220,7 @@ const registerReComment= async (e)=>{
             </CommentInformationBox>
             <CommentreplyBox>
                 <CommentreplyAllBox>
-                    <CommentreplyIcon onClick={() => {}}><AiOutlineComment /></CommentreplyIcon>
+                    <CommentreplyIcon onClick={() => { }}><AiOutlineComment /></CommentreplyIcon>
                     <CommentreplyCount>{reCommentCnt}</CommentreplyCount>
                     <CommentreplyBtn
                         LoginMaintain={loginMaintain}
@@ -239,6 +241,17 @@ const registerReComment= async (e)=>{
                         {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                     </CommentreplyLikeBtn>
                     <CommentreplyLikeCount>{likecount}</CommentreplyLikeCount>
+                    <OptionBox
+                        LoginMaintain={loginMaintain}
+                        User={user.login_state}
+                        UserInfo={userInfo}
+                        UserInfoState={userInfo == null ?
+                            null : userInfo.loginState}
+                        UserInfoNickname={userInfo == null ?
+                            (user.login_state === "allok" ?
+                                user.nickname : null) : userInfo.nickName}
+                        Writer={Comment.writer}><SlOptions />
+                    </OptionBox>
                 </CommentreplyLikeAllBox>
             </CommentreplyBox>
 
@@ -362,6 +375,7 @@ const CommentreplyCount = styled.span
     margin: 3px 0px 0px 0px;
     font-size: 17px;
     font-weight: bold;
+    cursor: pointer;
 `
 
 const CommentreplyLikeCount = styled.span
@@ -369,6 +383,13 @@ const CommentreplyLikeCount = styled.span
     margin: 3px 0px 0px 0px;
     font-size: 17px;
     font-weight: bold;
+`
+const OptionBox = styled.div
+`
+    margin: 3px 0px 0px 15px;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")};
+    cursor : pointer;
 `
 
 const CommentreplyIcon = styled.i
@@ -382,7 +403,7 @@ const CommentreplyLikeBtn = styled.div
     `
     cursor: pointer;
     font-size: 22px;
-    margin: 0px 10px 0px 0px;
+    margin: 0px 5px 0px 0px;
 `
 
 const CommentreplyBtn = styled.div
@@ -400,14 +421,14 @@ const CommentText = styled.span
 `
 
 const CommentInformationBox = styled.div
-`
-    padding: 0px 0px 0px 67px;
+    `
+    padding: 0px 0px 0px 0px;
     font-size: 20px;
     font-weight: bold;
 `
 
 const CommentLine = styled.div
-`
+    `
     width: 100%;
     border: 1px dashed black;
 `
@@ -418,9 +439,10 @@ const CommentUserBox = styled.div
 `
 
 const SirenImg = styled.img
-`
-    width: 26px;
-    height: 26px;
+    `
+    width: 25px;
+    height: 25px;
+    margin: 0px 0px 0px 7px;    
 `
 
 const TitleLine = styled.div
@@ -432,7 +454,7 @@ const TitleLine = styled.div
 
 const UserNicknameText = styled.span
     `
-    font-size: 25px;
+    font-size: 20px;
     margin: 0px 0px 5px 0px;
 `
 
@@ -465,10 +487,10 @@ const CommentUserProfileBox = styled.div
 `
 
 const CommentUserProfile = styled.img
-`
+    `
     width: 43px;
     height: 43px;
-    border: solid 2px black;
+    border: none;
     border-radius: 30px;
     margin: 21px 0px 0px 0px;
 `
@@ -501,12 +523,12 @@ const ReCommentInputBox = styled.div
 `
 
 const ReCommentBtn = styled.button
-`
-    width: 8%;
+    `
+    width: 9%;
     background: #55AAFF;
     outline: none;
     border-radius: 10px;
-    margin: 10px 0px 0px 0px;
+    margin: 10px 0px 10px 0px;
     border: solid 3px black;
     font-size: 19px;
     font-weight: bold;
@@ -516,9 +538,9 @@ const ReCommentBtn = styled.button
 
 const CancelBtn = styled(ReCommentBtn)
     `
-    width: 7%;
+    width: 6%;
     background: white;
-    margin : 10px 10px 0px 0px;
+    margin : 10px 10px 10px 0px;
 `
 
 const ReCommentBtnBox = styled.div
@@ -528,13 +550,13 @@ const ReCommentBtnBox = styled.div
 `
 
 const ReCommentArea = styled.div
-`
+    `
     display: grid;
     grid-template-columns: 0fr 3fr ;
 `
 
 const ReCommentProfile = styled.div
-`
+    `
     margin: -20px 11px 0px 0px;
 `
 
