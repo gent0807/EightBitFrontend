@@ -1,19 +1,28 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-import "react-quill/dist/quill.snow.css";
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
 import { ImageDrop } from "quill-image-drop-module";
+import { AiFillFileAdd } from "react-icons/ai";
+import "react-quill/dist/quill.snow.css";
+
+import PPTX from "../../img/FileList/pptx.png";
+import JPG from "../../img/FileList/jpg.png";
+import PNG from "../../img/FileList/png.png";
+import PDF from "../../img/FileList/pdf.png";
+import TXT from "../../img/FileList/txt.png";
+import ZIP from "../../img/FileList/zip.png";
+import Default from "../../img/FileList/defaultWhite.png"
+
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const UpdateBoard = () => {
     const [WriterChangeValue, setWriterChangeValue] = useState("");
-    const [StoryChangeValue, setStoryChangeValue] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     const user = useSelector(state => state.user);
@@ -313,17 +322,20 @@ const UpdateBoard = () => {
                 }
             })
 
-
-
-
     }
+
+    console.log(EditerValue);
+
+
     return (
         <WriterInputBox>
             <WriterInformationTextAllBox>
-                <WriterInformation><WriterInformationText>글쓰기</WriterInformationText></WriterInformation>
+                <WriterInformation><WriterInformationText>여러분의 생각을 펼쳐 보세요!</WriterInformationText></WriterInformation>
             </WriterInformationTextAllBox>
             <WriteBoardSubmit onSubmit={OncheckSubmit}>
-                <WriterInput placeholder='제목' maxLength={50} onChange={WriterChange} value={WriterChangeValue} />
+                <TagTextBox><TagText>제목</TagText></TagTextBox>
+                <WriterInput placeholder='제목을 입력해 주세요!' maxLength={50} onChange={WriterChange} value={WriterChangeValue} />
+                <TagTextBox><TagText>본문</TagText></TagTextBox>
                 <EditerBox>
                     <Editer
                         placeholder="내용을 입력해 주세요!"
@@ -334,12 +346,15 @@ const UpdateBoard = () => {
                         formats={formats}
                     ></Editer>
                 </EditerBox>
+                <TagTextBox><TagText>파일첨부</TagText></TagTextBox>
                 <FileUploadBox ref={dragRef} checkFile={isDragging}>
-                    <FileUploadLabel checkFile={isDragging} htmlFor='fileUpload'>
-                        <FileUpload id='fileUpload' type="file" multiple={true} onChange={(e) => { onChangeFiles(e); e.target.value = ''; }} />
-                        <FileUploadText>이미지 첨부</FileUploadText>
-                    </FileUploadLabel>
-                    <FileList>
+                    <FileBtnBox>
+                        <FileUploadLabel checkFile={isDragging} htmlFor='fileUpload'>
+                            <FileUpload id='fileUpload' type="file" multiple={true} onChange={(e) => { onChangeFiles(e); e.target.value = ''; }} />
+                            <FileUploadText checkFile={isDragging}><AiFillFileAdd /></FileUploadText>
+                        </FileUploadLabel>
+                    </FileBtnBox>
+                    <FileList Files={files}>
                         {files.length > 0 &&
                             files.map(file => {
                                 const {
@@ -348,6 +363,17 @@ const UpdateBoard = () => {
                                 } = file;
                                 return (
                                     <FileNumber key={id}>
+                                        <>
+                                            <Icon src={[
+                                                (name.includes("pptx") ? PPTX :
+                                                    (name.includes("txt") ? TXT :
+                                                        (name.includes("pdf") ? PDF :
+                                                            (name.includes("jpg") ? JPG :
+                                                                (name.includes("png") ? PNG :
+                                                                    (name.includes("zip") ? ZIP :
+                                                                        Default))))))
+                                            ]} />
+                                        </>
                                         <FileName>{name}</FileName>
                                         <FileDelete onClick={() => handleFilterFile(id)}>
                                             X
@@ -359,7 +385,8 @@ const UpdateBoard = () => {
                     </FileList>
                 </FileUploadBox>
                 <SubmitBtnBox>
-                    <SubmitBtn>등록하기</SubmitBtn>
+                    <Link to="/FreeBoard"><CancelBtn>취소</CancelBtn></Link>
+                    <SubmitBtn>등록</SubmitBtn>
                 </SubmitBtnBox>
             </WriteBoardSubmit>
         </WriterInputBox>
@@ -370,6 +397,9 @@ export default UpdateBoard;
 
 const Editer = styled(ReactQuill)
     `
+    display: flex;
+    flex-direction: column;
+    
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
@@ -417,6 +447,35 @@ const Editer = styled(ReactQuill)
     }
 `
 
+const Icon = styled.img
+    `
+    width : 30px;
+    height : 30px;
+    margin: -6px 0px 0px 0px;
+`
+
+const FileBtnBox = styled.div
+    `
+    width: 100%;
+    text-align: center;
+`
+
+const TagText = styled.span
+    `
+
+`
+
+const TagTextBox = styled.div
+    `
+    display: flex;
+    text-align: center;
+    justify-content: start;
+    align-items: start;
+    margin: 0px 20px 13px 20px;
+    font-size: 30px;
+    color : ${props => props.theme.textColor};
+`
+
 const EditerBox = styled.div
     `
     max-width: 1240px;
@@ -436,7 +495,8 @@ const WriteBoardSubmit = styled.form
 const SubmitBtnBox = styled.div
     `
     display: flex;
-    justify-content: center;
+    justify-content: end;
+    margin: 0px 20px 30px 20px;
 `
 
 const SubmitBtn = styled.button
@@ -448,12 +508,20 @@ const SubmitBtn = styled.button
     border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 24px;
     caret-color: transparent;
+    margin: 0px 0px 0px 15px;
+    width: 120px;
+    height: 60px;
     &:hover
     {
         background : ${props => props.theme.HoverColor};
     }
+`
+
+const CancelBtn = styled(SubmitBtn)
+    `
+    margin: 0px 0px 0px 0px;
 `
 
 const FileNumber = styled.div
@@ -467,6 +535,7 @@ const FileNumber = styled.div
     color : ${props => props.theme.textColor};
     font-weight : bold;
     justify-content: space-between;
+    height: 44px;
 `
 
 const FileName = styled.div
@@ -487,9 +556,9 @@ const FileList = styled.div
     `
     padding: 8px;
     margin-bottom: 10px;
-    display: flex;
+    font-size: 20px;
+    display: ${props => props.Files.length === 0 ? "none" : "flex"};
     justify-content: space-between;
-    padding: 22px 0px 0px 0px;
     flex-direction: column;
     &:hover
     {
@@ -500,22 +569,18 @@ const FileList = styled.div
 
 const FileUploadLabel = styled.label
     `
-    
     color: black;
-    border: solid 3px #3c3c3c;
-    background: #6a9dda;
-    padding : 10px;
     border-radius : 10px;
     cursor : pointer;
-    font-weight : bold;
     caret-color: transparent;
-    border: solid 3px ${props => props.theme.borderColor};
-    background: ${props => props.theme.DropDownListColor};
+    font-size: 80px;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 `
 
-const FileUploadText = styled.span
+const FileUploadText = styled.div
     `
-    
+    color: ${props => props.checkFile ? "#55aaff" : "black"};
 `
 
 const WriterInputBox = styled.div
@@ -527,15 +592,16 @@ const WriterInputBox = styled.div
 const FileUploadBox = styled.div
     `
     display: flex;
-    flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+    flex-direction: column;
     border: solid 3px ${props => props.theme.borderColor};
     margin: 0px 20px 30px 20px;
     border-radius: 20px;
     justify-content: center;
-    padding: 24px 0px 0px 0px;
+    padding: 19px 0px 0px 0px;
     background: ${props => props.checkFile ? "rgb(0,0,0,0.04)" : "white"};
+    min-height: 135px;
     @media (hover: hover)
     {
         &:hover
@@ -555,6 +621,8 @@ const WriterInput = styled.input
     font-size: 20px;
     box-sizing: border-box;
     margin: 0px 20px 30px 20px;
+    height: 70px;
+    font-size: 23px;
 `
 
 const FileUpload = styled.input
@@ -600,24 +668,30 @@ const StoryInput = styled.textarea
 
 const WriterInformation = styled.div
     `
+    display: flex;
     text-align: center;
-    border: solid 3px ${props => props.theme.borderColor};
-    color : ${props => props.theme.textColor}
-    width: 70px;
+    color : ${props => props.theme.textColor};
     padding: 15px;
     border-radius: 20px;
     font-weight: bold;
     font-size: 22px;
+    @media (min-width:250px) and (max-width:666px)
+    {
+        font-size: 15px;
+    }
 }
 `
 
-const WriterInformationText = styled.span
+const WriterInformationText = styled.h1
     `
     color : ${props => props.theme.textColor};
 `
 const WriterInformationTextAllBox = styled.div
     `
     display: flex;
-    justify-content: center;
-    margin: 0px 0px 40px 0px
+    justify-content: start;
+    @media (min-width:250px) and (max-width:666px)
+    {
+        justify-content: center;
+    }
 `

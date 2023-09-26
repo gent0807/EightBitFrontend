@@ -10,7 +10,6 @@ import FreeBoard from "./FreeBoard/FreeBoardContainer";
 import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
 import Footer from "./Footer/Footer";
 import NotFound from "./ErrorPage/NotFound";
-import FirstPage from "./FirstPage";
 import WriteBoard from "./WriteBoard/WriteBoardContainer";
 import FreeArticle from "./Articles/FreeArticleContainer";
 import UpdateBoard from "./UpdateBoard/UpdateBoardContainer";
