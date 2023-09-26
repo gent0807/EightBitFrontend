@@ -20,8 +20,7 @@ const Router = () => {
 
     return (
         <BrowserRouter>
-            <FooterSetContent>
-                <TopNavBar />
+        <TopNavBar />
                 <Routes>
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Sign" element={<Sign />} />
@@ -35,15 +34,9 @@ const Router = () => {
                     <Route path="/" element={<Center />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
-            </FooterSetContent>
             <Footer />
         </BrowserRouter>
     );
 }
 
 export default Router;
-
-const FooterSetContent = styled.div
-    `
-    padding-bottom: 285px;
-`

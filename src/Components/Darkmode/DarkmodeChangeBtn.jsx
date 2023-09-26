@@ -36,7 +36,7 @@ const IconsBox = styled.div
     background: white;
     background: ${props => props.change ? "rgba(0,144,249,1)" : "rgba(55,65,118,1)"};
     border-radius: 42px;
-    margin: 16px -6px 0px 8px;
+    margin: 16px -6px 0px 19px;
     padding: 5px;
     width: 50px;
     height: 20px;

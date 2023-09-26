@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.scss";
 import "swiper/components/navigation/navigation.scss";
@@ -333,23 +334,28 @@ const CenterPage = () => {
 
     return (
         <SwiperBox>
+                <VideoBackgroundBox>
+                
+                </VideoBackgroundBox>
             <GameSlideBox>
                 <PopTitleBox>인기 게임 차트</PopTitleBox>
                 <Slider {...swiperParams} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
-                            <SlideAllBox>
-                                <SlideBox>
-                                    <ImgBox src={img} />
-                                </SlideBox>
+                            <Link to='/'>
+                                <SlideAllBox>
+                                    <SlideBox>
+                                        <ImgBox src={img} />
+                                    </SlideBox>
 
-                                <AllBox>
-                                    <InformaionBoxTextBox>
-                                        <TitleBox>{title}</TitleBox>
-                                        <InformaionBox>{informaion}</InformaionBox>
-                                    </InformaionBoxTextBox>
-                                </AllBox>
-                            </SlideAllBox>
+                                    <AllBox>
+                                        <InformaionBoxTextBox>
+                                            <TitleBox>{title}</TitleBox>
+                                            <InformaionBox>{informaion}</InformaionBox>
+                                        </InformaionBoxTextBox>
+                                    </AllBox>
+                                </SlideAllBox>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Slider>
@@ -357,18 +363,20 @@ const CenterPage = () => {
                 <Slider {...swiperParams2} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
-                            <SlideAllBox>
-                                <SlideBox>
-                                    <ImgBox src={img} />
-                                </SlideBox>
+                            <Link to='/'>
+                                <SlideAllBox>
+                                    <SlideBox>
+                                        <ImgBox src={img} />
+                                    </SlideBox>
 
-                                <AllBox>
-                                    <InformaionBoxTextBox>
-                                        <TitleBox>{title}</TitleBox>
-                                        <InformaionBox>{informaion}</InformaionBox>
-                                    </InformaionBoxTextBox>
-                                </AllBox>
-                            </SlideAllBox>
+                                    <AllBox>
+                                        <InformaionBoxTextBox>
+                                            <TitleBox>{title}</TitleBox>
+                                            <InformaionBox>{informaion}</InformaionBox>
+                                        </InformaionBoxTextBox>
+                                    </AllBox>
+                                </SlideAllBox>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Slider>
@@ -376,18 +384,20 @@ const CenterPage = () => {
                 <Slider {...swiperParams3} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
-                            <SlideAllBox>
-                                <SlideBox>
-                                    <ImgBox src={img} />
-                                </SlideBox>
+                            <Link to='/'>
+                                <SlideAllBox>
+                                    <SlideBox>
+                                        <ImgBox src={img} />
+                                    </SlideBox>
 
-                                <AllBox>
-                                    <InformaionBoxTextBox>
-                                        <TitleBox>{title}</TitleBox>
-                                        <InformaionBox>{informaion}</InformaionBox>
-                                    </InformaionBoxTextBox>
-                                </AllBox>
-                            </SlideAllBox>
+                                    <AllBox>
+                                        <InformaionBoxTextBox>
+                                            <TitleBox>{title}</TitleBox>
+                                            <InformaionBox>{informaion}</InformaionBox>
+                                        </InformaionBoxTextBox>
+                                    </AllBox>
+                                </SlideAllBox>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Slider>
@@ -414,18 +424,20 @@ const CenterPage = () => {
                 <Slider {...swiperParams4} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
-                            <SlideAllBox>
-                                <SlideBox>
-                                    <ImgBox src={img} />
-                                </SlideBox>
+                            <Link to='/'>
+                                <SlideAllBox>
+                                    <SlideBox>
+                                        <ImgBox src={img} />
+                                    </SlideBox>
 
-                                <AllBox>
-                                    <InformaionBoxTextBox>
-                                        <TitleBox>{title}</TitleBox>
-                                        <InformaionBox>{informaion}</InformaionBox>
-                                    </InformaionBoxTextBox>
-                                </AllBox>
-                            </SlideAllBox>
+                                    <AllBox>
+                                        <InformaionBoxTextBox>
+                                            <TitleBox>{title}</TitleBox>
+                                            <InformaionBox>{informaion}</InformaionBox>
+                                        </InformaionBoxTextBox>
+                                    </AllBox>
+                                </SlideAllBox>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Slider>
@@ -433,18 +445,20 @@ const CenterPage = () => {
                 <Slider {...swiperParams5} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
-                            <SlideAllBox>
-                                <SlideBox>
-                                    <ImgBox src={img} />
-                                </SlideBox>
+                            <Link to='/'>
+                                <SlideAllBox>
+                                    <SlideBox>
+                                        <ImgBox src={img} />
+                                    </SlideBox>
 
-                                <AllBox>
-                                    <InformaionBoxTextBox>
-                                        <TitleBox>{title}</TitleBox>
-                                        <InformaionBox>{informaion}</InformaionBox>
-                                    </InformaionBoxTextBox>
-                                </AllBox>
-                            </SlideAllBox>
+                                    <AllBox>
+                                        <InformaionBoxTextBox>
+                                            <TitleBox>{title}</TitleBox>
+                                            <InformaionBox>{informaion}</InformaionBox>
+                                        </InformaionBoxTextBox>
+                                    </AllBox>
+                                </SlideAllBox>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Slider>
@@ -452,18 +466,20 @@ const CenterPage = () => {
                 <Slider {...swiperParams6} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
-                            <SlideAllBox>
-                                <SlideBox>
-                                    <ImgBox src={img} />
-                                </SlideBox>
+                            <Link to='/'>
+                                <SlideAllBox>
+                                    <SlideBox>
+                                        <ImgBox src={img} />
+                                    </SlideBox>
 
-                                <AllBox>
-                                    <InformaionBoxTextBox>
-                                        <TitleBox>{title}</TitleBox>
-                                        <InformaionBox>{informaion}</InformaionBox>
-                                    </InformaionBoxTextBox>
-                                </AllBox>
-                            </SlideAllBox>
+                                    <AllBox>
+                                        <InformaionBoxTextBox>
+                                            <TitleBox>{title}</TitleBox>
+                                            <InformaionBox>{informaion}</InformaionBox>
+                                        </InformaionBoxTextBox>
+                                    </AllBox>
+                                </SlideAllBox>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Slider>
@@ -488,6 +504,12 @@ const CenterPage = () => {
         </SwiperBox>
     );
 }
+
+const VideoBackgroundBox = styled.div
+    `
+    background: black;
+    height: 700px;
+`
 
 const InformaionBoxTextBox = styled.div
     `
@@ -538,6 +560,10 @@ const Slider = styled(Swiper)
     z-index: 1;
     margin-bottom: 20px;
     height: 382px;
+
+    a{
+        text-decoration: none;
+    }
 
 .swiper-pagination
 {
@@ -727,7 +753,7 @@ const SlideBox = styled.div
     `
     border-radius: 10px;
     overflow: hidden;
-    border: solid 0.5px black;
+    border: solid 0.5px ${props => props.theme.borderColor};
     height: 285px;
 `
 
