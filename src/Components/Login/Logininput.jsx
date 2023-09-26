@@ -1,12 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa";
 import { SiNaver } from "react-icons/si";
-import { AiOutlineTwitter } from "react-icons/ai";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { BsGithub } from 'react-icons/bs';
-import { AiFillGithub } from 'react-icons/ai';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';

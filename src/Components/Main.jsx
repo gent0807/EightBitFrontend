@@ -20,22 +20,18 @@ const Main = () => {
   return (
     <ThemeProvider theme={isDarkmode ? lightTheme : darkTheme}>
       <GlobalStyle />
-      <FooterSet>
+      <DarkModeBox>
         <Router />
-      </FooterSet>
+      </DarkModeBox>
     </ThemeProvider>
   );
 }
 
 export default Main;
 
-const FooterSet = styled.div
+const DarkModeBox = styled.div
   `
-  min-height: calc(100% - 120px);
-  @media (min-width:250px) and (max-width:480px)
-    {
-        max-width: 480px;
-    }
+  
 `
 
 const darkTheme =
@@ -72,7 +68,7 @@ const lightTheme =
 
 const GlobalStyle = createGlobalStyle
   `
-  ${FooterSet}
+  ${DarkModeBox}
   {
     background-color: ${(props) => props.theme.backgroundColor};
     transition: background-color 0.5s, background 0.5s, color 0.5s, box-shadow 0.5s, border 0.5s, accent-color 0.5s;

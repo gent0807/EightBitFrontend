@@ -314,7 +314,8 @@ const HeaderBox = () => {
 
 
     return (
-        <ALLNavBox ref={BtnLeaveRef}>
+        <ALLNavBox>
+            <LeaveBox  ref={BtnLeaveRef}>
             <BackgroudTopNav>
                 <Topnav>
                     <NavBox>
@@ -344,7 +345,7 @@ const HeaderBox = () => {
                             {loginMaintain == null ? [] : loginMaintain == "true" ?
                                 (userInfo == null ? [] : userInfo.loginState === "allok" ?
                                     [<MenuBox
-                                        left={"21px"}
+                                        left={"19px"}
                                         top={"8.3px"}
                                         size={"33px"}
                                         padding={"5.4px 0px 0px 0px"}
@@ -354,7 +355,7 @@ const HeaderBox = () => {
 
                                 (user.login_state === "allok" ?
                                     [<MenuBox
-                                        left={"21px"}
+                                        left={"19px"}
                                         top={"8.3px"}
                                         size={"33px"}
                                         padding={"5.4px 0px 0px 0px"}
@@ -378,7 +379,7 @@ const HeaderBox = () => {
 
                             <MenuBox
                                 click={FastClickCheck}
-                                left={"16px"}
+                                left={"24px"}
                                 top={"9px"}
                                 size={"33px"}
                                 ref={FastRef}
@@ -728,6 +729,7 @@ const HeaderBox = () => {
                     </SupportSubNav>
                 </SubNavMenu>
             </BackgroudSubNav>
+            </LeaveBox>
         </ALLNavBox>
     );
 }
@@ -736,18 +738,21 @@ export const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+const LeaveBox = styled.div
+`
+`
+
 const WriteBox = styled.div
     `
-    margin: 9.5px 0px 0px 233.5px;
     width: 66px;
     height: 11px;
-    position: absolute;
     border: solid 2px white;
     padding: 14.5px;
     border-radius: 8px;
     background: ${props => props.click ? "#2773cf" : "#6a9dda"};
     font-size: 22px;
     cursor: pointer;
+    margin: 7px 0px 0px 19px;
     
     @media (hover: hover)
     {
@@ -1037,14 +1042,6 @@ const AllButtonBox = styled.div
 const ButtonBox = styled.div
     `
     display: flex;
-    margin-right: ${props => props.menucheck ? "166px" : "-3px"};
-
-    @media (min-width:250px) and (max-width:666px)
-    {
-        margin-left: ${props => props.menucheck ? "-61px" : "0px"};
-        margin-top: ${props => props.menucheck ? "5px" : "0px"};
-        margin-right: ${props => props.menucheck ? "155px" : "28px"};
-    }
 `
 
 const MenuBox = styled.div
@@ -1125,21 +1122,24 @@ export const SearchButton = styled.button
 
 const Profile = styled.div
     `
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 36px;
     height: 36px;
     border-radius: 26px;
-    border: ${props => props.click ? "solid 3.8px #6a9dda" : "none"};
+    box-sizing: border-box;
+    box-shadow: ${props => props.click ? "0px 0px 0px 3px" : "none"} #6a9dda;
     overflow: hidden;
     cursor: pointer;
-    margin: ${props => props.click ? "10px 0px 0px 170.96px" : "12.6px 0px 0px 174px"};
-    position: absolute;
+    margin: 12px 0px 0px 19px;
     
     @media (hover: hover)
     {
         &:hover
         {
-            border: solid 3.8px #6a9dda;
-            margin: 10px 0px 0px 171px;
+            box-shadow: 0px 0px 0px 3px #6a9dda;
         }
         
     }
@@ -1229,7 +1229,7 @@ const ProfileListBox = styled.div
     `
     display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 81.5px;
+    margin: 59px 0px 0px 158.5px;
     border: solid 2px #3c3c3c;
     background: white;  
     height: ${props => props.show ? "370px" : "0px"};
@@ -1253,7 +1253,7 @@ const FastListBox = styled(ProfileListBox)
     `
     display: ${props => props.default ? "block" : "none"};
     width: 310px;
-    margin: 59px 0px 0px 20px;
+    margin: 59px 0px 0px 6px;
     height: ${props => props.show ? "370px" : "0px"};
     z-index: ${props => props.zindex ? 2 : 1};
 `
@@ -1262,7 +1262,7 @@ const WriteListBox = styled(ProfileListBox)
     `
     display: ${props => props.default ? "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 172.9px;
+    margin: 59px 0px 0px 244.9px;
     height: ${props => props.show ? "369px" : "0px"};
     z-index: ${props => props.zindex ? 2 : 1};
 `

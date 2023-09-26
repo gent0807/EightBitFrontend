@@ -5,9 +5,7 @@ import { EmailPwFoundList, LoginTopLOGO, APIListA, Line } from "../Login/Loginin
 import { isDark } from '../Darkmode/Darkmode';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa";
 import { SiNaver } from "react-icons/si";
-import { AiOutlineTwitter } from "react-icons/ai";
 import { work } from '../Phone/PhoneAuthMode';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { BsGithub } from 'react-icons/bs';

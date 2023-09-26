@@ -10,7 +10,6 @@ import FreeBoard from "./FreeBoard/FreeBoardContainer";
 import { BrowserRouter, Routes, Route, Switch } from 'react-router-dom';
 import Footer from "./Footer/Footer";
 import NotFound from "./ErrorPage/NotFound";
-import FirstPage from "./FirstPage";
 import WriteBoard from "./WriteBoard/WriteBoardContainer";
 import FreeArticle from "./Articles/FreeArticleContainer";
 import UpdateBoard from "./UpdateBoard/UpdateBoardContainer";
@@ -20,8 +19,7 @@ const Router = () => {
 
     return (
         <BrowserRouter>
-            <FooterSetContent>
-                <TopNavBar />
+        <TopNavBar />
                 <Routes>
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Sign" element={<Sign />} />
@@ -35,15 +33,9 @@ const Router = () => {
                     <Route path="/" element={<Center />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
-            </FooterSetContent>
             <Footer />
         </BrowserRouter>
     );
 }
 
 export default Router;
-
-const FooterSetContent = styled.div
-    `
-    padding-bottom: 285px;
-`
