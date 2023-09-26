@@ -18,6 +18,7 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const SingleComment = ({ Comment, profileImagePath }) => {
+
     const { writer } = useParams();
     const { regdate } = useParams();
     const [likecount, setLikecount] = useState(0);
@@ -30,6 +31,7 @@ const SingleComment = ({ Comment, profileImagePath }) => {
     userInfo = JSON.parse(userInfo);
     let likeMode = useRef(false);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
+    const [reCommentCnt, setReCommentCnt] = useState(0);
 
     const quillRef = useRef(null);
 
@@ -216,11 +218,19 @@ const SingleComment = ({ Comment, profileImagePath }) => {
             </CommentInformationBox>
             <CommentreplyBox>
                 <CommentreplyAllBox>
-                    <CommentreplyIcon onClick={() => { }}><AiOutlineComment /></CommentreplyIcon>
-                    <CommentreplyCount>0</CommentreplyCount>
+                    <CommentreplyIcon onClick={() => {}}><AiOutlineComment /></CommentreplyIcon>
+                    <CommentreplyCount>{reCommentCnt}</CommentreplyCount>
                     <CommentreplyBtn
+                        LoginMaintain={loginMaintain}
+                        UserInfo={userInfo} User={userInfo == null ?
+                            null : userInfo.loginState}
+                        UserCheck={user.login_state}
+                        UserNicknameCheck={user.nickname}
+                        UserNickname={userInfo == null ?
+                            null : userInfo.nickName}
+                        Writer={writer}
                         onClick={() => setOnReplyBtn(!onReplyBtn)}>
-                        {onReplyBtn == false ? "댓글쓰기" : "댓글 취소"}
+                        {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
                     </CommentreplyBtn>
                 </CommentreplyAllBox>
                 <CommentreplyLikeAllBox>
@@ -376,10 +386,12 @@ const CommentreplyLikeBtn = styled.div
 `
 
 const CommentreplyBtn = styled.div
-    `
+`
     margin: 4px 0px 0px 18px;
     font-weight: bold;
     cursor: pointer;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+        (props.UserCheck === "allok" ? "block" : "none")};
 `
 
 const CommentText = styled.span

@@ -15,7 +15,7 @@ import { ImageDrop } from "quill-image-drop-module";
 import SingleComment from "./SingleComment";
 import { FiShare } from "react-icons/fi";
 import { FcOpenedFolder } from "react-icons/fc";
-import {AiOutlineEye} from "react-icons/ai";
+import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineComment } from "react-icons/ai";
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -31,7 +31,10 @@ const FreeArticle = () => {
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [replyChangeValue, setReplyChangeValue] = useState("");
+    const [replyChangeValue2, setReplyChangeValue2] = useState("");
     const [replycnt, setReplycnt] = useState(0);
+    const [onReplyBtn, setOnReplyBtn] = useState(false);
+    const [totalComment, setTotalComment] = useState(0);
 
     const [InformationImage, setInformationImage] = useState([
         {
@@ -323,9 +326,9 @@ const FreeArticle = () => {
                         <WriteViewBox>
                             <WriterText>{writer}</WriterText>
                             <LikeViewBox>
-                                <LikeText><BsHandThumbsUp size={24} style={{margin:"0px 0px -4px 0px"}}></BsHandThumbsUp> {likecount}</LikeText>
-                                <ViewText><AiOutlineEye size={27} style={{margin:"0px 0px -5px 0px"}}></AiOutlineEye> {visitcnt}</ViewText>
-                                <ReplyText><AiOutlineComment size={27} style={{margin:"0px 0px -5px 0px"}}></AiOutlineComment> {replycnt}</ReplyText>
+                                <LikeText><BsHandThumbsUp size={24} style={{ margin: "0px 0px -4px 0px" }}></BsHandThumbsUp> {likecount}</LikeText>
+                                <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -5px 0px" }}></AiOutlineEye> {visitcnt}</ViewText>
+                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -5px 0px" }}></AiOutlineComment> {replycnt}</ReplyText>
                             </LikeViewBox>
                         </WriteViewBox>
                     </UserProfileBox>
@@ -341,7 +344,7 @@ const FreeArticle = () => {
                     <TitleBox>
                         <TitleText>{title}</TitleText>
                         <ShareArea>
-                            <FcOpenedFolder size={35} style={{ margin: "0px 15px -4px 0px", cursor: "pointer" }} />
+                            <FcOpenedFolder size={35} style={{ margin: "0px 17px -4px 0px", cursor: "pointer" }} />
                             <FiShare size={30} style={{ cursor: "pointer" }} />
                         </ShareArea>
                     </TitleBox>
@@ -358,38 +361,53 @@ const FreeArticle = () => {
                             );
                         })
                     }
-                    <CommentForm
-                    LoginMaintain={loginMaintain}
-                    UserInfo={userInfo} User={userInfo == null ?
-                        null : userInfo.loginState}
-                    UserCheck={user.login_state}
-                    UserNicknameCheck={user.nickname}
-                    UserNickname={userInfo == null ?
-                        null : userInfo.nickName}
-                    Writer={writer}
-                    onSubmit={registerReply}>
-                    <CommentArea>
-                        <CommentProfile>
-                            <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
-                        </CommentProfile>
-                        <CommentInputBox>
-                            <Editer
-                                placeholder="댓글을 입력해 주세요!"
-                                value={replyChangeValue}
-                                onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
-                                theme="snow"
-                                modules={modules}
-                                formats={formats}>
-                            </Editer>
-                        </CommentInputBox>
-                    </CommentArea>
-
-                    <CommentBtnBox>
-                        <CommentBtn>댓글 쓰기</CommentBtn>
-                    </CommentBtnBox>
-                </CommentForm>
+                    <div style={{height:"300px"}}>
+                    </div>
+                    <div style={{display:"flex"}}>
+                        <CommentreplyBtn2
+                        LoginMaintain={loginMaintain}
+                        UserInfo={userInfo} User={userInfo == null ?
+                            null : userInfo.loginState}
+                        UserCheck={user.login_state}
+                        UserNicknameCheck={user.nickname}
+                        UserNickname={userInfo == null ?
+                            null : userInfo.nickName}
+                        Writer={writer}
+                        onClick={() => setOnReplyBtn(!onReplyBtn)}>
+                        {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
+                        </CommentreplyBtn2>
+                    </div>
+                    
+                    <div style={{height:"70px"}}>
+                    </div>
+                    <CommentForm2
+                        OnReplyBtn={onReplyBtn}
+                        onSubmit={registerReply}>
+                        <CommentArea>
+                            <CommentProfile>
+                                <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                            </CommentProfile>
+                            <CommentInputBox>
+                                <Editer2
+                                    placeholder="댓글을 입력해 주세요!"
+                                    value={replyChangeValue2}
+                                    onChange={(content, delta, source, editor) => setReplyChangeValue2(editor.getHTML())}
+                                    theme="snow"
+                                    modules={modules}
+                                    formats={formats}>
+                                </Editer2>
+                            </CommentInputBox>
+                        </CommentArea>
+                        <CommentBtnBox>
+                            <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
+                            <CommentBtn>댓글 쓰기</CommentBtn>
+                        </CommentBtnBox>
+                    </CommentForm2>
                 </InformationAllBox>
             </InformationBox>
+            <div style={{display:"flex", fontSize:"22px", justifyContent:"start", margin:"0px 0px -25.5px 0px"}}>
+              총 {totalComment}개 답글  
+            </div>
             <EditAllBox>
                 <LikeBtn
                     LoginMaintain={loginMaintain}
@@ -433,6 +451,7 @@ const FreeArticle = () => {
                 <Link to="/FreeBoard">목록</Link>
 
             </EditAllBox>
+
             <CommentLine></CommentLine>
 
             <CommentBox>
@@ -558,7 +577,7 @@ const Editer2 = styled(ReactQuill)
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
-        min-height: 80px;
+        min-height: 70px;
         font-size: 20px;
     }
 
@@ -652,8 +671,14 @@ const CommentreplyBtn = styled.div
     margin: 4px 0px 0px 18px;
     font-weight: bold;
     cursor: pointer;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+        (props.UserCheck === "allok" ? "block" : "none")};
 `
 
+const CommentreplyBtn2 = styled(CommentreplyBtn)
+`
+    margin: 0px 0px 0px 0px;
+`
 const CommentText = styled.span
     `
 
@@ -740,10 +765,22 @@ const CommentBtn = styled.button
     cursor: pointer;
 `
 
+const CancelBtn = styled(CommentBtn)
+    `
+    width: 7%;
+    background: white;
+    margin : 10px 10px 0px 0px;
+`
+
 const CommentForm = styled.form
     `
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
         (props.UserCheck === "allok" ? "block" : "none")};
+`
+
+const CommentForm2 = styled(CommentForm)
+`
+    display: ${props => props.OnReplyBtn == false ? "none" : "block"};
 `
 
 const InformaionImageBox = styled.img
