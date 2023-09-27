@@ -13,6 +13,11 @@ import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
 import SingleComment from "./SingleComment";
+import { FiShare } from "react-icons/fi";
+import { FcOpenedFolder } from "react-icons/fc";
+import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineComment } from "react-icons/ai";
+import Siren from "../../img/Siren/Siren.png";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -27,12 +32,15 @@ const FreeArticle = () => {
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [replyChangeValue, setReplyChangeValue] = useState("");
+    const [replyChangeValue2, setReplyChangeValue2] = useState("");
     const [replycnt, setReplycnt] = useState(0);
+    const [onReplyBtn, setOnReplyBtn] = useState(false);
+    const [totalComment, setTotalComment] = useState(0);
 
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
-            src: "http://218.155.175.176:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+            src: "http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
 
@@ -40,17 +48,17 @@ const FreeArticle = () => {
     const [Comment, setComment] = useState([
         {
             id: 1,
-            writer: "올빼미",
+            writer: "eight",
             content: "ㅋㅋㅋㅋㅋ 개웃기네"
         },
         {
             id: 2,
-            writer: "라따뚜이",
+            writer: "ㅎㅇㄹ",
             content: "뭐라는 거임?"
         },
         {
             id: 3,
-            writer: "누구세요",
+            writer: "란토",
             content: "누구세요??"
         }
     ]);
@@ -319,46 +327,101 @@ const FreeArticle = () => {
                         <WriteViewBox>
                             <WriterText>{writer}</WriterText>
                             <LikeViewBox>
-                                <LikeText>좋아요 수 : {likecount}</LikeText>
-                                <ViewText>조회 수 : {visitcnt}</ViewText>
-                                <ReplyText>댓글 수 : {replycnt}</ReplyText>
+                                <LikeText><BsHandThumbsUp size={24} style={{ margin: "0px 0px -4px 0px" }}></BsHandThumbsUp> {likecount}</LikeText>
+                                <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px 0px" }}></AiOutlineEye> {visitcnt}</ViewText>
+                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px 0px" }}></AiOutlineComment> {replycnt}</ReplyText>
                             </LikeViewBox>
                         </WriteViewBox>
                     </UserProfileBox>
-                    <DayBox>
-                        <RegdateText>등록일 : {dayjs(regdate).format("YY.MM.DD hh:mm")}</RegdateText>
-                        <DayBoxBar></DayBoxBar>
-                        <EditText>수정일 : {dayjs(updatedate).format("YY.MM.DD hh:mm")}</EditText>
-                    </DayBox>
+                    <div style={{margin:"0px 10px 0px 0px"}}>
+                        <RedateBox>
+                            신고
+                            <SirenImg src={Siren} />
+                        </RedateBox>
+                        <DayBox>
+                            <RegdateText>등록일 : {dayjs(regdate).format("YY.MM.DD hh:mm")}</RegdateText>
+                            <DayBoxBar></DayBoxBar>
+                            <EditText>수정일 : {dayjs(updatedate).format("YY.MM.DD hh:mm")}</EditText>
+                        </DayBox>
+                    </div>
+
                 </UserinformationBox>
             </UserBox>
             <InformationBox>
                 <InformationAllBox>
                     <TitleBox>
                         <TitleText>{title}</TitleText>
+                        <ShareArea>
+                            <FcOpenedFolder size={35} style={{ margin: "0px 17px -4px 0px", cursor: "pointer" }} />
+                            <FiShare size={30} style={{ cursor: "pointer" }} />
+                        </ShareArea>
                     </TitleBox>
                     <TitleLine></TitleLine>
                     <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
-
+                    <br></br>
                     {InformationImage.length > 0 &&
                         InformationImage.map(Image => {
                             return (
                                 <InformaionImageBox
                                     key={Image.id}
                                     src={Image.src}
-                                    style={{ width: "70px", height: "70px", borderRadius: "26px" }} />
+                                    style={{ width: "400px", height: "400px", borderRadius: "10px" }} />
                             );
                         })
                     }
+                    <div style={{ height: "250px" }}>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                        <CommentreplyBtn2
+                            LoginMaintain={loginMaintain}
+                            UserInfo={userInfo} User={userInfo == null ?
+                                null : userInfo.loginState}
+                            UserCheck={user.login_state}
+                            UserNicknameCheck={user.nickname}
+                            UserNickname={userInfo == null ?
+                                null : userInfo.nickName}
+                            Writer={writer}
+                            onClick={() => setOnReplyBtn(!onReplyBtn)}>
+                            {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
+                        </CommentreplyBtn2>
+                    </div>
+
+                    <div style={{ height: "70px" }}>
+                    </div>
+                    <CommentForm2
+                        OnReplyBtn={onReplyBtn}
+                        onSubmit={registerReply}>
+                        <CommentArea>
+                            <CommentProfile>
+                                <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                            </CommentProfile>
+                            <CommentInputBox>
+                                <Editer2
+                                    placeholder="댓글을 입력해 주세요!"
+                                    value={replyChangeValue2}
+                                    onChange={(content, delta, source, editor) => setReplyChangeValue2(editor.getHTML())}
+                                    theme="snow"
+                                    modules={modules}
+                                    formats={formats}>
+                                </Editer2>
+                            </CommentInputBox>
+                        </CommentArea>
+                        <CommentBtnBox>
+                            <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
+                            <CommentBtn>댓글 쓰기</CommentBtn>
+                        </CommentBtnBox>
+                    </CommentForm2>
                 </InformationAllBox>
             </InformationBox>
+            <div style={{ display: "flex", fontSize: "20px", justifyContent: "start", margin: "0px 0px -22.5px 0px" }}>
+                총 {totalComment}개 댓글
+            </div>
             <EditAllBox>
                 <LikeBtn
                     LoginMaintain={loginMaintain}
                     UserInfo={userInfo == null ? null : userInfo.loginState}
                     User={user.login_state}
-                    onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}
-                >
+                    onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}>
                     {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                 </LikeBtn>
 
@@ -372,8 +435,7 @@ const FreeArticle = () => {
                             (user.login_state === "allok" ?
                                 (user.nickname == writer ?
                                     "block" : "none") : "none")
-                    }}
-                >
+                    }}>
                     수정
                 </Link>
 
@@ -395,6 +457,8 @@ const FreeArticle = () => {
                 <Link to="/FreeBoard">목록</Link>
 
             </EditAllBox>
+
+            <CommentLine></CommentLine>
 
             <CommentBox>
                 {Comment.length > 0 &&
@@ -419,17 +483,25 @@ const FreeArticle = () => {
                         null : userInfo.nickName}
                     Writer={writer}
                     onSubmit={registerReply}>
-                    <CommentInputBox>
-                        <Editer
-                            placeholder="댓글을 입력해 주세요!"
-                            value={replyChangeValue}
-                            onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
-                            theme="snow"
-                            modules={modules}
-                            formats={formats}>
-                        </Editer>
-                    </CommentInputBox>
-                    <CommentBtn>등록</CommentBtn>
+                    <CommentArea>
+                        <CommentProfile>
+                            <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                        </CommentProfile>
+                        <CommentInputBox>
+                            <Editer
+                                placeholder="댓글을 입력해 주세요!"
+                                value={replyChangeValue}
+                                onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
+                                theme="snow"
+                                modules={modules}
+                                formats={formats}>
+                            </Editer>
+                        </CommentInputBox>
+                    </CommentArea>
+
+                    <CommentBtnBox>
+                        <CommentBtn>댓글 쓰기</CommentBtn>
+                    </CommentBtnBox>
                 </CommentForm>
             </CommentBox>
         </FreeArticleBox >
@@ -437,6 +509,18 @@ const FreeArticle = () => {
 }
 
 export default FreeArticle;
+
+const ReCommentBtnBox = styled.div
+    `
+    display: flex;
+    justify-content: end;
+`
+
+const CommentBtnBox = styled.div
+    `
+    display: flex;
+    justify-content: end;
+`
 
 const Editer = styled(ReactQuill)
     `
@@ -491,6 +575,167 @@ const Editer = styled(ReactQuill)
 
 `
 
+const Editer2 = styled(ReactQuill)
+    `
+    display: flex;
+    flex-direction: column;
+
+    .ql-editor
+    {
+        margin: 0px -2px -2px 0px;
+        min-height: 70px;
+        font-size: 20px;
+    }
+
+    .ql-editor::-webkit-scrollbar 
+    {
+        display: none;
+    }
+
+    .ql-container::-webkit-scrollbar{
+        background: gray;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-container::-webkit-scrollbar-thumb
+    {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+    }
+
+    .ql-container::-webkit-scrollbar-track
+    {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .ql-video
+    {
+        width: 1280px;
+        height: 700px;
+    }
+
+    .ql-toolbar.ql-toolbar.ql-snow
+    {
+        order: 2;
+    }
+
+`
+
+const CommentreplyBox = styled.div
+    `
+    display: flex;
+    justify-content: space-between;
+    margin: 22px 10px 10px 67px;
+`
+
+const CommentreplyAllBox = styled.div
+    `
+    display: flex;
+`
+
+const CommentreplyLikeAllBox = styled.div
+    `
+    display: flex;
+`
+
+const CommentreplyCount = styled.span
+    `
+    margin: 3px 0px 0px 0px;
+    font-size: 17px;
+    font-weight: bold;
+`
+
+const CommentreplyLikeCount = styled.span
+    `
+    margin: 3px 0px 0px 0px;
+    font-size: 17px;
+    font-weight: bold;
+`
+
+const CommentreplyIcon = styled.i
+    `
+    margin: 0px 6px 0px 0px;
+    font-size: 23px;
+`
+
+const CommentreplyLikeBtn = styled.div
+    `
+    cursor: pointer;
+    font-size: 22px;
+    margin: 0px 10px 0px 0px;
+`
+
+const CommentreplyBtn = styled.div
+    `
+    margin: 4px 0px 0px 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+        (props.UserCheck === "allok" ? "block" : "none")};
+`
+
+const CommentreplyBtn2 = styled(CommentreplyBtn)
+    `
+    margin: 0px 0px 0px 0px;
+`
+const CommentText = styled.span
+    `
+
+`
+
+const CommentInformationBox = styled.div
+    `
+    padding: 0px 0px 0px 67px;
+    font-size: 20px;
+    font-weight: bold;
+`
+
+const CommentLine = styled.hr
+    `
+    width: 100%;
+    border: 0.1px solid black;
+`
+
+const CommentUserBox = styled.div
+    `
+    display: flex;
+`
+
+const CommentArea = styled.div
+    `
+    display: grid;
+    grid-template-columns: 0fr 3fr ;
+`
+
+const CommentProfile = styled.div
+    `
+    margin: -20px 11px 0px 0px;
+`
+
+
+const CommentUserProfile = styled.img
+    `
+    width: 43px;
+    height: 43px;
+    border: none;
+    border-radius: 30px;
+    margin: 21px 0px 0px 0px;
+`
+
+const SirenImg = styled.img
+    `
+    width: 25px;
+    height: 25px;
+    margin: 0px 0px 0px 7px;
+`
+
 const TitleLine = styled.div
     `
     height: 1px;
@@ -517,7 +762,7 @@ const CommentBtn = styled.button
     `
     background: #55AAFF;
     outline: none;
-    width: 100%;
+    width: 9%;
     border-radius: 10px;
     margin: 10px 0px 0px 0px;
     border: solid 3px black;
@@ -527,10 +772,21 @@ const CommentBtn = styled.button
     cursor: pointer;
 `
 
+const CancelBtn = styled(CommentBtn)
+    `
+    width: 7%;
+    background: white;
+    margin : 10px 10px 0px 0px;
+`
+
 const CommentForm = styled.form
     `
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
         (props.UserCheck === "allok" ? "block" : "none")};
+`
+const CommentForm2 = styled(CommentForm)
+    `
+    display: ${props => props.OnReplyBtn == false ? "none" : "block"};
 `
 
 const InformaionImageBox = styled.img
@@ -540,7 +796,8 @@ const InformaionImageBox = styled.img
 
 const TitleBox = styled.div
     `
-
+    display: flex;
+    justify-content: space-between;
 `
 
 const DeleteBtn = styled.div
@@ -556,8 +813,8 @@ const LikeBtn = styled.div
     display: ${props => props.LoginMaintain == null ? "none" : (props.LoginMaintain == "true" ? (props.UserInfo === "allok" ? "block" : "none") : (props.User === "allok" ? "block" : "none"))};
     cursor : pointer;
     color: orange;
-    font-size: 37.2px;
-    margin: -8px 0px 0px 0px;
+    font-size: 28.2px;
+    margin: -3.5px 0px 0px 0px;
 `
 
 const EditAllBox = styled.div
@@ -573,9 +830,11 @@ const EditAllBox = styled.div
     }
 `
 
+
+
 const WriterText = styled.span
     `
-    font-size: 27px;
+    font-size: 25px;
 `
 
 const LikeText = styled.span
@@ -598,6 +857,15 @@ const RegdateText = styled.span
     {
         margin: 0px 0px 0px 0px;
     }
+`
+
+const RedateBox = styled.div
+    `
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    cursor: pointer;
+    margin: 0px 0px 17px 0px;
 `
 
 const EditText = styled.span
@@ -640,7 +908,7 @@ const InformationBox = styled.div
     `
     display: flex;
     flex-direction: column;
-    margin: 20px 0px 86px 0px;
+    margin: 20px 0px 50px 0px;
     word-break: break-all;
 `
 
@@ -675,7 +943,8 @@ const UserProfile = styled.img
     `
     width: 70px;
     height: 70px;
-    border-radius: 26px;
+    border-radius: 32px;
+    cursor: pointer;
 `
 
 const UserProfileBox = styled.div
@@ -726,4 +995,10 @@ const DayBox = styled.div
         align-items: center;
         justify-content: center;
     }
+`
+
+const ShareArea = styled.div
+    `
+    display: flex;
+    align-items: end;
 `

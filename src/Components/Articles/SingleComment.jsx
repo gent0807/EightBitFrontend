@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { AiOutlineComment } from "react-icons/ai";
+import { SlOptions } from "react-icons/sl";
 import dayjs from "dayjs";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
@@ -14,10 +15,12 @@ import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
 import Siren from "../../img/Siren/Siren.png";
 
+
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const SingleComment = ({ Comment, profileImagePath }) => {
+
     const { writer } = useParams();
     const { regdate } = useParams();
     const [likecount, setLikecount] = useState(0);
@@ -30,6 +33,7 @@ const SingleComment = ({ Comment, profileImagePath }) => {
     userInfo = JSON.parse(userInfo);
     let likeMode = useRef(false);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
+    const [reCommentCnt, setReCommentCnt] = useState(0);
 
     const quillRef = useRef(null);
 
@@ -183,7 +187,7 @@ const SingleComment = ({ Comment, profileImagePath }) => {
         "width",
     ];
 
-    const registerRecomment = async (e) => {
+    const registerReComment = async (e) => {
         e.preventDefault();
 
         if (reCommentChangeValue.length > 0) {
@@ -203,10 +207,11 @@ const SingleComment = ({ Comment, profileImagePath }) => {
                     <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                     <CommentInformationAllBox>
                         <UserNicknameText>{Comment.writer}</UserNicknameText>
-                        <Regdate>{dayjs(regdate).format("YY.MM.DD hh:mm")}</Regdate>
+                        <Regdate>{dayjs(regdate).format("YY.MM.DD HH:mm")}</Regdate>
                     </CommentInformationAllBox>
                 </CommentUserBox>
                 <RedateBox>
+                    신고
                     <SirenImg src={Siren} />
                 </RedateBox>
             </CommentUserProfileBox>
@@ -215,21 +220,38 @@ const SingleComment = ({ Comment, profileImagePath }) => {
             </CommentInformationBox>
             <CommentreplyBox>
                 <CommentreplyAllBox>
-                    <CommentreplyIcon><AiOutlineComment /></CommentreplyIcon>
-                    <CommentreplyCount>0</CommentreplyCount>
+                    <CommentreplyIcon onClick={() => { }}><AiOutlineComment /></CommentreplyIcon>
+                    <CommentreplyCount>{reCommentCnt}</CommentreplyCount>
                     <CommentreplyBtn
-                        onClick={() => setOnReplyBtn(!onReplyBtn)}
-                    >
-                        댓글 쓰기
+                        LoginMaintain={loginMaintain}
+                        UserInfo={userInfo} User={userInfo == null ?
+                            null : userInfo.loginState}
+                        UserCheck={user.login_state}
+                        UserNicknameCheck={user.nickname}
+                        UserNickname={userInfo == null ?
+                            null : userInfo.nickName}
+                        Writer={writer}
+                        onClick={() => setOnReplyBtn(!onReplyBtn)}>
+                        {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
                     </CommentreplyBtn>
                 </CommentreplyAllBox>
                 <CommentreplyLikeAllBox>
                     <CommentreplyLikeBtn
-                        onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}
-                    >
+                        onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}>
                         {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                     </CommentreplyLikeBtn>
                     <CommentreplyLikeCount>{likecount}</CommentreplyLikeCount>
+                    <OptionBox
+                        LoginMaintain={loginMaintain}
+                        User={user.login_state}
+                        UserInfo={userInfo}
+                        UserInfoState={userInfo == null ?
+                            null : userInfo.loginState}
+                        UserInfoNickname={userInfo == null ?
+                            (user.login_state === "allok" ?
+                                user.nickname : null) : userInfo.nickName}
+                        Writer={Comment.writer}><SlOptions />
+                    </OptionBox>
                 </CommentreplyLikeAllBox>
             </CommentreplyBox>
 
@@ -248,24 +270,30 @@ const SingleComment = ({ Comment, profileImagePath }) => {
 
                 Writer={writer}
 
-                onSubmit={registerRecomment}>
-                <ReCommentInputBox>
-                    <Editer2
-                        placeholder="댓글을 입력해 주세요!"
-                        value={reCommentChangeValue}
-                        onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
-                        theme="snow"
-                        modules={modules}
-                        formats={formats}>
-                    </Editer2>
-                </ReCommentInputBox>
+                onSubmit={registerReComment}>
+                <ReCommentArea>
+                    <ReCommentProfile>
+                        <CommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                    </ReCommentProfile>
+                    <ReCommentInputBox>
+                        <Editer2
+                            placeholder="댓글을 입력해 주세요!"
+                            value={reCommentChangeValue}
+                            onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                            theme="snow"
+                            modules={modules}
+                            formats={formats}>
+                        </Editer2>
+                    </ReCommentInputBox>
+                </ReCommentArea>
                 <ReCommentBtnBox>
-                    <CancelBtn type="button">취소</CancelBtn>
-                    <ReCommentBtn>등록</ReCommentBtn>
+                    <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
+                    <ReCommentBtn>댓글 쓰기</ReCommentBtn>
                 </ReCommentBtnBox>
-                <CommentLine></CommentLine>
             </ReCommentForm>
             )}
+
+            <CommentLine />
         </UserCommentBox>
     );
 }
@@ -329,7 +357,7 @@ const CommentreplyBox = styled.div
     `
     display: flex;
     justify-content: space-between;
-    margin: 22px 10px 10px 67px;
+    margin: 22px 10px 10px 0px;
 `
 
 const CommentreplyAllBox = styled.div
@@ -347,6 +375,7 @@ const CommentreplyCount = styled.span
     margin: 3px 0px 0px 0px;
     font-size: 17px;
     font-weight: bold;
+    cursor: pointer;
 `
 
 const CommentreplyLikeCount = styled.span
@@ -355,18 +384,26 @@ const CommentreplyLikeCount = styled.span
     font-size: 17px;
     font-weight: bold;
 `
+const OptionBox = styled.div
+`
+    margin: 3px 0px 0px 15px;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")};
+    cursor : pointer;
+`
 
 const CommentreplyIcon = styled.i
     `
     margin: 0px 6px 0px 0px;
     font-size: 23px;
+    cursor: pointer;    
 `
 
 const CommentreplyLikeBtn = styled.div
     `
     cursor: pointer;
     font-size: 22px;
-    margin: 0px 10px 0px 0px;
+    margin: 0px 5px 0px 0px;
 `
 
 const CommentreplyBtn = styled.div
@@ -374,6 +411,8 @@ const CommentreplyBtn = styled.div
     margin: 4px 0px 0px 18px;
     font-weight: bold;
     cursor: pointer;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+        (props.UserCheck === "allok" ? "block" : "none")};
 `
 
 const CommentText = styled.span
@@ -383,7 +422,7 @@ const CommentText = styled.span
 
 const CommentInformationBox = styled.div
     `
-    padding: 0px 0px 0px 67px;
+    padding: 0px 0px 0px 0px;
     font-size: 20px;
     font-weight: bold;
 `
@@ -391,11 +430,7 @@ const CommentInformationBox = styled.div
 const CommentLine = styled.div
     `
     width: 100%;
-    height: 1px;
-    display: flex;
-    background: black;
-    margin: 12px 0px 12px 0px;
-}
+    border: 1px dashed black;
 `
 
 const CommentUserBox = styled.div
@@ -405,8 +440,9 @@ const CommentUserBox = styled.div
 
 const SirenImg = styled.img
     `
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
+    margin: 0px 0px 0px 7px;    
 `
 
 const TitleLine = styled.div
@@ -418,7 +454,7 @@ const TitleLine = styled.div
 
 const UserNicknameText = styled.span
     `
-    font-size: 25px;
+    font-size: 20px;
     margin: 0px 0px 5px 0px;
 `
 
@@ -432,6 +468,7 @@ const RedateBox = styled.div
     display: flex;
     align-items: end;
     cursor: pointer;
+    margin: 0px 0px 36px 0px;
 `
 
 const CommentInformationAllBox = styled.div
@@ -451,11 +488,18 @@ const CommentUserProfileBox = styled.div
 
 const CommentUserProfile = styled.img
     `
-    width: 50px;
-    height: 50px;
-    border: solid 2px black;
+    width: 43px;
+    height: 43px;
+    border: none;
     border-radius: 30px;
     margin: 21px 0px 0px 0px;
+    cursor: pointer;
+`
+
+const CommentUserProfile2 = styled(CommentUserProfile)
+    `
+    width: 38px;
+    height: 38px;
 `
 
 const UserCommentBox = styled.div
@@ -474,47 +518,47 @@ const ReCommentInputBox = styled.div
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 2fr;
-    border: solid 3px ${props => props.theme.borderColor};
+    border: solid 2px ${props => props.theme.borderColor};
     border-radius: 10px;
     overflow: hidden;
 `
 
-const CancelBtn = styled.div
-    `
-    width: 8%;
-    background: #55AAFF;
-    outline: none;
-    width: 100%;
-    border-radius: 10px;
-    margin: 10px 0px 0px 0px;
-    border: solid 3px black;
-    font-size: 19px;
-    font-weight: bold;
-    padding: 10px;
-    cursor: pointer;
-    background: white;
-    margin : 10px 10px 0px 0px;
-`
-
 const ReCommentBtn = styled.button
     `
-    width: 8%;
+    width: 9%;
     background: #55AAFF;
     outline: none;
-    width: 100%;
     border-radius: 10px;
-    margin: 10px 0px 0px 0px;
+    margin: 10px 0px 10px 0px;
     border: solid 3px black;
     font-size: 19px;
     font-weight: bold;
     padding: 10px;
     cursor: pointer;
+`
+
+const CancelBtn = styled(ReCommentBtn)
+    `
+    width: 6%;
+    background: white;
+    margin : 10px 10px 10px 0px;
 `
 
 const ReCommentBtnBox = styled.div
     `
     display: flex;
     justify-content: end;
+`
+
+const ReCommentArea = styled.div
+    `
+    display: grid;
+    grid-template-columns: 0fr 3fr ;
+`
+
+const ReCommentProfile = styled.div
+    `
+    margin: -20px 11px 0px 0px;
 `
 
 const CommentInputBox = styled.div

@@ -522,6 +522,8 @@ const SubmitBtn = styled.button
 const CancelBtn = styled(SubmitBtn)
     `
     margin: 0px 0px 0px 0px;
+    background: white;
+
 `
 
 const FileNumber = styled.div
