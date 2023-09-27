@@ -8,7 +8,7 @@ import "swiper/components/pagination/pagination.scss";
 import SwiperCore, { Navigation, Pagination, EffectCoverflow } from "swiper";
 import { FiArrowLeft } from "react-icons/fi";
 import { FiArrowRight } from "react-icons/fi";
-
+import VideoPlayler from './VideoPlayer';
 import test from "../../img/MainSlide/test.png";
 import test1 from "../../img/MainSlide/test1.png";
 import test2 from "../../img/MainSlide/test2.png";
@@ -334,11 +334,11 @@ const CenterPage = () => {
 
     return (
         <SwiperBox>
-                <VideoBackgroundBox>
-                
-                </VideoBackgroundBox>
+            <VideoPlayler />
+            <TopLineBackground>
+            </TopLineBackground>
             <GameSlideBox>
-                <PopTitleBox>인기 게임</PopTitleBox>
+            <PopTitleBox>인기 게임 차트</PopTitleBox>
                 <Slider {...swiperParams} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
@@ -505,10 +505,13 @@ const CenterPage = () => {
     );
 }
 
-const VideoBackgroundBox = styled.div
-    `
-    background: black;
-    height: 700px;
+const TopLineBackground = styled.div
+`
+    margin: -7px 0px 0px 0px;
+    height: 67px;
+    background: linear-gradient(180deg, black 17%,rgba(0,0,0,0.8) 38%,transparent 85%);
+}
+
 `
 
 const InformaionBoxTextBox = styled.div

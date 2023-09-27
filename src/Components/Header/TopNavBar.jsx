@@ -98,10 +98,10 @@ const HeaderBox = () => {
         };
 
         if (!isGameTabCheck) {
-            document.addEventListener("mouseout", handleOuside);
+            document.addEventListener("mouseover", handleOuside);
         }
         return () => {
-            document.removeEventListener("mouseout", handleOuside);
+            document.removeEventListener("mouseover", handleOuside);
         };
     }, [BtnLeaveRef]);
 
@@ -312,11 +312,19 @@ const HeaderBox = () => {
         setFastClickCheck(false);
     }
 
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const updateScroll = () => {
+        setScrollPosition(window.scrollY || document.documentElement.scrollTop);
+    }
+    useEffect(() => {
+        window.addEventListener('scroll', updateScroll);
+    });
+
 
     return (
         <ALLNavBox>
             <LeaveBox  ref={BtnLeaveRef}>
-            <BackgroudTopNav>
+            <BackgroudTopNav TopBack={scrollPosition}>
                 <Topnav>
                     <NavBox>
                         <LogoBox>
@@ -700,30 +708,30 @@ const HeaderBox = () => {
                 </Topnav>
             </BackgroudTopNav>
 
-            <BackgroudSubNav LineCheck={BackgroundLine}>
+            <BackgroudSubNav LineCheck={BackgroundLine} TopBack={scrollPosition}>
                 <SubNavMenu LineCheck={BackgroundLine}>
-                    <GameSubNav display={isGameTabCheck}>
+                    <GameSubNav display={isGameTabCheck} TopBack={scrollPosition}>
                         <Link to='/'><SubNavText>홈</SubNavText></Link>
                         <Link to='/'><SubNavText>전체게임</SubNavText></Link>
                         <Link to='/'><SubNavText>공식게임</SubNavText></Link>
                         <Link to='/'><SubNavText>인디게임</SubNavText></Link>
                         <Link to='/'><SubNavText>추천게임</SubNavText></Link>
                     </GameSubNav>
-                    <ShopSubNav display={isShopTabCheck}>
+                    <ShopSubNav display={isShopTabCheck} TopBack={scrollPosition}>
                         <Link to='/'><SubNavText>홈</SubNavText></Link>
                         <Link to='/'><SubNavText>쿠폰샵</SubNavText></Link>
                         <Link to='/'><SubNavText>굿즈샵</SubNavText></Link>
                         <Link to='/'><SubNavText>장바구니</SubNavText></Link>
                         <Link to='/'><SubNavText>위시리스트</SubNavText></Link>
                     </ShopSubNav>
-                    <ComunitySubNav display={isComunityTabCheck}>
+                    <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
                         <Link to='/'><SubNavText>공지사항</SubNavText></Link>
                         <Link to='/'><SubNavText>이벤트</SubNavText></Link>
                         <Link to='/'><SubNavText>공략게시판</SubNavText></Link>
                         <Link to='/'><SubNavText>토론게시판</SubNavText></Link>
                         <Link to='/FreeBoard'><SubNavText>자유게시판</SubNavText></Link>
                     </ComunitySubNav>
-                    <SupportSubNav display={isSupprotTabCheck}>
+                    <SupportSubNav display={isSupprotTabCheck} TopBack={scrollPosition}>
                         <Link to='/'><SubNavText>이용문의</SubNavText></Link>
                         <Link to='/'><SubNavText>회사정보</SubNavText></Link>
                     </SupportSubNav>
@@ -740,6 +748,7 @@ export const ScrollTop = () => {
 
 const LeaveBox = styled.div
 `
+
 `
 
 const WriteBox = styled.div
@@ -774,7 +783,8 @@ const WriteBoxText = styled.span
 `
 const BackgroudTopNav = styled.div
     `
-    background-color: #3c3c3c;
+    background-color: ${props => props.TopBack === 0 ? "rgba(25,25,25,0.4)" : "#3c3c3c"};
+    transition: background-color 0.5s;
 
     @media (min-width:250px) and (max-width:666px)
     {
@@ -790,8 +800,9 @@ const BackgroudTopNav = styled.div
 
 const BackgroudSubNav = styled.div
     `
-    background: ${props => props.LineCheck ? "white" : "transparent"};
-    border-bottom: ${props => props.LineCheck ? "solid 3px #3c3c3c" : "none"};
+    display: ${props => props.LineCheck ? "block" : "none"};
+    background: ${props => props.TopBack === 0 ? "rgba(25,25,25,0.4)" : "white"};
+    border-bottom: ${props => props.LineCheck ? props.TopBack === 0 ? "none" : "solid 3px #3c3c3c" : "none"};
 
     @media (min-width:250px) and (max-width:666px)
     {
@@ -803,7 +814,6 @@ const BackgroudSubNav = styled.div
 const ALLNavBox = styled.div
     `
     font-size: 25px;
-    
 `
 
 const GameSubNav = styled.div
@@ -812,7 +822,7 @@ const GameSubNav = styled.div
 a{
     text-decoration: none;
     -webkit-tap-highlight-color:transparent;
-    color: black;
+    color: ${props => props.TopBack === 0 ? "white" : "black"};
     font-weight: bold;
     &:hover
     {
@@ -835,6 +845,16 @@ a{
 const ShopSubNav = styled(GameSubNav)
     `
     display: ${props => props.display ? "block" : "none"};
+    a{
+        text-decoration: none;
+        -webkit-tap-highlight-color:transparent;
+        color: ${props => props.TopBack === 0 ? "white" : "black"};
+        font-weight: bold;
+        &:hover
+        {
+            color: #6a9dda;
+        }
+    }
     &:hover
     {
         color: #6a9dda;
@@ -853,6 +873,16 @@ const ShopSubNav = styled(GameSubNav)
 const ComunitySubNav = styled(GameSubNav)
     `
     display: ${props => props.display ? "block" : "none"};
+    a{
+        text-decoration: none;
+        -webkit-tap-highlight-color:transparent;
+        color: ${props => props.TopBack === 0 ? "white" : "black"};
+        font-weight: bold;
+        &:hover
+        {
+            color: #6a9dda;
+        }
+    }
     &:hover
     {
         color: #6a9dda;
@@ -872,6 +902,16 @@ const ComunitySubNav = styled(GameSubNav)
 const SupportSubNav = styled(GameSubNav)
     `
     display: ${props => props.display ? "block" : "none"};
+    a{
+        text-decoration: none;
+        -webkit-tap-highlight-color:transparent;
+        color: ${props => props.TopBack === 0 ? "white" : "black"};
+        font-weight: bold;
+        &:hover
+        {
+            color: #6a9dda;
+        }
+    }
     &:hover
     {
         color: #6a9dda;
@@ -929,7 +969,6 @@ const SubNavMenu = styled.div
     margin: auto;
     max-width: 1500px;
     align-items: center;
-    background: ${props => props.LineCheck ? "white" : "transparent"};
     @media (min-width:250px) and (max-width:666px)
     {
         font-size: 17px;
@@ -1005,7 +1044,6 @@ const NavUl = styled.ul
 
 export const SearchInput = styled.input
     `
-    margin: 5.5px 0px 0px 0px;
     border: none;
     outline: none;
     border-top-left-radius: 10px;
@@ -1096,7 +1134,6 @@ export const SearchInputIconBox = styled.div
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     background: #dee2e6;
-    margin: 5.5px 0px 0px 0px;
     height: 46.5px;
     -webkit-user-select: none;
 `
@@ -1230,7 +1267,7 @@ const ProfileListBox = styled.div
     display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
     margin: 59px 0px 0px 158.5px;
-    border: solid 2px #3c3c3c;
+    box-shadow: 0px 0px 0px 3px ${props => props.theme.borderColor} inset;
     background: white;  
     height: ${props => props.show ? "370px" : "0px"};
     border-radius: 10px;
@@ -1253,7 +1290,7 @@ const FastListBox = styled(ProfileListBox)
     `
     display: ${props => props.default ? "block" : "none"};
     width: 310px;
-    margin: 59px 0px 0px 6px;
+    margin: 59px 0px 0px 66px;
     height: ${props => props.show ? "370px" : "0px"};
     z-index: ${props => props.zindex ? 2 : 1};
 `

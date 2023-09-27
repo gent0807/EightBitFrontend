@@ -71,6 +71,7 @@ const GlobalStyle = createGlobalStyle
   ${DarkModeBox}
   {
     background-color: ${(props) => props.theme.backgroundColor};
+
     transition: background-color 0.5s, background 0.5s, color 0.5s, box-shadow 0.5s, border 0.5s, accent-color 0.5s;
   }
 `
