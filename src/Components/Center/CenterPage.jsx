@@ -380,7 +380,7 @@ const CenterPage = () => {
                         </SwiperSlide>
                     ))}
                 </Slider>
-                <PopTitleBox>테마 게임</PopTitleBox>
+                <PopTitleBox>장르별 게임</PopTitleBox>
                 <Slider {...swiperParams3} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>

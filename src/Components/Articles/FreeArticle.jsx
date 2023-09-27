@@ -333,7 +333,7 @@ const FreeArticle = () => {
                             </LikeViewBox>
                         </WriteViewBox>
                     </UserProfileBox>
-                    <div>
+                    <div style={{margin:"0px 10px 0px 0px"}}>
                         <RedateBox>
                             신고
                             <SirenImg src={Siren} />
@@ -943,7 +943,8 @@ const UserProfile = styled.img
     `
     width: 70px;
     height: 70px;
-    border-radius: 26px;
+    border-radius: 32px;
+    cursor: pointer;
 `
 
 const UserProfileBox = styled.div

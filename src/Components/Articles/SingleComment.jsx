@@ -493,6 +493,7 @@ const CommentUserProfile = styled.img
     border: none;
     border-radius: 30px;
     margin: 21px 0px 0px 0px;
+    cursor: pointer;
 `
 
 const CommentUserProfile2 = styled(CommentUserProfile)
