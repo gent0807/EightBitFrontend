@@ -3,68 +3,65 @@ import { useState, useRef, useEffect } from "react";
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { firstReset } from "../Darkmode/Darkmode";
 
-function PaginationNav ({ total, limit, page, setPage }) {
+function PaginationNav({ total, limit, page, setPage }) {
   const numPages = total > 0 && limit > 0 ? Math.ceil(total / limit) : 1;
   const [currPage, setCurrPage] = useState(page);
   const [WindowLength, setWindowLength] = useState(window.innerWidth);
   const FirstReset = useRecoilValue(firstReset);
   const [CFirstReset, setCFirstReset] = useRecoilState(firstReset);
-  let firstNum = FirstReset ? WindowLength <= 666 ? currPage - (currPage % 5) + 1 : currPage - (currPage % 10) + 1 : 1 ;
-  console.log(WindowLength , firstNum, numPages);
+  let firstNum = FirstReset ? WindowLength <= 666 ? currPage - (currPage % 5) + 1 : currPage - (currPage % 10) + 1 : 1;
+  console.log(WindowLength, firstNum, numPages);
 
-  const handleResize = () => 
-  {
-      setWindowLength(window.innerWidth);
+  const handleResize = () => {
+    setWindowLength(window.innerWidth);
   };
 
   useEffect(() => {
-      window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     }
   })
 
-  const ScrollTop = () =>
-  {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  const ScrollTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
     <>
       <Nav>
-        <Button onClick={() => {setPage(1); setCurrPage(1); setCFirstReset(true); ScrollTop();}} off={page === 1}>
+        <Button onClick={() => { setPage(1); setCurrPage(1); setCFirstReset(true); ScrollTop(); }} off={page === 1}>
           &lt;
           &lt;
         </Button>
-        <Button 
-            onClick={() => {setPage(page-1); setCurrPage(page-2); setCFirstReset(true); ScrollTop();}} 
-            off={page===1}>
-            &lt;
+        <Button
+          onClick={() => { setPage(page - 1); setCurrPage(page - 2); setCFirstReset(true); ScrollTop(); }}
+          off={page === 1}>
+          &lt;
         </Button>
-        <Button 
-            onClick={() => {setPage(firstNum); setCFirstReset(true); ScrollTop();}}
-            aria-current={page === firstNum ? "page" : null}>
-            {firstNum}
+        <Button
+          onClick={() => { setPage(firstNum); setCFirstReset(true); ScrollTop(); }}
+          aria-current={page === firstNum ? "page" : null}>
+          {firstNum}
         </Button>
-                {Array(numPages - firstNum).fill().map((_, i) =>{
-                    if(i <= Math.round(WindowLength <= 666 ? 3 : 8))
-                    {
-                        return (
-                            <Button 
-                                key={i+1} 
-                                onClick={() => {setPage(firstNum+1+i); setCFirstReset(true); ScrollTop();}}
-                                aria-current={page === firstNum+1+i ? "page" : null}>
-                                {firstNum+1+i}
-                            </Button>
-                        )
-                    }
-                })}
-        <Button 
-            onClick={() => {setPage(page+1); setCurrPage(page); setCFirstReset(true); ScrollTop();}} 
-            off={page === numPages}>
-            &gt;
+        {Array(numPages - firstNum).fill().map((_, i) => {
+          if (i <= Math.round(WindowLength <= 666 ? 3 : 8)) {
+            return (
+              <Button
+                key={i + 1}
+                onClick={() => { setPage(firstNum + 1 + i); setCFirstReset(true); ScrollTop(); }}
+                aria-current={page === firstNum + 1 + i ? "page" : null}>
+                {firstNum + 1 + i}
+              </Button>
+            )
+          }
+        })}
+        <Button
+          onClick={() => { setPage(page + 1); setCurrPage(page); setCFirstReset(true); ScrollTop(); }}
+          off={page === numPages}>
+          &gt;
         </Button>
-        <Button onClick={() => {setPage(numPages); setCurrPage(numPages); setCFirstReset(true); ScrollTop();}} off={page === numPages}>
+        <Button onClick={() => { setPage(numPages); setCurrPage(numPages); setCFirstReset(true); ScrollTop(); }} off={page === numPages}>
           &gt;
           &gt;
         </Button>

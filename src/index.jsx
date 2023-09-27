@@ -32,7 +32,6 @@ const Font = styled.body
   {
     font-family: "NanumSquareR";
   }
-
 `
 /* const reducer = (currentState, action) => {
     if(currentState===undefined){

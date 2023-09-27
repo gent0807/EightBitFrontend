@@ -1,9 +1,9 @@
-import React, { useRef,useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa";
 import { SiNaver } from "react-icons/si";
-import { AiOutlineTwitter } from "react-icons/ai";
 import { RiErrorWarningFill } from "react-icons/ri";
+import { RiKakaoTalkFill } from 'react-icons/ri';
+import { BsGithub } from 'react-icons/bs';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { styled } from 'styled-components';
@@ -14,150 +14,184 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { ScrollTop } from '../Header/TopNavBar';
 import { work } from '../Phone/PhoneAuthMode';
 
-const Logininput = () => 
-{                 
-    const [ authMode, setAuthMode ]=useRecoilState(work);
-    const [ Email, setEmail ] = useState('');
-    const [ Pw, setPw ] = useState('');
-    //const [loginCheck,setLoginCheck]=React.useState('');
-    const [ message,setMessage ] = useState('');
-    const [ isShow, setIsShow ] = useState(false);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const isDarkmode = useRecoilValue(isDark);
-    const inputRef = useRef();
-    const ip=localStorage.getItem("ip");
-    let loginCheck;
+import LogoLight from "../../img/LOGO/8bitLight.png";
+import LogoDark from "../../img/LOGO/8bitDark.png";
 
-    localStorage.setItem("loginMaintain", isShow);
+const Logininput = () => {
+  const [authMode, setAuthMode] = useRecoilState(work);
+  const [Email, setEmail] = useState('');
+  const [Pw, setPw] = useState('');
+  //const [loginCheck,setLoginCheck]=React.useState('');
+  const [message, setMessage] = useState('');
+  const [isShow, setIsShow] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isDarkmode = useRecoilValue(isDark);
+  const inputRef = useRef();
+  const ip = localStorage.getItem("ip");
+  let loginCheck;
 
-    const user=useSelector(state=>state.user);
-    const loginMaintain = localStorage.getItem("loginMaintain");
-    let userInfo=localStorage.getItem("userInfo");
-    userInfo=JSON.parse(userInfo);   
-    console.log("loginMaintain",loginMaintain);
-    console.log("userInfo",userInfo);
-    console.log("user",user);
+  localStorage.setItem("loginMaintain", isShow);
 
-    useEffect(() => {
-      inputRef.current.focus();
-      setAuthMode('find');
-    },[]);
+  const user = useSelector(state => state.user);
+  const loginMaintain = localStorage.getItem("loginMaintain");
+  let userInfo = localStorage.getItem("userInfo");
+  userInfo = JSON.parse(userInfo);
+  console.log("loginMaintain", loginMaintain);
+  console.log("userInfo", userInfo);
+  console.log("user", user);
 
-    const Show = () =>
-    {
-      setIsShow(!isShow);
-    } 
+  useEffect(() => {
+    inputRef.current.focus();
+    setAuthMode('find');
+  }, []);
 
-    const OnChangeEmail = (e) => {
-      const currentEmail = e.target.value;
-      setEmail(currentEmail);
+  const Show = () => {
+    setIsShow(!isShow);
+  }
+
+  const OnChangeEmail = (e) => {
+    const currentEmail = e.target.value;
+    setEmail(currentEmail);
+  }
+
+  const OnChangePw = (e) => {
+    const currentPw = e.target.value;
+    setPw(currentPw);
+  }
+
+  const OnCheckSubmit = (e) => {
+    e.preventDefault();
+    if (Email == "" && Pw == "") {
+      setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>이메일과 패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
     }
-  
-    const OnChangePw = (e) => {
-      const currentPw = e.target.value;
-      setPw(currentPw);
+    else if (Email != "" && Pw == "") {
+      setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
     }
+    else if (Email == "" && Pw != "") {
+      setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>이메일을 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
+    }
+    else {
 
-    const OnCheckSubmit = (e) =>
-    {   
-        e.preventDefault();
-        if(Email==""&&Pw==""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일과 패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
-        }
-        else if(Email!=""&&Pw==""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>패스워드를 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
-        }
-        else if(Email==""&&Pw!=""){
-          setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>이메일을 입력하세요!</ErrorMessageText></ErrorMessageBox>]);
-        }
-        else{
-        
-        axios.post(`${ip}/Users/check/login/`,{
-            email:Email,
-            password:Pw
-          } 
-        )
-        .then(res=>{
+      axios.post(`${ip}/Users/check/login/`, {
+        email: Email,
+        password: Pw
+      }
+      )
+        .then(res => {
           return res.data;
         })
-        .then(data=>{
+        .then(data => {
           console.log(data);
-          loginCheck=data.loginState;
-          if(loginCheck=="emailok"){
-            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>비밀번호가 틀렸습니다!</ErrorMessageText></ErrorMessageBox>])
+          loginCheck = data.loginState;
+          if (loginCheck == "emailok") {
+            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>비밀번호가 틀렸습니다!</ErrorMessageText></ErrorMessageBox>])
           }
-          else if(loginCheck=="no"){
-            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>가입되지 않은 이메일입니다!</ErrorMessageText></ErrorMessageBox>])
+          else if (loginCheck == "no") {
+            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>가입되지 않은 이메일입니다!</ErrorMessageText></ErrorMessageBox>])
           }
-          else if(loginCheck=="allok"){
-            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill/></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
+          else if (loginCheck == "allok") {
+            setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>로그인 가능</ErrorMessageText></ErrorMessageBox>])
             dispatch(loginState(data));
             localStorage.setItem("loginMaintain", isShow);
-            if(isShow==true){
-                localStorage.setItem("userInfo", JSON.stringify(data));
+            if (isShow == true) {
+              localStorage.setItem("userInfo", JSON.stringify(data));
             }
             console.log(localStorage.getItem("userInfo"));
             navigate("/");
           }
         });
-
-        /*if(loginCheck=="emailok"){   <- 위에 함수 호출로 인한 실행과 비동기적이기 때문에 위에서의 loginCheck와는 동기화되지 않는다. 즉 최초의 submit 이벤트 처리시에는 axios 함수에서의 loginCheck와 axios와 비동기적으로 실행되는 if문에서의 loginCheck는 다를 수 밖에 없다.
-            console.log('까비');           
-        }*/
-
-        
-        
-      }
-
+      /*if(loginCheck=="emailok"){   <- 위에 함수 호출로 인한 실행과 비동기적이기 때문에 위에서의 loginCheck와는 동기화되지 않는다. 즉 최초의 submit 이벤트 처리시에는 axios 함수에서의 loginCheck와 axios와 비동기적으로 실행되는 if문에서의 loginCheck는 다를 수 밖에 없다.
+          console.log('까비');           
+      }*/
     }
+  }
 
- 
 
-    return(
-      <LoginT> 
-          <LoginTop>
-          <Link to='/'><LoginTopLOGO src={ isDarkmode ? 'img/8bit_Dark.png' : 'img/8bit.png' } alt='로고'/></Link>
-          </LoginTop>
-          <LoginInput>
-          <InputT>
-          <Sumbit onSubmit={OnCheckSubmit}>
-          <InputBox ref={inputRef} placeholder="E-mail" onChange={OnChangeEmail}/>
-          <PwInputBox placeholder="Password" onChange={OnChangePw} type='password'/>
-          <ErrorMessageShow>{message}</ErrorMessageShow>
-          <LoginMaintainT>
-          <LoginMaintainCheckBox type='checkbox' onClick={Show}/>
-          <LoginMaintain>로그인 유지</LoginMaintain>
-          <LoginMaintainMessageShow show={isShow}><span>개인정보 보호를 위해 개인 PC에서만 사용하세요.</span></LoginMaintainMessageShow>
-          </LoginMaintainT>
-          <LoginBtnT>
-          <LoginBtn type="submit"><span>로그인</span></LoginBtn>
-          </LoginBtnT>
+
+  return (
+    <LoginT>
+      <LoginTop>
+        <Link to='/'>
+          <LoginTopLOGO src={isDarkmode ? LogoDark : LogoLight} alt='로고' />
+        </Link>
+      </LoginTop>
+
+      <LoginInput>
+        <InputT>
+          <Sumbit
+            onSubmit={OnCheckSubmit}
+          >
+            <InputAllBox>
+              <InputBox
+                ref={inputRef}
+                placeholder="E-mail"
+                onChange={OnChangeEmail}
+              />
+              <PwInputBox
+                placeholder="Password"
+                onChange={OnChangePw}
+                type='password'
+              />
+            </InputAllBox>
+
+            <ErrorMessageShow show={message}>{message}</ErrorMessageShow>
+
+            <LoginMaintainT>
+              <LoginMaintainCheckBox type='checkbox' onClick={Show} />
+              <LoginMaintain>로그인 유지</LoginMaintain>
+              <LoginMaintainMessageShow show={isShow}>
+                <LoginMaintainText>개인정보 보호를 위해 개인 PC에서만 사용하세요.</LoginMaintainText>
+              </LoginMaintainMessageShow>
+            </LoginMaintainT>
+            <LoginBtnT>
+              <LoginBtn type="submit">로그인</LoginBtn>
+            </LoginBtnT>
           </Sumbit>
-          </InputT>
-          <LOGINAPI>
+        </InputT>
+
+        <LOGINAPI>
           <Line><span>또는</span></Line>
           <APIList>
             <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
-            <APIListLI>< APIListA border={"#1877f2"} background={"#1877f2"} API="#"><FaFacebookF /></APIListA></APIListLI>
-            <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></ APIListA></APIListLI>
-            <APIListLI>< APIListA border={"#1da1f2"} background={"#1da1f2"} API="#"><AiOutlineTwitter /></ APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#edf511"} background={"#edf511"} API="#"><RiKakaoTalkFill style={{color:"black"}}/></ APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#0d0c0c"} background={"#0d0c0c"} API="#"><BsGithub /></ APIListA></APIListLI>
           </APIList>
-          </LOGINAPI>
-          <EmPwFoundT>
+        </LOGINAPI>
+
+        <EmPwFoundT>
           <EmailPwFoundList>
             <EmailPwFoundListLiBar onClick={() => ScrollTop()}><Link to='/PhoneAuth'>이메일/비밀번호 찾기</Link></EmailPwFoundListLiBar>
             <EmailPwFoundListLI onClick={() => ScrollTop()}><Link to='/SelectSign'>회원가입</Link></EmailPwFoundListLI>
           </EmailPwFoundList>
-          </EmPwFoundT>
-        </LoginInput>
-      </LoginT>
-    );
+        </EmPwFoundT>
+
+      </LoginInput>
+    </LoginT>
+  );
 }
 
-export const InputBox = styled.input
+const LoginMaintainText = styled.div
+  `
+
 `
-    width: 435px;
+
+const LineText = styled.span
+  `
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
+`
+
+const InputAllBox = styled.div
+  `
+    display: flex;
+    flex-direction: column;
+`
+
+export const InputBox = styled.input
+  `
+    max-width: 435px;
     height: 20px;
     padding: 20px 5px 20px 20px;
     margin-bottom: 10px;
@@ -181,33 +215,33 @@ export const InputBox = styled.input
 `
 
 const PwInputBox = styled(InputBox)
-`
+  `
     font-family: "";
 `
 
 const ErrorMessageBox = styled.div
-`
+  `
     display: flex;
 
 `
 
 const ErrorMessageIcon = styled.i
-`
+  `
     margin: 1px 9px 0px;
 `
 
 const LoginT = styled.div
-`
+  `
     position:relative;
 `
 
 const LoginTop = styled.div
-`
+  `
     text-align: center;
     margin-bottom: 50px;
 `
 export const LoginTopLOGO = styled.img
-`
+  `
     width: 192px;
     height: 102px;
     margin: 0px 0px 32px 0px;
@@ -215,29 +249,30 @@ export const LoginTopLOGO = styled.img
 `
 
 const LoginInput = styled.div
-`
-    display: inline-block;
+  `
+    display: flex;
+    flex-direction: column;
 `
 
 const InputT = styled.div
-`
+  `
 
 `
 
 const Sumbit = styled.form
-`
+  `
 `
 
 const ErrorMessageShow = styled.p
-`
-    display: inline-block;
+  `
+    display: ${props => props.show === "" ? "none" : "inline-block"};
     margin: 0px;
     font-size: 15px;
     color: ${(props) => props.theme.errorColor};
 `
 
 const LoginMaintain = styled.p
-`
+  `
     font-size: 16px;
     margin-top: 14px;
     margin-left: 4px;
@@ -246,14 +281,14 @@ const LoginMaintain = styled.p
 `
 
 const LoginMaintainT = styled.div
-`
-    margin-bottom: 15px;
+  `
+    margin: -9px 0px 15px 0px;
     display: flex;
     height: 54px;
 `
 
 const LoginMaintainCheckBox = styled.input
-`
+  `
     accent-color: ${(props) => props.theme.checkBoxColor};
     zoom: 1.5;
     margin-top: -2px;
@@ -266,7 +301,7 @@ const LoginMaintainCheckBox = styled.input
 `
 
 const LoginMaintainMessageShow = styled.p
-`
+  `
     display: ${props => props.show ? "block" : "none"};
     margin: 40px 0px 0px -100px;
     font-size: 12px;
@@ -274,11 +309,14 @@ const LoginMaintainMessageShow = styled.p
 `
 
 const LoginBtnT = styled.div
+  `
+    display: flex;
+    flex-direction: column;
 `
-`
+
 const LoginBtn = styled.button
-`
-    width: 460px;
+  `
+    max-width: 460px;
     height: 51px;
     padding: 0px 16px;
     background: ${(props) => props.theme.buttonColor};
@@ -298,7 +336,7 @@ const LoginBtn = styled.button
 `
 
 export const Line = styled.p
-`
+  `
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -320,24 +358,18 @@ export const Line = styled.p
       content: "";
       background-color: ${(props) => props.theme.textColor};
     }
-    span
-    {
-      display: block;
-      padding-left: 1.6rem;
-      padding-right: 1.6rem;
-    }
 `
 
 const LOGINAPI = styled.div
-`
+  `
 `
 
 const EmPwFoundT = styled.div
-`
+  `
 `
 
 export const EmailPwFoundList = styled.ul
-`
+  `
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -347,15 +379,15 @@ export const EmailPwFoundList = styled.ul
 `
 
 const APIList = styled(EmailPwFoundList)
-`
+  `
     margin:40px 0px 40px 0px;
 `
 
-export const APIListA = styled.a.attrs((props) => ({href : props.API}))
-`
+export const APIListA = styled.a.attrs((props) => ({ href: props.API }))
+  `
     display: inline-block;
     padding: 5px;
-    margin: 0px 10px 0px 10px;
+    margin: 0px 5px 0px 5px;
     width: 44px;
     height: 44px;
     border-radius: 30px;
@@ -372,22 +404,21 @@ export const APIListA = styled.a.attrs((props) => ({href : props.API}))
 `
 
 const APIListLI = styled.li
-`
+  `
 `
 
 const EmailPwFoundListLI = styled.li
-`
-    margin: 0px 10px 0px 10px;
+  `
+    padding: 0px 10px 0px 10px;
     a
     {
       color: ${props => props.theme.textColor};
       text-decoration: none;
-      margin: 0px 15px 0px 15px;
     }
 `
 
 const EmailPwFoundListLiBar = styled(EmailPwFoundListLI)
-`
+  `
   &::after {
     background: ${props => props.theme.textColor};
     position: absolute;
@@ -399,7 +430,7 @@ const EmailPwFoundListLiBar = styled(EmailPwFoundListLI)
 `
 
 const ErrorMessageText = styled.span
-`
+  `
 
 `
 export default Logininput;

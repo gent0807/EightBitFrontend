@@ -7,7 +7,7 @@ const Containerbox = styled.div`
     padding: 267px 0px 54px 0px;
     @media (min-width:250px) and (max-width:666px)
     {
-        padding: 358px 0px 54px 0px;
+        padding: 358px 10px 54px 10px;
     }
 `
 
@@ -15,9 +15,9 @@ const Containerbox = styled.div`
 const LoginContainer = () => {
   return (
     <Containerbox>
-      <Logininput/>
+      <Logininput />
     </Containerbox>
   );
-} 
+}
 
 export default LoginContainer;
