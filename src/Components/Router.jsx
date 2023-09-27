@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import styled from 'styled-components';
 import TopNavBar from './Header/TopNavBarContainer';
 import Login from './Login/LoginContainer';
 import Sign from './Sign/SignContainer';
@@ -19,20 +17,20 @@ const Router = () => {
 
     return (
         <BrowserRouter>
-        <TopNavBar />
-                <Routes>
-                    <Route path="/Login" element={<Login />} />
-                    <Route path="/Sign" element={<Sign />} />
-                    <Route path="/EmailPwFound" element={<EmailPwFound />} />
-                    <Route path="/PhoneAuth" element={<PhoneAuth />} />
-                    <Route path="/SelectSign" element={<SelectSign />} />
-                    <Route path="/FreeBoard" element={<FreeBoard />} />
-                    <Route path="/WriteBoard" element={<WriteBoard />} />
-                    <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
-                    <Route path="/UpdateBoard/:writer/:regdate" element={<UpdateBoard />} />
-                    <Route path="/" element={<Center />} />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
+            <TopNavBar />
+            <Routes>
+                <Route path="/Login" element={<Login />} />
+                <Route path="/Sign" element={<Sign />} />
+                <Route path="/EmailPwFound" element={<EmailPwFound />} />
+                <Route path="/PhoneAuth" element={<PhoneAuth />} />
+                <Route path="/SelectSign" element={<SelectSign />} />
+                <Route path="/FreeBoard" element={<FreeBoard />} />
+                <Route path="/WriteBoard" element={<WriteBoard />} />
+                <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
+                <Route path="/UpdateBoard/:writer/:regdate" element={<UpdateBoard />} />
+                <Route path="/" element={<Center />} />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
             <Footer />
         </BrowserRouter>
     );

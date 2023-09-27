@@ -144,13 +144,6 @@ const FreeBoard = () => {
                 </FitterBox>
             </SearchBox>
             <BoardBox>
-                <BoardTitle>
-                    <BoardTitleNumber><BoardTitleText>번호</BoardTitleText></BoardTitleNumber>
-                    <BoardTitleTitle><BoardTitleText>제목</BoardTitleText></BoardTitleTitle>
-                    <BoardTitleWriter><BoardTitleText>작성자</BoardTitleText></BoardTitleWriter>
-                    <BoardTitleViewTime><BoardTitleText>등록일</BoardTitleText></BoardTitleViewTime>
-                    <BoardTitleViewCounter><BoardTitleText>조회수</BoardTitleText></BoardTitleViewCounter>
-                </BoardTitle>
                 <BoardContentAllBox>
                     {posts.length === 0 && <NotPage />}
                     {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt }) => (
