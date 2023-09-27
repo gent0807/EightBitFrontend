@@ -1,6 +1,7 @@
 import TopNavBar from './TopNavBar';
 import styled from 'styled-components'
 
+
 const Containerbox = styled.div`
     margin: 0 auto;
     position: fixed;
@@ -8,11 +9,11 @@ const Containerbox = styled.div`
     width: 100%;
 `
 
-const TopNavBarContainer = () =>
-{
-    return(
+const TopNavBarContainer = () => {
+
+    return (
         <Containerbox>
-            <TopNavBar/>
+            <TopNavBar />
         </Containerbox>
     );
 }

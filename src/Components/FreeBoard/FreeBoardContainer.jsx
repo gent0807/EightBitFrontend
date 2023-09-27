@@ -13,9 +13,8 @@ const Containerbox = styled.div`
     }
 `
 
-const BoardContainer = () => 
-{
-    return(
+const BoardContainer = () => {
+    return (
         <Containerbox>
             <FreeBoard />
         </Containerbox>
