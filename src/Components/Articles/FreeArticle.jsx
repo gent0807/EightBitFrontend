@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
 import dayjs from "dayjs";
@@ -40,7 +40,7 @@ const FreeArticle = () => {
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
-            src: "http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+            src: "http://218.155.175.176:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
 
@@ -400,7 +400,6 @@ const FreeArticle = () => {
                                     placeholder="댓글을 입력해 주세요!"
                                     value={replyChangeValue2}
                                     onChange={(content, delta, source, editor) => setReplyChangeValue2(editor.getHTML())}
-                                    theme="snow"
                                     modules={modules}
                                     formats={formats}>
                                 </Editer2>
@@ -492,9 +491,9 @@ const FreeArticle = () => {
                                 placeholder="댓글을 입력해 주세요!"
                                 value={replyChangeValue}
                                 onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
-                                theme="snow"
                                 modules={modules}
-                                formats={formats}>
+                                formats={formats}
+                            >
                             </Editer>
                         </CommentInputBox>
                     </CommentArea>
@@ -526,6 +525,17 @@ const Editer = styled(ReactQuill)
     `
     display: flex;
     flex-direction: column;
+
+    .ql-editor.ql-blank::before
+    {
+        content: attr(data-placeholder);
+        font-style: italic;
+        left: 15px;
+        pointer-events: none;
+        position: absolute;
+        right: 15px;
+        color: ${props => props.theme.textColor};
+    }
 
     .ql-editor
     {

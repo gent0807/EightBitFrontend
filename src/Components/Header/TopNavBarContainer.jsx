@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const Containerbox = styled.div`
     margin: 0 auto;
     position: fixed;
-    z-index: 3;
+    z-index: 9999;
     width: 100%;
 `
 

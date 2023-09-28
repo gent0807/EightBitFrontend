@@ -24,51 +24,6 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <script type="text/javascript">
-      (function() {
-        function getInitialColorMode() {
-          const isClient = typeof window !== 'undefined';
-          if (isClient) {
-            const persistedColorPreference = window.localStorage.getItem('mode');
-    
-            if (persistedColorPreference) {
-              return persistedColorPreference;
-            }
-    
-            const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
-            if (systemPreference.matches) {
-              return 'false';
-            }
-            return 'true';
-          }
-        }
-        const colorMode = getInitialColorMode();
-        document.documentElement.style.setProperty(
-          'background-color',
-          colorMode === 'false' ? '#1d2024' : 'white'
-        );
-        document.documentElement.style.setProperty(
-          'background',
-          colorMode === 'false' ? '#1d2024' : 'white'
-        );
-        document.documentElement.style.setProperty(
-          'color',
-          colorMode === 'false' ? '#6a9dda' : 'black'
-        );
-        document.documentElement.style.setProperty(
-          'border',
-          colorMode === 'false' ? '#6a9dda' : '#3c3c3c'
-        );
-        document.documentElement.style.setProperty(
-          'accent-color',
-          colorMode === 'false' ? '#6a9dda' : '#3c3c3c'
-        );
-        document.documentElement.style.setProperty(
-          'box-shadow',
-          colorMode === 'false' ? '#6a9dda' : '#3c3c3c'
-        );
-      })();
-    </script>
     <style>
       html
       {
