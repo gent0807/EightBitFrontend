@@ -6,39 +6,87 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
+import { AiFillCheckCircle } from "react-icons/ai";
 import { AiOutlineComment } from "react-icons/ai";
 import { SlOptions } from "react-icons/sl";
+import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp } from "react-icons/io";
+import {BiLogoDevTo} from "react-icons/bi";
 import dayjs from "dayjs";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
 import Siren from "../../img/Siren/Siren.png";
+import SingleReComment from "./SingleReComment";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleComment = ({ Comment, profileImagePath }) => {
+const SingleReply = ({ Comment}) => {
 
-    const { writer } = useParams();
-    const { regdate } = useParams();
     const [likecount, setLikecount] = useState(0);
+    const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
+    const [reCommentHide, setReCommentHide] = useState(false);
+
     const navigate = useNavigate();
+
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     let likeMode = useRef(false);
+
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [reCommentCnt, setReCommentCnt] = useState(0);
 
     const quillRef = useRef(null);
 
+    const [ReComment, setReComment] = useState([
+        {
+            id: 1,
+            writer: "eight",
+            content: "ㅋㅋㅋㅋㅋ 개웃기네"
+        },
+        {
+            id: 2,
+            writer: "seopseop",
+            content: "뭐라는 거임?"
+        },
+        {
+            id: 3,
+            writer: "란토",
+            content: "누구세요??"
+        }
+    ]);
+
+
+    useEffect(() => {
+        const getUsreProfileImagePath = (writer) => {
+            axios.get(`${ip}/Users/profileImgPath?nickname=${writer}`, {
+
+            },
+                {
+
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then(data => {
+                    console.log(data);
+                    setProfileImagePath(data);
+                })
+
+        }
+        getUsreProfileImagePath(Comment.writer);
+        setReCommentCnt(ReComment.length);
+    }, []);
+
     const getNewLikeCount = async () => {
-        axios.get(`${ip}/Board/article/like?writer=${writer}&regdate=${regdate}`, {
+        axios.get(`${ip}/Board/article/like?writer=${Comment.writer}&regdate=${Comment.regdate}`, {
 
         }, {
 
@@ -61,7 +109,7 @@ const SingleComment = ({ Comment, profileImagePath }) => {
         }
 
 
-        await axios.patch(`${ip}/Board/article/like/up?writer=${writer}&regdate=${regdate}`, {
+        await axios.patch(`${ip}/Board/article/like/up?writer=${Comment.writer}&regdate=${Comment.regdate}`, {
 
         },
             {
@@ -78,7 +126,7 @@ const SingleComment = ({ Comment, profileImagePath }) => {
 
     const countDownLike = async () => {
         if (likecount > 0) {
-            await axios.patch(`${ip}/Board/article/like/down?writer=${writer}&regdate=${regdate}`, {
+            await axios.patch(`${ip}/Board/article/like/down?writer=${Comment.writer}&regdate=${Comment.regdate}`, {
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -206,23 +254,43 @@ const SingleComment = ({ Comment, profileImagePath }) => {
                 <CommentUserBox>
                     <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                     <CommentInformationAllBox>
-                        <UserNicknameText>{Comment.writer}</UserNicknameText>
-                        <Regdate>{dayjs(regdate).format("YY.MM.DD HH:mm")}</Regdate>
+                        <div style={{ display: "flex" }}>
+                            <UserNicknameText>{Comment.writer}</UserNicknameText>
+                            {Comment.regdate == Comment.updatedate ? "" :
+                                <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
+                                    <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
+                                    수정됨
+                                </div>}
+
+                        </div>
+                        <div style={{ display: "flex" }}>
+                            <CommentreplyIcon><AiOutlineComment /></CommentreplyIcon>
+                            <CommentreplyCount>{reCommentCnt}</CommentreplyCount>
+                        </div>
+
                     </CommentInformationAllBox>
                 </CommentUserBox>
-                <RedateBox>
-                    신고
-                    <SirenImg src={Siren} />
-                </RedateBox>
+                <div style={{ margin: "15px 0px 0px 0px" }}>
+                    <RedateBox>
+                        신고
+                        <SirenImg src={Siren} />
+                    </RedateBox>
+                    <Regdate>{dayjs(Comment.regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
+                </div>
             </CommentUserProfileBox>
             <CommentInformationBox>
                 <CommentText>{Comment.content}</CommentText>
             </CommentInformationBox>
             <CommentreplyBox>
                 <CommentreplyAllBox>
-                    <CommentreplyIcon onClick={() => { }}><AiOutlineComment /></CommentreplyIcon>
-                    <CommentreplyCount>{reCommentCnt}</CommentreplyCount>
+                    <div onClick={() => { setReCommentHide(!reCommentHide) }} style={{ display: reCommentCnt > 0 ? "flex" : "none", fontWeight: "bold", margin: "2.9px 0px 0px 2px", fontSize: "15.5px", cursor: "pointer" }}>
+                        {reCommentHide === true ?
+                            <IoIosArrowDown size={18} style={{ margin: "0px 7px 0px 0px " }} />
+                            : <IoIosArrowUp size={18} style={{ margin: "0px 7px 0px 0px " }} />}
+                        {reCommentHide === true ? `댓글 ${reCommentCnt}개 보기` : "댓글 모두 숨기기"}
+                    </div>
                     <CommentreplyBtn
+                        ReCommentCnt={reCommentCnt}
                         LoginMaintain={loginMaintain}
                         UserInfo={userInfo} User={userInfo == null ?
                             null : userInfo.loginState}
@@ -230,7 +298,7 @@ const SingleComment = ({ Comment, profileImagePath }) => {
                         UserNicknameCheck={user.nickname}
                         UserNickname={userInfo == null ?
                             null : userInfo.nickName}
-                        Writer={writer}
+                        Writer={Comment.writer}
                         onClick={() => setOnReplyBtn(!onReplyBtn)}>
                         {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
                     </CommentreplyBtn>
@@ -255,50 +323,62 @@ const SingleComment = ({ Comment, profileImagePath }) => {
                 </CommentreplyLikeAllBox>
             </CommentreplyBox>
 
-            {onReplyBtn && (<ReCommentForm
-                LoginMaintain={loginMaintain}
+            <ReCommentSector>
+                {onReplyBtn && (<ReCommentForm
+                    LoginMaintain={loginMaintain}
 
-                UserInfo={userInfo} User={userInfo == null ?
-                    null : userInfo.loginState}
+                    UserInfo={userInfo} User={userInfo == null ?
+                        null : userInfo.loginState}
 
-                UserCheck={user.login_state}
+                    UserCheck={user.login_state}
 
-                UserNicknameCheck={user.nickname}
+                    UserNicknameCheck={user.nickname}
 
-                UserNickname={userInfo == null ?
-                    null : userInfo.nickName}
+                    UserNickname={userInfo == null ?
+                        null : userInfo.nickName}
 
-                Writer={writer}
+                    Writer={Comment.writer}
 
-                onSubmit={registerReComment}>
-                <ReCommentArea>
-                    <ReCommentProfile>
-                        <CommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
-                    </ReCommentProfile>
-                    <ReCommentInputBox>
-                        <Editer2
-                            placeholder="댓글을 입력해 주세요!"
-                            value={reCommentChangeValue}
-                            onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
-                            theme="snow"
-                            modules={modules}
-                            formats={formats}>
-                        </Editer2>
-                    </ReCommentInputBox>
-                </ReCommentArea>
-                <ReCommentBtnBox>
-                    <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
-                    <ReCommentBtn>댓글 쓰기</ReCommentBtn>
-                </ReCommentBtnBox>
-            </ReCommentForm>
-            )}
-
+                    onSubmit={registerReComment}>
+                    <ReCommentArea>
+                        <ReCommentProfile>
+                            <CommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                        </ReCommentProfile>
+                        <ReCommentInputBox>
+                            <Editer2
+                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
+                                value={reCommentChangeValue}
+                                onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                                theme="snow"
+                                modules={modules}
+                                formats={formats}>
+                            </Editer2>
+                        </ReCommentInputBox>
+                    </ReCommentArea>
+                    <ReCommentBtnBox>
+                        <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
+                        <ReCommentBtn>댓글 쓰기</ReCommentBtn>
+                    </ReCommentBtnBox>
+                </ReCommentForm>
+                )}
+                <ReCommentBox reCommentHide={reCommentHide}>
+                    {ReComment.length > 0 &&
+                        ReComment.map(ReComment => {
+                            return (
+                                <SingleReComment
+                                    ReComment={ReComment}
+                                />
+                            );
+                        })
+                    }
+                </ReCommentBox>
+            </ReCommentSector>
             <CommentLine />
         </UserCommentBox>
     );
 }
 
-export default SingleComment;
+export default SingleReply;
 
 const Editer2 = styled(ReactQuill)
     `
@@ -372,10 +452,9 @@ const CommentreplyLikeAllBox = styled.div
 
 const CommentreplyCount = styled.span
     `
-    margin: 3px 0px 0px 0px;
+    margin: 2.5px 0px 0px 0px;
     font-size: 17px;
     font-weight: bold;
-    cursor: pointer;
 `
 
 const CommentreplyLikeCount = styled.span
@@ -385,7 +464,7 @@ const CommentreplyLikeCount = styled.span
     font-weight: bold;
 `
 const OptionBox = styled.div
-`
+    `
     margin: 3px 0px 0px 15px;
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")) :
         (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")};
@@ -395,8 +474,7 @@ const OptionBox = styled.div
 const CommentreplyIcon = styled.i
     `
     margin: 0px 6px 0px 0px;
-    font-size: 23px;
-    cursor: pointer;    
+    font-size: 23px;   
 `
 
 const CommentreplyLikeBtn = styled.div
@@ -408,7 +486,7 @@ const CommentreplyLikeBtn = styled.div
 
 const CommentreplyBtn = styled.div
     `
-    margin: 4px 0px 0px 18px;
+    margin: ${props => props.ReCommentCnt > 0 ? "2px 0px 0px 18px" : "2px 0px 0px 1px"};
     font-weight: bold;
     cursor: pointer;
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
@@ -430,7 +508,7 @@ const CommentInformationBox = styled.div
 const CommentLine = styled.div
     `
     width: 100%;
-    border: 1px dashed black;
+    border: 1px dashed ${props => props.theme.textColor};
 `
 
 const CommentUserBox = styled.div
@@ -440,9 +518,9 @@ const CommentUserBox = styled.div
 
 const SirenImg = styled.img
     `
-    width: 25px;
-    height: 25px;
-    margin: 0px 0px 0px 7px;    
+    width: 20px;
+    height: 20px;
+    margin: 0px 0px 1px 7px;    
 `
 
 const TitleLine = styled.div
@@ -454,8 +532,9 @@ const TitleLine = styled.div
 
 const UserNicknameText = styled.span
     `
-    font-size: 20px;
-    margin: 0px 0px 5px 0px;
+    font-size: 21px;
+    margin: 0px 0px 6px 2px;
+    cursor: pointer;
 `
 
 const Regdate = styled.span
@@ -467,8 +546,9 @@ const RedateBox = styled.div
     `
     display: flex;
     align-items: end;
+    justify-content: end;
     cursor: pointer;
-    margin: 0px 0px 36px 0px;
+    margin: 0px -3px 10px 0px;
 `
 
 const CommentInformationAllBox = styled.div
@@ -483,16 +563,15 @@ const CommentUserProfileBox = styled.div
     display: flex;
     justify-content: space-between;
     margin: 0px 0px 17px 0px;
-}
 `
 
 const CommentUserProfile = styled.img
     `
-    width: 43px;
-    height: 43px;
+    width: 44px;
+    height: 44px;
     border: none;
     border-radius: 30px;
-    margin: 21px 0px 0px 0px;
+    margin: 23px 0px 0px 0px;
     cursor: pointer;
 `
 
@@ -509,8 +588,24 @@ const UserCommentBox = styled.div
 
 const ReCommentForm = styled.form
     `
-display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
         (props.UserCheck === "allok" ? "block" : "none")};
+    padding: 30px 0px 0px 0px;
+
+`
+
+const ReCommentBox = styled.div
+    `
+    display: ${props => props.reCommentHide === true ? "none" : "block"};
+    margin: 18px 0px 0px 0px;
+    padding: 0px 0px 25px 0px;
+`
+
+const ReCommentSector = styled.div
+    `
+    margin: 0px 12px 40px 12px;
+    padding: 0px 6px 0px 30px;
+    border-left: solid 3px ${props => props.theme.textColor};
 `
 
 const ReCommentInputBox = styled.div
@@ -518,7 +613,7 @@ const ReCommentInputBox = styled.div
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 2fr;
-    border: solid 2px ${props => props.theme.borderColor};
+    border: solid 2px ${props => props.theme.textColor};
     border-radius: 10px;
     overflow: hidden;
 `
@@ -558,7 +653,7 @@ const ReCommentArea = styled.div
 
 const ReCommentProfile = styled.div
     `
-    margin: -20px 11px 0px 0px;
+    margin: -20px 22px 0px 0px;
 `
 
 const CommentInputBox = styled.div
