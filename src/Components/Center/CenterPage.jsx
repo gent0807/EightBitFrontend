@@ -696,7 +696,7 @@ const GameSlideBox = styled.div
     z-index: 999;
 `
 
-const PopTitleBox = styled.h1
+const PopTitleBox = styled.h2
     `
     color: ${props => props.theme.textColor};
 `

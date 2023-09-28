@@ -36,8 +36,8 @@ const DarkModeBox = styled.div
 
 const darkTheme =
 {
-  backgroundColor: "#191919",
-  textColor: "#6a9dda",
+  backgroundColor: "rgba(25,25,25,1)",
+  textColor: "white",
   successColor: "#6a9dda",
   errorColor: "orange",
   borderColor: "#6a9dda",
