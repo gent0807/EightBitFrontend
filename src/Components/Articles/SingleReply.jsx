@@ -29,7 +29,7 @@ const SingleReply = ({ Comment}) => {
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
-    const [reCommentHide, setReCommentHide] = useState(false);
+    const [reCommentHide, setReCommentHide] = useState(true);
 
     const navigate = useNavigate();
 
