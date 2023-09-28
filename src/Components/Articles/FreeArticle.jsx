@@ -6,17 +6,20 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
+import { AiFillCheckCircle } from "react-icons/ai";
+import {BsDot} from "react-icons/bs";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
-import SingleComment from "./SingleComment";
+import SingleReply from "./SingleReply";
 import { FiShare } from "react-icons/fi";
 import { FcOpenedFolder } from "react-icons/fc";
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineComment } from "react-icons/ai";
+import {BiLogoDevTo} from "react-icons/bi";
 import Siren from "../../img/Siren/Siren.png";
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -34,6 +37,7 @@ const FreeArticle = () => {
     const [replyChangeValue, setReplyChangeValue] = useState("");
     const [replyChangeValue2, setReplyChangeValue2] = useState("");
     const [replycnt, setReplycnt] = useState(0);
+    const [recommentcnt, setReCommentCnt] = useState(0);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [totalComment, setTotalComment] = useState(0);
 
@@ -53,7 +57,7 @@ const FreeArticle = () => {
         },
         {
             id: 2,
-            writer: "ㅎㅇㄹ",
+            writer: "seopseop",
             content: "뭐라는 거임?"
         },
         {
@@ -205,6 +209,9 @@ const FreeArticle = () => {
             .catch(err => {
                 navigate("/NotFound");
             })
+
+        setReplycnt(Comment.length);
+        setTotalComment(Comment.length);
     }, []);
 
 
@@ -329,15 +336,25 @@ const FreeArticle = () => {
                     <UserProfileBox>
                         <UserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                         <WriteViewBox>
-                            <WriterText>{writer}</WriterText>
+                            <div style={{ display: "flex" }}>
+                                <WriterText>{writer}</WriterText>
+                                {regdate == updatedate ? "" :
+                                    <div style={{ display: "flex", margin: "7.2px 0px 0px 2px" }}>
+                                        <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
+                                        수정됨
+                                    </div>}
+
+                            </div>
                             <LikeViewBox>
-                                <LikeText><BsHandThumbsUp size={24} style={{ margin: "0px 0px -4px 0px" }}></BsHandThumbsUp> {likecount}</LikeText>
-                                <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px 0px" }}></AiOutlineEye> {visitcnt}</ViewText>
-                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px 0px" }}></AiOutlineComment> {replycnt}</ReplyText>
+                                <LikeText><BsHandThumbsUp size={22} style={{ margin: "0px 0px -4px 0px" }}></BsHandThumbsUp> {likecount}</LikeText>
+                                <BsDot style={{margin:"4px 1px 0px 0px"}}></BsDot>
+                                <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineEye> {visitcnt}</ViewText>
+                                <BsDot style={{margin:"4px 1px 0px 0px"}}></BsDot>
+                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment> {replycnt}</ReplyText>
                             </LikeViewBox>
                         </WriteViewBox>
                     </UserProfileBox>
-                    <div style={{margin:"0px 10px 0px 0px"}}>
+                    <div style={{ margin: "0px 10px 0px 0px" }}>
                         <RedateBox>
                             신고
                             <SirenImg src={Siren} />
@@ -395,13 +412,13 @@ const FreeArticle = () => {
                     <CommentForm2
                         OnReplyBtn={onReplyBtn}
                         onSubmit={registerReply}>
-                        <CommentArea>
+                        <CommentArea2>
                             <CommentProfile>
                                 <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
-                                    placeholder="댓글을 입력해 주세요!"
+                                    placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해주세요!"
                                     value={replyChangeValue2}
                                     onChange={(content, delta, source, editor) => setReplyChangeValue2(editor.getHTML())}
                                     theme="snow"
@@ -409,7 +426,7 @@ const FreeArticle = () => {
                                     formats={formats}>
                                 </Editer2>
                             </CommentInputBox>
-                        </CommentArea>
+                        </CommentArea2>
                         <CommentBtnBox>
                             <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
                             <CommentBtn>댓글 쓰기</CommentBtn>
@@ -417,9 +434,10 @@ const FreeArticle = () => {
                     </CommentForm2>
                 </InformationAllBox>
             </InformationBox>
-            <div style={{ display: "flex", fontSize: "20px", justifyContent: "start", margin: "0px 0px -22.5px 0px" }}>
-                총 {totalComment}개 댓글
-            </div>
+            {replycnt > 0 ?
+                <div style={{ display: "flex", fontSize: "20px", justifyContent: "start", margin: "0px 0px -22.5px 0px" }}>
+                    총 {totalComment}개 댓글
+                </div> : ""}
             <EditAllBox>
                 <LikeBtn
                     LoginMaintain={loginMaintain}
@@ -468,9 +486,8 @@ const FreeArticle = () => {
                 {Comment.length > 0 &&
                     Comment.map(Comment => {
                         return (
-                            <SingleComment
+                            <SingleReply
                                 Comment={Comment}
-                                profileImagePath={profileImagePath}
                             />
                         );
                     })
@@ -487,13 +504,15 @@ const FreeArticle = () => {
                         null : userInfo.nickName}
                     Writer={writer}
                     onSubmit={registerReply}>
-                    <CommentArea>
+                    <CommentArea
+                        TotalComment={totalComment}
+                    >
                         <CommentProfile>
                             <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer
-                                placeholder="댓글을 입력해 주세요!"
+                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
                                 value={replyChangeValue}
                                 onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
                                 theme="snow"
@@ -587,7 +606,7 @@ const Editer2 = styled(ReactQuill)
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
-        min-height: 70px;
+        min-height: 100px;
         font-size: 20px;
     }
 
@@ -617,6 +636,10 @@ const Editer2 = styled(ReactQuill)
     {
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
+    }
+
+    .quill > .ql-container > .ql-editor.ql-blank::before{
+        color: ${props => props.theme.textColor};
     }
 
     .ql-video
@@ -704,7 +727,7 @@ const CommentInformationBox = styled.div
 const CommentLine = styled.hr
     `
     width: 100%;
-    border: 0.1px solid black;
+    border: 0.1px solid ${props => props.theme.textColor};
 `
 
 const CommentUserBox = styled.div
@@ -714,13 +737,19 @@ const CommentUserBox = styled.div
 
 const CommentArea = styled.div
     `
+    grid-template-columns: 0fr 3fr ;
+    display: ${props => props.TotalComment > 0 ? "grid" : "none"};
+`
+
+const CommentArea2 = styled.div
+    `
     display: grid;
     grid-template-columns: 0fr 3fr ;
 `
 
 const CommentProfile = styled.div
     `
-    margin: -20px 11px 0px 0px;
+    margin: -20px 22px 0px 0px;
 `
 
 
@@ -735,9 +764,9 @@ const CommentUserProfile = styled.img
 
 const SirenImg = styled.img
     `
-    width: 25px;
-    height: 25px;
-    margin: 0px 0px 0px 7px;
+    width: 20px;
+    height: 20px;
+    margin: 0px 0px 1px 7px;
 `
 
 const TitleLine = styled.div
@@ -757,9 +786,10 @@ const CommentInputBox = styled.div
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 2fr;
-    border: solid 3px ${props => props.theme.borderColor};
+    border: solid 3px ${props => props.theme.textColor};
     border-radius: 10px;
     overflow: hidden;
+    
 `
 
 const CommentBtn = styled.button
@@ -839,17 +869,19 @@ const EditAllBox = styled.div
 
 const WriterText = styled.span
     `
-    font-size: 25px;
+    font-size: 24.5px;
+    cursor: pointer;
+    margin: 0px 0px 6.2px 0px;
 `
 
 const LikeText = styled.span
     `
-    margin: 0px 9px 0px 0px;
+    margin: 2px 2px 0px 0px;
 `
 
 const ViewText = styled.span
     `
-    margin: 0px 9px 0px 0px;    
+    margin: 0px 2px 0px 0px;    
 `
 
 const ReplyText = styled.span
@@ -891,12 +923,11 @@ const Information = styled.div
 
 const InformationAllBox = styled.div
     `
-    background: white;
     border-radius: 10px;
     padding: 10px;
     min-height: 200px;
     border: none;
-    box-shadow: 0 0 0 3px ${(props) => props.theme.WriterBorder} inset;
+    color: ${props => props.theme.textColor};
 `
 
 const FreeArticleBox = styled.div
@@ -934,7 +965,6 @@ const UserinformationBox = styled.div
     display: flex;
     justify-content: space-between;
     margin: 0px 0px 10px 0px;
-    color: ${props => props.theme.textColor};
     @media (min-width:250px) and (max-width:666px)
     {
         display: flex;
