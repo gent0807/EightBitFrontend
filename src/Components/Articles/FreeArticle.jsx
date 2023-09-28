@@ -40,15 +40,13 @@ const FreeArticle = () => {
     const [recommentcnt, setReCommentCnt] = useState(0);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [totalComment, setTotalComment] = useState(0);
-
+    const inputRef = useRef();
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
             src: "http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
-
-
     const [Comment, setComment] = useState([
         {
             id: 1,
@@ -67,7 +65,6 @@ const FreeArticle = () => {
         }
     ]);
 
-
     const navigate = useNavigate();
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
@@ -75,7 +72,6 @@ const FreeArticle = () => {
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     let likeMode = useRef(false);
-
     const quillRef = useRef(null);
 
     const toolbarOptions = [
@@ -212,6 +208,7 @@ const FreeArticle = () => {
 
         setReplycnt(Comment.length);
         setTotalComment(Comment.length);
+        inputRef.current.focus();
     }, []);
 
 
@@ -421,7 +418,6 @@ const FreeArticle = () => {
                                     placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해주세요!"
                                     value={replyChangeValue2}
                                     onChange={(content, delta, source, editor) => setReplyChangeValue2(editor.getHTML())}
-                                    theme="snow"
                                     modules={modules}
                                     formats={formats}>
                                 </Editer2>
@@ -512,12 +508,12 @@ const FreeArticle = () => {
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer
+                                ref={inputRef}
                                 placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
                                 value={replyChangeValue}
                                 onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
-                                theme="snow"
                                 modules={modules}
-                                formats={formats}>
+                                formats={formats}>  
                             </Editer>
                         </CommentInputBox>
                     </CommentArea>
@@ -549,6 +545,10 @@ const Editer = styled(ReactQuill)
     `
     display: flex;
     flex-direction: column;
+
+    .ql-editor.ql-blank::before{
+        color: ${props => props.theme.textColor};
+    }
 
     .ql-editor
     {
@@ -602,6 +602,10 @@ const Editer2 = styled(ReactQuill)
     `
     display: flex;
     flex-direction: column;
+    
+    .ql-editor.ql-blank::before{
+        color: ${props => props.theme.textColor};;
+    }
 
     .ql-editor
     {

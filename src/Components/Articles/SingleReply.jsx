@@ -11,7 +11,7 @@ import { AiOutlineComment } from "react-icons/ai";
 import { SlOptions } from "react-icons/sl";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import {BiLogoDevTo} from "react-icons/bi";
+import { BiLogoDevTo } from "react-icons/bi";
 import dayjs from "dayjs";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
@@ -19,17 +19,21 @@ import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
 import Siren from "../../img/Siren/Siren.png";
 import SingleReComment from "./SingleReComment";
+import { BsPencilSquare } from "react-icons/bs";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReply = ({ Comment}) => {
+const SingleReply = ({ Comment }) => {
 
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
-    const [reCommentHide, setReCommentHide] = useState(true);
+    const [reCommentHide, setReCommentHide] = useState(false);
+    const [replyStatusDivHide, setReplyStatusDivHide] = useState(true);
+    const [updateMode, setUpdateMode] = useState(false);
 
     const navigate = useNavigate();
 
@@ -250,81 +254,153 @@ const SingleReply = ({ Comment}) => {
 
     return (
         <UserCommentBox key={Comment.id}>
-            <CommentUserProfileBox>
-                <CommentUserBox>
-                    <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
-                    <CommentInformationAllBox>
-                        <div style={{ display: "flex" }}>
-                            <UserNicknameText>{Comment.writer}</UserNicknameText>
-                            {Comment.regdate == Comment.updatedate ? "" :
-                                <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
-                                    <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
-                                    수정됨
-                                </div>}
+            <div style={{ display: updateMode === true ? "none" : "block" }}>
+                <CommentUserProfileBox>
+                    <CommentUserBox>
+                        <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                        <CommentInformationAllBox>
+                            <div style={{ display: "flex" }}>
+                                <UserNicknameText>{Comment.writer}</UserNicknameText>
+                                {Comment.regdate == Comment.updatedate ? "" :
+                                    <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
+                                        <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
+                                        수정됨
+                                    </div>}
 
-                        </div>
-                        <div style={{ display: "flex" }}>
-                            <CommentreplyIcon><AiOutlineComment /></CommentreplyIcon>
-                            <CommentreplyCount>{reCommentCnt}</CommentreplyCount>
-                        </div>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                                <CommentreplyIcon><AiOutlineComment /></CommentreplyIcon>
+                                <CommentreplyCount>{reCommentCnt}</CommentreplyCount>
+                            </div>
 
-                    </CommentInformationAllBox>
-                </CommentUserBox>
-                <div style={{ margin: "15px 0px 0px 0px" }}>
-                    <RedateBox>
-                        신고
-                        <SirenImg src={Siren} />
-                    </RedateBox>
-                    <Regdate>{dayjs(Comment.regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
-                </div>
-            </CommentUserProfileBox>
-            <CommentInformationBox>
-                <CommentText>{Comment.content}</CommentText>
-            </CommentInformationBox>
-            <CommentreplyBox>
-                <CommentreplyAllBox>
-                    <div onClick={() => { setReCommentHide(!reCommentHide) }} style={{ display: reCommentCnt > 0 ? "flex" : "none", fontWeight: "bold", margin: "2.9px 0px 0px 2px", fontSize: "15.5px", cursor: "pointer" }}>
-                        {reCommentHide === true ?
-                            <IoIosArrowDown size={18} style={{ margin: "0px 7px 0px 0px " }} />
-                            : <IoIosArrowUp size={18} style={{ margin: "0px 7px 0px 0px " }} />}
-                        {reCommentHide === true ? `댓글 ${reCommentCnt}개 보기` : "댓글 모두 숨기기"}
+                        </CommentInformationAllBox>
+                    </CommentUserBox>
+                    <div style={{ margin: "15px 0px 0px 0px" }}>
+                        <RedateBox>
+                            신고
+                            <SirenImg src={Siren} />
+                        </RedateBox>
+                        <Regdate>{dayjs(Comment.regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
-                    <CommentreplyBtn
-                        ReCommentCnt={reCommentCnt}
+                </CommentUserProfileBox>
+                <CommentInformationBox>
+                    <CommentText>{Comment.content}</CommentText>
+                </CommentInformationBox>
+                <CommentreplyBox>
+                    <CommentreplyAllBox>
+                        <div onClick={() => { setReCommentHide(!reCommentHide) }} style={{ display: reCommentCnt > 0 ? "flex" : "none", fontWeight: "bold", margin: "2.9px 0px 0px 2px", fontSize: "15.5px", cursor: "pointer" }}>
+                            {reCommentHide === true ?
+                                <IoIosArrowDown size={18} style={{ margin: "0px 7px 0px 0px " }} />
+                                : <IoIosArrowUp size={18} style={{ margin: "0px 7px 0px 0px " }} />}
+                            {reCommentHide === true ? `댓글 ${reCommentCnt}개 보기` : "댓글 모두 숨기기"}
+                        </div>
+                        <CommentreplyBtn
+                            ReCommentCnt={reCommentCnt}
+                            LoginMaintain={loginMaintain}
+                            UserInfo={userInfo} User={userInfo == null ?
+                                null : userInfo.loginState}
+                            UserCheck={user.login_state}
+                            UserNicknameCheck={user.nickname}
+                            UserNickname={userInfo == null ?
+                                null : userInfo.nickName}
+                            Writer={Comment.writer}
+                            onClick={() => setOnReplyBtn(!onReplyBtn)}>
+                            {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
+                        </CommentreplyBtn>
+                    </CommentreplyAllBox>
+                    <div>
+                        <CommentreplyLikeAllBox>
+                            <CommentreplyLikeBtn
+                                onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}>
+                                {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
+                            </CommentreplyLikeBtn>
+                            <CommentreplyLikeCount>{likecount}</CommentreplyLikeCount>
+                            <OptionBox
+                                LoginMaintain={loginMaintain}
+                                User={user.login_state}
+                                UserInfo={userInfo}
+                                UserInfoState={userInfo == null ?
+                                    null : userInfo.loginState}
+                                UserInfoNickname={userInfo == null ?
+                                    (user.login_state === "allok" ?
+                                        user.nickname : null) : userInfo.nickName}
+                                Writer={Comment.writer}
+                                onClick={() => { setReplyStatusDivHide(!replyStatusDivHide) }}><SlOptions />
+                            </OptionBox>
+                        </CommentreplyLikeAllBox>
+                        <SettingReplyStatusDiv ReplyStatusDivHide={replyStatusDivHide}>
+                            <SettingReplyStatusBox>
+                                <UpdateReply onClick={() => {
+                                    setReplyStatusDivHide(true);
+                                    setUpdateMode(true);
+                                }}>
+                                    <span>
+                                        <BsPencilSquare size={20} style={{ margin: "0px 10px -5px 0px" }} />
+                                        수정하기
+                                    </span>
+                                </UpdateReply>
+                                <DeleteReply>
+                                    <span>
+                                        <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
+                                        삭제하기
+                                    </span>
+                                </DeleteReply>
+                            </SettingReplyStatusBox>
+                        </SettingReplyStatusDiv>
+                    </div>
+                </CommentreplyBox>
+                <ReCommentSector>
+                    {onReplyBtn && (<ReCommentForm
                         LoginMaintain={loginMaintain}
+
                         UserInfo={userInfo} User={userInfo == null ?
                             null : userInfo.loginState}
+
                         UserCheck={user.login_state}
+
                         UserNicknameCheck={user.nickname}
+
                         UserNickname={userInfo == null ?
                             null : userInfo.nickName}
-                        Writer={Comment.writer}
-                        onClick={() => setOnReplyBtn(!onReplyBtn)}>
-                        {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
-                    </CommentreplyBtn>
-                </CommentreplyAllBox>
-                <CommentreplyLikeAllBox>
-                    <CommentreplyLikeBtn
-                        onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}>
-                        {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
-                    </CommentreplyLikeBtn>
-                    <CommentreplyLikeCount>{likecount}</CommentreplyLikeCount>
-                    <OptionBox
-                        LoginMaintain={loginMaintain}
-                        User={user.login_state}
-                        UserInfo={userInfo}
-                        UserInfoState={userInfo == null ?
-                            null : userInfo.loginState}
-                        UserInfoNickname={userInfo == null ?
-                            (user.login_state === "allok" ?
-                                user.nickname : null) : userInfo.nickName}
-                        Writer={Comment.writer}><SlOptions />
-                    </OptionBox>
-                </CommentreplyLikeAllBox>
-            </CommentreplyBox>
 
-            <ReCommentSector>
-                {onReplyBtn && (<ReCommentForm
+                        Writer={Comment.writer}
+
+                        onSubmit={registerReComment}>
+                        <ReCommentArea>
+                            <ReCommentProfile>
+                                <CommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                            </ReCommentProfile>
+                            <ReCommentInputBox>
+                                <Editer2
+                                    placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
+                                    value={reCommentChangeValue}
+                                    onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                                    modules={modules}
+                                    formats={formats}>
+                                </Editer2>
+                            </ReCommentInputBox>
+                        </ReCommentArea>
+                        <ReCommentBtnBox>
+                            <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
+                            <ReCommentBtn>댓글 쓰기</ReCommentBtn>
+                        </ReCommentBtnBox>
+                    </ReCommentForm>
+                    )}
+                    <ReCommentBox reCommentHide={reCommentHide}>
+                        {ReComment.length > 0 &&
+                            ReComment.map(ReComment => {
+                                return (
+                                    <SingleReComment
+                                        ReComment={ReComment}
+                                    />
+                                );
+                            })
+                        }
+                    </ReCommentBox>
+                </ReCommentSector>
+            </div>
+            <div style={{display:updateMode===false ? "none": "block"}}>
+                <ReCommentForm
                     LoginMaintain={loginMaintain}
 
                     UserInfo={userInfo} User={userInfo == null ?
@@ -347,33 +423,21 @@ const SingleReply = ({ Comment}) => {
                         <ReCommentInputBox>
                             <Editer2
                                 placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
-                                value={reCommentChangeValue}
+                                value={Comment.content}
                                 onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
-                                theme="snow"
                                 modules={modules}
                                 formats={formats}>
                             </Editer2>
                         </ReCommentInputBox>
                     </ReCommentArea>
                     <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
-                        <ReCommentBtn>댓글 쓰기</ReCommentBtn>
+                        <CancelBtn type="button" onClick={() => {setUpdateMode(false)}}>취소</CancelBtn>
+                        <ReCommentBtn>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>
-                )}
-                <ReCommentBox reCommentHide={reCommentHide}>
-                    {ReComment.length > 0 &&
-                        ReComment.map(ReComment => {
-                            return (
-                                <SingleReComment
-                                    ReComment={ReComment}
-                                />
-                            );
-                        })
-                    }
-                </ReCommentBox>
-            </ReCommentSector>
+            </div>
             <CommentLine />
+
         </UserCommentBox>
     );
 }
@@ -384,6 +448,10 @@ const Editer2 = styled(ReactQuill)
     `
     display: flex;
     flex-direction: column;
+
+    .ql-editor.ql-blank::before{
+        color: ${props => props.theme.textColor};;
+    }
 
     .ql-editor
     {
@@ -448,6 +516,7 @@ const CommentreplyAllBox = styled.div
 const CommentreplyLikeAllBox = styled.div
     `
     display: flex;
+    margin: 0px 0px 0px 60px;
 `
 
 const CommentreplyCount = styled.span
@@ -486,8 +555,9 @@ const CommentreplyLikeBtn = styled.div
 
 const CommentreplyBtn = styled.div
     `
-    margin: ${props => props.ReCommentCnt > 0 ? "2px 0px 0px 18px" : "2px 0px 0px 1px"};
+    margin: ${props => props.ReCommentCnt > 0 ? "3px 0px 0px 18px" : "3px 0px 0px 1px"};
     font-weight: bold;
+    font-size: 14.5px;
     cursor: pointer;
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
         (props.UserCheck === "allok" ? "block" : "none")};
@@ -583,6 +653,7 @@ const CommentUserProfile2 = styled(CommentUserProfile)
 
 const UserCommentBox = styled.div
     `
+    
 
 `
 
@@ -600,6 +671,40 @@ const ReCommentBox = styled.div
     margin: 18px 0px 0px 0px;
     padding: 0px 0px 25px 0px;
 `
+
+const SettingReplyStatusDiv = styled.div
+    `
+    display: ${props => props.ReplyStatusDivHide === true ? "none" : "flex"};
+    justify-content: end;
+    position: absolute;
+    z-index: 2;
+    background: ${props => props.theme.backgroundColor};
+`
+
+const SettingReplyStatusBox = styled.div
+    `
+    border-radius: 6px;
+    border: solid 1px ${props => props.theme.textColor};
+`
+
+const UpdateReply = styled.div
+    `
+    margin: 9px 20px 12px 20px;
+    disply: flex;
+    cursor: pointer;
+    align-items: center;
+    font-size: 18px;
+`
+
+const DeleteReply = styled.div
+    `
+    margin: 9px 20px 10px 20px;
+    disply: flex;
+    cursor: pointer;
+    align-items: center;
+    font-size: 18px;
+`
+
 
 const ReCommentSector = styled.div
     `
