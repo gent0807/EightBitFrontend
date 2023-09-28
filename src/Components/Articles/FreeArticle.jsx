@@ -840,7 +840,6 @@ const DeleteBtn = styled.div
         (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")};
     cursor : pointer;
     margin: 0px 0px 0px 13px;
-    color: black;
 `
 
 const LikeBtn = styled.div
