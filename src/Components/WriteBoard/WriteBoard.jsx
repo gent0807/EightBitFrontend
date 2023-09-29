@@ -503,7 +503,7 @@ const SubmitBtn = styled.button
     `
     color: black;
     border: solid 3px ${props => props.theme.borderColor};
-    background: ${props => props.theme.DropDownListColor};
+    background: #6a9dda;
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;

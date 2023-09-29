@@ -11,7 +11,6 @@ import { AiOutlineComment } from "react-icons/ai";
 import { SlOptions } from "react-icons/sl";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import { BiLogoDevTo } from "react-icons/bi";
 import dayjs from "dayjs";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
@@ -20,6 +19,7 @@ import { ImageDrop } from "quill-image-drop-module";
 import Siren from "../../img/Siren/Siren.png";
 import SingleReComment from "./SingleReComment";
 import { BsPencilSquare } from "react-icons/bs";
+import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 
@@ -30,10 +30,14 @@ const SingleReply = ({ Comment }) => {
 
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
+    const [writerRole, setWriterRole] = useState("");
+    const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [reCommentHide, setReCommentHide] = useState(false);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(true);
     const [updateMode, setUpdateMode] = useState(false);
+    const [updateReplyText, setUpdateReplyText] = useState("");
+
 
     const navigate = useNavigate();
 
@@ -69,7 +73,7 @@ const SingleReply = ({ Comment }) => {
 
 
     useEffect(() => {
-        const getUsreProfileImagePath = (writer) => {
+        const getUserProfileImagePath = (writer) => {
             axios.get(`${ip}/Users/profileImgPath?nickname=${writer}`, {
 
             },
@@ -83,10 +87,30 @@ const SingleReply = ({ Comment }) => {
                     console.log(data);
                     setProfileImagePath(data);
                 })
-
         }
-        getUsreProfileImagePath(Comment.writer);
+
+        const getUserRole = (writer) => {
+            axios.get(`${ip}/Users/role?nickname=${writer}`, {
+
+            },
+                {
+
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then(data => {
+                    console.log(data);
+                    setWriterRole(data);
+                })
+        }
+
+
+
+        getUserProfileImagePath(Comment.writer);
+        getUserRole(Comment.writer);
         setReCommentCnt(ReComment.length);
+        setUpdateReplyText(Comment.content);
     }, []);
 
     const getNewLikeCount = async () => {
@@ -242,14 +266,37 @@ const SingleReply = ({ Comment }) => {
     const registerReComment = async (e) => {
         e.preventDefault();
 
-        if (reCommentChangeValue.length > 0) {
+        if (reCommentChangeValue.length > 11) {
 
         }
-        else if (reCommentChangeValue.length == 0) {
+        else if (reCommentChangeValue.length <= 11) {
             alert("댓글 내용을 입력해주세요.");
             return;
         }
 
+    }
+
+    const updateReply= async (e) => {
+        e.preventDefault();
+        if(updateReplyText.length > 11){
+            setUpdateMode(false);
+        }
+
+        else if(updateReplyText.length <=11){
+            alert("댓글을 입력해주세요.");
+            return;
+        }
+    }
+
+    const report1 = async () => {
+        setReportMode(false);
+    }
+
+    const report2 = async () => {
+        setReportMode(false);
+    }
+    const report3 = async () => {
+        setReportMode(false);
     }
 
     return (
@@ -261,6 +308,7 @@ const SingleReply = ({ Comment }) => {
                         <CommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{Comment.writer}</UserNicknameText>
+                                <BiLogoDevTo size={22} style={{ margin: "0px 0px 0px 2px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
                                 {Comment.regdate == Comment.updatedate ? "" :
                                     <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
                                         <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
@@ -278,8 +326,19 @@ const SingleReply = ({ Comment }) => {
                     <div style={{ margin: "15px 0px 0px 0px" }}>
                         <RedateBox>
                             신고
-                            <SirenImg src={Siren} />
+                            <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
+                        <ReportBox ReportMode={reportMode}>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report1}>
+                                욕설/비방 신고
+                            </div>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report2}>
+                                음란물 신고
+                            </div>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report3}>
+                                게시판 부적합 신고
+                            </div>
+                        </ReportBox>
                         <Regdate>{dayjs(Comment.regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
                 </CommentUserProfileBox>
@@ -399,7 +458,7 @@ const SingleReply = ({ Comment }) => {
                     </ReCommentBox>
                 </ReCommentSector>
             </div>
-            <div style={{display:updateMode===false ? "none": "block"}}>
+            <div style={{ display: updateMode === false ? "none" : "block" }}>
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -415,7 +474,7 @@ const SingleReply = ({ Comment }) => {
 
                     Writer={Comment.writer}
 
-                    onSubmit={registerReComment}>
+                    onSubmit={updateReply}>
                     <ReCommentArea>
                         <ReCommentProfile>
                             <CommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
@@ -423,15 +482,15 @@ const SingleReply = ({ Comment }) => {
                         <ReCommentInputBox>
                             <Editer2
                                 placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
-                                value={Comment.content}
-                                onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                                value={updateReplyText}
+                                onChange={(content, delta, source, editor) => setUpdateReplyText(editor.getHTML())}
                                 modules={modules}
                                 formats={formats}>
                             </Editer2>
                         </ReCommentInputBox>
                     </ReCommentArea>
                     <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => {setUpdateMode(false)}}>취소</CancelBtn>
+                        <CancelBtn type="button" onClick={() => { setUpdateMode(false) }}>취소</CancelBtn>
                         <ReCommentBtn>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>
@@ -621,6 +680,17 @@ const RedateBox = styled.div
     margin: 0px -3px 10px 0px;
 `
 
+const ReportBox = styled.div
+    `
+    border: 1px solid ${props => props.theme.textColor};
+    border-radius: 10px;
+    position: absolute;
+    z-index: 2;
+    background: ${props => props.theme.backgroundColor};
+    margin: 0px 0px 0px 10px;
+    display: ${props => props.ReportMode == false ? "none" : "block"};
+`
+
 const CommentInformationAllBox = styled.div
     `
     display: flex;
@@ -689,7 +759,7 @@ const SettingReplyStatusBox = styled.div
 
 const UpdateReply = styled.div
     `
-    margin: 9px 20px 12px 20px;
+    margin: 9px 20px 12px 18px;
     disply: flex;
     cursor: pointer;
     align-items: center;
@@ -698,7 +768,7 @@ const UpdateReply = styled.div
 
 const DeleteReply = styled.div
     `
-    margin: 9px 20px 10px 20px;
+    margin: 9px 20px 10px 18px;
     disply: flex;
     cursor: pointer;
     align-items: center;
