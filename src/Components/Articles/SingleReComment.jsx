@@ -187,7 +187,20 @@ const SingleReComment = ({ ReComment }) => {
         e.preventDefault();
 
         if(reCommentChangeValue.length>11){
+            /*   axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+                {
 
+                },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then((res) => {
+                    return res.data;
+                }
+                )
+                .then((data) => {
+                    dispatch(point); 
+                }); */
         }
         else if(reCommentChangeValue.length <= 11){
             alert("댓글을 입력해주세요.");
