@@ -277,7 +277,7 @@ const WriteBoard = () => {
             title: WriterChangeValue,
             content: EditerValue,
             writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-        },
+            },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
             })
@@ -285,14 +285,13 @@ const WriteBoard = () => {
                 return res.data
             })
             .then((data) => {
+                const writer=data.writer;
+                const regdate=data.regdate;
+
                 if (files.length == 0) {
-                    console.log("this is no file");
-                    navigate('/FreeArticle/' + data.writer + '/' + data.regdate);
-                    return;
+                
                 }
                 else if (files.length > 0) {
-                    const writer = data.writer;
-                    const regdate = data.regdate;
 
                     const fd = new FormData();
 
@@ -310,16 +309,28 @@ const WriteBoard = () => {
                         }
                         )
                         .then((data) => {
-                            console.log(data);
-                            console.log(userInfo.accessToken);
-                            console.log(user.access_token);
-                            navigate('/FreeArticle/' + writer + '/' + regdate);
+                           
                         }
-
                         )
 
 
                 }
+
+                axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=10`, 
+                {
+                    
+                },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then((res) => {
+                    return res.data;
+                }                 
+                )
+                .then((data) => {
+                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    return;
+                });
             })
 
     }

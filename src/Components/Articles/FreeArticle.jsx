@@ -50,7 +50,7 @@ const FreeArticle = () => {
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
-            src: "http://localhost:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+            src: "http://localhost:8033/EightBitBackend/resources/board/article/nomalfiles/image.png",
         }
     ]);
     const [Comment, setComment] = useState([
@@ -331,7 +331,7 @@ const FreeArticle = () => {
 
 
         if (replyChangeValue.length > 11) {
-            await axios.post(`${ip}/Board/freeReply`, {
+            await axios.post(`${ip}/Board/reply`, {
                 replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 original_writer: writer,
@@ -345,6 +345,20 @@ const FreeArticle = () => {
                 })
                 .then((data) => {
                     /* dispatch(replyText({replyText:replyChangeValue})); */
+                    axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+                        {
+
+                        },
+                        {
+                            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                        })
+                        .then((res) => {
+                            return res.data;
+                        }
+                        )
+                        .then((data) => {
+                            /* dispatch(point); */
+                        });
                 })
         }
         else if (replyChangeValue.length <= 11) {
@@ -468,7 +482,7 @@ const FreeArticle = () => {
                                 () => {
                                     setShareMode(!shareMode);
                                     setFileDownloadMode(false);
-                            }} />
+                                }} />
                         </ShareArea>
                         <FileDownloadBox FileDownloadMode={fileDownloadMode}>
                             <div style={{ margin: "10px 10px 10px 10px", display: "flex", cursor: "pointer" }} onClick={downloadFile}>

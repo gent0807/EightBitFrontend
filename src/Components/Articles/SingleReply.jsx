@@ -267,7 +267,20 @@ const SingleReply = ({ Comment }) => {
         e.preventDefault();
 
         if (reCommentChangeValue.length > 11) {
+          /*   axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+                {
 
+                },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then((res) => {
+                    return res.data;
+                }
+                )
+                .then((data) => {
+                    dispatch(point); 
+                }); */
         }
         else if (reCommentChangeValue.length <= 11) {
             alert("댓글 내용을 입력해주세요.");
@@ -276,13 +289,13 @@ const SingleReply = ({ Comment }) => {
 
     }
 
-    const updateReply= async (e) => {
+    const updateReply = async (e) => {
         e.preventDefault();
-        if(updateReplyText.length > 11){
+        if (updateReplyText.length > 11) {
             setUpdateMode(false);
         }
 
-        else if(updateReplyText.length <=11){
+        else if (updateReplyText.length <= 11) {
             alert("댓글을 입력해주세요.");
             return;
         }
