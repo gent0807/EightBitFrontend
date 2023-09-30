@@ -8,7 +8,8 @@ export const userSlice = createSlice({
         access_token: null,
         refresh_token: null,
         nickname: null,
-        profile_img_path: null
+        profile_img_path: null,
+        point: 0,
     },
     reducers: {
         clearLoginState: (state) => {
@@ -19,6 +20,7 @@ export const userSlice = createSlice({
             state.temp_token = null;
             state.nickname = null;
             state.profile_img_path = null;
+            state.point = 0;
             return state;
         },
         accessToken: (state, action) => {
@@ -36,11 +38,16 @@ export const userSlice = createSlice({
             state.refresh_token = action.payload.refreshToken;
             state.nickname = action.payload.nickName;
             state.profile_img_path = action.payload.profileImgPath;
+            state.point = action.payload.point;
+            return state;
+        },
+        point:(state, action) => {
+            state.point = action.payload.point;
             return state;
         }
 
     },
 });
 
-export const { clearLoginState, accessToken, refreshToken, loginState } = userSlice.actions;
+export const { clearLoginState, accessToken, refreshToken, loginState, point } = userSlice.actions;
 export default userSlice.reducer;

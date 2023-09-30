@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
@@ -16,6 +16,7 @@ import PDF from "../../img/FileList/pdf.png";
 import TXT from "../../img/FileList/txt.png";
 import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
+import { point } from '../Redux/User';
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -26,6 +27,7 @@ const WriteBoard = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     const loginMaintain = localStorage.getItem("loginMaintain");
@@ -277,7 +279,7 @@ const WriteBoard = () => {
             title: WriterChangeValue,
             content: EditerValue,
             writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-        },
+            },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
             })
@@ -285,14 +287,13 @@ const WriteBoard = () => {
                 return res.data
             })
             .then((data) => {
+                const writer=data.writer;
+                const regdate=data.regdate;
+
                 if (files.length == 0) {
-                    console.log("this is no file");
-                    navigate('/FreeArticle/' + data.writer + '/' + data.regdate);
-                    return;
+                
                 }
                 else if (files.length > 0) {
-                    const writer = data.writer;
-                    const regdate = data.regdate;
 
                     const fd = new FormData();
 
@@ -310,16 +311,29 @@ const WriteBoard = () => {
                         }
                         )
                         .then((data) => {
-                            console.log(data);
-                            console.log(userInfo.accessToken);
-                            console.log(user.access_token);
-                            navigate('/FreeArticle/' + writer + '/' + regdate);
+                           
                         }
-
                         )
 
 
                 }
+
+                axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=10`, 
+                {
+                    
+                },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then((res) => {
+                    return res.data;
+                }                 
+                )
+                .then((data) => {
+                    dispatch(point(data));
+                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    return;
+                });
             })
 
     }
@@ -503,7 +517,7 @@ const SubmitBtn = styled.button
     `
     color: black;
     border: solid 3px ${props => props.theme.borderColor};
-    background: ${props => props.theme.DropDownListColor};
+    background: #6a9dda;
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;

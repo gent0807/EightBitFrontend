@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useSelector } from "react-redux";
+import { useRecoilState, useRecoilValue  } from "recoil";
+import { freeReply } from "./Reply";
+import { freeReComment } from "./ReComment"; 
+import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
-import {BsDot} from "react-icons/bs";
+import { BsDot } from "react-icons/bs";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import ReactQuill, { Quill } from "react-quill";
@@ -19,8 +22,11 @@ import { FiShare } from "react-icons/fi";
 import { FcOpenedFolder } from "react-icons/fc";
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineComment } from "react-icons/ai";
-import {BiLogoDevTo} from "react-icons/bi";
+import { BiLogoDevTo } from "react-icons/bi";
+import { RiKakaoTalkFill } from "react-icons/ri";
+import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
+import { point } from "../Redux/User";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -34,10 +40,13 @@ const FreeArticle = () => {
     const [visitcnt, setVisitcnt] = useState(0);
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
+    const [writerRole, setWriterRole] = useState("");
+    const [reportMode, setReportMode] = useState(false);
+    const [shareMode, setShareMode] = useState(false);
+    const [fileDownloadMode, setFileDownloadMode] = useState(false);
     const [replyChangeValue, setReplyChangeValue] = useState("");
     const [replyChangeValue2, setReplyChangeValue2] = useState("");
     const [replycnt, setReplycnt] = useState(0);
-    const [recommentcnt, setReCommentCnt] = useState(0);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [totalComment, setTotalComment] = useState(0);
     const inputRef = useRef();
@@ -67,10 +76,16 @@ const FreeArticle = () => {
 
     const navigate = useNavigate();
     const ip = localStorage.getItem("ip");
-    const user = useSelector(state => state.user);
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    /* const registerReplyText= useSelector((state) => state.registerReplyText); */
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
+
+    const [replyText, setReplyText] = useRecoilState(freeReply);
+    const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
+
     let likeMode = useRef(false);
     const quillRef = useRef(null);
 
@@ -168,7 +183,7 @@ const FreeArticle = () => {
 
     useEffect(() => {
 
-        const getUsreProfileImagePath = (writer) => {
+        const getUsereProfileImagePath = (writer) => {
             axios.get(`${ip}/Users/profileImgPath?nickname=${writer}`, {
 
             },
@@ -181,6 +196,24 @@ const FreeArticle = () => {
                 .then(data => {
                     console.log(data);
                     setProfileImagePath(data);
+                })
+
+        }
+
+
+        const getUserRole = (writer) => {
+            axios.get(`${ip}/Users/role?nickname=${writer}`, {
+
+            },
+                {
+
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then(data => {
+                    console.log(data);
+                    setWriterRole(data);
                 })
 
         }
@@ -199,8 +232,8 @@ const FreeArticle = () => {
                 setUpdatedate(data.updatedate);
                 setVisitcnt(data.visitcnt);
                 setLikecount(data.likecount);
-                console.log(data);
-                getUsreProfileImagePath(writer);
+                getUsereProfileImagePath(writer);
+                getUserRole(writer);
             })
             .catch(err => {
                 navigate("/NotFound");
@@ -209,7 +242,8 @@ const FreeArticle = () => {
         setReplycnt(Comment.length);
         setTotalComment(Comment.length);
         inputRef.current.focus();
-    }, []);
+    }, [replyText, reCommentText]);
+
 
 
 
@@ -296,15 +330,14 @@ const FreeArticle = () => {
         else return;
     }
 
-    const replyChange=(e)=>{
-        setReplyChangeValue(e.target.value);
-    }
+
 
     const registerReply = async (e) => {
         e.preventDefault();
 
-        if (replyChangeValue.length > 0) {
-            await axios.post(`${ip}/Board/freeReply`, {
+
+        if (replyChangeValue.length > 11) {
+            await axios.post(`${ip}/Board/reply`, {
                 replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 original_writer: writer,
@@ -313,17 +346,80 @@ const FreeArticle = () => {
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
                 })
-                .then(res => {
+                .then((res) => {
                     return res.data;
                 })
-                .then(data => {
+                .then((data) => {
+                    /* dispatch(replyText({replyText:replyChangeValue})); */
+                    axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+                        {
 
+                        },
+                        {
+                            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                        })
+                        .then((res) => {
+                            return res.data;
+                        }
+                        )
+                        .then((data) => {
+                           dispatch(point(data));
+                        });
                 })
         }
-        else if (replyChangeValue.length == 0) {
+        else if (replyChangeValue.length <= 11) {
             alert("댓글 내용을 입력해주세요.");
             return;
         }
+    }
+
+    const registerReply2 = async (e) => {
+        e.preventDefault();
+        console.log(replyChangeValue2.length);
+        if (replyChangeValue2.length > 11) {
+            await axios.post(`${ip}/Board/freeReply`, {
+                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: replyChangeValue2,
+                original_writer: writer,
+                original_regdate: regdate
+            },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
+                    /* dispatch(replyText({replyText:replyChangeValue2})); */
+                })
+        }
+        else if (replyChangeValue2.length <= 11) {
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
+    }
+
+    const report1 = async () => {
+        setReportMode(false);
+    }
+
+    const report2 = async () => {
+        setReportMode(false);
+    }
+    const report3 = async () => {
+        setReportMode(false);
+    }
+
+    const kakaoShare = async () => {
+        setShareMode(false);
+    }
+
+    const instagramShare = async () => {
+        setShareMode(false);
+    }
+
+    const downloadFile = async () => {
+        setFileDownloadMode(false);
     }
 
     return (
@@ -335,6 +431,7 @@ const FreeArticle = () => {
                         <WriteViewBox>
                             <div style={{ display: "flex" }}>
                                 <WriterText>{writer}</WriterText>
+                                <BiLogoDevTo size={25} style={{ margin: "0px 0px 0px 0px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
                                 {regdate == updatedate ? "" :
                                     <div style={{ display: "flex", margin: "7.2px 0px 0px 2px" }}>
                                         <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
@@ -344,9 +441,9 @@ const FreeArticle = () => {
                             </div>
                             <LikeViewBox>
                                 <LikeText><BsHandThumbsUp size={22} style={{ margin: "0px 0px -4px 0px" }}></BsHandThumbsUp> {likecount}</LikeText>
-                                <BsDot style={{margin:"4px 1px 0px 0px"}}></BsDot>
+                                <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
                                 <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineEye> {visitcnt}</ViewText>
-                                <BsDot style={{margin:"4px 1px 0px 0px"}}></BsDot>
+                                <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
                                 <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment> {replycnt}</ReplyText>
                             </LikeViewBox>
                         </WriteViewBox>
@@ -354,8 +451,19 @@ const FreeArticle = () => {
                     <div style={{ margin: "0px 10px 0px 0px" }}>
                         <RedateBox>
                             신고
-                            <SirenImg src={Siren} />
+                            <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
+                        <ReportBox ReportMode={reportMode}>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report1}>
+                                욕설/비방 신고
+                            </div>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report2}>
+                                음란물 신고
+                            </div>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report3}>
+                                게시판 부적합 신고
+                            </div>
+                        </ReportBox>
                         <DayBox>
                             <RegdateText>등록일 : {dayjs(regdate).format("YY.MM.DD hh:mm")}</RegdateText>
                             <DayBoxBar></DayBoxBar>
@@ -370,9 +478,33 @@ const FreeArticle = () => {
                     <TitleBox>
                         <TitleText>{title}</TitleText>
                         <ShareArea>
-                            <FcOpenedFolder size={35} style={{ margin: "0px 17px -4px 0px", cursor: "pointer" }} />
-                            <FiShare size={30} style={{ cursor: "pointer" }} />
+                            <FcOpenedFolder size={35} style={{ margin: "0px 17px -4px 0px", cursor: "pointer" }} onClick={
+                                () => {
+                                    setFileDownloadMode(!fileDownloadMode);
+                                    setShareMode(false);
+                                }
+                            } />
+                            <FiShare size={30} style={{ cursor: "pointer" }} onClick={
+                                () => {
+                                    setShareMode(!shareMode);
+                                    setFileDownloadMode(false);
+                                }} />
                         </ShareArea>
+                        <FileDownloadBox FileDownloadMode={fileDownloadMode}>
+                            <div style={{ margin: "10px 10px 10px 10px", display: "flex", cursor: "pointer" }} onClick={downloadFile}>
+                                첨부파일
+                            </div>
+                        </FileDownloadBox>
+                        <ShareBox ShareMode={shareMode}>
+                            <div style={{ margin: "10px 10px 10px 10px", display: "flex", cursor: "pointer" }} onClick={kakaoShare}>
+                                <RiKakaoTalkFill size={22} style={{ margin: "0px 10px 0px 0px" }} />
+                                kakao
+                            </div>
+                            <div style={{ margin: "10px 10px 10px 10px", display: "flex", cursor: "pointer" }} onClick={instagramShare}>
+                                <RiInstagramFill size={22} style={{ margin: "0px 10px 0px 0px" }} />
+                                instagram
+                            </div>
+                        </ShareBox>
                     </TitleBox>
                     <TitleLine></TitleLine>
                     <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
@@ -408,7 +540,7 @@ const FreeArticle = () => {
                     </div>
                     <CommentForm2
                         OnReplyBtn={onReplyBtn}
-                        onSubmit={registerReply}>
+                        onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
                                 <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
@@ -466,6 +598,9 @@ const FreeArticle = () => {
                     UserInfoNickname={userInfo == null ?
                         (user.login_state === "allok" ?
                             user.nickname : null) : userInfo.nickName}
+                    UserInfoRole={userInfo == null ?
+                        (user.login_state === "allok" ?
+                            user.role : null) : userInfo.role}
                     Writer={writer}
                     onClick={deleteArticle}
                 >
@@ -513,7 +648,7 @@ const FreeArticle = () => {
                                 value={replyChangeValue}
                                 onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
                                 modules={modules}
-                                formats={formats}>  
+                                formats={formats}>
                             </Editer>
                         </CommentInputBox>
                     </CommentArea>
@@ -776,7 +911,7 @@ const SirenImg = styled.img
 const TitleLine = styled.div
     `
     height: 1px;
-    background: black;
+    background: ${props => props.theme.textColor};
     margin: 15px 0px 15px 0px;
 `
 
@@ -840,8 +975,8 @@ const TitleBox = styled.div
 
 const DeleteBtn = styled.div
     `
-    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")) :
-        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")};
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
     cursor : pointer;
     margin: 0px 0px 0px 13px;
 `
@@ -906,6 +1041,18 @@ const RedateBox = styled.div
     justify-content: end;
     cursor: pointer;
     margin: 0px 0px 17px 0px;
+`
+
+const ReportBox = styled.div
+    `
+    border: 1px solid ${props => props.theme.textColor};
+    border-radius: 10px;
+    position: absolute;
+    z-index: 2;
+    background: ${props => props.theme.backgroundColor};
+    margin: 0px 0px 0px 260px;
+    display: ${props => props.ReportMode == false ? "none" : "block"};
+    
 `
 
 const EditText = styled.span
@@ -1040,3 +1187,28 @@ const ShareArea = styled.div
     display: flex;
     align-items: end;
 `
+
+const FileDownloadBox = styled.div
+    `
+    border: 1px solid ${props => props.theme.textColor};
+    border-radius: 10px;
+    position: absolute;
+    z-index: 2;
+    margin: 40px 0px 0px 1112px;
+    background: ${props => props.theme.backgroundColor};
+    font-size: 18px;
+    display: ${props => props.FileDownloadMode == false ? "none" : "block"};
+`
+
+const ShareBox = styled.div
+    `
+    border: 1px solid ${props => props.theme.textColor};
+    border-radius: 10px;
+    position: absolute;
+    z-index: 2;
+    margin: 40px 0px 0px 1132px;
+    background: ${props => props.theme.backgroundColor};
+    font-size: 18px;
+    display: ${props => props.ShareMode == false ? "none" : "block"};
+`
+

@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { freeReply } from "./Reply";
+import { freeReComment } from "./ReComment";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -11,7 +14,6 @@ import { AiOutlineComment } from "react-icons/ai";
 import { SlOptions } from "react-icons/sl";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import { BiLogoDevTo } from "react-icons/bi";
 import dayjs from "dayjs";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
@@ -20,7 +22,9 @@ import { ImageDrop } from "quill-image-drop-module";
 import Siren from "../../img/Siren/Siren.png";
 import SingleReComment from "./SingleReComment";
 import { BsPencilSquare } from "react-icons/bs";
+import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { point } from "../Redux/User";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -30,19 +34,27 @@ const SingleReply = ({ Comment }) => {
 
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
+    const [writerRole, setWriterRole] = useState("");
+    const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [reCommentHide, setReCommentHide] = useState(false);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(true);
     const [updateMode, setUpdateMode] = useState(false);
+    const [updateReplyText, setUpdateReplyText] = useState("");
+
 
     const navigate = useNavigate();
 
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     let likeMode = useRef(false);
+
+    const [replyText, setReplyText] = useRecoilState(freeReply);
+    const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
 
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [reCommentCnt, setReCommentCnt] = useState(0);
@@ -69,7 +81,7 @@ const SingleReply = ({ Comment }) => {
 
 
     useEffect(() => {
-        const getUsreProfileImagePath = (writer) => {
+        const getUserProfileImagePath = (writer) => {
             axios.get(`${ip}/Users/profileImgPath?nickname=${writer}`, {
 
             },
@@ -83,11 +95,31 @@ const SingleReply = ({ Comment }) => {
                     console.log(data);
                     setProfileImagePath(data);
                 })
-
         }
-        getUsreProfileImagePath(Comment.writer);
+
+        const getUserRole = (writer) => {
+            axios.get(`${ip}/Users/role?nickname=${writer}`, {
+
+            },
+                {
+
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then(data => {
+                    console.log(data);
+                    setWriterRole(data);
+                })
+        }
+
+
+
+        getUserProfileImagePath(Comment.writer);
+        getUserRole(Comment.writer);
         setReCommentCnt(ReComment.length);
-    }, []);
+        setUpdateReplyText(Comment.content);
+    }, [replyText, reCommentText]);
 
     const getNewLikeCount = async () => {
         axios.get(`${ip}/Board/article/like?writer=${Comment.writer}&regdate=${Comment.regdate}`, {
@@ -242,14 +274,50 @@ const SingleReply = ({ Comment }) => {
     const registerReComment = async (e) => {
         e.preventDefault();
 
-        if (reCommentChangeValue.length > 0) {
+        if (reCommentChangeValue.length > 11) {
+            /*  axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+               {
 
+               },
+               {
+                   headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+               })
+               .then((res) => {
+                   return res.data;
+               }
+               )
+               .then((data) => {
+                   dispatch(point(data));
+               });  */
         }
-        else if (reCommentChangeValue.length == 0) {
+        else if (reCommentChangeValue.length <= 11) {
             alert("댓글 내용을 입력해주세요.");
             return;
         }
 
+    }
+
+    const updateReply = async (e) => {
+        e.preventDefault();
+        if (updateReplyText.length > 11) {
+            setUpdateMode(false);
+        }
+
+        else if (updateReplyText.length <= 11) {
+            alert("댓글을 입력해주세요.");
+            return;
+        }
+    }
+
+    const report1 = async () => {
+        setReportMode(false);
+    }
+
+    const report2 = async () => {
+        setReportMode(false);
+    }
+    const report3 = async () => {
+        setReportMode(false);
     }
 
     return (
@@ -261,6 +329,7 @@ const SingleReply = ({ Comment }) => {
                         <CommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{Comment.writer}</UserNicknameText>
+                                <BiLogoDevTo size={22} style={{ margin: "0px 0px 0px 2px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
                                 {Comment.regdate == Comment.updatedate ? "" :
                                     <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
                                         <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
@@ -278,8 +347,19 @@ const SingleReply = ({ Comment }) => {
                     <div style={{ margin: "15px 0px 0px 0px" }}>
                         <RedateBox>
                             신고
-                            <SirenImg src={Siren} />
+                            <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
+                        <ReportBox ReportMode={reportMode}>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report1}>
+                                욕설/비방 신고
+                            </div>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report2}>
+                                음란물 신고
+                            </div>
+                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report3}>
+                                게시판 부적합 신고
+                            </div>
+                        </ReportBox>
                         <Regdate>{dayjs(Comment.regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
                 </CommentUserProfileBox>
@@ -324,16 +404,32 @@ const SingleReply = ({ Comment }) => {
                                 UserInfoNickname={userInfo == null ?
                                     (user.login_state === "allok" ?
                                         user.nickname : null) : userInfo.nickName}
+                                UserInfoRole={userInfo == null ?
+                                    (user.login_state === "allok" ?
+                                        user.role : null) : userInfo.role}
                                 Writer={Comment.writer}
                                 onClick={() => { setReplyStatusDivHide(!replyStatusDivHide) }}><SlOptions />
                             </OptionBox>
                         </CommentreplyLikeAllBox>
                         <SettingReplyStatusDiv ReplyStatusDivHide={replyStatusDivHide}>
                             <SettingReplyStatusBox>
-                                <UpdateReply onClick={() => {
-                                    setReplyStatusDivHide(true);
-                                    setUpdateMode(true);
-                                }}>
+                                <UpdateReply
+                                    LoginMaintain={loginMaintain}
+                                    User={user.login_state}
+                                    UserInfo={userInfo}
+                                    UserInfoState={userInfo == null ?
+                                        null : userInfo.loginState}
+                                    UserInfoNickname={userInfo == null ?
+                                        (user.login_state === "allok" ?
+                                            user.nickname : null) : userInfo.nickName}
+                                    UserInfoRole={userInfo == null ?
+                                        (user.login_state === "allok" ?
+                                            user.role : null) : userInfo.role}
+                                    Writer={Comment.writer}
+                                    onClick={() => {
+                                        setReplyStatusDivHide(true);
+                                        setUpdateMode(true);
+                                    }}>
                                     <span>
                                         <BsPencilSquare size={20} style={{ margin: "0px 10px -5px 0px" }} />
                                         수정하기
@@ -399,7 +495,7 @@ const SingleReply = ({ Comment }) => {
                     </ReCommentBox>
                 </ReCommentSector>
             </div>
-            <div style={{display:updateMode===false ? "none": "block"}}>
+            <div style={{ display: updateMode === false ? "none" : "block" }}>
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -415,7 +511,7 @@ const SingleReply = ({ Comment }) => {
 
                     Writer={Comment.writer}
 
-                    onSubmit={registerReComment}>
+                    onSubmit={updateReply}>
                     <ReCommentArea>
                         <ReCommentProfile>
                             <CommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
@@ -423,15 +519,15 @@ const SingleReply = ({ Comment }) => {
                         <ReCommentInputBox>
                             <Editer2
                                 placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
-                                value={Comment.content}
-                                onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                                value={updateReplyText}
+                                onChange={(content, delta, source, editor) => setUpdateReplyText(editor.getHTML())}
                                 modules={modules}
                                 formats={formats}>
                             </Editer2>
                         </ReCommentInputBox>
                     </ReCommentArea>
                     <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => {setUpdateMode(false)}}>취소</CancelBtn>
+                        <CancelBtn type="button" onClick={() => { setUpdateMode(false) }}>취소</CancelBtn>
                         <ReCommentBtn>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>
@@ -535,8 +631,8 @@ const CommentreplyLikeCount = styled.span
 const OptionBox = styled.div
     `
     margin: 3px 0px 0px 15px;
-    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")) :
-        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")};
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
     cursor : pointer;
 `
 
@@ -621,6 +717,17 @@ const RedateBox = styled.div
     margin: 0px -3px 10px 0px;
 `
 
+const ReportBox = styled.div
+    `
+    border: 1px solid ${props => props.theme.textColor};
+    border-radius: 10px;
+    position: absolute;
+    z-index: 2;
+    background: ${props => props.theme.backgroundColor};
+    margin: 0px 0px 0px 10px;
+    display: ${props => props.ReportMode == false ? "none" : "block"};
+`
+
 const CommentInformationAllBox = styled.div
     `
     display: flex;
@@ -689,8 +796,9 @@ const SettingReplyStatusBox = styled.div
 
 const UpdateReply = styled.div
     `
-    margin: 9px 20px 12px 20px;
-    disply: flex;
+    margin: 9px 20px 12px 18px;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "flex" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "flex" : "none") : "none")};
     cursor: pointer;
     align-items: center;
     font-size: 18px;
@@ -698,7 +806,7 @@ const UpdateReply = styled.div
 
 const DeleteReply = styled.div
     `
-    margin: 9px 20px 10px 20px;
+    margin: 9px 20px 10px 18px;
     disply: flex;
     cursor: pointer;
     align-items: center;
