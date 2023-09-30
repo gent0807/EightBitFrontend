@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
@@ -16,6 +16,7 @@ import PDF from "../../img/FileList/pdf.png";
 import TXT from "../../img/FileList/txt.png";
 import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
+import { point } from '../Redux/User';
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -26,6 +27,7 @@ const WriteBoard = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     const loginMaintain = localStorage.getItem("loginMaintain");
@@ -328,6 +330,7 @@ const WriteBoard = () => {
                 }                 
                 )
                 .then((data) => {
+                    dispatch(point(data));
                     navigate('/FreeArticle/' + writer + '/' + regdate);
                     return;
                 });

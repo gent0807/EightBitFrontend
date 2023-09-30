@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useRecoilState, useRecoilValue  } from "recoil";
+import { freeReply } from "./Reply";
+import { freeReComment } from "./ReComment"; 
 import { useSelector, useDispatch } from "react-redux";
-import { createStore} from "redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -24,6 +26,7 @@ import { BiLogoDevTo } from "react-icons/bi";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
+import { point } from "../Redux/User";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -72,13 +75,17 @@ const FreeArticle = () => {
     ]);
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const ip = localStorage.getItem("ip");
     const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
     /* const registerReplyText= useSelector((state) => state.registerReplyText); */
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
+
+    const [replyText, setReplyText] = useRecoilState(freeReply);
+    const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
+
     let likeMode = useRef(false);
     const quillRef = useRef(null);
 
@@ -225,7 +232,6 @@ const FreeArticle = () => {
                 setUpdatedate(data.updatedate);
                 setVisitcnt(data.visitcnt);
                 setLikecount(data.likecount);
-                console.log(data);
                 getUsereProfileImagePath(writer);
                 getUserRole(writer);
             })
@@ -236,7 +242,7 @@ const FreeArticle = () => {
         setReplycnt(Comment.length);
         setTotalComment(Comment.length);
         inputRef.current.focus();
-    }, []);
+    }, [replyText, reCommentText]);
 
 
 
@@ -357,7 +363,7 @@ const FreeArticle = () => {
                         }
                         )
                         .then((data) => {
-                            /* dispatch(point); */
+                           dispatch(point(data));
                         });
                 })
         }
@@ -592,6 +598,9 @@ const FreeArticle = () => {
                     UserInfoNickname={userInfo == null ?
                         (user.login_state === "allok" ?
                             user.nickname : null) : userInfo.nickName}
+                    UserInfoRole={userInfo == null ?
+                        (user.login_state === "allok" ?
+                            user.role : null) : userInfo.role}
                     Writer={writer}
                     onClick={deleteArticle}
                 >
@@ -966,8 +975,8 @@ const TitleBox = styled.div
 
 const DeleteBtn = styled.div
     `
-    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")) :
-        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")};
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
     cursor : pointer;
     margin: 0px 0px 0px 13px;
 `

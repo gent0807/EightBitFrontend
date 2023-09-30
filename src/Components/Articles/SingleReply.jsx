@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { freeReply } from "./Reply";
+import { freeReComment } from "./ReComment";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -21,6 +24,7 @@ import SingleReComment from "./SingleReComment";
 import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { point } from "../Redux/User";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -43,10 +47,14 @@ const SingleReply = ({ Comment }) => {
 
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     let likeMode = useRef(false);
+
+    const [replyText, setReplyText] = useRecoilState(freeReply);
+    const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
 
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [reCommentCnt, setReCommentCnt] = useState(0);
@@ -111,7 +119,7 @@ const SingleReply = ({ Comment }) => {
         getUserRole(Comment.writer);
         setReCommentCnt(ReComment.length);
         setUpdateReplyText(Comment.content);
-    }, []);
+    }, [replyText, reCommentText]);
 
     const getNewLikeCount = async () => {
         axios.get(`${ip}/Board/article/like?writer=${Comment.writer}&regdate=${Comment.regdate}`, {
@@ -267,20 +275,20 @@ const SingleReply = ({ Comment }) => {
         e.preventDefault();
 
         if (reCommentChangeValue.length > 11) {
-          /*   axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                {
+            /*  axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+               {
 
-                },
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                })
-                .then((res) => {
-                    return res.data;
-                }
-                )
-                .then((data) => {
-                    dispatch(point); 
-                }); */
+               },
+               {
+                   headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+               })
+               .then((res) => {
+                   return res.data;
+               }
+               )
+               .then((data) => {
+                   dispatch(point(data));
+               });  */
         }
         else if (reCommentChangeValue.length <= 11) {
             alert("댓글 내용을 입력해주세요.");
@@ -396,16 +404,32 @@ const SingleReply = ({ Comment }) => {
                                 UserInfoNickname={userInfo == null ?
                                     (user.login_state === "allok" ?
                                         user.nickname : null) : userInfo.nickName}
+                                UserInfoRole={userInfo == null ?
+                                    (user.login_state === "allok" ?
+                                        user.role : null) : userInfo.role}
                                 Writer={Comment.writer}
                                 onClick={() => { setReplyStatusDivHide(!replyStatusDivHide) }}><SlOptions />
                             </OptionBox>
                         </CommentreplyLikeAllBox>
                         <SettingReplyStatusDiv ReplyStatusDivHide={replyStatusDivHide}>
                             <SettingReplyStatusBox>
-                                <UpdateReply onClick={() => {
-                                    setReplyStatusDivHide(true);
-                                    setUpdateMode(true);
-                                }}>
+                                <UpdateReply
+                                    LoginMaintain={loginMaintain}
+                                    User={user.login_state}
+                                    UserInfo={userInfo}
+                                    UserInfoState={userInfo == null ?
+                                        null : userInfo.loginState}
+                                    UserInfoNickname={userInfo == null ?
+                                        (user.login_state === "allok" ?
+                                            user.nickname : null) : userInfo.nickName}
+                                    UserInfoRole={userInfo == null ?
+                                        (user.login_state === "allok" ?
+                                            user.role : null) : userInfo.role}
+                                    Writer={Comment.writer}
+                                    onClick={() => {
+                                        setReplyStatusDivHide(true);
+                                        setUpdateMode(true);
+                                    }}>
                                     <span>
                                         <BsPencilSquare size={20} style={{ margin: "0px 10px -5px 0px" }} />
                                         수정하기
@@ -607,8 +631,8 @@ const CommentreplyLikeCount = styled.span
 const OptionBox = styled.div
     `
     margin: 3px 0px 0px 15px;
-    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")) :
-        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "block" : "none") : "none")};
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
     cursor : pointer;
 `
 
@@ -773,7 +797,8 @@ const SettingReplyStatusBox = styled.div
 const UpdateReply = styled.div
     `
     margin: 9px 20px 12px 18px;
-    disply: flex;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "flex" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "flex" : "none") : "none")};
     cursor: pointer;
     align-items: center;
     font-size: 18px;
