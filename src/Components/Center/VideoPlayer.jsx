@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from "styled-components";
 import VideoSample from "../../Video/video.mp4"
-import VideoSample2 from "../../Video/video2.mkv"
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, EffectCoverflow, Autoplay } from "swiper";
 import "swiper/swiper.scss";
@@ -10,6 +9,10 @@ import "swiper/components/pagination/pagination.scss";
 import videoLogo from "../../Video/videoLogo.png"
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { RiInformationLine } from "react-icons/ri";
+import { AiOutlineDownload } from "react-icons/ai";
+import { VscMute } from "react-icons/vsc";
+import { VscUnmute } from "react-icons/vsc";
 import ReactPlayer from 'react-player'
 import { Link, useNavigate } from "react-router-dom";
 import test from "../../img/MainSlide/test.png";
@@ -26,7 +29,54 @@ const VideoPlayler = () => {
     const navNextRef = useRef(null);
     const PaginatonRef = useRef(null);
     const [swiper, setSwiper] = useState(null);
+    const [soundOnOff, setSoundOnOff] = useState(true);
     const [mainImageIndex, setMainImageIndex] = useState(0);
+    const [playtime, setPlaytime] = useState(0);
+
+    const [Slide, setSlide] = useState([
+        {
+            id: 1,
+            img: test2,
+            Logo: videoLogo,
+            informaion: "켜두기만 하면 캐릭터가 성장한다!",
+            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            title: "방치모험가"
+        },
+        {
+            id: 2,
+            img: test,
+            Logo: videoLogo,
+            informaion: "일단달려! 드릴에게 도망쳐라!",
+            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            title: "도망런"
+        },
+        {
+            id: 3,
+            img: test4,
+            Logo: videoLogo,
+            informaion: "수학을 풀고 강해져라!",
+            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            title: "매스리볼버"
+        },
+        {
+            id: 4,
+            img: test3,
+            Logo: videoLogo,
+            informaion: "무기 강화로 당신의 운을 시험하라!",
+            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            title: "럭키웨폰"
+        },
+        {
+            id: 5,
+            img: test1,
+            Logo: videoLogo,
+            informaion: "인간이 되고 싶은 뱀파이어...",
+            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            title: "로드 오브 토파즈"
+        },
+    ]);
+
+    console.log(Slide[mainImageIndex].video.duration);
 
     const swiperParams =
     {
@@ -101,56 +151,69 @@ const VideoPlayler = () => {
         effect: "coverflow",
     }
 
-    const [Slide, setSlide] = useState([
-        {
-            id: 1,
-            img: test,
-            informaion: "질리지 않는 8비트 공식게임!",
-            video: VideoSample,
-            title: "모험가키우기"
-        },
-        {
-            id: 2,
-            img: test1,
-            informaion: "질리지 않는 8비트 공식게임!",
-            video: VideoSample2,
-            title: "모험가키우기"
-        },
-        {
-            id: 3,
-            img: test2,
-            informaion: "질리지 않는 8비트 공식게임!",
-            video: VideoSample,
-            title: "모험가키우기"
-        },
-        {
-            id: 4,
-            img: test3,
-            informaion: "질리지 않는 8비트 공식게임!",
-            video: VideoSample,
-            title: "모험가키우기"
-        },
-        {
-            id: 5,
-            img: test4,
-            informaion: "질리지 않는 8비트 공식게임!",
-            video: VideoSample2,
-            title: "모험가키우기"
-        },
-    ]);
+    console.log(playtime);
 
     return (
         <VideoAllBox>
-            <VideoBackground>
-            </VideoBackground>
-            <VideoPlay
-                url={Slide[mainImageIndex].video}
-                loop={true}
-                muted={true}
-                playing={true}
-                width={"100%"}
-                height={"48.5vw"}
-            />
+
+            <VideoBox>
+                <VideoBackground>
+                </VideoBackground>
+                <VideoInformation>
+                    <VideoInformationLogoBox>
+                        <VideoInformationLogo src={Slide[mainImageIndex].Logo} />
+                    </VideoInformationLogoBox>
+
+                    <VideoInformationTextBox>
+                        <VideoInformationText>
+                            {Slide[mainImageIndex].informaion}
+                        </VideoInformationText>
+                    </VideoInformationTextBox>
+
+                    <VideoInformationDownLoadBtnBox>
+
+                        <VideoDownloadBtn>
+                            <VideoDownloadBtnIcon>
+                                <RiInformationLine />
+                            </VideoDownloadBtnIcon>
+                            <VideoDownloadBtnText>
+                                다운로드
+                            </VideoDownloadBtnText>
+                        </VideoDownloadBtn>
+
+                        <Link to="/">
+                            <VideoInformationBtn>
+                                <VideoInformationBtnIcon>
+                                    <AiOutlineDownload />
+                                </VideoInformationBtnIcon>
+                                <VideoInformationBtnText>
+                                    상세정보
+                                </VideoInformationBtnText>
+                            </VideoInformationBtn>
+                        </Link>
+
+                        <MuteBtn>
+                            <MuteBtnIcon onClick={() => setSoundOnOff(!soundOnOff)}>
+                                {soundOnOff ? <VscMute /> : <VscUnmute />}
+                            </MuteBtnIcon>
+                        </MuteBtn>
+
+                    </VideoInformationDownLoadBtnBox>
+
+                </VideoInformation>
+                <VideoPlay
+                    url={Slide[mainImageIndex].video}
+                    loop={true}
+                    onProgress={
+                        (progress) => {setPlaytime(progress.playedSeconds)}
+                    }
+                    muted={soundOnOff}
+                    playing={true}
+                    width={"100%"}
+                    height={"48.5vw"}
+                />
+                </VideoBox>
+
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
@@ -183,6 +246,133 @@ const VideoPlayler = () => {
 }
 
 export default VideoPlayler
+
+const MuteBtn = styled.div
+`
+    margin: 0px 0px 0px 1vw;
+    font-size: 1.3vw;
+    cursor: pointer;
+    svg
+    {
+        color: white;
+    }
+`
+
+const MuteBtnIcon = styled.i
+`
+`
+
+const VideoInformationBtnIcon = styled.i
+`
+    display: flex;
+    align-items: center;
+    font-size: 1.3vw;
+    svg
+    {
+        color: white;
+    }
+`
+
+const VideoDownloadBtnIcon = styled.i
+`
+    display: flex;
+    align-items: center;
+    font-size: 1.3vw;
+    svg
+    {
+        color: white;
+    }
+`
+
+const VideoInformationDownLoadBtnBox = styled.div
+`
+    display: flex;
+    margin: 2vw 0px 0px 0px;
+    justify-content: start;
+
+    a
+    {
+        text-decoration: none;
+    }
+`
+
+const VideoInformationBtn = styled.div
+`
+    display: flex;
+    background: #007aff;
+    margin: 0px 0px 0px 1vw;
+    padding: 0.8vw;
+    white-space: nowrap;
+    border-radius: 5px;
+`
+
+const VideoInformationBtnText = styled.div
+`
+    color: white;
+    font-size: 1.3vw;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 1px 0px 0px 10px;
+`
+
+const VideoDownloadBtn = styled.div
+`
+    display: flex;
+    background: #007aff;
+    padding: 0.8vw;
+    white-space: nowrap;
+    border-radius: 5px;
+`
+
+const VideoDownloadBtnText = styled.span
+`
+    color: white;
+    font-size: 1.3vw;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 1px 0px 0px 10px;
+`
+
+const VideoInformationLogoBox = styled.div
+`
+
+`
+
+const VideoInformationLogo = styled.img
+`
+    width: 100%;
+    height: 100%;
+}
+`
+
+const VideoInformationTextBox = styled.div
+`
+    text-align: start;
+`
+
+const VideoInformationText = styled.span
+`
+    color: ${props => props.theme.CenterTextColor};
+    font-size: 1.5vw;
+    font-weight: bold;
+    transition: color 0.5s;
+`
+
+const VideoBox = styled.div
+`
+
+`
+
+const VideoInformation = styled.div
+`
+    position: absolute;
+    top: 12vw;
+    right: 11%;
+    width: 25vw;
+    height: 12vw;
+    border-radius: 18px;
+    z-index: 999;
+`
 
 const Slider = styled(Swiper)
     `
@@ -373,6 +563,7 @@ const VideoBackground = styled.div
 
 const VideoAllBox = styled.div
     `
+    position: relative;
 `
 
 const ButtonBox = styled.div
