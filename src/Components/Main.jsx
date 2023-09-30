@@ -18,7 +18,7 @@ const Main = () => {
   const isDarkmode = useRecoilValue(isDark);
 
   return (
-    <ThemeProvider theme={isDarkmode ? lightTheme : darkTheme}>
+    <ThemeProvider theme={isDarkmode ? darkTheme : lightTheme}>
       <GlobalStyle />
       <DarkModeBox>
         <Router />
@@ -36,6 +36,8 @@ const DarkModeBox = styled.div
 
 const darkTheme =
 {
+  CenterBorderColor: "#007aff",
+  CenterTextColor: "#007aff",
   backgroundColor: "rgba(25,25,25,1)",
   textColor: "white",
   successColor: "#6a9dda",
@@ -52,7 +54,9 @@ const darkTheme =
 
 const lightTheme =
 {
-  backgroundColor: "white",
+  CenterBorderColor: "white",
+  CenterTextColor: "white",
+  backgroundColor: "rgba(255,255,255,1)",
   textColor: "black",
   successColor: "green",
   errorColor: "red",

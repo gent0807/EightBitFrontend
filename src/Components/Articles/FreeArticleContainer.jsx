@@ -10,6 +10,7 @@ let Containerbox = styled.div
     padding: 267px 0px 54px 0px;
     color: ${props=>props.theme.textColor};
     background: ${props => props.theme.backgroundColor};
+    transition: background 0.5s;
     @media (min-width:250px) and (max-width:666px)
     {
         padding: 358px 0px 54px 0px;

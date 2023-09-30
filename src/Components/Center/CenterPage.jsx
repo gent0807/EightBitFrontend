@@ -23,10 +23,28 @@ const CenterPage = () => {
     const navNextRef = useRef(null);
     const navPrevRef2 = useRef(null);
     const navNextRef2 = useRef(null);
+    const navPrevRef3 = useRef(null);
+    const navNextRef3 = useRef(null);
+    const navPrevRef4 = useRef(null);
+    const navNextRef4 = useRef(null);
+    const navPrevRef5 = useRef(null);
+    const navNextRef5 = useRef(null);
+    const navPrevRef6 = useRef(null);
+    const navNextRef6 = useRef(null);
+    const navPrevRef7 = useRef(null);
+    const navNextRef7 = useRef(null);
+
     const PaginatonRef = useRef(null);
     const PaginatonRef2 = useRef(null);
-    const [swiper, setSwiper] = useState(null);
-    const [mainImageIndex, setMainImageIndex] = useState(0);
+    const PaginatonRef3 = useRef(null);
+    const PaginatonRef4 = useRef(null);
+    const PaginatonRef5 = useRef(null);
+    const PaginatonRef6 = useRef(null);
+    const PaginatonRef7 = useRef(null);
+
+    const [ swiper, setSwiper ] = useState(null);
+    const [ mainImageIndex, setMainImageIndex ] = useState(0);
+
     const [Slide, setSlide] = useState([
         {
             id: 1,
@@ -129,176 +147,6 @@ const CenterPage = () => {
 
     const swiperParams =
     {
-        spaceBetween: 30,
-        slidesPerView: 5,
-        loop: true,
-        loopAdditionalSlides: 1,
-        breakpoints: {
-            250: {
-                spaceBetween: 30,
-                slidesPerView: 1,
-            },
-            561: {
-                spaceBetween: 30,
-                slidesPerView: 2,
-            },
-            794: {
-                spaceBetween: 30,
-                slidesPerView: 3,
-            },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
-            1342: {
-                spaceBetween: 30,
-                slidesPerView: 5,
-            }
-        },
-        navigation: true,
-        pagination: { clickable: true },
-        onSwiper: setSwiper,
-        allowSlidePrev: { Slidelength: false },
-    }
-
-    const swiperParams2 =
-    {
-        spaceBetween: 30,
-        slidesPerView: 5,
-        loop: true,
-        loopAdditionalSlides: 1,
-        breakpoints: {
-            250: {
-                spaceBetween: 30,
-                slidesPerView: 1,
-            },
-            561: {
-                spaceBetween: 30,
-                slidesPerView: 2,
-            },
-            794: {
-                spaceBetween: 30,
-                slidesPerView: 3,
-            },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
-            1342: {
-                spaceBetween: 30,
-                slidesPerView: 5,
-            }
-        },
-        navigation: true,
-        pagination: { clickable: true },
-        onSwiper: setSwiper,
-        allowSlidePrev: { Slidelength: false },
-    }
-
-    const swiperParams3 =
-    {
-        spaceBetween: 30,
-        slidesPerView: 5,
-        loop: true,
-        loopAdditionalSlides: 1,
-        breakpoints: {
-            250: {
-                spaceBetween: 30,
-                slidesPerView: 1,
-            },
-            561: {
-                spaceBetween: 30,
-                slidesPerView: 2,
-            },
-            794: {
-                spaceBetween: 30,
-                slidesPerView: 3,
-            },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
-            1342: {
-                spaceBetween: 30,
-                slidesPerView: 5,
-            }
-        },
-        navigation: true,
-        pagination: { clickable: true },
-        onSwiper: setSwiper,
-        allowSlidePrev: { Slidelength: false },
-    }
-
-    const swiperParams4 =
-    {
-        spaceBetween: 30,
-        slidesPerView: 5,
-        loop: true,
-        loopAdditionalSlides: 1,
-        breakpoints: {
-            250: {
-                spaceBetween: 30,
-                slidesPerView: 1,
-            },
-            561: {
-                spaceBetween: 30,
-                slidesPerView: 2,
-            },
-            794: {
-                spaceBetween: 30,
-                slidesPerView: 3,
-            },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
-            1342: {
-                spaceBetween: 30,
-                slidesPerView: 5,
-            }
-        },
-        navigation: true,
-        pagination: { clickable: true },
-        onSwiper: setSwiper,
-        allowSlidePrev: { Slidelength: false },
-    }
-
-    const swiperParams5 =
-    {
-        spaceBetween: 30,
-        slidesPerView: 5,
-        loop: true,
-        loopAdditionalSlides: 1,
-        breakpoints: {
-            250: {
-                spaceBetween: 30,
-                slidesPerView: 1,
-            },
-            561: {
-                spaceBetween: 30,
-                slidesPerView: 2,
-            },
-            794: {
-                spaceBetween: 30,
-                slidesPerView: 3,
-            },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
-            1342: {
-                spaceBetween: 30,
-                slidesPerView: 5,
-            }
-        },
-        navigation: true,
-        pagination: { clickable: true },
-        onSwiper: setSwiper,
-        allowSlidePrev: { Slidelength: false },
-    }
-
-    const AdSwiper =
-    {
         navigation: { prevEl: navPrevRef.current, nextEl: navNextRef.current },
         pagination: {
             el: PaginatonRef.current,
@@ -311,15 +159,37 @@ const CenterPage = () => {
             swiper.activeIndex = mainImageIndex
             swiper.navigation.update();
         },
-        onSwiper: setSwiper,
-        onSlideChange: (e) => setMainImageIndex(e.activeIndex),
-        allowSlidePrev: { Slidelength: false },
-        slidesPerView: 1,
+        spaceBetween: 30,
+        slidesPerView: 5,
         loop: true,
         loopAdditionalSlides: 1,
+        onSwiper: setSwiper,
+        allowSlidePrev: { Slidelength: false },
+        breakpoints: {
+            250: {
+                spaceBetween: 30,
+                slidesPerView: 1,
+            },
+            561: {
+                spaceBetween: 30,
+                slidesPerView: 2,
+            },
+            794: {
+                spaceBetween: 30,
+                slidesPerView: 3,
+            },
+            1060: {
+                spaceBetween: 30,
+                slidesPerView: 4,
+            },
+            1342: {
+                spaceBetween: 30,
+                slidesPerView: 5,
+            }
+        },
     }
 
-    const AdSwiper2 =
+    const swiperParams2 =
     {
         navigation: { prevEl: navPrevRef2.current, nextEl: navNextRef2.current },
         pagination: {
@@ -333,6 +203,204 @@ const CenterPage = () => {
             swiper.activeIndex = mainImageIndex
             swiper.navigation.update();
         },
+        spaceBetween: 30,
+        slidesPerView: 5,
+        loop: true,
+        loopAdditionalSlides: 1,
+        onSwiper: setSwiper,
+        allowSlidePrev: { Slidelength: false },
+        breakpoints: {
+            250: {
+                spaceBetween: 30,
+                slidesPerView: 1,
+            },
+            561: {
+                spaceBetween: 30,
+                slidesPerView: 2,
+            },
+            794: {
+                spaceBetween: 30,
+                slidesPerView: 3,
+            },
+            1060: {
+                spaceBetween: 30,
+                slidesPerView: 4,
+            },
+            1342: {
+                spaceBetween: 30,
+                slidesPerView: 5,
+            }
+        },
+    }
+
+    const swiperParams3 =
+    {
+        navigation: { prevEl: navPrevRef4.current, nextEl: navNextRef4.current },
+        pagination: {
+            el: PaginatonRef4.current,
+            type: 'bullets',
+            clickable: true
+        },
+        onBeforeInit: (swiper) => {
+            swiper.params.navigation.prevEl = navPrevRef4.current;
+            swiper.params.navigation.nextEl = navNextRef4.current;
+            swiper.activeIndex = mainImageIndex
+            swiper.navigation.update();
+        },
+        spaceBetween: 30,
+        slidesPerView: 5,
+        loop: true,
+        loopAdditionalSlides: 1,
+        onSwiper: setSwiper,
+        allowSlidePrev: { Slidelength: false },
+        breakpoints: {
+            250: {
+                spaceBetween: 30,
+                slidesPerView: 1,
+            },
+            561: {
+                spaceBetween: 30,
+                slidesPerView: 2,
+            },
+            794: {
+                spaceBetween: 30,
+                slidesPerView: 3,
+            },
+            1060: {
+                spaceBetween: 30,
+                slidesPerView: 4,
+            },
+            1342: {
+                spaceBetween: 30,
+                slidesPerView: 5,
+            }
+        },
+    }
+
+    const swiperParams4 =
+    {
+        navigation: { prevEl: navPrevRef5.current, nextEl: navNextRef5.current },
+        pagination: {
+            el: PaginatonRef5.current,
+            type: 'bullets',
+            clickable: true
+        },
+        onBeforeInit: (swiper) => {
+            swiper.params.navigation.prevEl = navPrevRef5.current;
+            swiper.params.navigation.nextEl = navNextRef5.current;
+            swiper.activeIndex = mainImageIndex
+            swiper.navigation.update();
+        },
+        spaceBetween: 30,
+        slidesPerView: 5,
+        loop: true,
+        loopAdditionalSlides: 1,
+        onSwiper: setSwiper,
+        allowSlidePrev: { Slidelength: false },
+        breakpoints: {
+            250: {
+                spaceBetween: 30,
+                slidesPerView: 1,
+            },
+            561: {
+                spaceBetween: 30,
+                slidesPerView: 2,
+            },
+            794: {
+                spaceBetween: 30,
+                slidesPerView: 3,
+            },
+            1060: {
+                spaceBetween: 30,
+                slidesPerView: 4,
+            },
+            1342: {
+                spaceBetween: 30,
+                slidesPerView: 5,
+            }
+        },
+    }
+    
+    const swiperParams5 =
+    {
+        spaceBetween: 30,
+        slidesPerView: 5,
+        loop: true,
+        loopAdditionalSlides: 1,
+        navigation: { prevEl: navPrevRef6.current, nextEl: navNextRef6.current },
+        pagination: {
+            el: PaginatonRef6.current,
+            type: 'bullets',
+            clickable: true
+        },
+        onBeforeInit: (swiper) => {
+            swiper.params.navigation.prevEl = navPrevRef6.current;
+            swiper.params.navigation.nextEl = navNextRef6.current;
+            swiper.activeIndex = mainImageIndex
+            swiper.navigation.update();
+        },
+        onSwiper: setSwiper,
+        breakpoints: {
+            250: {
+                spaceBetween: 30,
+                slidesPerView: 1,
+            },
+            561: {
+                spaceBetween: 30,
+                slidesPerView: 2,
+            },
+            794: {
+                spaceBetween: 30,
+                slidesPerView: 3,
+            },
+            1060: {
+                spaceBetween: 30,
+                slidesPerView: 4,
+            },
+            1342: {
+                spaceBetween: 30,
+                slidesPerView: 5,
+            }
+        },
+        allowSlidePrev: { Slidelength: false },
+    }
+
+    const AdSwiper =
+    {
+        navigation: { prevEl: navPrevRef3.current, nextEl: navNextRef3.current },
+        pagination: {
+            el: PaginatonRef3.current,
+            type: 'bullets',
+            clickable: true
+        },
+        onBeforeInit: (swiper) => {
+            swiper.params.navigation.prevEl = navPrevRef3.current;
+            swiper.params.navigation.nextEl = navNextRef3.current;
+            swiper.activeIndex = mainImageIndex
+            swiper.navigation.update();
+        },
+        onSwiper: setSwiper,
+        onSlideChange: (e) => setMainImageIndex(e.activeIndex),
+        allowSlidePrev: { Slidelength: false },
+        slidesPerView: 1,
+        loop: true,
+        loopAdditionalSlides: 1,
+    }
+
+    const AdSwiper2 =
+    {
+        navigation: { prevEl: navPrevRef7.current, nextEl: navNextRef7.current },
+        pagination: {
+            el: PaginatonRef7.current,
+            type: 'bullets',
+            clickable: true
+        },
+        onBeforeInit: (swiper) => {
+            swiper.params.navigation.prevEl = navPrevRef7.current;
+            swiper.params.navigation.nextEl = navNextRef7.current;
+            swiper.activeIndex = mainImageIndex
+            swiper.navigation.update();
+        },
         onSwiper: setSwiper,
         onSlideChange: (e) => setMainImageIndex(e.activeIndex),
         allowSlidePrev: { Slidelength: false },
@@ -343,171 +411,225 @@ const CenterPage = () => {
 
     return (
         <SwiperBox>
+
             <VideoPlayler />
+
             <AllContentBox>
-            <GameSlideBox>
-                <PopTitleBox>장르별 게임</PopTitleBox>
-                <Slider {...swiperParams} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
-                        <SwiperSlide key={id}>
-                            <Link to='/'>
-                                <SlideAllBox>
-                                    <SlideBox>
-                                        <ImgBox src={img} />
-                                    </SlideBox>
+                <GameSlideBox>
 
-                                    <AllBox>
-                                        <InformaionBoxTextBox>
-                                            <TitleBox>{title}</TitleBox>
-                                            <InformaionBox>{informaion}</InformaionBox>
-                                        </InformaionBoxTextBox>
-                                    </AllBox>
-                                </SlideAllBox>
-                            </Link>
-                        </SwiperSlide>
-                    ))}
-                </Slider>
-                <PopTitleBox>장르별 게임</PopTitleBox>
-                <Slider {...swiperParams2} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
-                        <SwiperSlide key={id}>
-                            <Link to='/'>
-                                <SlideAllBox>
-                                    <SlideBox>
-                                        <ImgBox src={img} />
-                                    </SlideBox>
+                    <PopTitleBox>장르별 게임</PopTitleBox>
 
-                                    <AllBox>
-                                        <InformaionBoxTextBox>
-                                            <TitleBox>{title}</TitleBox>
-                                            <InformaionBox>{informaion}</InformaionBox>
-                                        </InformaionBoxTextBox>
-                                    </AllBox>
-                                </SlideAllBox>
-                            </Link>
-                        </SwiperSlide>
-                    ))}
-                </Slider>
-            </GameSlideBox>
-            <AdContainerBox>
-                <AdSlider {...AdSwiper} ref={setSwiper}>
-                    {AdSlide.length !== 0 && AdSlide.map(({ id, img, informaion, title }) => (
-                        <SwiperSlide key={id}>
-                            <ImgAdBox src={img} />
-                            <AdAllBox>
-                                <AdTitleBox>{title}</AdTitleBox>
-                                <AdInformaionBox>{informaion}</AdInformaionBox>
-                            </AdAllBox>
-                        </SwiperSlide>
-                    ))}
-                </AdSlider>
-                <ButtonBox>
-                    <PrevBtn ref={navPrevRef}><IoIosArrowBack /></PrevBtn>
-                    <PaginationBtn ref={PaginatonRef}></PaginationBtn>
-                    <NextBtn ref={navNextRef}><IoIosArrowForward /></NextBtn>
-                </ButtonBox>
-            </AdContainerBox>
-            <GameSlideBox>
-                <PopTitleBox>인기 게임 차트</PopTitleBox>
-                <Slider {...swiperParams3} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
-                        <SwiperSlide key={id}>
-                            <Link to='/'>
-                                <SlideAllBox>
-                                    <SlideBox>
-                                        <ImgBox src={img} />
-                                    </SlideBox>
+                    <Slider {...swiperParams} ref={setSwiper}>
+                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                            <SwiperSlide key={id}>
+                                <Link to='/'>
+                                    <SlideAllBox>
+                                        <SlideBox>
+                                            <ImgBox src={img} />
+                                        </SlideBox>
 
-                                    <AllBox>
-                                        <InformaionBoxTextBox>
-                                            <TitleBox>{title}</TitleBox>
-                                            <InformaionBox>{informaion}</InformaionBox>
-                                        </InformaionBoxTextBox>
-                                    </AllBox>
-                                </SlideAllBox>
-                            </Link>
-                        </SwiperSlide>
-                    ))}
-                </Slider>
-                <PopTitleBox>인기 게임 차트</PopTitleBox>
-                <Slider {...swiperParams4} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
-                        <SwiperSlide key={id}>
-                            <Link to='/'>
-                                <SlideAllBox>
-                                    <SlideBox>
-                                        <ImgBox src={img} />
-                                    </SlideBox>
+                                        <AllBox>
+                                            <InformaionBoxTextBox>
+                                                <TitleBox>{title}</TitleBox>
+                                                <InformaionBox>{informaion}</InformaionBox>
+                                            </InformaionBoxTextBox>
+                                        </AllBox>
+                                    </SlideAllBox>
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Slider>
 
-                                    <AllBox>
-                                        <InformaionBoxTextBox>
-                                            <TitleBox>{title}</TitleBox>
-                                            <InformaionBox>{informaion}</InformaionBox>
-                                        </InformaionBoxTextBox>
-                                    </AllBox>
-                                </SlideAllBox>
-                            </Link>
-                        </SwiperSlide>
-                    ))}
-                </Slider>
-                <PopTitleBox>인기 게임 차트</PopTitleBox>
-                <Slider {...swiperParams5} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
-                        <SwiperSlide key={id}>
-                            <Link to='/'>
-                                <SlideAllBox>
-                                    <SlideBox>
-                                        <ImgBox src={img} />
-                                    </SlideBox>
+                    <ButtonBox>
+                        <PrevBtn ref={navPrevRef}><IoIosArrowBack /></PrevBtn>
+                        <PaginationBtn ref={PaginatonRef}></PaginationBtn>
+                        <NextBtn ref={navNextRef}><IoIosArrowForward /></NextBtn>
+                    </ButtonBox>
 
-                                    <AllBox>
-                                        <InformaionBoxTextBox>
-                                            <TitleBox>{title}</TitleBox>
-                                            <InformaionBox>{informaion}</InformaionBox>
-                                        </InformaionBoxTextBox>
-                                    </AllBox>
-                                </SlideAllBox>
-                            </Link>
-                        </SwiperSlide>
-                    ))}
-                </Slider>
-            </GameSlideBox>
-            <AdContainerBox>
-                <AdSlideBox>
-                <AdSlider {...AdSwiper2} ref={setSwiper}>
-                    {AdSlide2.length !== 0 && AdSlide.map(({ id, img, informaion, title }) => (
-                        <SwiperSlide key={id}>
-                            <ImgAdBox src={img} />
-                            <AdAllBox>
-                                <AdTitleBox>{title}</AdTitleBox>
-                                <AdInformaionBox>{informaion}</AdInformaionBox>
-                            </AdAllBox>
-                        </SwiperSlide>
-                    ))}
-                </AdSlider>
-                <ButtonBox>
-                    <PrevBtn ref={navPrevRef2}><IoIosArrowBack /></PrevBtn>
-                    <PaginationBtn ref={PaginatonRef2}></PaginationBtn>
-                    <NextBtn ref={navNextRef2}><IoIosArrowForward /></NextBtn>
-                </ButtonBox>
-                </AdSlideBox>
-            </AdContainerBox>
+                    <PopTitleBox>장르별 게임</PopTitleBox>
+
+                    <Slider {...swiperParams2} ref={setSwiper}>
+                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                            <SwiperSlide key={id}>
+                                <Link to='/'>
+                                    <SlideAllBox>
+                                        <SlideBox>
+                                            <ImgBox src={img} />
+                                        </SlideBox>
+
+                                        <AllBox>
+                                            <InformaionBoxTextBox>
+                                                <TitleBox>{title}</TitleBox>
+                                                <InformaionBox>{informaion}</InformaionBox>
+                                            </InformaionBoxTextBox>
+                                        </AllBox>
+                                    </SlideAllBox>
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Slider>
+
+                    <ButtonBox>
+                        <PrevBtn ref={navPrevRef2}><IoIosArrowBack /></PrevBtn>
+                        <PaginationBtn ref={PaginatonRef2}></PaginationBtn>
+                        <NextBtn ref={navNextRef2}><IoIosArrowForward /></NextBtn>
+                    </ButtonBox>
+
+                </GameSlideBox>
+
+                <AdContainerBox>
+                    <AdSlider {...AdSwiper} ref={setSwiper}>
+                        {AdSlide.length !== 0 && AdSlide.map(({ id, img, informaion, title }) => (
+                            <SwiperSlide key={id}>
+                                <ImgAdBox src={img} />
+                                <AdAllBox>
+                                    <AdTitleBox>{title}</AdTitleBox>
+                                    <AdInformaionBox>{informaion}</AdInformaionBox>
+                                </AdAllBox>
+                            </SwiperSlide>
+                        ))}
+                    </AdSlider>
+
+                    <ButtonBox>
+                        <PrevBtn ref={navPrevRef3}><IoIosArrowBack /></PrevBtn>
+                        <PaginationBtn ref={PaginatonRef3}></PaginationBtn>
+                        <NextBtn ref={navNextRef3}><IoIosArrowForward /></NextBtn>
+                    </ButtonBox>
+
+                </AdContainerBox>
+
+                <GameSlideBox>
+
+                    <PopTitleBox>인기 게임 차트</PopTitleBox>
+
+                    <Slider {...swiperParams3} ref={setSwiper}>
+                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                            <SwiperSlide key={id}>
+                                <Link to='/'>
+                                    <SlideAllBox>
+                                        <SlideBox>
+                                            <ImgBox src={img} />
+                                        </SlideBox>
+
+                                        <AllBox>
+                                            <InformaionBoxTextBox>
+                                                <TitleBox>{title}</TitleBox>
+                                                <InformaionBox>{informaion}</InformaionBox>
+                                            </InformaionBoxTextBox>
+                                        </AllBox>
+                                    </SlideAllBox>
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Slider>
+
+                    <ButtonBox>
+                        <PrevBtn ref={navPrevRef4}><IoIosArrowBack /></PrevBtn>
+                        <PaginationBtn ref={PaginatonRef4}></PaginationBtn>
+                        <NextBtn ref={navNextRef4}><IoIosArrowForward /></NextBtn>
+                    </ButtonBox>
+
+                    <PopTitleBox>인기 게임 차트</PopTitleBox>
+
+                    <Slider {...swiperParams4} ref={setSwiper}>
+                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                            <SwiperSlide key={id}>
+                                <Link to='/'>
+                                    <SlideAllBox>
+                                        <SlideBox>
+                                            <ImgBox src={img} />
+                                        </SlideBox>
+
+                                        <AllBox>
+                                            <InformaionBoxTextBox>
+                                                <TitleBox>{title}</TitleBox>
+                                                <InformaionBox>{informaion}</InformaionBox>
+                                            </InformaionBoxTextBox>
+                                        </AllBox>
+                                    </SlideAllBox>
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Slider>
+
+                    <ButtonBox>
+                        <PrevBtn ref={navPrevRef5}><IoIosArrowBack /></PrevBtn>
+                        <PaginationBtn ref={PaginatonRef5}></PaginationBtn>
+                        <NextBtn ref={navNextRef5}><IoIosArrowForward /></NextBtn>
+                    </ButtonBox>
+
+                    <PopTitleBox>인기 게임 차트</PopTitleBox>
+
+                    <Slider {...swiperParams5} ref={setSwiper}>
+                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                            <SwiperSlide key={id}>
+                                <Link to='/'>
+                                    <SlideAllBox>
+                                        <SlideBox>
+                                            <ImgBox src={img} />
+                                        </SlideBox>
+
+                                        <AllBox>
+                                            <InformaionBoxTextBox>
+                                                <TitleBox>{title}</TitleBox>
+                                                <InformaionBox>{informaion}</InformaionBox>
+                                            </InformaionBoxTextBox>
+                                        </AllBox>
+                                    </SlideAllBox>
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Slider>
+
+                    <ButtonBox>
+                        <PrevBtn ref={navPrevRef6}><IoIosArrowBack /></PrevBtn>
+                        <PaginationBtn ref={PaginatonRef6}></PaginationBtn>
+                        <NextBtn ref={navNextRef6}><IoIosArrowForward /></NextBtn>
+                    </ButtonBox>
+
+                </GameSlideBox>
+
+                <AdContainerBox>
+                    <AdSlideBox>
+
+                        <AdSlider {...AdSwiper2} ref={setSwiper}>
+                            {AdSlide2.length !== 0 && AdSlide.map(({ id, img, informaion, title }) => (
+                                <SwiperSlide key={id}>
+                                    <ImgAdBox src={img} />
+                                    <AdAllBox>
+                                        <AdTitleBox>{title}</AdTitleBox>
+                                        <AdInformaionBox>{informaion}</AdInformaionBox>
+                                    </AdAllBox>
+                                </SwiperSlide>
+                            ))}
+                        </AdSlider>
+
+                        <ButtonBox>
+                            <PrevBtn ref={navPrevRef7}><IoIosArrowBack /></PrevBtn>
+                            <PaginationBtn ref={PaginatonRef7}></PaginationBtn>
+                            <NextBtn ref={navNextRef7}><IoIosArrowForward /></NextBtn>
+                        </ButtonBox>
+
+                    </AdSlideBox>
+                </AdContainerBox>
+
             </AllContentBox>
         </SwiperBox>
     );
 }
 
 const AllContentBox = styled.div
-`
+    `
 
 `
 
 const AdContainerBox = styled.div
     `
+    margin: 40px 0px 40px 0px;
 `
 
 const Slider = styled(Swiper)
-`
+    `
     margin-left: auto;
     margin-right: auto;
     position: relative;
@@ -521,21 +643,6 @@ const Slider = styled(Swiper)
     a{
         text-decoration: none;
     }
-
-.swiper-pagination
-{
-    
-}
-
-.swiper-slide
-{
-
-}
-
-.swiper-wrapper
-{
-    
-}
 
 .swiper-button-next, .swiper-button-prev
 {
@@ -560,20 +667,6 @@ const Slider = styled(Swiper)
     font-size: 22px;
 }
 
-.swiper-pagination.swiper-pagination-clickable.swiper-pagination-bullets
-{
-    bottom: 18px;
-    left: 0;
-    width: 100%;
-}
-
-.swiper-pagination-bullet
-{
-    cursor: pointer;
-    margin: 0px 8px 0px 0px;
-    background: gray;
-}
-
 .swiper-pagination-bullet.swiper-pagination-bullet-active
 {
     background: #007aff;
@@ -590,21 +683,17 @@ const PaginationBtn = styled.div
     {
         align-item:center;
         margin: 0px 4px 0px 4px;
-        background: gray;
+        background: white;
         cursor: pointer;
+        opacity: 1;
     }
 
     .swiper-pagination-bullet.swiper-pagination-bullet-active
     {
         background: #007aff;
+        width: 20px;
+        border-radius: 5px;
     }
-`
-
-const TopLineBackground = styled.div
-    `
-    margin: -7px 0px 0px 0px;
-    height: 67px;
-    background: linear-gradient(180deg, black 17%,rgba(0,0,0,0.8) 38%,transparent 85%);
 `
 
 const InformaionBoxTextBox = styled.div
@@ -622,11 +711,11 @@ const AllBox = styled.div
     flex-direction: column;
     justify-content: end;
     background: rgba(0,0,0,0.3);
-    top: 0%;
-    height: 75%;
-    left: 0%;
+    top: 0.2%;
+    height: 74.6%;
+    left: 0.4%;
     border-radius: 8px;
-    width: 100%;
+    width: 99.163%;
     overflow: hidden;
      @media (min-width:250px) and (max-width:560px)
     {
@@ -667,7 +756,8 @@ const PrevBtn = styled.div
     align-items: center;
     z-index: 10;
     cursor: pointer;
-    color:#007aff;
+    transition: color 0.5s;
+    color: ${props => props.theme.CenterTextColor};
     font-size: 34px;
 `
 const NextBtn = styled.div
@@ -677,7 +767,8 @@ const NextBtn = styled.div
     align-items: center;
     z-index: 10;
     cursor: pointer;
-    color:#007aff;
+    transition: color 0.5s;
+    color: ${props => props.theme.CenterTextColor};
     font-size: 34px;
 `
 const AdSlideBox = styled.div
@@ -698,7 +789,8 @@ const GameSlideBox = styled.div
 
 const PopTitleBox = styled.h2
     `
-    color: ${props => props.theme.textColor};
+    color: ${props => props.theme.CenterTextColor};
+    transition: color 0.5s;
 `
 
 const SwiperBox = styled.div
@@ -771,7 +863,8 @@ const SlideBox = styled.div
     `
     border-radius: 10px;
     overflow: hidden;
-    border: solid 0.5px ${props => props.theme.borderColor};
+    border: solid 1px ${props => props.theme.CenterBorderColor};
+    transition: border 0.5s;
     height: 285px;
 `
 

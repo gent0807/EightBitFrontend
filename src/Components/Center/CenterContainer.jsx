@@ -5,6 +5,7 @@ let Containerbox = styled.div
     `
     width: 100%;
     padding: 0px 0px 1000px 0px;
+    background: rgba(25,25,25,1);
 `
 
 const CenterContainer = () => {

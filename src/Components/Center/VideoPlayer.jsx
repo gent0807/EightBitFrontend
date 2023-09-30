@@ -24,38 +24,35 @@ SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
 const VideoPlayler = () => {
     const navPrevRef = useRef(null);
     const navNextRef = useRef(null);
+    const PaginatonRef = useRef(null);
     const [swiper, setSwiper] = useState(null);
     const [mainImageIndex, setMainImageIndex] = useState(0);
-    
-    const VideoSwiper =
+
+    const swiperParams =
     {
         navigation: { prevEl: navPrevRef.current, nextEl: navNextRef.current },
+
+        pagination: {
+            el: PaginatonRef.current,
+            type: 'bullets',
+            clickable: true
+        },
+
         onBeforeInit: (swiper) => {
             swiper.params.navigation.prevEl = navPrevRef.current;
             swiper.params.navigation.nextEl = navNextRef.current;
             swiper.activeIndex = mainImageIndex
             swiper.navigation.update();
         },
+
         onSwiper: setSwiper,
-        onSlideChange: (e) => setMainImageIndex(e.activeIndex),
+        onSlideChange: (e) => setMainImageIndex(e.realIndex),
         allowSlidePrev: { Slidelength: false },
-        slidesPerView: 1,
-        loop: true,
-        loopAdditionalSlides: 1,
-    }
-    
-    const swiperParams =
-    {
-        spaceBetween: 30,
-        slidesPerView: 5,
-        centeredSlides: true,
-        loopAdditionalSlides: 1,
-        loop: true,
-        effect: "coverflow",
         autoplay: {
             delay: 20000,
             disableOnInteraction: false,
-          },
+        },
+
         coverflowEffect: {
             rotate: 20,
             stretch: 10,
@@ -64,6 +61,7 @@ const VideoPlayler = () => {
             scale: 1,
             slideShadows: false
         },
+
         breakpoints: {
             250: {
                 spaceBetween: 30,
@@ -86,22 +84,21 @@ const VideoPlayler = () => {
                 slidesPerView: 5,
             }
         },
-        navigation: true,
-        pagination: { clickable: true },
-        onSwiper: setSwiper,
-        onBeforeInit: (swiper) => {
-            swiper.realIndex = mainImageIndex
-            swiper.navigation.update();
-        },
-        onSlideChange: (e) => setMainImageIndex(e.realIndex),
-        allowSlidePrev: { Slidelength: false },
+
         coverflow: {
             rotate: 0,
             stretch: 100,
             depth: 150,
             modifier: 1.5,
             slideShadows: false,
-        }
+        },
+
+        spaceBetween: 30,
+        slidesPerView: 5,
+        centeredSlides: true,
+        loopAdditionalSlides: 1,
+        loop: true,
+        effect: "coverflow",
     }
 
     const [Slide, setSlide] = useState([
@@ -141,19 +138,19 @@ const VideoPlayler = () => {
             title: "모험가키우기"
         },
     ]);
-    
+
     return (
         <VideoAllBox>
-                <VideoBackground>
-                </VideoBackground>
-                        <VideoPlay
-                            url={Slide[mainImageIndex].video}
-                            loop={true}
-                            muted={true}
-                            playing={true}
-                            width={"100%"}
-                            height={"48.5vw"}
-                        />
+            <VideoBackground>
+            </VideoBackground>
+            <VideoPlay
+                url={Slide[mainImageIndex].video}
+                loop={true}
+                muted={true}
+                playing={true}
+                width={"100%"}
+                height={"48.5vw"}
+            />
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
@@ -175,12 +172,105 @@ const VideoPlayler = () => {
                         </SwiperSlide>
                     ))}
                 </Slider>
+                <ButtonBox>
+                    <PrevBtn ref={navPrevRef}><IoIosArrowBack /></PrevBtn>
+                    <PaginationBtn ref={PaginatonRef}></PaginationBtn>
+                    <NextBtn ref={navNextRef}><IoIosArrowForward /></NextBtn>
+                </ButtonBox>
             </GameSlideBox>
         </VideoAllBox>
     );
 }
 
 export default VideoPlayler
+
+const Slider = styled(Swiper)
+    `
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
+    margin-bottom: 20px;
+    height: 382px;
+
+    a{
+        text-decoration: none;
+    }
+
+    .swiper-button-next, .swiper-button-prev
+    {
+        top: 41%;
+        background: white;
+        background: white;
+        border-radius: 30px;
+        padding: 10px;
+        border: solid 3px #55AAFF;
+        width: 30px;
+        height: 30px;
+    }
+
+    .swiper-button-prev.swiper-button-disabled,
+    .swiper-button-next.swiper-button-disabled
+    {
+        display: none;
+    }
+
+    .swiper-button-prev:after,
+    .swiper-button-next:after
+    {
+        font-size: 22px;
+    }
+
+`
+
+const PaginationBtn = styled.div
+    `
+display: flex;
+align-items: center;
+z-index: 999;
+
+.swiper-pagination-bullet
+{
+    margin: 0px 4px 0px 4px;
+    background: white;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active
+{
+    background: #007aff;
+    width: 20px;
+    border-radius: 5px;
+}
+`
+
+const PrevBtn = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    cursor: pointer;
+    transition: color 0.5s;
+    color: ${props => props.theme.CenterTextColor};
+    font-size: 34px;
+`
+
+const NextBtn = styled.div
+    `   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    cursor: pointer;
+    transition: color 0.5s;
+    color: ${props => props.theme.CenterTextColor};
+    font-size: 34px;
+`
 
 const GameSlideBox = styled.div
     `
@@ -193,8 +283,8 @@ const GameSlideBox = styled.div
 
 const ImgBox = styled.img
     `
-    width: 100%;
-    height: 285px;
+width: 100%;
+height: 285px;
 `
 
 const AllBox = styled.div
@@ -204,11 +294,11 @@ const AllBox = styled.div
     flex-direction: column;
     justify-content: end;
     background: rgba(0,0,0,0.3);
-    top: 0%;
-    height: 75%;
-    left: 0%;
+    top: 0.2%;
+    height: 74.7%;
+    left: 0.4%;
     border-radius: 8px;
-    width: 100%;
+    width: 99.163%;
     overflow: hidden;
      @media (min-width:250px) and (max-width:560px)
     {
@@ -257,17 +347,13 @@ const SlideBox = styled.div
     `
     border-radius: 10px;
     overflow: hidden;
-    border: solid 0.5px ${props => props.theme.borderColor};
+    border: solid 1px ${props => props.theme.CenterBorderColor};
+    transition: border 0.5s;
     height: 285px;
 `
 
-const PopTitleBox = styled.h1
-    `
-    color: ${props => props.theme.textColor};
-`
-
 const VideoPlay = styled(ReactPlayer)
-`
+    `
     width: 100%;
     height: 100%;
 `
@@ -275,7 +361,7 @@ const VideoPlay = styled(ReactPlayer)
 const VideoBackground = styled.div
     `
     position: absolute;
-    background-image: linear-gradient(to top, rgba(25, 25, 25, 1) 2%, rgba(25, 25, 25, 0.9) 11%, rgba(25, 25, 25, 0) 54%);
+    background: linear-gradient(to top, rgba(25, 25, 25, 1) 2%, rgba(25, 25, 25, 0.9) 11%, rgba(25, 25, 25, 0) 54%);
     height: 48.5vw;
     top: 0%;
     left: 0%;
@@ -292,123 +378,8 @@ const VideoAllBox = styled.div
 const ButtonBox = styled.div
     `
     display: flex;
-    justify-content: space-between;
-    position: absolute;
-    z-index: 999;
-    top: 36%;
-    bottom: 0%;
-    left: 0%;
-    right: 0%;
+    justify-content: center;
+    margin: -71px 0px 0px 0px;
 }
 `
 
-const VideoSource = styled.source
-    `
-    
-`
-
-const Slider = styled(Swiper)
-    `
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    overflow: hidden;
-    list-style: none;
-    padding: 0;
-    z-index: 1;
-    margin-bottom: 20px;
-    height: 382px;
-
-    a{
-        text-decoration: none;
-    }
-
-.swiper-pagination
-{
-    
-}
-
-.swiper-slide
-{
-
-}
-
-.swiper-wrapper
-{
-    
-}
-
-.swiper-button-next, .swiper-button-prev
-{
-    top: 41%;
-    background: white;
-    background: white;
-    border-radius: 30px;
-    padding: 10px;
-    border: solid 3px #55AAFF;
-    width: 30px;
-    height: 30px;
-}
-
-.swiper-button-prev.swiper-button-disabled,
-.swiper-button-next.swiper-button-disabled
-{
-    display: none;
-}
-
-.swiper-button-prev:after,
-.swiper-button-next:after
-{
-    font-size: 22px;
-}
-
-.swiper-pagination.swiper-pagination-clickable.swiper-pagination-bullets
-{
-    bottom: 18px;
-    left: 0;
-    width: 100%;
-}
-
-.swiper-pagination-bullet
-{
-    cursor: pointer;
-    margin: 0px 8px 0px 0px;
-    background: gray;
-}
-
-.swiper-pagination-bullet.swiper-pagination-bullet-active
-{
-    background: #007aff;
-}
-
-`
-
-const VideoSlider = styled(Swiper)
-`
-
-`
-
-const PrevBtn = styled.div
-    `
-    display: flex;
-    flex-direction: column;
-    color:#007aff;
-    align-items: center;
-    cursor: pointer;
-    svg{
-        width: 60px;
-        height: 60px;
-    }
-`
-const NextBtn = styled.div
-    `   
-    display: flex;
-    color:#007aff;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    svg{
-        width: 60px;
-        height: 60px;
-    }
-`
