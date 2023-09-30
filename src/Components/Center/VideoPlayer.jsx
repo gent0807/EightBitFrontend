@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from "styled-components";
-import VideoSample from "../../Video/video.mp4"
+import VideoSample from "../../Video/maple.mp4"
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, EffectCoverflow, Autoplay } from "swiper";
 import "swiper/swiper.scss";
@@ -39,7 +39,7 @@ const VideoPlayler = () => {
             img: test2,
             Logo: videoLogo,
             informaion: "켜두기만 하면 캐릭터가 성장한다!",
-            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            video: VideoSample,
             title: "방치모험가"
         },
         {
@@ -47,7 +47,7 @@ const VideoPlayler = () => {
             img: test,
             Logo: videoLogo,
             informaion: "일단달려! 드릴에게 도망쳐라!",
-            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            video: VideoSample,
             title: "도망런"
         },
         {
@@ -55,7 +55,7 @@ const VideoPlayler = () => {
             img: test4,
             Logo: videoLogo,
             informaion: "수학을 풀고 강해져라!",
-            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            video: VideoSample,
             title: "매스리볼버"
         },
         {
@@ -63,7 +63,7 @@ const VideoPlayler = () => {
             img: test3,
             Logo: videoLogo,
             informaion: "무기 강화로 당신의 운을 시험하라!",
-            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            video: VideoSample,
             title: "럭키웨폰"
         },
         {
@@ -71,7 +71,7 @@ const VideoPlayler = () => {
             img: test1,
             Logo: videoLogo,
             informaion: "인간이 되고 싶은 뱀파이어...",
-            video: "https://youtu.be/ewtxhRRyb9s?si=4zbyeG656iF8yvu6",
+            video: VideoSample,
             title: "로드 오브 토파즈"
         },
     ]);
@@ -210,7 +210,7 @@ const VideoPlayler = () => {
                     muted={soundOnOff}
                     playing={true}
                     width={"100%"}
-                    height={"48.5vw"}
+                    height={"auto"}
                 />
                 </VideoBox>
 
@@ -366,7 +366,7 @@ const VideoBox = styled.div
 const VideoInformation = styled.div
 `
     position: absolute;
-    top: 12vw;
+    top: 16vw;
     right: 11%;
     width: 25vw;
     height: 12vw;
@@ -551,8 +551,8 @@ const VideoPlay = styled(ReactPlayer)
 const VideoBackground = styled.div
     `
     position: absolute;
-    background: linear-gradient(to top, rgba(25, 25, 25, 1) 2%, rgba(25, 25, 25, 0.9) 11%, rgba(25, 25, 25, 0) 54%);
-    height: 48.5vw;
+    background: linear-gradient(to top, rgba(25, 25, 25, 1) 5%, rgba(25, 25, 25, 0.9) 20%, rgba(25, 25, 25, 0) 54%);
+    height: 58vw;
     top: 0%;
     left: 0%;
     bottom: 0%;
