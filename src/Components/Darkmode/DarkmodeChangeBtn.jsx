@@ -20,8 +20,8 @@ const Darkmode = () => {
         <IconsBox change={Darkmode} onClick={ToggleBtn}>
             <Icons Move={Darkmode} />
             <IconsAllBox>
-                <MoonIcon Opacity={Darkmode}><BsFillMoonFill /></MoonIcon>
                 <SunIcon Opacity={Darkmode}><BsSunFill /></SunIcon>
+                <MoonIcon Opacity={Darkmode}><BsFillMoonFill /></MoonIcon>
             </IconsAllBox>
         </IconsBox>
     );
@@ -34,7 +34,7 @@ const IconsBox = styled.div
     `
     cursor: pointer;
     background: white;
-    background: ${props => props.change ? "rgba(0,144,249,1)" : "rgba(55,65,118,1)"};
+    background: ${props => props.change ? "rgba(55,65,118,1)" : "rgba(0,144,249,1)"};
     border-radius: 42px;
     margin: 16px -6px 0px 19px;
     padding: 5px;
@@ -77,16 +77,16 @@ const SunIcon = styled.i
     `
     color: yellow;
     font-size:16px;
-    opacity: ${props => props.Opacity ? "100%" : "0%"};
-    animation: ${props => props.Opacity ? IconOpacityDown : IconOpacityUp} 0.4s;
-`
-
-const MoonIcon = styled.i
-    `
-    font-size:16px;
     margin: 0px 10px 0px 0px;
     opacity: ${props => props.Opacity ? "0%" : "100%"};
     animation: ${props => props.Opacity ? IconOpacityUp : IconOpacityDown} 0.4s;
+    `
+    
+    const MoonIcon = styled.i
+    `
+    font-size:16px;
+    opacity: ${props => props.Opacity ? "100%" : "0%"};
+    animation: ${props => props.Opacity ? IconOpacityDown : IconOpacityUp} 0.4s;
 `
 
 const IconRight = keyframes

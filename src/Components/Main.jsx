@@ -5,9 +5,9 @@ import { isDark } from './Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-const ip = `http://localhost:8033/EightBitBackend`;
+const ip = `http://218.155.175.176:8033/EightBitBackend`;
 
-const profileImageDir = "http://localhost:8033/EightBitBackend/resources/Users/"
+const profileImageDir = "http://218.155.175.176:8033/EightBitBackend/resources/Users/profileImage/"
 
 const Main = () => {
 
@@ -18,7 +18,7 @@ const Main = () => {
   const isDarkmode = useRecoilValue(isDark);
 
   return (
-    <ThemeProvider theme={isDarkmode ? lightTheme : darkTheme}>
+    <ThemeProvider theme={isDarkmode ? darkTheme : lightTheme}>
       <GlobalStyle />
       <DarkModeBox>
         <Router />
@@ -36,6 +36,8 @@ const DarkModeBox = styled.div
 
 const darkTheme =
 {
+  CenterBorderColor: "#007aff",
+  CenterTextColor: "#007aff",
   backgroundColor: "rgba(25,25,25,1)",
   textColor: "white",
   successColor: "#6a9dda",
@@ -52,7 +54,9 @@ const darkTheme =
 
 const lightTheme =
 {
-  backgroundColor: "white",
+  CenterBorderColor: "white",
+  CenterTextColor: "white",
+  backgroundColor: "rgba(255,255,255,1)",
   textColor: "black",
   successColor: "green",
   errorColor: "red",

@@ -6,7 +6,7 @@ import { freeReComment } from "./ReComment";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
@@ -52,7 +52,7 @@ const FreeArticle = () => {
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
-            src: "http://localhost:8033/EightBitBackend/resources/board/article/nomalfiles/image.png",
+            src: "http://218.155.175.176:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
     const [Comment, setComment] = useState([
