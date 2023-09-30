@@ -66,21 +66,21 @@ const SingleReply = ({ Comment }) => {
             id: 1,
             original_writer: Comment.replyer,
             origianal_regdate: Comment.original_regdate,   //Comment.regdate로 변경 예정
-            replyer: "eight",
+            reCommenter: "eight",
             content: "ㅋㅋㅋㅋㅋ 개웃기네"
         },
         {
             id: 2,
             original_writer: Comment.replyer,
             origianal_regdate: Comment.origianal_regdate,   //Comment.regdate로 변경 예정
-            replyer: "seopseop",
+            reCommenter: "seopseop",
             content: "뭐라는 거임?"
         },
         {
             id: 3,
             original_writer: Comment.replyer,
             origianal_regdate: Comment.origianal_regdate,   //Comment.regdate로 변경 예정
-            replyer: "란토",
+            reCommenter: "란토",
             content: "누구세요??"
         }
     ]);
