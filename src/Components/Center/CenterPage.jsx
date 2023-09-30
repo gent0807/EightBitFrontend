@@ -19,6 +19,7 @@ import test5 from "../../img/MainSlide/test5.png";
 SwiperCore.use([Navigation, Pagination, EffectCoverflow]);
 
 const CenterPage = () => {
+    
     const navPrevRef = useRef(null);
     const navNextRef = useRef(null);
     const navPrevRef2 = useRef(null);
@@ -712,7 +713,7 @@ const AllBox = styled.div
     justify-content: end;
     background: rgba(0,0,0,0.3);
     top: 0.2%;
-    height: 74.6%;
+    height: 74.7%;
     left: 0.4%;
     border-radius: 8px;
     width: 99.163%;

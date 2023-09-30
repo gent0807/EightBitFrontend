@@ -814,6 +814,8 @@ const BackgroudSubNav = styled.div
 const ALLNavBox = styled.div
     `
     font-size: 25px;
+    position: relative;
+    z-index:9999;
 `
 
 const GameSubNav = styled.div
