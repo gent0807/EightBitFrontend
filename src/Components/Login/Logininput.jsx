@@ -113,7 +113,7 @@ const Logininput = () => {
     <LoginT>
       <LoginTop>
         <Link to='/'>
-          <LoginTopLOGO src={isDarkmode ? LogoDark : LogoLight} alt='로고' />
+          <LoginTopLOGO src={isDarkmode ? LogoLight : LogoDark} alt='로고' />
         </Link>
       </LoginTop>
 

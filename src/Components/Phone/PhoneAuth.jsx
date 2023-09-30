@@ -163,7 +163,7 @@ const Phone = () => {
     return (
         <PhoneBox>
             <LogoBox>
-                <Link to='/'><PhoneAuthLOGO src={isDarkmode ? LogoDark : LogoLight} alt='로고' /></Link>
+                <Link to='/'><PhoneAuthLOGO src={isDarkmode ? LogoLight : LogoDark} alt='로고' /></Link>
             </LogoBox>
 
             <IntroduceBox>

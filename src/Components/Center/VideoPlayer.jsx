@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from "styled-components";
 import VideoSample from "../../Video/maple.mp4"
+import VideoSample2 from "../../Video/video.mp4"
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, EffectCoverflow, Autoplay } from "swiper";
 import "swiper/swiper.scss";
@@ -39,7 +40,7 @@ const VideoPlayler = () => {
             img: test2,
             Logo: videoLogo,
             informaion: "켜두기만 하면 캐릭터가 성장한다!",
-            video: VideoSample,
+            video: VideoSample2,
             title: "방치모험가"
         },
         {
@@ -55,7 +56,7 @@ const VideoPlayler = () => {
             img: test4,
             Logo: videoLogo,
             informaion: "수학을 풀고 강해져라!",
-            video: VideoSample,
+            video: VideoSample2,
             title: "매스리볼버"
         },
         {
@@ -71,7 +72,7 @@ const VideoPlayler = () => {
             img: test1,
             Logo: videoLogo,
             informaion: "인간이 되고 싶은 뱀파이어...",
-            video: VideoSample,
+            video: VideoSample2,
             title: "로드 오브 토파즈"
         },
     ]);
@@ -98,10 +99,6 @@ const VideoPlayler = () => {
         onSwiper: setSwiper,
         onSlideChange: (e) => setMainImageIndex(e.realIndex),
         allowSlidePrev: { Slidelength: false },
-        autoplay: {
-            delay: 20000,
-            disableOnInteraction: false,
-        },
 
         coverflowEffect: {
             rotate: 20,
@@ -155,10 +152,7 @@ const VideoPlayler = () => {
 
     return (
         <VideoAllBox>
-
             <VideoBox>
-                <VideoBackground>
-                </VideoBackground>
                 <VideoInformation>
                     <VideoInformationLogoBox>
                         <VideoInformationLogo src={Slide[mainImageIndex].Logo} />
@@ -201,19 +195,21 @@ const VideoPlayler = () => {
                     </VideoInformationDownLoadBtnBox>
 
                 </VideoInformation>
-                <VideoPlay
-                    url={Slide[mainImageIndex].video}
-                    loop={true}
-                    onProgress={
-                        (progress) => {setPlaytime(progress.playedSeconds)}
-                    }
-                    muted={soundOnOff}
-                    playing={true}
-                    width={"100%"}
-                    height={"auto"}
-                />
-                </VideoBox>
-
+                <VideoViewBox>
+                    <VideoPlay
+                        url={Slide[mainImageIndex].video}
+                        loop={true}
+                        onProgress={
+                            (progress) => { setPlaytime(progress.playedSeconds) }
+                        }
+                        muted={soundOnOff}
+                        playing={true}
+                        width={"100%"}
+                        height={"100%"}
+                    />
+                    <VideoBackground />
+                </VideoViewBox>
+            </VideoBox>
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
@@ -247,8 +243,13 @@ const VideoPlayler = () => {
 
 export default VideoPlayler
 
-const MuteBtn = styled.div
+const VideoViewBox = styled.div
+    `
+
 `
+
+const MuteBtn = styled.div
+    `
     margin: 0px 0px 0px 1vw;
     font-size: 1.3vw;
     cursor: pointer;
@@ -259,11 +260,11 @@ const MuteBtn = styled.div
 `
 
 const MuteBtnIcon = styled.i
-`
+    `
 `
 
 const VideoInformationBtnIcon = styled.i
-`
+    `
     display: flex;
     align-items: center;
     font-size: 1.3vw;
@@ -274,7 +275,7 @@ const VideoInformationBtnIcon = styled.i
 `
 
 const VideoDownloadBtnIcon = styled.i
-`
+    `
     display: flex;
     align-items: center;
     font-size: 1.3vw;
@@ -285,7 +286,7 @@ const VideoDownloadBtnIcon = styled.i
 `
 
 const VideoInformationDownLoadBtnBox = styled.div
-`
+    `
     display: flex;
     margin: 2vw 0px 0px 0px;
     justify-content: start;
@@ -297,7 +298,7 @@ const VideoInformationDownLoadBtnBox = styled.div
 `
 
 const VideoInformationBtn = styled.div
-`
+    `
     display: flex;
     background: #007aff;
     margin: 0px 0px 0px 1vw;
@@ -307,7 +308,7 @@ const VideoInformationBtn = styled.div
 `
 
 const VideoInformationBtnText = styled.div
-`
+    `
     color: white;
     font-size: 1.3vw;
     font-weight: bold;
@@ -316,7 +317,7 @@ const VideoInformationBtnText = styled.div
 `
 
 const VideoDownloadBtn = styled.div
-`
+    `
     display: flex;
     background: #007aff;
     padding: 0.8vw;
@@ -325,7 +326,7 @@ const VideoDownloadBtn = styled.div
 `
 
 const VideoDownloadBtnText = styled.span
-`
+    `
     color: white;
     font-size: 1.3vw;
     font-weight: bold;
@@ -334,24 +335,24 @@ const VideoDownloadBtnText = styled.span
 `
 
 const VideoInformationLogoBox = styled.div
-`
+    `
 
 `
 
 const VideoInformationLogo = styled.img
-`
+    `
     width: 100%;
     height: 100%;
 }
 `
 
 const VideoInformationTextBox = styled.div
-`
+    `
     text-align: start;
 `
 
 const VideoInformationText = styled.span
-`
+    `
     color: ${props => props.theme.CenterTextColor};
     font-size: 1.5vw;
     font-weight: bold;
@@ -359,15 +360,15 @@ const VideoInformationText = styled.span
 `
 
 const VideoBox = styled.div
-`
+    `
 
 `
 
 const VideoInformation = styled.div
-`
+    `
     position: absolute;
-    top: 16vw;
-    right: 11%;
+    top: 17vw;
+    right: 3vw;
     width: 25vw;
     height: 12vw;
     border-radius: 18px;
@@ -466,15 +467,30 @@ const GameSlideBox = styled.div
     `
     max-width: 1280px;
     position: relative;
-    margin: -12vw auto 0px auto;
+    margin: -160px auto 0px auto;
     padding: 0px 20px 0px 20px;
-    z-index: 999;
+    z-index: 1000;
+
+    @media (min-width:250px) and (max-width:549px)
+    {
+        margin: -9px auto 0px auto;
+    }
+
+    @media (min-width:550px) and (max-width:704px)
+    {
+        margin: -74px auto 0px auto;
+    }
+
+    @media (min-width:705px) and (max-width:1373px)
+    {
+        margin: -80px auto 0px auto;
+    }
 `
 
 const ImgBox = styled.img
     `
-width: 100%;
-height: 285px;
+    width: 100%;
+    height: 285px;
 `
 
 const AllBox = styled.div
@@ -550,14 +566,10 @@ const VideoPlay = styled(ReactPlayer)
 
 const VideoBackground = styled.div
     `
-    position: absolute;
-    background: linear-gradient(to top, rgba(25, 25, 25, 1) 5%, rgba(25, 25, 25, 0.9) 20%, rgba(25, 25, 25, 0) 54%);
-    height: 58vw;
-    top: 0%;
-    left: 0%;
-    bottom: 0%;
-    right: 0%;
-    z-index: 999;
+    position: relative;
+    background: rgba(25,25,25,1);
+    box-shadow: 2px -8px 11px 13px rgba(25,25,25,1);
+    z-index: 1000;
     pointer-events: none;
 `
 

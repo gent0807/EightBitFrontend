@@ -621,7 +621,8 @@ const CenterPage = () => {
 
 const AllContentBox = styled.div
     `
-
+    position: relative;
+    z-index: 1000;
 `
 
 const AdContainerBox = styled.div

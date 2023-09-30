@@ -381,7 +381,7 @@ const Signinput = (props) => {
     <SignT>
       <SignTop>
         <Link to='/'>
-          <SignTopLogo src={isDarkmode ? LogoDark : LogoLight} alt='로고' />
+          <SignTopLogo src={isDarkmode ? LogoLight : LogoDark} alt='로고' />
         </Link>
       </SignTop>
       <SubmitT onSubmit={register}>

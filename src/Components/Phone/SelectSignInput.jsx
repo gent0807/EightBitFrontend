@@ -25,7 +25,7 @@ const SelectSign = () => {
     return (
         <SelectSignBox>
             <LogoBox>
-                <Link to='/'><LoginTopLOGO src={isDarkmode ? LogoDark : LogoLight} alt='로고' /></Link>
+                <Link to='/'><LoginTopLOGO src={isDarkmode ? LogoLight : LogoDark} alt='로고' /></Link>
             </LogoBox>
             <IntroduceBox>
                 <MainText as="h1">8bit 가입을 시작합니다!</MainText>
