@@ -64,17 +64,23 @@ const SingleReply = ({ Comment }) => {
     const [ReComment, setReComment] = useState([
         {
             id: 1,
-            writer: "eight",
+            original_writer: Comment.replyer,
+            origianal_regdate: Comment.original_regdate,   //Comment.regdate로 변경 예정
+            replyer: "eight",
             content: "ㅋㅋㅋㅋㅋ 개웃기네"
         },
         {
             id: 2,
-            writer: "seopseop",
+            original_writer: Comment.replyer,
+            origianal_regdate: Comment.origianal_regdate,   //Comment.regdate로 변경 예정
+            replyer: "seopseop",
             content: "뭐라는 거임?"
         },
         {
             id: 3,
-            writer: "란토",
+            original_writer: Comment.replyer,
+            origianal_regdate: Comment.origianal_regdate,   //Comment.regdate로 변경 예정
+            replyer: "란토",
             content: "누구세요??"
         }
     ]);
@@ -115,14 +121,14 @@ const SingleReply = ({ Comment }) => {
 
 
 
-        getUserProfileImagePath(Comment.writer);
-        getUserRole(Comment.writer);
+        getUserProfileImagePath(Comment.replyer);
+        getUserRole(Comment.replyer);
         setReCommentCnt(ReComment.length);
         setUpdateReplyText(Comment.content);
     }, [replyText, reCommentText]);
 
     const getNewLikeCount = async () => {
-        axios.get(`${ip}/Board/article/like?writer=${Comment.writer}&regdate=${Comment.regdate}`, {
+        axios.get(`${ip}/Board/article/like?writer=${Comment.original_writer}&regdate=${Comment.original_regdate}`, {   //Board/reply에 Comment.replyer, Comment.regdate로 변경 예정
 
         }, {
 
@@ -145,7 +151,7 @@ const SingleReply = ({ Comment }) => {
         }
 
 
-        await axios.patch(`${ip}/Board/article/like/up?writer=${Comment.writer}&regdate=${Comment.regdate}`, {
+        await axios.patch(`${ip}/Board/article/like/up?writer=${Comment.original_writer}&regdate=${Comment.original_regdate}`, {
 
         },
             {
@@ -162,7 +168,7 @@ const SingleReply = ({ Comment }) => {
 
     const countDownLike = async () => {
         if (likecount > 0) {
-            await axios.patch(`${ip}/Board/article/like/down?writer=${Comment.writer}&regdate=${Comment.regdate}`, {
+            await axios.patch(`${ip}/Board/article/like/down?writer=${Comment.original_writer}&regdate=${Comment.original_regdate}`, {
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -275,20 +281,36 @@ const SingleReply = ({ Comment }) => {
         e.preventDefault();
 
         if (reCommentChangeValue.length > 11) {
-            /*  axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-               {
+            await axios.post(`${ip}/Board/reComment`, {
+                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: reCommentChangeValue,
+                original_writer: Comment.replyer,
+                original_regdate: Comment.origianal_regdate, //Comment.regdate로 변경 예정
+            },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
+                    setReCommentText(data.content);
+                    axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+                        {
 
-               },
-               {
-                   headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-               })
-               .then((res) => {
-                   return res.data;
-               }
-               )
-               .then((data) => {
-                   dispatch(point(data));
-               });  */
+                        },
+                        {
+                            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                        })
+                        .then((res) => {
+                            return res.data;
+                        }
+                        )
+                        .then((data) => {
+                            dispatch(point(data));
+                        });
+                })
+
         }
         else if (reCommentChangeValue.length <= 11) {
             alert("댓글 내용을 입력해주세요.");
@@ -300,13 +322,28 @@ const SingleReply = ({ Comment }) => {
     const updateReply = async (e) => {
         e.preventDefault();
         if (updateReplyText.length > 11) {
-            setUpdateMode(false);
+            await axios.patch(`${ip}/Board/reply?original_writer=${Comment.original_writer}&original_regdate=${Comment.original_regdate}`,
+                {
+                    replyer: Comment.replyer,
+                    content: updateReplyText,
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
+                    setReplyText(data.content);
+                    setUpdateMode(false);
+                });
         }
 
         else if (updateReplyText.length <= 11) {
             alert("댓글을 입력해주세요.");
             return;
         }
+    }
+
+    const deleteReply = async (e) => {
+        await axios.delete
     }
 
     const report1 = async () => {
@@ -328,7 +365,7 @@ const SingleReply = ({ Comment }) => {
                         <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                         <CommentInformationAllBox>
                             <div style={{ display: "flex" }}>
-                                <UserNicknameText>{Comment.writer}</UserNicknameText>
+                                <UserNicknameText>{Comment.replyer}</UserNicknameText>
                                 <BiLogoDevTo size={22} style={{ margin: "0px 0px 0px 2px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
                                 {Comment.regdate == Comment.updatedate ? "" :
                                     <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
@@ -425,7 +462,7 @@ const SingleReply = ({ Comment }) => {
                                     UserInfoRole={userInfo == null ?
                                         (user.login_state === "allok" ?
                                             user.role : null) : userInfo.role}
-                                    Writer={Comment.writer}
+                                    Writer={Comment.replyer}
                                     onClick={() => {
                                         setReplyStatusDivHide(true);
                                         setUpdateMode(true);
@@ -459,7 +496,7 @@ const SingleReply = ({ Comment }) => {
                         UserNickname={userInfo == null ?
                             null : userInfo.nickName}
 
-                        Writer={Comment.writer}
+                        Writer={Comment.replyer}
 
                         onSubmit={registerReComment}>
                         <ReCommentArea>
@@ -509,7 +546,7 @@ const SingleReply = ({ Comment }) => {
                     UserNickname={userInfo == null ?
                         null : userInfo.nickName}
 
-                    Writer={Comment.writer}
+                    Writer={Comment.replyer}
 
                     onSubmit={updateReply}>
                     <ReCommentArea>

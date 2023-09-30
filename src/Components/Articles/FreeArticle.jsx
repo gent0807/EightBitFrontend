@@ -46,7 +46,6 @@ const FreeArticle = () => {
     const [fileDownloadMode, setFileDownloadMode] = useState(false);
     const [replyChangeValue, setReplyChangeValue] = useState("");
     const [replyChangeValue2, setReplyChangeValue2] = useState("");
-    const [replycnt, setReplycnt] = useState(0);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [totalComment, setTotalComment] = useState(0);
     const inputRef = useRef();
@@ -59,17 +58,23 @@ const FreeArticle = () => {
     const [Comment, setComment] = useState([
         {
             id: 1,
-            writer: "eight",
+            original_writer: writer,
+            origianal_regdate: regdate,
+            replyer: "eight",
             content: "ㅋㅋㅋㅋㅋ 개웃기네"
         },
         {
             id: 2,
-            writer: "seopseop",
+            original_writer: writer,
+            origianal_regdate: regdate,
+            replyer: "seopseop",
             content: "뭐라는 거임?"
         },
         {
             id: 3,
-            writer: "란토",
+            original_writer: writer,
+            origianal_regdate: regdate,
+            replyer: "란토",
             content: "누구세요??"
         }
     ]);
@@ -239,9 +244,6 @@ const FreeArticle = () => {
                 navigate("/NotFound");
             })
 
-        setReplycnt(Comment.length);
-        setTotalComment(Comment.length);
-        inputRef.current.focus();
     }, [replyText, reCommentText]);
 
 
@@ -341,7 +343,7 @@ const FreeArticle = () => {
                 replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 original_writer: writer,
-                original_regdate: regdate
+                original_regdate: regdate,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -350,7 +352,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    /* dispatch(replyText({replyText:replyChangeValue})); */
+                    setReplyText(data.content);
                     axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                         {
 
@@ -365,7 +367,7 @@ const FreeArticle = () => {
                         .then((data) => {
                            dispatch(point(data));
                         });
-                })
+                });
         }
         else if (replyChangeValue.length <= 11) {
             alert("댓글 내용을 입력해주세요.");
@@ -377,11 +379,11 @@ const FreeArticle = () => {
         e.preventDefault();
         console.log(replyChangeValue2.length);
         if (replyChangeValue2.length > 11) {
-            await axios.post(`${ip}/Board/freeReply`, {
+            await axios.post(`${ip}/Board/reply`, {
                 replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue2,
                 original_writer: writer,
-                original_regdate: regdate
+                original_regdate: regdate,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -390,8 +392,22 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    /* dispatch(replyText({replyText:replyChangeValue2})); */
-                })
+                    setReplyText(data.content);
+                    axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+                        {
+
+                        },
+                        {
+                            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                        })
+                        .then((res) => {
+                            return res.data;
+                        }
+                        )
+                        .then((data) => {
+                           dispatch(point(data));
+                        });
+                });
         }
         else if (replyChangeValue2.length <= 11) {
             alert("댓글 내용을 입력해주세요.");
@@ -444,7 +460,7 @@ const FreeArticle = () => {
                                 <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
                                 <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineEye> {visitcnt}</ViewText>
                                 <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
-                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment> {replycnt}</ReplyText>
+                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment>{Comment.length}</ReplyText>
                             </LikeViewBox>
                         </WriteViewBox>
                     </UserProfileBox>
@@ -562,9 +578,9 @@ const FreeArticle = () => {
                     </CommentForm2>
                 </InformationAllBox>
             </InformationBox>
-            {replycnt > 0 ?
+            {Comment.length > 0 ?
                 <div style={{ display: "flex", fontSize: "20px", justifyContent: "start", margin: "0px 0px -22.5px 0px" }}>
-                    총 {totalComment}개 댓글
+                    총 {Comment.length}개 댓글
                 </div> : ""}
             <EditAllBox>
                 <LikeBtn

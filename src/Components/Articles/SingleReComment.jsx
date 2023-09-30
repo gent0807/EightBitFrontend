@@ -183,9 +183,9 @@ const SingleReComment = ({ ReComment }) => {
 
         }
 
-        getUsreProfileImagePath(ReComment.writer);
-        getUserRole(ReComment.writer);
-        setReCommentChangeValue("@" + ReComment.writer + "\n");
+        getUsreProfileImagePath(ReComment.replyer);
+        getUserRole(ReComment.replyer);
+        setReCommentChangeValue("@" + ReComment.replyer + "\n");
         setUpdateReCommentText(ReComment.content);
     }, [reCommentText]);
 
@@ -193,6 +193,7 @@ const SingleReComment = ({ ReComment }) => {
         e.preventDefault();
 
         if (reCommentChangeValue.length > 11) {
+            await axios.post(`${ip}/}`)
             axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                 {
 
@@ -229,7 +230,7 @@ const SingleReComment = ({ ReComment }) => {
 
 
     const getNewLikeCount = async () => {
-        axios.get(`${ip}/Board/article/like?writer=${ReComment.writer}&regdate=${ReComment.regdate}`, {
+        axios.get(`${ip}/Board/article/like?writer=${ReComment.original_writer}&regdate=${ReComment.original_regdate}`, {
 
         }, {
 
@@ -252,7 +253,7 @@ const SingleReComment = ({ ReComment }) => {
         }
 
 
-        await axios.patch(`${ip}/Board/article/like/up?writer=${ReComment.writer}&regdate=${ReComment.regdate}`, {
+        await axios.patch(`${ip}/Board/article/like/up?writer=${ReComment.original_writer}&regdate=${ReComment.original_regdate}`, {
 
         },
             {
@@ -269,7 +270,7 @@ const SingleReComment = ({ ReComment }) => {
 
     const countDownLike = async () => {
         if (likecount > 0) {
-            await axios.patch(`${ip}/Board/article/like/down?writer=${ReComment.writer}&regdate=${ReComment.regdate}`, {
+            await axios.patch(`${ip}/Board/article/like/down?writer=${ReComment.original_writer}&regdate=${ReComment.original_regdate}`, {
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -308,7 +309,7 @@ const SingleReComment = ({ ReComment }) => {
                         <ReCommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                         <ReCommentInformationAllBox>
                             <div style={{ display: "flex" }}>
-                                <UserNicknameText>{ReComment.writer}</UserNicknameText>
+                                <UserNicknameText>{ReComment.replyer}</UserNicknameText>
                                 <BiLogoDevTo size={21} style={{ margin: "0px 0px 0px 2px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
                                 {ReComment.regdate == ReComment.updatedate ? "" :
                                     <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
