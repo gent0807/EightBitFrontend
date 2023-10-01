@@ -252,7 +252,15 @@ const MuteBtn = styled.div
     `
     margin: 0px 0px 0px 1vw;
     font-size: 1.3vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     cursor: pointer;
+    width: 3vw;
+    height: 3vw;
+    border: solid 2px white;
+    border-radius: 30px;
+    box-sizing: border-box;
     svg
     {
         color: white;
@@ -261,6 +269,9 @@ const MuteBtn = styled.div
 
 const MuteBtnIcon = styled.i
     `
+    font-size: 1.5vw;
+    text-align: center;
+    margin: 0.5vw 0px 0px 0px;
 `
 
 const VideoInformationBtnIcon = styled.i

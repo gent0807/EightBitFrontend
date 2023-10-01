@@ -60,6 +60,7 @@ const HeaderBox = () => {
     const [LanguageClickCheck, setLanguageClickCheck] = useState(false);
     const [FastClickCheck, setFastClickCheck] = useState(false);
     const [BackgroundLine, setBackgroundLine] = useState(false)
+    const [ modalOnOffBtn, setModalOnOffBtn ] = useState(false);
 
 
 
@@ -81,6 +82,21 @@ const HeaderBox = () => {
     let FastRef = useRef(null);
     let WriteRef = useRef(null);
     let BtnLeaveRef = useRef(null);
+
+    const [WindowLength, setWindowLength] = useState(window.innerWidth);
+
+    console.log(WindowLength);
+
+    const handleResize = () => {
+        setWindowLength(window.innerWidth);
+      };
+    
+      useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => {
+          window.removeEventListener("resize", handleResize);
+        }
+      })
 
     useEffect(() => {
         function handleOuside(e) {
@@ -105,15 +121,20 @@ const HeaderBox = () => {
         };
     }, [BtnLeaveRef]);
 
-    console.log(BtnLeaveRef);
-
     useEffect(() => {
         function handleOuside(e) {
             if (LanguageRef.current && !LanguageRef.current.contains(e.target)) {
                 setLanguageClickCheck(false);
                 setIsLanguageMenuShow(false);
             }
+
         };
+        
+        if(WindowLength <= 1342)
+        {
+            setLanguageClickCheck(false);
+            setIsLanguageMenuShow(false);
+        }
 
         if (!LanguageMenuShow) {
             document.addEventListener("click", handleOuside);
@@ -121,7 +142,7 @@ const HeaderBox = () => {
         return () => {
             document.removeEventListener("click", handleOuside);
         };
-    }, [LanguageRef]);
+    }, [LanguageRef, WindowLength]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -131,13 +152,19 @@ const HeaderBox = () => {
             }
         };
 
+        if(WindowLength <= 1342)
+        {
+            setFastClickCheck(false);
+            setIsFastMenuShow(false);
+        }
+
         if (!FastMenuShow) {
             document.addEventListener("click", handleOuside);
         }
         return () => {
             document.removeEventListener("click", handleOuside);
         };
-    }, [FastRef]);
+    }, [FastRef, WindowLength]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -147,13 +174,19 @@ const HeaderBox = () => {
             }
         };
 
+        if(WindowLength <= 1342)
+        {
+            setProfileMenuShow(false);
+            setProfileClickCheck(false);
+        }
+
         if (!ProfileMenuShow) {
             document.addEventListener("click", handleOuside);
         }
         return () => {
             document.removeEventListener("click", handleOuside);
         };
-    }, [ProfileRef]);
+    }, [ProfileRef, WindowLength]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -164,13 +197,20 @@ const HeaderBox = () => {
             }
         };
 
+        if(WindowLength <= 1342)
+        {
+            setIsWriteMenuShow(false);
+            setIsWriteMenuClickCheck(false);
+            setWriteClickCheck(false);
+        }
+
         if (!WriteMenuShow) {
             document.addEventListener("click", handleOuside);
         }
         return () => {
             document.removeEventListener("click", handleOuside);
         };
-    }, [WriteRef]);
+    }, [WriteRef, WindowLength]);
 
 
 
@@ -320,137 +360,114 @@ const HeaderBox = () => {
         window.addEventListener('scroll', updateScroll);
     });
 
-
     return (
         <ALLNavBox>
-            <LeaveBox  ref={BtnLeaveRef}>
-            <BackgroudTopNav TopBack={scrollPosition}>
-                <Topnav>
-                    <NavBox>
-                        <LogoBox>
-                            <Link to='/'><Logo src={LogoLight} alt='로고' /></Link>
-                        </LogoBox>
-                        <NavUl>
-                            <GameLi onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
-                            <ShopLi onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
-                            <ComunityLi onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
-                            <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
-                        </NavUl>
-                    </NavBox>
-                    <AllButtonBox>
-                        <SearchInputBox>
-                            <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
-                            <SearchInputIconBox>
-                                <SearchButton><HiOutlineSearch /></SearchButton>
-                            </SearchInputIconBox>
-                        </SearchInputBox>
-                        <ButtonBox
-                            menucheck={loginMaintain == null ?
-                                false : loginMaintain === "true" ?
-                                    (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
-                        >
+            <LeaveBox ref={BtnLeaveRef}>
 
-                            {loginMaintain == null ? [] : loginMaintain == "true" ?
-                                (userInfo == null ? [] : userInfo.loginState === "allok" ?
-                                    [<MenuBox
-                                        left={"19px"}
-                                        top={"8.3px"}
-                                        size={"33px"}
-                                        padding={"5.4px 0px 0px 0px"}
-                                    >
-                                        <AiOutlineShopping />
-                                    </MenuBox>] : []) :
+                <BackgroudTopNav TopBack={scrollPosition}>
 
-                                (user.login_state === "allok" ?
-                                    [<MenuBox
-                                        left={"19px"}
-                                        top={"8.3px"}
-                                        size={"33px"}
-                                        padding={"5.4px 0px 0px 0px"}
-                                    >
-                                        <AiOutlineShopping />
-                                    </MenuBox>] : [])}
+                <ModalFast OnOff = {modalOnOffBtn}>
 
-                            <MenuBox
-                                click={LanguageClickCheck}
-                                left={"19px"}
-                                top={"10px"}
-                                size={"30px"}
-                                ref={LanguageRef}
-                                padding={"6px 0px 0px 0px"}
-                                onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}
+                </ModalFast>
+
+                    <Topnav>
+
+                        <NavBox>
+                            <NavMenuAllBox>
+                                <LogoBox>
+                                    <Link to='/'><Logo src={LogoLight} alt='로고' /></Link>
+                                </LogoBox>
+                                <NavUl>
+                                    <GameLi onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
+                                    <ShopLi onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
+                                    <ComunityLi onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
+                                    <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
+                                </NavUl>
+                            </NavMenuAllBox>
+                            <ModalFastMenu
+                                onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
                             >
-                                <MdLanguage />
-                            </MenuBox>
+                                <ModalFastMenuIcon><CgMenuGridR /></ModalFastMenuIcon>
+                            </ModalFastMenu>
+                        </NavBox>
 
-                            <Darkmode />
-
-                            <MenuBox
-                                click={FastClickCheck}
-                                left={"24px"}
-                                top={"9px"}
-                                size={"33px"}
-                                ref={FastRef}
-                                padding={"4.8px 0px 0px 0px"}
-                                onClick={() => FastMenuCheck()}
+                        <AllButtonBox>
+                            <SearchInputBox>
+                                <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
+                                <SearchInputIconBox>
+                                    <SearchButton><HiOutlineSearch /></SearchButton>
+                                </SearchInputIconBox>
+                            </SearchInputBox>
+                            <ButtonBox
+                                menucheck={loginMaintain == null ?
+                                    false : loginMaintain === "true" ?
+                                        (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
                             >
-                                <CgMenuGridR />
-                            </MenuBox>
 
-                            <>
-                                {loginMaintain == null ?
-                                    [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}>
-                                        <Link to='/Login'>로그인</Link>
-                                    </LineBox>,
-                                    <MenuBox
-                                        onClick={() => ScrollTop()}
-                                        left={"9px"}
-                                        top={"7px"}
-                                        size={"15px"}
-                                        padding={"10px 0px 10px 0px"}
-                                    >
-                                        <Link to='/SelectSign'>회원가입</Link>
-                                    </MenuBox>] :
+                                {loginMaintain == null ? [] : loginMaintain == "true" ?
+                                    (userInfo == null ? [] : userInfo.loginState === "allok" ?
+                                        [<MenuBox
+                                            left={"19px"}
+                                            top={"8.3px"}
+                                            size={"33px"}
+                                            padding={"5.4px 0px 0px 0px"}
+                                        >
+                                            <AiOutlineShopping />
+                                        </MenuBox>] : []) :
 
-                                    loginMaintain == "true" ?
-                                        (userInfo == null ?
-                                            [<LineBox
-                                                onClick={() => ScrollTop()}
-                                                left={"20px"}
-                                                top={"7px"}
-                                                size={"15px"}
-                                                padding={"10px 0px 10px 0px"}
-                                            >
-                                                <Link to='/Login'>로그인</Link>
-                                            </LineBox>,
+                                    (user.login_state === "allok" ?
+                                        [<MenuBox
+                                            left={"19px"}
+                                            top={"8.3px"}
+                                            size={"33px"}
+                                            padding={"5.4px 0px 0px 0px"}
+                                        >
+                                            <AiOutlineShopping />
+                                        </MenuBox>] : [])}
 
-                                            <MenuBox
-                                                onClick={() => ScrollTop()}
-                                                left={"9px"}
-                                                top={"7px"}
-                                                size={"15px"}
-                                                padding={"10px 0px 10px 0px"}
-                                            >
-                                                <Link to='/SelectSign'>회원가입</Link>
-                                            </MenuBox>] :
+                                <MenuBox
+                                    click={LanguageClickCheck}
+                                    left={"19px"}
+                                    top={"10px"}
+                                    size={"30px"}
+                                    ref={LanguageRef}
+                                    padding={"6px 0px 0px 0px"}
+                                    onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}
+                                >
+                                    <MdLanguage />
+                                </MenuBox>
 
-                                            userInfo.loginState === "allok" ?
-                                                [<Profile
-                                                    click={ProfileClickCheck}
-                                                    ref={ProfileRef}
-                                                    onClick={() => ProfileMenuCheck()}
-                                                >
-                                                    <Profileimg src={localStorage.getItem("profileImageDir") + userInfo.profileImgPath} />
-                                                </Profile>,
+                                <Darkmode />
 
-                                                <WriteBox
-                                                    click={WriteClickCheck}
-                                                    onClick={() => WriteMenuCheck()}
-                                                    ref={WriteRef}
-                                                >
-                                                    <WriteBoxText >글쓰기</WriteBoxText>
-                                                </WriteBox>] :
+                                <MenuBox
+                                    click={FastClickCheck}
+                                    left={"24px"}
+                                    top={"9px"}
+                                    size={"33px"}
+                                    ref={FastRef}
+                                    padding={"4.8px 0px 0px 0px"}
+                                    onClick={() => FastMenuCheck()}
+                                >
+                                    <CgMenuGridR />
+                                </MenuBox>
 
+                                <>
+                                    {loginMaintain == null ?
+                                        [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}>
+                                            <Link to='/Login'>로그인</Link>
+                                        </LineBox>,
+                                        <MenuBox
+                                            onClick={() => ScrollTop()}
+                                            left={"9px"}
+                                            top={"7px"}
+                                            size={"15px"}
+                                            padding={"10px 0px 10px 0px"}
+                                        >
+                                            <Link to='/SelectSign'>회원가입</Link>
+                                        </MenuBox>] :
+
+                                        loginMaintain == "true" ?
+                                            (userInfo == null ?
                                                 [<LineBox
                                                     onClick={() => ScrollTop()}
                                                     left={"20px"}
@@ -469,274 +486,312 @@ const HeaderBox = () => {
                                                     padding={"10px 0px 10px 0px"}
                                                 >
                                                     <Link to='/SelectSign'>회원가입</Link>
-                                                </MenuBox>]) :
-                                        (user.login_state === "allok" ?
-                                            [<Profile
-                                                click={ProfileClickCheck}
-                                                ref={ProfileRef}
-                                                onClick={() => ProfileMenuCheck()}
+                                                </MenuBox>] :
+
+                                                userInfo.loginState === "allok" ?
+                                                    [<Profile
+                                                        click={ProfileClickCheck}
+                                                        ref={ProfileRef}
+                                                        onClick={() => ProfileMenuCheck()}
+                                                    >
+                                                        <Profileimg src={localStorage.getItem("profileImageDir") + userInfo.profileImgPath} />
+                                                    </Profile>,
+
+                                                    <WriteBox
+                                                        click={WriteClickCheck}
+                                                        onClick={() => WriteMenuCheck()}
+                                                        ref={WriteRef}
+                                                    >
+                                                        <WriteBoxText >글쓰기</WriteBoxText>
+                                                    </WriteBox>] :
+
+                                                    [<LineBox
+                                                        onClick={() => ScrollTop()}
+                                                        left={"20px"}
+                                                        top={"7px"}
+                                                        size={"15px"}
+                                                        padding={"10px 0px 10px 0px"}
+                                                    >
+                                                        <Link to='/Login'>로그인</Link>
+                                                    </LineBox>,
+
+                                                    <MenuBox
+                                                        onClick={() => ScrollTop()}
+                                                        left={"9px"}
+                                                        top={"7px"}
+                                                        size={"15px"}
+                                                        padding={"10px 0px 10px 0px"}
+                                                    >
+                                                        <Link to='/SelectSign'>회원가입</Link>
+                                                    </MenuBox>]) :
+                                            (user.login_state === "allok" ?
+                                                [<Profile
+                                                    click={ProfileClickCheck}
+                                                    ref={ProfileRef}
+                                                    onClick={() => ProfileMenuCheck()}
+                                                >
+                                                    <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                                </Profile>,
+
+                                                <WriteBox
+                                                    click={WriteClickCheck}
+                                                    onClick={() => WriteMenuCheck()}
+                                                    ref={WriteRef}
+                                                >
+                                                    <WriteBoxText >글쓰기</WriteBoxText>
+                                                </WriteBox>] :
+                                                [<LineBox
+                                                    onClick={() => ScrollTop()}
+                                                    left={"20px"}
+                                                    top={"7px"}
+                                                    size={"15px"}
+                                                    padding={"10px 0px 10px 0px"}
+                                                >
+                                                    <Link to='/Login'>로그인</Link>
+                                                </LineBox>,
+
+                                                <MenuBox
+                                                    onClick={() => ScrollTop()}
+                                                    left={"9px"}
+                                                    top={"7px"}
+                                                    size={"15px"}
+                                                    padding={"10px 0px 10px 0px"}
+                                                >
+                                                    <Link to='/SelectSign'>회원가입</Link>
+                                                </MenuBox>])}
+                                </>
+
+                                <LanguageListBox
+                                    margin={loginMaintain == null ? false : loginMaintain == "true" ?
+                                        ((userInfo != null) ? (userInfo.loginState === "allok" ?
+                                            true : false) : false) :
+                                        (user.login_state === "allok" ? true : false)}
+                                    zindex={languageTopZIndex.current}
+                                    default={isDefaultLanguageScene}
+                                    show={LanguageMenuShow}>
+                                    <ProfileUl>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
+                                            setLanguageClickCheck(!LanguageClickCheck)]}
+                                        >
+                                            <DropdownImg src={Korean} />
+                                            <ProfileliText MediaLeft={"17px"}>Korean</ProfileliText>
+                                        </Profileli>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
+                                            setLanguageClickCheck(!LanguageClickCheck)]}
+                                        >
+                                            <DropdownImg src={UK} />
+                                            <ProfileliText MediaLeft={"17px"}>English</ProfileliText>
+                                        </Profileli>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
+                                            setLanguageClickCheck(!LanguageClickCheck)]}
+                                        >
+                                            <DropdownImg src={Germany} />
+                                            <ProfileliText MediaLeft={"17px"}>Deutsch</ProfileliText>
+                                        </Profileli>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
+                                            setLanguageClickCheck(!LanguageClickCheck)]}
+                                        >
+                                            <DropdownImg src={Spain} />
+                                            <ProfileliText MediaLeft={"17px"}>Espanol</ProfileliText>
+                                        </Profileli>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
+                                            setLanguageClickCheck(!LanguageClickCheck)]}
+                                        >
+                                            <DropdownImg src={Japan} />
+                                            <ProfileliText MediaLeft={"17px"}>Japanese</ProfileliText>
+                                        </Profileli>
+                                        <Profileli
+                                            padding="11.5px 0px 15px 13px"
+                                            onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
+                                            setLanguageClickCheck(!LanguageClickCheck)]}
+                                        >
+                                            <DropdownImg src={China} />
+                                            <ProfileliText MediaLeft={"17px"}>Chinese</ProfileliText>
+                                        </Profileli>
+                                    </ProfileUl>
+                                </LanguageListBox>
+
+                                <FastListBox zindex={fastMenuTopZIndex.current} default={isDefaultFastScene} show={FastMenuShow}>
+                                    <ProfileUl>
+
+                                    </ProfileUl>
+                                </FastListBox>
+
+                                <ProfileListBox
+                                    zindex={profileMenuTopZIndex.current}
+                                    default={isDefaultProfileScene}
+                                    logout={isProfileLogoutCheck}
+                                    show={ProfileMenuShow}
+                                    mediaCheck={WindowLength}
+                                >
+                                    <ProfileUl>
+                                        <Link to='/'>
+                                            <Profileli
+                                                padding="15px 0px 15px 13px"
+                                                onClick={() => [setProfileMenuShow(!ProfileMenuShow),
+                                                setProfileClickCheck(!ProfileClickCheck)]}
                                             >
-                                                <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
-                                            </Profile>,
+                                                <DropdownImg src={User} />
+                                                <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
+                                            </Profileli>
+                                        </Link>
 
-                                            <WriteBox
-                                                click={WriteClickCheck}
-                                                onClick={() => WriteMenuCheck()}
-                                                ref={WriteRef}
-                                            >
-                                                <WriteBoxText >글쓰기</WriteBoxText>
-                                            </WriteBox>] :
-                                            [<LineBox
-                                                onClick={() => ScrollTop()}
-                                                left={"20px"}
-                                                top={"7px"}
-                                                size={"15px"}
-                                                padding={"10px 0px 10px 0px"}
-                                            >
-                                                <Link to='/Login'>로그인</Link>
-                                            </LineBox>,
-
-                                            <MenuBox
-                                                onClick={() => ScrollTop()}
-                                                left={"9px"}
-                                                top={"7px"}
-                                                size={"15px"}
-                                                padding={"10px 0px 10px 0px"}
-                                            >
-                                                <Link to='/SelectSign'>회원가입</Link>
-                                            </MenuBox>])}
-                            </>
-
-                            <LanguageListBox
-                                margin={loginMaintain == null ? false : loginMaintain == "true" ?
-                                    ((userInfo != null) ? (userInfo.loginState === "allok" ?
-                                        true : false) : false) :
-                                    (user.login_state === "allok" ? true : false)}
-                                zindex={languageTopZIndex.current}
-                                default={isDefaultLanguageScene}
-                                show={LanguageMenuShow}>
-                                <ProfileUl>
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                        setLanguageClickCheck(!LanguageClickCheck)]}
-                                    >
-                                        <DropdownImg src={Korean} />
-                                        <ProfileliText MediaLeft={"17px"}>Korean</ProfileliText>
-                                    </Profileli>
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                        setLanguageClickCheck(!LanguageClickCheck)]}
-                                    >
-                                        <DropdownImg src={UK} />
-                                        <ProfileliText MediaLeft={"17px"}>English</ProfileliText>
-                                    </Profileli>
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                        setLanguageClickCheck(!LanguageClickCheck)]}
-                                    >
-                                        <DropdownImg src={Germany} />
-                                        <ProfileliText MediaLeft={"17px"}>Deutsch</ProfileliText>
-                                    </Profileli>
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                        setLanguageClickCheck(!LanguageClickCheck)]}
-                                    >
-                                        <DropdownImg src={Spain} />
-                                        <ProfileliText MediaLeft={"17px"}>Espanol</ProfileliText>
-                                    </Profileli>
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                        setLanguageClickCheck(!LanguageClickCheck)]}
-                                    >
-                                        <DropdownImg src={Japan} />
-                                        <ProfileliText MediaLeft={"17px"}>Japanese</ProfileliText>
-                                    </Profileli>
-                                    <Profileli
-                                        padding="11.5px 0px 15px 13px"
-                                        onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                        setLanguageClickCheck(!LanguageClickCheck)]}
-                                    >
-                                        <DropdownImg src={China} />
-                                        <ProfileliText MediaLeft={"17px"}>Chinese</ProfileliText>
-                                    </Profileli>
-                                </ProfileUl>
-                            </LanguageListBox>
-
-                            <FastListBox zindex={fastMenuTopZIndex.current} default={isDefaultFastScene} show={FastMenuShow}>
-                                <ProfileUl>
-
-                                </ProfileUl>
-                            </FastListBox>
-
-                            <ProfileListBox
-                                zindex={profileMenuTopZIndex.current}
-                                default={isDefaultProfileScene}
-                                logout={isProfileLogoutCheck}
-                                show={ProfileMenuShow}
-                            >
-                                <ProfileUl>
-                                    <Link to='/'>
                                         <Profileli
                                             padding="15px 0px 15px 13px"
                                             onClick={() => [setProfileMenuShow(!ProfileMenuShow),
                                             setProfileClickCheck(!ProfileClickCheck)]}
                                         >
-                                            <DropdownImg src={User} />
-                                            <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
+                                            <DropdownImg src={Bell} />
+                                            <ProfileliText MediaLeft={"17px"}>소식 알람</ProfileliText>
                                         </Profileli>
-                                    </Link>
 
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                        setProfileClickCheck(!ProfileClickCheck)]}
-                                    >
-                                        <DropdownImg src={Bell} />
-                                        <ProfileliText MediaLeft={"17px"}>소식 알람</ProfileliText>
-                                    </Profileli>
+                                        <Link to='/'>
+                                            <Profileli
+                                                padding="15px 0px 15px 13px"
+                                                onClick={() => [setProfileMenuShow(!ProfileMenuShow),
+                                                setProfileClickCheck(!ProfileClickCheck)]}
+                                            >
+                                                <DropdownImg src={Coding} />
+                                                <ProfileliText MediaLeft={"17px"}>개발자등록</ProfileliText>
+                                            </Profileli>
+                                        </Link>
 
-                                    <Link to='/'>
+                                        <Link to='/'>
+                                            <Profileli
+                                                padding="15px 0px 15px 13px"
+                                                onClick={() => [setProfileMenuShow(!ProfileMenuShow),
+                                                setProfileClickCheck(!ProfileClickCheck)]}
+                                            >
+                                                <DropdownImg src={Shop} />
+                                                <ProfileliText MediaLeft={"17px"}>굿즈샵 입점</ProfileliText>
+                                            </Profileli>
+                                        </Link>
+
+                                        <Link to='/'>
+                                            <Profileli
+                                                padding="15px 0px 15px 13px"
+                                                onClick={() => [setProfileMenuShow(!ProfileMenuShow),
+                                                setProfileClickCheck(!ProfileClickCheck)]}
+                                            >
+                                                <DropdownImg src={Update} />
+                                                <ProfileliText MediaLeft={"17px"}>회원정보수정</ProfileliText>
+                                            </Profileli>
+                                        </Link>
+
                                         <Profileli
-                                            padding="15px 0px 15px 13px"
-                                            onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                            setProfileClickCheck(!ProfileClickCheck)]}
+                                            line="none"
+                                            padding="10px 0px 15px 13px"
+                                            onClick={LogoutFunc}
                                         >
-                                            <DropdownImg src={Coding} />
-                                            <ProfileliText MediaLeft={"17px"}>개발자등록</ProfileliText>
+                                            <DropdownImg src={Logout} />
+                                            <ProfileliText MediaLeft={"16px"}>로그아웃</ProfileliText>
                                         </Profileli>
-                                    </Link>
+                                    </ProfileUl>
 
-                                    <Link to='/'>
-                                        <Profileli
-                                            padding="15px 0px 15px 13px"
-                                            onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                            setProfileClickCheck(!ProfileClickCheck)]}
-                                        >
-                                            <DropdownImg src={Shop} />
-                                            <ProfileliText MediaLeft={"17px"}>굿즈샵 입점</ProfileliText>
-                                        </Profileli>
-                                    </Link>
+                                </ProfileListBox>
 
-                                    <Link to='/'>
-                                        <Profileli
-                                            padding="15px 0px 15px 13px"
-                                            onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                            setProfileClickCheck(!ProfileClickCheck)]}
-                                        >
-                                            <DropdownImg src={Update} />
-                                            <ProfileliText MediaLeft={"17px"}>회원정보수정</ProfileliText>
-                                        </Profileli>
-                                    </Link>
+                                <WriteListBox
+                                    zindex={writeMemuTopZIndex.current}
+                                    default={isDefaultWriteScene}
+                                    show={WriteMenuShow}
+                                >
+                                    <ProfileUl>
+                                        <Link to="/WriteBoard">
+                                            <Profileli
+                                                padding="15px 0px 15px 13px"
+                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                                            >
+                                                <DropdownImg src={Essay} />
+                                                <ProfileliText MediaLeft={"17px"}>자유게시판</ProfileliText>
+                                            </Profileli>
+                                        </Link>
 
-                                    <Profileli
-                                        line="none"
-                                        padding="10px 0px 15px 13px"
-                                        onClick={LogoutFunc}
-                                    >
-                                        <DropdownImg src={Logout} />
-                                        <ProfileliText MediaLeft={"16px"}>로그아웃</ProfileliText>
-                                    </Profileli>
-                                </ProfileUl>
-
-                            </ProfileListBox>
-
-                            <WriteListBox
-                                zindex={writeMemuTopZIndex.current}
-                                default={isDefaultWriteScene}
-                                show={WriteMenuShow}
-                            >
-                                <ProfileUl>
-                                    <Link to="/WriteBoard">
                                         <Profileli
                                             padding="15px 0px 15px 13px"
                                             onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
                                         >
-                                            <DropdownImg src={Essay} />
-                                            <ProfileliText MediaLeft={"17px"}>자유게시판</ProfileliText>
+                                            <DropdownImg src={Discussion} />
+                                            <ProfileliText MediaLeft={"17px"}>토론게시판</ProfileliText>
                                         </Profileli>
-                                    </Link>
 
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                    >
-                                        <DropdownImg src={Discussion} />
-                                        <ProfileliText MediaLeft={"17px"}>토론게시판</ProfileliText>
-                                    </Profileli>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                                        >
+                                            <DropdownImg src={Strategy} />
+                                            <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
+                                        </Profileli>
 
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                    >
-                                        <DropdownImg src={Strategy} />
-                                        <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
-                                    </Profileli>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                                        >
+                                            <DropdownImg src={Rating} />
+                                            <ProfileliText MediaLeft={"17px"}>상품 리뷰</ProfileliText>
+                                        </Profileli>
 
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                    >
-                                        <DropdownImg src={Rating} />
-                                        <ProfileliText MediaLeft={"17px"}>상품 리뷰</ProfileliText>
-                                    </Profileli>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                                        >
+                                            <DropdownImg src={Console} />
+                                            <ProfileliText MediaLeft={"17px"}>게임 리뷰</ProfileliText>
+                                        </Profileli>
 
-                                    <Profileli
-                                        padding="15px 0px 15px 13px"
-                                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                    >
-                                        <DropdownImg src={Console} />
-                                        <ProfileliText MediaLeft={"17px"}>게임 리뷰</ProfileliText>
-                                    </Profileli>
+                                        <Profileli
+                                            padding="10.5px 0px 15px 13px"
+                                            onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                                        >
+                                            <DropdownImg src={Digital} />
+                                            <ProfileliText MediaLeft={"17px"}>아트워크</ProfileliText>
+                                        </Profileli>
 
-                                    <Profileli
-                                        padding="10.5px 0px 15px 13px"
-                                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                    >
-                                        <DropdownImg src={Digital} />
-                                        <ProfileliText MediaLeft={"17px"}>아트워크</ProfileliText>
-                                    </Profileli>
+                                    </ProfileUl>
+                                </WriteListBox>
+                            </ButtonBox>
+                        </AllButtonBox>
+                    </Topnav>
+                </BackgroudTopNav>
 
-                                </ProfileUl>
-                            </WriteListBox>
-                        </ButtonBox>
-                    </AllButtonBox>
-                </Topnav>
-            </BackgroudTopNav>
-
-            <BackgroudSubNav LineCheck={BackgroundLine} TopBack={scrollPosition}>
-                <SubNavMenu LineCheck={BackgroundLine}>
-                    <GameSubNav display={isGameTabCheck} TopBack={scrollPosition}>
-                        <Link to='/'><SubNavText>홈</SubNavText></Link>
-                        <Link to='/'><SubNavText>전체게임</SubNavText></Link>
-                        <Link to='/'><SubNavText>공식게임</SubNavText></Link>
-                        <Link to='/'><SubNavText>인디게임</SubNavText></Link>
-                        <Link to='/'><SubNavText>추천게임</SubNavText></Link>
-                    </GameSubNav>
-                    <ShopSubNav display={isShopTabCheck} TopBack={scrollPosition}>
-                        <Link to='/'><SubNavText>홈</SubNavText></Link>
-                        <Link to='/'><SubNavText>쿠폰샵</SubNavText></Link>
-                        <Link to='/'><SubNavText>굿즈샵</SubNavText></Link>
-                        <Link to='/'><SubNavText>장바구니</SubNavText></Link>
-                        <Link to='/'><SubNavText>위시리스트</SubNavText></Link>
-                    </ShopSubNav>
-                    <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
-                        <Link to='/'><SubNavText>공지사항</SubNavText></Link>
-                        <Link to='/'><SubNavText>이벤트</SubNavText></Link>
-                        <Link to='/'><SubNavText>공략게시판</SubNavText></Link>
-                        <Link to='/'><SubNavText>토론게시판</SubNavText></Link>
-                        <Link to='/FreeBoard'><SubNavText>자유게시판</SubNavText></Link>
-                    </ComunitySubNav>
-                    <SupportSubNav display={isSupprotTabCheck} TopBack={scrollPosition}>
-                        <Link to='/'><SubNavText>이용문의</SubNavText></Link>
-                        <Link to='/'><SubNavText>회사정보</SubNavText></Link>
-                    </SupportSubNav>
-                </SubNavMenu>
-            </BackgroudSubNav>
+                <BackgroudSubNav LineCheck={BackgroundLine} TopBack={scrollPosition}>
+                    <SubNavMenu LineCheck={BackgroundLine}>
+                        <GameSubNav display={isGameTabCheck} TopBack={scrollPosition}>
+                            <Link to='/'><SubNavText>홈</SubNavText></Link>
+                            <Link to='/'><SubNavText>전체게임</SubNavText></Link>
+                            <Link to='/'><SubNavText>공식게임</SubNavText></Link>
+                            <Link to='/'><SubNavText>인디게임</SubNavText></Link>
+                            <Link to='/'><SubNavText>추천게임</SubNavText></Link>
+                        </GameSubNav>
+                        <ShopSubNav display={isShopTabCheck} TopBack={scrollPosition}>
+                            <Link to='/'><SubNavText>홈</SubNavText></Link>
+                            <Link to='/'><SubNavText>쿠폰샵</SubNavText></Link>
+                            <Link to='/'><SubNavText>굿즈샵</SubNavText></Link>
+                            <Link to='/'><SubNavText>장바구니</SubNavText></Link>
+                            <Link to='/'><SubNavText>위시리스트</SubNavText></Link>
+                        </ShopSubNav>
+                        <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
+                            <Link to='/'><SubNavText>공지사항</SubNavText></Link>
+                            <Link to='/'><SubNavText>이벤트</SubNavText></Link>
+                            <Link to='/'><SubNavText>공략게시판</SubNavText></Link>
+                            <Link to='/'><SubNavText>토론게시판</SubNavText></Link>
+                            <Link to='/FreeBoard'><SubNavText>자유게시판</SubNavText></Link>
+                        </ComunitySubNav>
+                        <SupportSubNav display={isSupprotTabCheck} TopBack={scrollPosition}>
+                            <Link to='/'><SubNavText>이용문의</SubNavText></Link>
+                            <Link to='/'><SubNavText>회사정보</SubNavText></Link>
+                        </SupportSubNav>
+                    </SubNavMenu>
+                </BackgroudSubNav>
             </LeaveBox>
         </ALLNavBox>
     );
@@ -746,8 +801,45 @@ export const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-const LeaveBox = styled.div
+const ModalFast = styled.div
 `
+    display: ${props => props.OnOff ? "block" : "none"};
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(25,25,25,0.8);
+`
+
+const ModalFastMenu = styled.div
+    `
+    display: none;
+
+    @media (min-width:667px) and (max-width:1342px)
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 35px;
+        cursor: pointer;
+        margin: -10px 0px 0px 0px;
+    }
+`
+
+const NavMenuAllBox = styled.div
+    `
+    display: flex;
+`
+
+const ModalFastMenuIcon = styled.i
+    `
+
+`
+
+const LeaveBox = styled.div
+    `
 
 `
 
@@ -794,7 +886,7 @@ const BackgroudTopNav = styled.div
 
     @media (min-width:667px) and (max-width:1342px)
     {
-        height: 160px;
+        height: 78px;
     }
 `
 
@@ -1026,7 +1118,7 @@ const NavBox = styled.div
 
     @media (min-width:666px) and (max-width:1342px)
     {
-        justify-content: center;
+        justify-content: space-between;
     }
 `
 
@@ -1075,13 +1167,18 @@ const AllButtonBox = styled.div
 
     @media (min-width:666px) and (max-width:1342px)
     {
-        margin: -10px 13px 0px 0px;
+        display: none;
     }
 `
 
 const ButtonBox = styled.div
     `
     display: flex;
+
+    @media (min-width:666px) and (max-width:1342px)
+    {
+        display: none;
+    }
 `
 
 const MenuBox = styled.div
@@ -1128,6 +1225,11 @@ export const SearchInputBox = styled.div
     display: flex;
     border: solid 3px #3c3c3c;
     border-radius: 13px;
+
+    @media (min-width:666px) and (max-width:1342px)
+    {
+        display: none;
+    }
 }
 `
 
@@ -1195,12 +1297,6 @@ const DropdownImg = styled.img
     height: 33px;
 `
 
-const UserImg = styled(DropdownImg)
-    `
-    border-radius: 26px;
-`
-
-
 const ProFileSlideDown = keyframes
     `
     0%{
@@ -1212,71 +1308,19 @@ const ProFileSlideDown = keyframes
     }
 `
 
-const ProFileSlideUp = keyframes
-    `
-    0%{
-        height: 370px;
-    }
-    100%{
-        height: 0px;
-    }
-`
-
-const LanguageSlideDown = keyframes
-    `
-    0%{
-        height: 0px;
-    }
-    100%{
-        height: 119px;
-    }
-    }
-`
-
-const LanguageSlideUp = keyframes
-    `
-    0%{
-        height: 119px;
-    }
-    100%{
-        height: 0px;
-    }
-`
-
-const WriteSlideDown = keyframes
-    `
-    0%{
-        height: 0px;
-    }
-    100%{
-        height: 119px;
-    }
-    }
-`
-
-const WriteSlideUp = keyframes
-    `
-    0%{
-        height: 119px;
-    }
-    100%{
-        height: 0px;
-    }
-`
-
 const ProfileListBox = styled.div
-    `
-    display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
-    width: 217px;
-    margin: 59px 0px 0px 158.5px;
-    box-shadow: 0px 0px 0px 3px ${props => props.theme.borderColor} inset;
-    background: white;  
-    height: ${props => props.show ? "370px" : "0px"};
-    border-radius: 10px;
-    position: absolute;
-    animation: ${props => props.show ? ProFileSlideDown : ProFileSlideUp} 0.25s;
-    overflow: hidden;
-    z-index: ${props => props.zindex ? 2 : 1};
+`
+display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
+width: 217px;
+margin: 59px 0px 0px 158.5px;
+box-shadow: 0px 0px 0px 3px ${props => props.theme.borderColor} inset;
+background: white;  
+height: ${props => props.show ? "370px" : "0px"};
+border-radius: 10px;
+position: absolute;
+animation: ${props => props.show ? ProFileSlideDown : "none"} 0.25s;
+overflow: hidden;
+z-index: ${props => props.zindex ? 2 : 1};
 `
 
 const LanguageListBox = styled(ProfileListBox)
@@ -1286,6 +1330,12 @@ const LanguageListBox = styled(ProfileListBox)
     margin: ${props => props.margin ? "59px 0px 0px -21.4px" : "59px 0px 0px -74px"};
     height: ${props => props.show ? "370px" : "0px"};
     z-index: ${props => props.zindex ? 2 : 1};
+
+    @media (min-width:666px) and (max-width:1342px)
+    {
+        display: none;
+        height: 0px;
+    }
 `
 
 const FastListBox = styled(ProfileListBox)
