@@ -282,6 +282,82 @@ const UpdateBoard = () => {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
             })
             .then((res) => {
+                /* if(res.status==403){
+                    axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`,{
+
+                    },
+                    {
+                        headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                    })
+                    .then((res) =>{
+                        return res.data
+                    }
+                    )
+                    .then((data)=>{
+                        if(data=="invalid"){
+                            localStorage.removeItem("userInfo");
+                            localStorage.removeItem("loginMaintain");
+                            dispatch(clearLoginState());
+                            deleteRefreshToken("refreshToken");
+                            window.alert("인증되지 않은 접근입니다.");
+                            navigate('/Login');
+                        }
+                        else if(data=="accesstoken valid"){
+                            localStorage.removeItem("userInfo");
+                            localStorage.removeItem("loginMaintain");
+                            dispatch(clearLoginState());
+                            deleteRefreshToken("refreshToken");
+                            window.alert("인증되지 않은 접근입니다.");
+                            navigate('/Login');
+                        }
+                        else if(data=="accesstoken not matched user"){
+                            localStorage.removeItem("userInfo");
+                            localStorage.removeItem("loginMaintain");
+                            dispatch(clearLoginState());
+                            deleteRefreshToken("refreshToken");
+                            window.alert("인증되지 않은 접근입니다.");
+                            navigate('/Login');
+                        }
+                        else if(data=="refreshtoken invalid"){
+                            localStorage.removeItem("userInfo");
+                            localStorage.removeItem("loginMaintain");
+                            dispatch(clearLoginState());
+                            deleteRefreshToken("refreshToken");
+                            window.alert("인증되지 않은 접근입니다.");
+                            navigate('/Login');
+                        }
+                        else if(data=="refreshtoken expired"){
+                            localStorage.removeItem("userInfo");
+                            localStorage.removeItem("loginMaintain");
+                            dispatch(clearLoginState());
+                            deleteRefreshToken("refreshToken");
+                            window.alert("로그인이 만료되었습니다.");
+                            navigate('/Login');
+                        }
+                        else if(data=="refreshtoken not matched user"){
+                            localStorage.removeItem("userInfo");
+                            localStorage.removeItem("loginMaintain");
+                            dispatch(clearLoginState());
+                            deleteRefreshToken("refreshToken");
+                            window.alert("인증되지 않은 접근입니다.");
+                            navigate('/Login');
+                        }
+                        else{
+                            const object={
+                                accessToken: data,
+                            };
+                            if(loginMaintain=="true"){
+                                userInfo.accessToken=data;
+                            }
+                            dispatch(accessToken(object));
+                            OncheckSubmit(e);
+                        }
+                    })
+                    return;
+                }
+                else if(res.status==200){
+                    return res.data
+                } */
                 return res.data
             })
             .then((data) => {
@@ -325,6 +401,10 @@ const UpdateBoard = () => {
     }
 
     console.log(EditerValue);
+
+    const deleteRefreshToken = (name) => {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+    }
 
 
     return (

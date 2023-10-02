@@ -146,7 +146,7 @@ const FreeBoard = () => {
             <BoardBox>
                 <BoardContentAllBox>
                     {posts.length === 0 && <NotPage />}
-                    {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt }) => (
+                    {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt, reply_count }) => (
                         <BoardContentBox key={id}>
                             <BoardContentNumber>{id}</BoardContentNumber>
                             <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>

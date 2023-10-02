@@ -27,10 +27,6 @@ export const userSlice = createSlice({
             state.access_token = action.payload.accessToken;
             return state;
         },
-        refreshToken: (state, action) => {
-            state.refresh_token = action.payload.refreshToken;
-            return state;
-        },
         loginState: (state, action) => {
             state.login_state = action.payload.loginState;
             state.role = action.payload.role;
@@ -49,5 +45,5 @@ export const userSlice = createSlice({
     },
 });
 
-export const { clearLoginState, accessToken, refreshToken, loginState, point } = userSlice.actions;
+export const { clearLoginState, accessToken, loginState, point } = userSlice.actions;
 export default userSlice.reducer;

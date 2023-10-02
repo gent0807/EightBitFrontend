@@ -34,6 +34,7 @@
     "redux-toolkit": "^1.1.2",
     "sacc": "^0.0.1",
     "sass": "^1.66.1",
+    "stream-http": "^3.2.0",
     "styled-components": "^6.0.0-rc.1",
     "swiper": "^6.0.2",
     "web-vitals": "^2.1.4"
