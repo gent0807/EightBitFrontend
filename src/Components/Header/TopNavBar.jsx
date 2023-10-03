@@ -245,6 +245,12 @@ const HeaderBox = () => {
     }
 
     const LogoutFunc = () => {
+        if(loginMaintain == "true"){
+            resetToken(userInfo.nickName);
+        }
+        else if(loginMaintain == "false"){
+            resetToken(user.nickname);
+        }
         localStorage.removeItem("userInfo");
         localStorage.removeItem("loginMaintain");
         dispatch(clearLoginState());
@@ -252,6 +258,23 @@ const HeaderBox = () => {
         setProfileClickCheck(false);
         setIsProfileLogoutCheck(true);
         navigate("/");
+    }
+
+    const resetToken = async (nickname) => {
+        await axios.patch(`${ip}/Users/token/reset/${nickname}`,
+        {
+
+        },
+        {
+            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}` },
+        })
+        .then((res) => {
+            return res.data;
+        })
+        .then((data) => {
+            return;
+        })
+
     }
 
     const GameliHover = () => {

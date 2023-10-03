@@ -27,7 +27,7 @@ const Router = () => {
                 <Route path="/FreeBoard" element={<FreeBoard />} />
                 <Route path="/WriteBoard" element={<WriteBoard />} />
                 <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
-                <Route path="/UpdateBoard/:writer/:regdate" element={<UpdateBoard />} />
+                <Route path="/UpdateBoard/:writer/:regdate/:title/:content" element={<UpdateBoard />} />
                 <Route path="/" element={<Center />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>

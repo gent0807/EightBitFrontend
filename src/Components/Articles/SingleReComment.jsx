@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { freeReply } from "./Reply";
 import { freeReComment } from "./ReComment";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -56,6 +57,7 @@ const SingleReComment = ({ ReComment }) => {
 
     let likeMode = useRef(false);
 
+    const [replyText, setReplyText] = useRecoilState(freeReply);
     const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
@@ -188,7 +190,7 @@ const SingleReComment = ({ ReComment }) => {
         }
 
         const getLikers=(reCommenter, regdate)=>{
-            axios.get(`${ip}/Board/article/reply/reComment/likers?replyer=${reCommenter}&regdate=${regdate}`,{
+            axios.get(`${ip}/Board/article/reply/reComment/likers?reCommenter=${reCommenter}&regdate=${regdate}`,{
 
             },
             {
@@ -238,12 +240,12 @@ const SingleReComment = ({ ReComment }) => {
         setRegdate(ReComment.regdate);
         setUpdatedate(ReComment.updatedate);
         setUpdateReCommentText(ReComment.content);
-        setReCommentChangeValue("@" + ReComment.replyer + "\n");
+        setReCommentChangeValue("@" + ReComment.reCommenter + "\n");
 
         getReCommenterProfileImagePath(ReComment.reCommenter);
         getReCommenterRole(ReComment.reCommenter);
         getLikers(ReComment.reCommenter, ReComment.regdate);
-    }, [reCommentText]);
+    }, [replyText, reCommentText]);
 
     const registerReComment = async (e) => {
         e.preventDefault();
@@ -298,7 +300,7 @@ const SingleReComment = ({ ReComment }) => {
 
         await axios.post(`${ip}/Board/article/reply/reComment/like/`, {
             liker:loginMaintain=="true" ? userInfo.nickName : user.nickname,
-            repCommenter: reCommenter,
+            reCommenter: reCommenter,
             regdate: regdate,
         },
         {
@@ -319,8 +321,7 @@ const SingleReComment = ({ ReComment }) => {
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/reply/like/${loginMaintain=="true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}`, {
-            },
+            await axios.delete(`${ip}/Board/article/reply/reComment/like/${loginMaintain=="true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}`, 
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
@@ -354,6 +355,7 @@ const SingleReComment = ({ ReComment }) => {
             })
             .then((data) => {
                 setReCommentText(data+"_update");
+                setContent(data);
                 setUpdateMode(false);
             });           
         }
@@ -372,9 +374,7 @@ const SingleReComment = ({ ReComment }) => {
         const check = window.confirm("정말 삭제하시겠습니까?");
         if(check==true){
             await axios.delete(`${ip}/Board/article/reply/reComment/${reCommenter}/${regdate}/${loginMaintain=="true" ? userInfo.role : user.role}`, 
-            {
-
-            },
+            
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
@@ -474,7 +474,7 @@ const SingleReComment = ({ ReComment }) => {
     }
 
     const reportAbuse = async () => {
-        axios.patch(`${ip}/Board/article/reply/reComment/report/abuse?reCommenter=${reCommenter}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/reComment/abuse?reCommenter=${reCommenter}&regdate=${regdate}`,{
 
         },{
 
@@ -489,7 +489,7 @@ const SingleReComment = ({ ReComment }) => {
     }
 
     const report19 = async () => {
-        axios.patch(`${ip}/Board/article/reply/reComment/report/19?reCommenter=${reCommenter}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/reComment/19?reCommenter=${reCommenter}&regdate=${regdate}`,{
 
         },{
 
@@ -503,7 +503,7 @@ const SingleReComment = ({ ReComment }) => {
         })
     }
     const reportIncoporate = async () => {
-        axios.patch(`${ip}/Board/article/reply/reComment/report/incoporate?reCommenter=${reCommenter}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/reComment/incoporate?reCommenter=${reCommenter}&regdate=${regdate}`,{
 
         },{
 

@@ -288,8 +288,7 @@ const SingleReply = ({ Comment }) => {
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/reply/like/${loginMaintain=="true" ? userInfo.nickName : user.nickname}/${replyer}/${regdate}`, {
-            },
+            await axios.delete(`${ip}/Board/article/reply/like/${loginMaintain=="true" ? userInfo.nickName : user.nickname}/${replyer}/${regdate}`, 
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
@@ -323,6 +322,7 @@ const SingleReply = ({ Comment }) => {
                 })
                 .then((data) => {
                     setReplyText(data+"_update");
+                    setContent(data);
                     setUpdateMode(false);
                 });
         }
@@ -336,9 +336,7 @@ const SingleReply = ({ Comment }) => {
     const deleteReply = async () => {
         const check = window.confirm("정말 삭제하시겠습니까?");
         if(check==true){
-            await axios.delete(`${ip}/Board/article/reply/${replyer}/${regdate}/${loginMaintain=="true" ? userInfo.role : user.role}`, {
-
-            },
+            await axios.delete(`${ip}/Board/article/reply/${replyer}/${regdate}/${loginMaintain=="true" ? userInfo.role : user.role}`, 
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
@@ -491,7 +489,7 @@ const SingleReply = ({ Comment }) => {
     }
 
     const reportAbuse = async () => {
-        axios.patch(`${ip}/Board/article/reply/report/abuse?replyer=${replyer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/reply/abuse?replyer=${replyer}&regdate=${regdate}`,{
 
         },{
 
@@ -506,7 +504,7 @@ const SingleReply = ({ Comment }) => {
     }
 
     const report19 = async () => {
-        axios.patch(`${ip}/Board/article/reply/report/19?replyer=${replyer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/reply/19?replyer=${replyer}&regdate=${regdate}`,{
 
         },{
 
@@ -520,7 +518,7 @@ const SingleReply = ({ Comment }) => {
         });
     }
     const reportIncoporate= async () => {
-        axios.patch(`${ip}/Board/article/reply/report/incoporate?replyer=${replyer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/reply/incoporate?replyer=${replyer}&regdate=${regdate}`,{
 
         },{
 

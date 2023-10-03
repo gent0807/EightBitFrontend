@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
 import { ImageDrop } from "quill-image-drop-module";
@@ -22,6 +22,10 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const UpdateBoard = () => {
+    const {writer}=useParams();
+    const {regdate}=useParams();
+    const {title}=useParams();
+    const {content}=useParams();
     const [WriterChangeValue, setWriterChangeValue] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);

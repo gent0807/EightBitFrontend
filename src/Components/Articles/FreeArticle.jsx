@@ -26,7 +26,6 @@ import { BiLogoDevTo } from "react-icons/bi";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
-import { get } from "http";
 import { clearLoginState, accessToken, point } from "../Redux/User";
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -48,7 +47,7 @@ const FreeArticle = () => {
     const [replyChangeValue, setReplyChangeValue] = useState("");
     const [replyChangeValue2, setReplyChangeValue2] = useState("");
     const [onReplyBtn, setOnReplyBtn] = useState(false);
-    const [totalCommentCount, setTotalCommentCount] = useState(0);
+    const [reCommentCount, setReCommentCount] = useState(0);
     const inputRef = useRef();
     const [InformationImage, setInformationImage] = useState([
         {
@@ -262,19 +261,19 @@ const FreeArticle = () => {
                 })
         }
 
-        const getTotalCommentCount = (writer, regdate) => {
+        const getReCommentCount = (writer, regdate) => {
             axios.get(`${ip}/Board/article/totalcomment/count?writer=${writer}&regdate=${regdate}`, {
 
             },
-                {
+            {
 
-                })
-                .then(res => {
-                    return res.data;
-                })
-                .then(data => {
-                    setTotalCommentCount(data);
-                })
+            })
+            .then(res => {
+                return res.data;
+            })
+            .then(data => {
+                setReCommentCount(data);
+            })
         }
 
         axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
@@ -294,7 +293,7 @@ const FreeArticle = () => {
                 getWriterRole(writer);
                 getLikers(writer, regdate);
                 getComments(writer, regdate);
-                getTotalCommentCount(writer, regdate);
+                getReCommentCount(writer, regdate);
             })
             .catch(err => {
                 navigate("/NotFound");
@@ -327,8 +326,7 @@ const FreeArticle = () => {
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/like/${loginMaintain=="true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`, {
-            },
+            await axios.delete(`${ip}/Board/article/like/${loginMaintain=="true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`, 
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
@@ -347,10 +345,8 @@ const FreeArticle = () => {
     const deleteArticle = (e) => {
         const check = window.confirm("정말 삭제하시겠습니까?");
         if (check == true) {
-
-            axios.delete(`${ip}/Board/article/${writer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`, {
-
-            }, {
+            axios.delete(`${ip}/Board/article/${writer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
+            {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
             .then(res => {
@@ -361,9 +357,7 @@ const FreeArticle = () => {
                 navigate("/FreeBoard");
             });
         }
-        else {
-            return;
-        }
+        else return;
     }
 
 
@@ -543,7 +537,7 @@ const FreeArticle = () => {
     }
 
     const reportAbuse = () => {
-        axios.patch(`${ip}/Board/article/report/abuse?writer=${writer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/article/abuse?writer=${writer}&regdate=${regdate}`,{
 
         },{
 
@@ -558,7 +552,7 @@ const FreeArticle = () => {
     }
 
     const report19 = async () => {
-        axios.patch(`${ip}/Board/article/report/19?writer=${writer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/article/19?writer=${writer}&regdate=${regdate}`,{
 
         },{
 
@@ -573,7 +567,7 @@ const FreeArticle = () => {
     }
 
     const reportIncoporate = async () => {
-        axios.patch(`${ip}/Board/article/report/incoporate?writer=${writer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/article/incoporate?writer=${writer}&regdate=${regdate}`,{
 
         },{
 
@@ -621,7 +615,7 @@ const FreeArticle = () => {
                                 <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
                                 <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineEye> {visitcnt}</ViewText>
                                 <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
-                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment>{Comments.length}</ReplyText>
+                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment>{Comments.length+reCommentCount}</ReplyText>
                             </LikeViewBox>
                         </WriteViewBox>
                     </UserProfileBox>
@@ -741,7 +735,7 @@ const FreeArticle = () => {
             </InformationBox>
             {Comments.length > 0 ?
                 <div style={{ display: "flex", fontSize: "20px", justifyContent: "start", margin: "0px 0px -22.5px 0px" }}>
-                    {totalCommentCount}개 댓글
+                    {reCommentCount+Comments.length}개 댓글
                 </div> : ""}
             <EditAllBox>
                 <LikeBtn
