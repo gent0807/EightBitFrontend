@@ -53,7 +53,7 @@ const FreeArticle = () => {
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
-            src: "http://218.155.175.176:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+            src: "http://59.14.217.233:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
         }
     ]);
     const [Comment, setComment] = useState([

@@ -250,16 +250,16 @@ const VideoViewBox = styled.div
 
 const MuteBtn = styled.div
     `
-    margin: 0px 0px 0px 1vw;
+    margin: 0px 0px 0px 24px;
     font-size: 1.3vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
     cursor: pointer;
-    width: 3vw;
-    height: 3vw;
+    width: 55px;
+    height: 55px;
     border: solid 2px white;
-    border-radius: 30px;
+    border-radius: 100%;
     box-sizing: border-box;
     svg
     {
@@ -269,16 +269,16 @@ const MuteBtn = styled.div
 
 const MuteBtnIcon = styled.i
     `
-    font-size: 1.5vw;
+    font-size: 30px;
     text-align: center;
-    margin: 0.5vw 0px 0px 0px;
+    margin: 17px 0px 7px 0px;
 `
 
 const VideoInformationBtnIcon = styled.i
     `
     display: flex;
     align-items: center;
-    font-size: 1.3vw;
+    font-size: 33px;
     svg
     {
         color: white;
@@ -289,7 +289,7 @@ const VideoDownloadBtnIcon = styled.i
     `
     display: flex;
     align-items: center;
-    font-size: 1.3vw;
+    font-size: 33px;
     svg
     {
         color: white;
@@ -301,6 +301,7 @@ const VideoInformationDownLoadBtnBox = styled.div
     display: flex;
     margin: 2vw 0px 0px 0px;
     justify-content: start;
+    width: 400px;
 
     a
     {
@@ -312,26 +313,26 @@ const VideoInformationBtn = styled.div
     `
     display: flex;
     background: #007aff;
-    margin: 0px 0px 0px 1vw;
-    padding: 0.8vw;
+    padding: 7px;
     white-space: nowrap;
     border-radius: 5px;
+    margin: 0px 0px 0px 10px;
 `
 
 const VideoInformationBtnText = styled.div
     `
     color: white;
-    font-size: 1.3vw;
+    font-size: 24px;
     font-weight: bold;
     cursor: pointer;
-    margin: 1px 0px 0px 10px;
+    margin: 9px 0px 6px 10px;
 `
 
 const VideoDownloadBtn = styled.div
     `
     display: flex;
     background: #007aff;
-    padding: 0.8vw;
+    padding: 7px;
     white-space: nowrap;
     border-radius: 5px;
 `
@@ -339,10 +340,10 @@ const VideoDownloadBtn = styled.div
 const VideoDownloadBtnText = styled.span
     `
     color: white;
-    font-size: 1.3vw;
+    font-size: 24px;
     font-weight: bold;
     cursor: pointer;
-    margin: 1px 0px 0px 10px;
+    margin: 9px 0px 6px 10px;
 `
 
 const VideoInformationLogoBox = styled.div
@@ -380,10 +381,16 @@ const VideoInformation = styled.div
     position: absolute;
     top: 17vw;
     right: 3vw;
-    width: 25vw;
-    height: 12vw;
+    width: 24vw;
     border-radius: 18px;
     z-index: 999;
+
+    @media (min-width:250px) and (max-width:666px)
+    {
+        right: 13vw;
+    }
+
+    
 `
 
 const Slider = styled(Swiper)

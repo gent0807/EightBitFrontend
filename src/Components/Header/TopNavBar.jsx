@@ -60,7 +60,8 @@ const HeaderBox = () => {
     const [LanguageClickCheck, setLanguageClickCheck] = useState(false);
     const [FastClickCheck, setFastClickCheck] = useState(false);
     const [BackgroundLine, setBackgroundLine] = useState(false)
-    const [ modalOnOffBtn, setModalOnOffBtn ] = useState(false);
+    const [modalOnOffBtn, setModalOnOffBtn] = useState(false);
+    const [searchmodalOnOffBtn, setSearchModalOnOffBtn] = useState(false);
 
 
 
@@ -89,14 +90,14 @@ const HeaderBox = () => {
 
     const handleResize = () => {
         setWindowLength(window.innerWidth);
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         window.addEventListener("resize", handleResize);
         return () => {
-          window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", handleResize);
         }
-      })
+    })
 
     useEffect(() => {
         function handleOuside(e) {
@@ -129,9 +130,8 @@ const HeaderBox = () => {
             }
 
         };
-        
-        if(WindowLength <= 1342)
-        {
+
+        if (WindowLength <= 1342) {
             setLanguageClickCheck(false);
             setIsLanguageMenuShow(false);
         }
@@ -152,8 +152,7 @@ const HeaderBox = () => {
             }
         };
 
-        if(WindowLength <= 1342)
-        {
+        if (WindowLength <= 1342) {
             setFastClickCheck(false);
             setIsFastMenuShow(false);
         }
@@ -174,8 +173,7 @@ const HeaderBox = () => {
             }
         };
 
-        if(WindowLength <= 1342)
-        {
+        if (WindowLength <= 1342) {
             setProfileMenuShow(false);
             setProfileClickCheck(false);
         }
@@ -197,8 +195,7 @@ const HeaderBox = () => {
             }
         };
 
-        if(WindowLength <= 1342)
-        {
+        if (WindowLength <= 1342) {
             setIsWriteMenuShow(false);
             setIsWriteMenuClickCheck(false);
             setWriteClickCheck(false);
@@ -353,12 +350,21 @@ const HeaderBox = () => {
     }
 
     const [scrollPosition, setScrollPosition] = useState(0);
+
     const updateScroll = () => {
         setScrollPosition(window.scrollY || document.documentElement.scrollTop);
     }
+
     useEffect(() => {
         window.addEventListener('scroll', updateScroll);
     });
+
+    useEffect(() => {
+        if (WindowLength >= 1342) {
+            setModalOnOffBtn(false);
+            setSearchModalOnOffBtn(false);
+        }
+    }, [WindowLength])
 
     return (
         <ALLNavBox>
@@ -366,9 +372,156 @@ const HeaderBox = () => {
 
                 <BackgroudTopNav TopBack={scrollPosition}>
 
-                <ModalFast OnOff = {modalOnOffBtn}>
+                    <ModalFast OnOff={modalOnOffBtn}>
+                        <ModalFastMenuBox>
+                            <ModalAllOffBtn>
+                                <ModalAllOffBtnText
+                                    onClick={() => setModalOnOffBtn(false)}
+                                >
+                                    x
+                                </ModalAllOffBtnText>
+                            </ModalAllOffBtn>
+                            <ModalUserMenu>
+                                {loginMaintain == null ?
+                                    [<LineBox
+                                        onClick={() => [
+                                            ScrollTop(),
+                                            setModalOnOffBtn(false),
+                                            setSearchModalOnOffBtn(false)
+                                        ]} 
+                                        left={"20px"}
+                                        top={"7px"}
+                                        size={"15px"}
+                                        padding={"10px 0px 10px 0px"}
+                                    >
+                                        <Link to='/Login'>로그인</Link>
+                                    </LineBox>,
+                                    <MenuBox
+                                        onClick={() => [
+                                            ScrollTop(),
+                                            setModalOnOffBtn(false),
+                                            setSearchModalOnOffBtn(false)
+                                        ]}
+                                        left={"9px"}
+                                        top={"7px"}
+                                        size={"15px"}
+                                        padding={"10px 0px 10px 0px"}
+                                    >
+                                        <Link to='/SelectSign'>회원가입</Link>
+                                    </MenuBox>] :
 
-                </ModalFast>
+                                    loginMaintain == "true" ?
+                                        (userInfo == null ?
+                                            [<LineBox
+                                                onClick={() => [
+                                                    ScrollTop(),
+                                                    setModalOnOffBtn(false),
+                                                    setSearchModalOnOffBtn(false)
+                                                ]}
+                                                left={"20px"}
+                                                top={"7px"}
+                                                size={"15px"}
+                                                padding={"10px 0px 10px 0px"}
+                                            >
+                                                <Link to='/Login'>로그인</Link>
+                                            </LineBox>,
+
+                                            <MenuBox
+                                                onClick={() => [
+                                                    ScrollTop(),
+                                                    setModalOnOffBtn(false),
+                                                    setSearchModalOnOffBtn(false)
+                                                ]}
+                                                left={"9px"}
+                                                top={"7px"}
+                                                size={"15px"}
+                                                padding={"10px 0px 10px 0px"}
+                                            >
+                                                <Link to='/SelectSign'>회원가입</Link>
+                                            </MenuBox>] :
+
+                                            userInfo.loginState === "allok" ?
+                                                [<Profile
+                                                    click={ProfileClickCheck}
+                                                    ref={ProfileRef}
+                                                    onClick={() => ProfileMenuCheck()}
+                                                >
+                                                    <Profileimg src={localStorage.getItem("profileImageDir") + userInfo.profileImgPath} />
+                                                </Profile>,
+                                                ] :
+
+                                                [<LineBox
+                                                    onClick={() => [
+                                                        ScrollTop(),
+                                                        setModalOnOffBtn(false),
+                                                        setSearchModalOnOffBtn(false)
+                                                    ]}
+                                                    left={"20px"}
+                                                    top={"7px"}
+                                                    size={"15px"}
+                                                    padding={"10px 0px 10px 0px"}
+                                                >
+                                                    <Link to='/Login'>로그인</Link>
+                                                </LineBox>,
+
+                                                <MenuBox
+                                                    onClick={() => [
+                                                        ScrollTop(),
+                                                        setModalOnOffBtn(false),
+                                                        setSearchModalOnOffBtn(false)
+                                                    ]}
+                                                    left={"9px"}
+                                                    top={"7px"}
+                                                    size={"15px"}
+                                                    padding={"10px 0px 10px 0px"}
+                                                >
+                                                    <Link to='/SelectSign'>회원가입</Link>
+                                                </MenuBox>]) :
+
+                                        (user.login_state === "allok" ?
+                                            [<Profile
+                                                click={ProfileClickCheck}
+                                                ref={ProfileRef}
+                                                onClick={() => ProfileMenuCheck()}
+                                            >
+                                                <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                            </Profile>,
+                                            ] :
+
+                                            [<LineBox
+                                                onClick={() => [
+                                                    ScrollTop(),
+                                                    setModalOnOffBtn(false),
+                                                    setSearchModalOnOffBtn(false)
+                                                ]}
+                                                left={"20px"}
+                                                top={"7px"}
+                                                size={"15px"}
+                                                padding={"10px 0px 10px 0px"}
+                                            >
+                                                <Link to='/Login'>로그인</Link>
+                                            </LineBox>,
+
+                                            <MenuBox
+                                                onClick={() => [
+                                                    ScrollTop(),
+                                                    setModalOnOffBtn(false),
+                                                    setSearchModalOnOffBtn(false)
+                                                ]}
+                                                left={"9px"}
+                                                top={"7px"}
+                                                size={"15px"}
+                                                padding={"10px 0px 10px 0px"}
+                                            >
+                                                <Link to='/SelectSign'>회원가입</Link>
+                                            </MenuBox>])}
+                            </ModalUserMenu>
+                        </ModalFastMenuBox>
+                    </ModalFast>
+
+                    <SearchModal OnOff={searchmodalOnOffBtn}>
+
+                    </SearchModal>
 
                     <Topnav>
 
@@ -384,11 +537,19 @@ const HeaderBox = () => {
                                     <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
                                 </NavUl>
                             </NavMenuAllBox>
-                            <ModalFastMenu
-                                onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
-                            >
-                                <ModalFastMenuIcon><CgMenuGridR /></ModalFastMenuIcon>
-                            </ModalFastMenu>
+
+                            <ModatAllBox>
+                                <SearchModalMenu
+                                    onClick={() => setSearchModalOnOffBtn(!searchmodalOnOffBtn)}
+                                >
+                                    <ModalSearchMenuIcon><HiOutlineSearch /></ModalSearchMenuIcon>
+                                </SearchModalMenu>
+                                <ModalFastMenu
+                                    onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                >
+                                    <ModalFastMenuIcon><CgMenuGridR /></ModalFastMenuIcon>
+                                </ModalFastMenu>
+                            </ModatAllBox>
                         </NavBox>
 
                         <AllButtonBox>
@@ -398,6 +559,7 @@ const HeaderBox = () => {
                                     <SearchButton><HiOutlineSearch /></SearchButton>
                                 </SearchInputIconBox>
                             </SearchInputBox>
+
                             <ButtonBox
                                 menucheck={loginMaintain == null ?
                                     false : loginMaintain === "true" ?
@@ -453,7 +615,13 @@ const HeaderBox = () => {
 
                                 <>
                                     {loginMaintain == null ?
-                                        [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}>
+                                        [<LineBox
+                                            onClick={() => ScrollTop()}
+                                            left={"20px"}
+                                            top={"7px"}
+                                            size={"15px"}
+                                            padding={"10px 0px 10px 0px"}
+                                        >
                                             <Link to='/Login'>로그인</Link>
                                         </LineBox>,
                                         <MenuBox
@@ -524,6 +692,7 @@ const HeaderBox = () => {
                                                     >
                                                         <Link to='/SelectSign'>회원가입</Link>
                                                     </MenuBox>]) :
+
                                             (user.login_state === "allok" ?
                                                 [<Profile
                                                     click={ProfileClickCheck}
@@ -801,22 +970,91 @@ export const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-const ModalFast = styled.div
+const ModalAllOffBtn = styled.div
+    `
+    display: flex;
+    color: white;
+    font-size: 45px;
+    justify-content: end;
+    cursor: pointer;
 `
-    display: ${props => props.OnOff ? "block" : "none"};
+
+const ModalAllOffBtnText = styled.span
+    `
+    margin: 14px 23px 0px 0px;
+`
+
+const ModatAllBox = styled.div
+    `
+    display: flex;
+`
+
+const ModalUserMenu = styled.div
+    `
+    display: flex;
+    justify-content: center;
+`
+
+const ModalFast = styled.div
+    `
+    display: ${props => props.OnOff ? "flex" : "none"};
+    justify-content: end;
     position: fixed;
     top: 0;
     bottom: 0;
     width: 100%;
     height: 100%;
-    background: rgba(25,25,25,0.8);
+    background: rgba(25,25,25,0.3);
+    z-index:99999;
+`
+
+const ModalFastMenuBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    width: 375px;
+    height: 100%;
+    background: rgba(25,25,25,1);
+
+    @media (min-width:250px) and (max-width:768px)
+    {
+         width: 100%;
+    }
+
+`
+
+const SearchModal = styled.div
+    `
+    display: ${props => props.OnOff ? "flex" : "none"};
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(25,25,25,1);
 `
 
 const ModalFastMenu = styled.div
     `
     display: none;
 
-    @media (min-width:667px) and (max-width:1342px)
+    @media (min-width:250px) and (max-width:1342px)
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 35px;
+        cursor: pointer;
+        margin: -10px 0px 0px 10px;
+    }
+`
+
+const SearchModalMenu = styled.div
+    `
+    display: none;
+
+    @media (min-width:250px) and (max-width:1342px)
     {
         display: flex;
         flex-direction: column;
@@ -834,6 +1072,11 @@ const NavMenuAllBox = styled.div
 `
 
 const ModalFastMenuIcon = styled.i
+    `
+
+`
+
+const ModalSearchMenuIcon = styled.i
     `
 
 `
@@ -881,7 +1124,6 @@ const BackgroudTopNav = styled.div
     @media (min-width:250px) and (max-width:666px)
     {
         width: 100%;
-        height: 260px;
     }
 
     @media (min-width:667px) and (max-width:1342px)
@@ -1032,9 +1274,10 @@ const GameLi = styled.li
     padding: 0px 20px 0px 20px;
     list-style: none;
     white-space: nowrap;
-    &
+    font-size: 25px;
+    @media (min-width:250px) and (max-width:666px)
     {
-        font-size: 25px;
+        font-size: 20px;
     }
     a
     {
@@ -1081,13 +1324,18 @@ const Topnav = styled.header
     a{
         text-decoration: none;
         font-weight: bold;
-        font-size: 25px;
         -webkit-tap-highlight-color:transparent;
     }
 
-    @media (min-width:250px) and (max-width:1342px)
+    @media (min-width:667px) and (max-width:1342px)
     {
         flex-direction: column;
+    }
+
+    @media (min-width:250px) and (max-width:666px)
+    {
+        flex-direction: column;
+        height: 72px;
     }
 
 `
@@ -1096,11 +1344,22 @@ const Logo = styled.img
     `
     width: 144px;
     height: 72px;
+
+     @media (min-width:250px) and (max-width:666px)
+    {
+        width: 95px;
+        height: 46px;
+    }
 `
 
 const LogoBox = styled.div
     `
     margin: -13px 0px 0px 0px;
+
+    @media (min-width:250px) and (max-width:666px)
+    {
+        margin: 0px 0px 0px 0px;
+    }
 `
 
 const NavBox = styled.div
@@ -1111,7 +1370,6 @@ const NavBox = styled.div
 
     @media (min-width:250px) and (max-width:666px)
     {
-        flex-direction: column;
         margin: 12px 0px 0px 0px;
         text-align: center;
     }
@@ -1127,11 +1385,18 @@ const NavUl = styled.ul
     display: flex;
     margin: 12px 0px 12px 0px;
     white-space: nowrap;
+    overflow: scroll;
 
-    @media (min-width:250px) and (max-width:666px)
+    &::-webkit-scrollbar
     {
+        display: none;
+    }
+
+    @media (min-width:250px) and (max-width:784px)
+    {
+        width: 48vw;
         padding: 0px;
-        justify-content: center;
+        justify-content: start;
     }
 
 `
@@ -1162,7 +1427,7 @@ const AllButtonBox = styled.div
 
     @media (min-width:250px) and (max-width:666px)
     {
-        flex-direction: column;
+        display: none;
     }
 
     @media (min-width:666px) and (max-width:1342px)
@@ -1174,11 +1439,6 @@ const AllButtonBox = styled.div
 const ButtonBox = styled.div
     `
     display: flex;
-
-    @media (min-width:666px) and (max-width:1342px)
-    {
-        display: none;
-    }
 `
 
 const MenuBox = styled.div
@@ -1195,6 +1455,7 @@ const MenuBox = styled.div
         font-size:23px;
         font-weight: lighter;
         color: white;
+        text-decoration: none;
         -webkit-tap-highlight-color:transparent;    
     }
 
@@ -1309,7 +1570,7 @@ const ProFileSlideDown = keyframes
 `
 
 const ProfileListBox = styled.div
-`
+    `
 display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
 width: 217px;
 margin: 59px 0px 0px 158.5px;

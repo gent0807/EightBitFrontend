@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { useState, useRef, useEffect } from "react";
-import { isDark } from "../Darkmode/Darkmode";
+import { isDark } from "./Darkmode";
 import { styled, keyframes } from "styled-components";
 import { icons } from "react-icons/lib";
 import { BsSunFill } from "react-icons/bs";
