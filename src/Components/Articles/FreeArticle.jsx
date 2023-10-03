@@ -275,6 +275,8 @@ const FreeArticle = () => {
                 setReCommentCount(data);
             })
         }
+        
+        console.log("freeArticle render");
 
         axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
 
@@ -289,11 +291,11 @@ const FreeArticle = () => {
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
                 setVisitcnt(data.visitcnt);
-                getUserProfileImagePath(writer);
-                getWriterRole(writer);
-                getLikers(writer, regdate);
-                getComments(writer, regdate);
-                getReCommentCount(writer, regdate);
+                getUserProfileImagePath(data.writer);
+                getWriterRole(data.writer);
+                getLikers(data.writer, data.regdate);
+                getComments(data.writer, data.regdate);
+                getReCommentCount(data.writer, data.regdate);
             })
             .catch(err => {
                 navigate("/NotFound");
@@ -364,7 +366,7 @@ const FreeArticle = () => {
 
     const registerReply = async (e) => {
         e.preventDefault();
-        if (replyChangeValue.length > 11) {
+        if (replyChangeValue.length > 0) {
             await axios.post(`${ip}/Board/article/reply`, {
                 original_writer: writer,
                 original_regdate: regdate,
@@ -379,6 +381,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
+                    setReplyChangeValue("");
                     setReplyText(data+"_register");
                     const pointUp= (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
@@ -395,13 +398,17 @@ const FreeArticle = () => {
                         )
                         .then((data) => {
                             dispatch(point(data));
+                            return;
                         });
                     }
 
                     pointUp();
+
+                    return;
+
                 });
         }
-        else if (replyChangeValue.length <= 11) {
+        else if (replyChangeValue.length == 0) {
             alert("댓글 내용을 입력해주세요.");
             return;
         }
@@ -409,7 +416,7 @@ const FreeArticle = () => {
 
     const registerReply2 = async (e) => {
         e.preventDefault();
-        if (replyChangeValue2.length > 11) {
+        if (replyChangeValue2.length > 0) {
             await axios.post(`${ip}/Board/article/reply`, {
                 original_writer: writer,
                 original_regdate: regdate,
@@ -424,8 +431,9 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
+                    setReplyChangeValue2("");
                     setReplyText(data);
-                    const pointUp= (/* f */) => {
+                    const pointUp=(/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                         {
 
@@ -440,14 +448,17 @@ const FreeArticle = () => {
                         )
                         .then((data) => {
                             dispatch(point(data));
+                            return;
                         });
                     }
 
                     pointUp();
+
+                    return;
                     
                 });
         }
-        else if (replyChangeValue2.length <= 11) {
+        else if (replyChangeValue2.length == 0) {
             alert("댓글 내용을 입력해주세요.");
             return;
         }
@@ -787,7 +798,9 @@ const FreeArticle = () => {
             <CommentBox>
                 {Comments.length > 0 &&
                     Comments.map(Comment => {
+                        console.log(Comment);
                         return (
+                            
                             <SingleReply
                                 Comment={Comment}
                             />
@@ -1045,8 +1058,8 @@ const CommentUserBox = styled.div
 
 const CommentArea = styled.div
     `
+    display: grid;
     grid-template-columns: 0fr 3fr ;
-    display:  "grid"
 `
 
 const CommentArea2 = styled.div
@@ -1086,7 +1099,7 @@ const TitleLine = styled.div
 
 const CommentBox = styled.div
     `
-
+    
 `
 
 const CommentInputBox = styled.div
@@ -1231,13 +1244,13 @@ const EditText = styled.span
 
 const TitleText = styled.span
     `
-    font-size: 28px;
+    font-size: 45px;
     font-weight: bold;
 `
 
 const Information = styled.div
     `
-    font-size: 20px;
+    font-size: 30px;
 `
 
 const InformationAllBox = styled.div

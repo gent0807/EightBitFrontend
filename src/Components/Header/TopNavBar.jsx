@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineSearch } from "react-icons/hi";
 import { CgMenuGridR } from "react-icons/cg";
 import { MdLanguage } from "react-icons/md";
+import { GiTwoCoins } from "react-icons/gi";
 import { useSelector, useDispatch } from "react-redux";
 import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";

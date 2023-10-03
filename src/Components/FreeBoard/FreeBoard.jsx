@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 const FreeBoard = () => {
     const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
-    const [Fitter, setFitter] = useState("미정");
+    const [Fitter, setFitter] = useState("최신순");
     const [LimtText, setLimtText] = useState("20개씩");
     const [limit, setLimit] = useState(20);
     const [page, setPage] = useState(1);
@@ -122,10 +122,10 @@ const FreeBoard = () => {
                 <FitterBox>
                     <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                         <FitterSelectBox show={FitterDropdown}>
-                            <FitterSelectList onClick={setFitterValue}>미정</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>미정</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>추천</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>미정</FitterSelectList>
+                            <FitterSelectList onClick={setFitterValue}>댓글순</FitterSelectList>
+                            <FitterSelectList onClick={setFitterValue}>조회순</FitterSelectList>
+                            <FitterSelectList onClick={setFitterValue}>추천순</FitterSelectList>
+                            <FitterSelectList onClick={setFitterValue}>과거순</FitterSelectList>
                         </FitterSelectBox>
                         <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
                         <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
