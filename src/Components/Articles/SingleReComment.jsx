@@ -28,7 +28,7 @@ import { clearLoginState, accessToken, point } from "../Redux/User";
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSelectedReCommentIndex, isEditing, addReComment, editReComment, deleteReComment}) => {
+const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSelectedReCommentIndex, isEditing, addReComment, editReComment, deleteReComment }) => {
     const [id, setId] = useState(ReComment.id);
     const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_replyer);
     const [originalRegdate, setOriginalRegdate] = useState(ReComment.original_regdate);
@@ -155,7 +155,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
         "width",
     ];
 
-    
+
 
     useEffect(() => {
         const getReCommenterProfileImagePath = (reCommenter) => {
@@ -234,7 +234,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                 })
         }
 
-        
+
         const getReComments = (replyer, regdate) => {
             axios.get(`${ip}/Board/article/reply/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
 
@@ -249,33 +249,33 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     setReComments(data);
                 })
         }
-        
-     /*    axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
-            {
 
-            },
-            {
+        /*    axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
+               {
+   
+               },
+               {
+   
+               })
+               .then((res) => {
+                   return res.data;
+               })
+               .then((data) => {
+                   setOriginalReplyer(data.original_replyer);
+                   setOriginalRegdate(data.original_regdate);
+                   setReCommenter(data.reCommenter);
+                   setContent(data.content);
+                   setRegdate(data.regdate);
+                   setUpdatedate(data.updatedate);
+                   setReportMode(false);
+                   setUpdateReCommentText(data.content);
+                   setReCommentChangeValue("@" + data.reCommenter + "\n");
+   
+                   getReCommenterProfileImagePath(data.reCommenter);
+                   getReCommenterRole(data.reCommenter);
+                   getLikers(data.reCommenter, data.regdate);
+               });  */
 
-            })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                setOriginalReplyer(data.original_replyer);
-                setOriginalRegdate(data.original_regdate);
-                setReCommenter(data.reCommenter);
-                setContent(data.content);
-                setRegdate(data.regdate);
-                setUpdatedate(data.updatedate);
-                setReportMode(false);
-                setUpdateReCommentText(data.content);
-                setReCommentChangeValue("@" + data.reCommenter + "\n");
-
-                getReCommenterProfileImagePath(data.reCommenter);
-                getReCommenterRole(data.reCommenter);
-                getLikers(data.reCommenter, data.regdate);
-            });  */
-        
         setId(ReComment.id);
         setOriginalReplyer(ReComment.original_replyer);
         setOriginalRegdate(ReComment.original_regdate);
@@ -288,15 +288,15 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
 
         getReCommenterProfileImagePath(ReComment.reCommenter);
         getReCommenterRole(ReComment.reCommenter);
-        getLikers(ReComment.reCommenter, ReComment.regdate); 
+        getLikers(ReComment.reCommenter, ReComment.regdate);
         getReComments(ReComment.original_replyer, ReComment.original_regdate);
 
         setReCommentStatusDivHide(true);
 
 
-    }, [addReComment, editReComment,deleteReComment]);
+    }, [addReComment, editReComment, deleteReComment]);
 
-    
+
 
 
     const addLike = async (e) => {
@@ -639,6 +639,13 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     <div>
                         <ReCommentreplyLikeAllBox>
                             <ReCommentreplyLikeBtn
+                                LoginMaintain={loginMaintain}
+                                UserInfo={userInfo} User={userInfo == null ?
+                                    null : userInfo.loginState}
+                                UserCheck={user.login_state}
+                                UserNicknameCheck={user.nickname}
+                                UserNickname={userInfo == null ?
+                                    null : userInfo.nickName}
                                 onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
                                 {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                             </ReCommentreplyLikeBtn>
@@ -931,6 +938,8 @@ const ReCommentreplyLikeBtn = styled.div
     cursor: pointer;
     font-size: 22px;
     margin: 0px 0px 0px 0px;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+        (props.UserCheck === "allok" ? "block" : "none")};
 `
 
 

@@ -705,6 +705,13 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                     <div>
                         <CommentreplyLikeAllBox>
                             <CommentreplyLikeBtn
+                                LoginMaintain={loginMaintain}
+                                UserInfo={userInfo} User={userInfo == null ?
+                                    null : userInfo.loginState}
+                                UserCheck={user.login_state}
+                                UserNicknameCheck={user.nickname}
+                                UserNickname={userInfo == null ?
+                                    null : userInfo.nickName}
                                 onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
                                 {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                             </CommentreplyLikeBtn>
@@ -963,6 +970,8 @@ const CommentreplyIcon = styled.i
 
 const CommentreplyLikeBtn = styled.div
     `
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+        (props.UserCheck === "allok" ? "block" : "none")};
     cursor: pointer;
     color: orange;
     font-size: 22px;
