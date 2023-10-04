@@ -364,6 +364,11 @@ const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment,
         setReComments(newReComments);
     };
 
+    const deleteReComment = (ReCommentId) => {
+        let newReComments = ReComments.filter(item=>item.id!==ReCommentId);
+        setReComments(newReComments);
+    }
+
 
     const updateReply = async (e) => {
         e.preventDefault();

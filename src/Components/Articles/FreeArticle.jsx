@@ -402,8 +402,6 @@ const FreeArticle = () => {
         else return;
     }
 
-
-
     const registerReply = async (e) => {
         e.preventDefault();
         if (replyChangeValue.length > 0) {
