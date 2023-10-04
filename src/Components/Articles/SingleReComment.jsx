@@ -1,8 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { freeReply } from "./Reply";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -30,7 +28,8 @@ import { clearLoginState, accessToken, point } from "../Redux/User";
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReComment = ({ ReComment }) => {
+const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSelectedReCommentIndex, isEditing, addReComment, editReComment, deleteReComment}) => {
+    const [id, setId] = useState(0);
     const [originalReplyer, setOriginalReplyer] = useState("");
     const [originalRegdate, setOriginalRegdate] = useState("");
     const [reCommenter, setReCommenter] = useState("");
@@ -44,7 +43,6 @@ const SingleReComment = ({ ReComment }) => {
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [timecount, setTimecount] = useState("1시간");
     const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(true);
-    const [updateMode, setUpdateMode] = useState(false);
     const [updateReCommentText, setUpdateReCommentText] = useState("");
 
     const navigate = useNavigate();
@@ -58,7 +56,6 @@ const SingleReComment = ({ ReComment }) => {
 
     let likeMode = useRef(false);
 
-    const [replyText, setReplyText] = useRecoilState(freeReply);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
     const quillRef = useRef(null);
@@ -233,7 +230,7 @@ const SingleReComment = ({ ReComment }) => {
                 })
         }
         
-        axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
+     /*    axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
             {
 
             },
@@ -250,7 +247,6 @@ const SingleReComment = ({ ReComment }) => {
                 setContent(data.content);
                 setRegdate(data.regdate);
                 setUpdatedate(data.updatedate);
-                setUpdateMode(false);
                 setReportMode(false);
                 setUpdateReCommentText(data.content);
                 setReCommentChangeValue("@" + data.reCommenter + "\n");
@@ -258,8 +254,9 @@ const SingleReComment = ({ ReComment }) => {
                 getReCommenterProfileImagePath(data.reCommenter);
                 getReCommenterRole(data.reCommenter);
                 getLikers(data.reCommenter, data.regdate);
-            }); 
-/* 
+            });  */
+        
+        setId(ReComment.id);
         setOriginalReplyer(ReComment.original_replyer);
         setOriginalRegdate(ReComment.original_regdate);
         setReCommenter(ReComment.reCommenter);
@@ -271,10 +268,10 @@ const SingleReComment = ({ ReComment }) => {
 
         getReCommenterProfileImagePath(ReComment.reCommenter);
         getReCommenterRole(ReComment.reCommenter);
-        getLikers(ReComment.reCommenter, ReComment.regdate); */
+        getLikers(ReComment.reCommenter, ReComment.regdate); 
 
 
-    }, [replyText]);
+    }, []);
 
     const registerReComment = async (e) => {
         e.preventDefault();
@@ -294,8 +291,9 @@ const SingleReComment = ({ ReComment }) => {
                     return res.data;
                 })
                 .then((data) => {
+                    addReComment(data);
+                    setReCommentCount(reCommentCount + 1);
                     setReCommentChangeValue("");
-                    setReplyText(data + "_register");
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -384,11 +382,9 @@ const SingleReComment = ({ ReComment }) => {
                     return res.data;
                 })
                 .then((data) => {
-                    console.log("updateReComment 데이터베이스 저장 완료");
-                    console.log("updateReComment data: " + data);
-                    setUpdateReCommentText(data);
-                    setUpdateMode(false);
-                    setReplyText(data + "_update");
+                    editReComment(id, updateReCommentText);
+                    setSelectedReCommentIndex(0);
+                    return;
                 });
         }
 
@@ -402,7 +398,7 @@ const SingleReComment = ({ ReComment }) => {
 
 
 
-    const deleteReComment = async () => {
+    const deleteReCommentInServer = async () => {
         const check = window.confirm("정말 삭제하시겠습니까?");
         if (check == true) {
             await axios.delete(`${ip}/Board/article/reply/reComment/${reCommenter}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
@@ -415,7 +411,8 @@ const SingleReComment = ({ ReComment }) => {
                     return res.data;
                 })
                 .then((data) => {
-                    setReplyText(data + "_delete");
+                    deleteReComment(id);
+                    return;
                 })
         }
         else return;
@@ -553,8 +550,8 @@ const SingleReComment = ({ ReComment }) => {
 
 
     return (
-        <UserReCommentBox key={ReComment.id}>
-            <div style={{ display: updateMode === true ? "none" : "block" }}>
+        <UserReCommentBox key={id}>
+            <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <ReCommentUserProfileBox>
                     <ReCommentUserBox>
                         <ReCommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
@@ -653,7 +650,7 @@ const SingleReComment = ({ ReComment }) => {
                                     ReCommenter={reCommenter}
                                     onClick={() => {
                                         setReCommentStatusDivHide(true);
-                                        setUpdateMode(true);
+                                        setSelectedReCommentIndex(id);
                                     }}>
                                     <span>
                                         <BsPencilSquare size={20} style={{ margin: "0px 10px -5px 0px" }} />
@@ -661,7 +658,7 @@ const SingleReComment = ({ ReComment }) => {
                                     </span>
                                 </UpdateReply>
                                 <DeleteReply
-                                    onClick={deleteReComment}
+                                    onClick={deleteReCommentInServer}
                                 >
                                     <span>
                                         <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
@@ -709,7 +706,7 @@ const SingleReComment = ({ ReComment }) => {
                 </ReCommentForm>
                 )}
             </div>
-            <div style={{ display: updateMode === false ? "none" : "block", margin: "40px 0px 0px 0px" }}>
+            <div style={{ display: isEditing === false ? "none" : "block", margin: "40px 0px 0px 0px" }}>
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -739,7 +736,7 @@ const SingleReComment = ({ ReComment }) => {
                         </ReCommentInputBox>
                     </ReCommentArea>
                     <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => { setUpdateMode(false) }}>취소</CancelBtn>
+                        <CancelBtn type="button" onClick={() => { setSelectedReCommentIndex(0) }}>취소</CancelBtn>
                         <ReCommentBtn>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>

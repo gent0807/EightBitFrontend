@@ -837,6 +837,8 @@ const FreeArticle = () => {
                         return (
                             <SingleReply
                                 Comment={Comment}
+                                reCommentCount={reCommentCount}
+                                setReCommentCount={setReCommentCount}
                                 setSelectedCommentIndex={setSelectedCommentIndex}
                                 isEditing={Comment.id===selectedCommentIndex? true : false}
                                 editComment={editComment}

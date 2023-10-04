@@ -29,7 +29,7 @@ import { clearLoginState, accessToken, point } from "../Redux/User";
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment, deleteComment }) => {
+const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCommentIndex, isEditing, editComment, deleteComment }) => {
     const [id, setId] = useState(0);
     const [replyer, setReplyer] = useState("");
     const [content, setContent] = useState("");
@@ -43,6 +43,7 @@ const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment,
     const [reCommentHide, setReCommentHide] = useState(false);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(true);
     const [updateReplyText, setUpdateReplyText] = useState("");
+    const [selectedReCommentIndex, setSelectedReCommentIndex] = useState(0);
 
 
     const navigate = useNavigate();
@@ -181,7 +182,6 @@ const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment,
                setUpdatedate(data.updatedate);
                setUpdateReplyText(data.content);
                setReportMode(false);
-               setUpdateMode(false);
                getReplyerProfileImagePath(data.replyer);
                getReplyerRole(data.replyer);
                getLikers(data.replyer, data.regdate);
@@ -350,7 +350,7 @@ const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment,
             updatedate: data.updatedate,
         };
         setReComments([...ReComments, newReComment]);
-        setReCommentChangeValue('');
+        setReCommentChangeValue("");
     };
 
     const editReComment = (ReCommentId, editValue)=>{
@@ -411,6 +411,7 @@ const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment,
                 })
                 .then((data) => {
                    deleteComment(id);
+                   return;
                 })
 
         }
@@ -440,6 +441,7 @@ const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment,
                 })
                 .then((data) => {
                     addReComment(data);
+                    setReCommentCount(reCommentCount + 1);
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -768,6 +770,13 @@ const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment,
                                 return (
                                     <SingleReComment
                                         ReComment={ReComment}
+                                        reCommentCount={reCommentCount}
+                                        setReCommentCount={setReCommentCount}
+                                        setSelectedReCommentIndex={setSelectedReCommentIndex}
+                                        isEditing={ReComment.id===selectedReCommentIndex? true : false}
+                                        addReComment={addReComment}
+                                        editReComment={editReComment}
+                                        deleteReComment={deleteReComment}
                                     />
                                 );
                             })
