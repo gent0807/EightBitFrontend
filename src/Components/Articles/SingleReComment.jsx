@@ -29,13 +29,13 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSelectedReCommentIndex, isEditing, addReComment, editReComment, deleteReComment}) => {
-    const [id, setId] = useState(0);
-    const [originalReplyer, setOriginalReplyer] = useState("");
-    const [originalRegdate, setOriginalRegdate] = useState("");
-    const [reCommenter, setReCommenter] = useState("");
-    const [content, setContent] = useState("");
-    const [regdate, setRegdate] = useState("");
-    const [updatedate, setUpdatedate] = useState("");
+    const [id, setId] = useState(ReComment.id);
+    const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_replyer);
+    const [originalRegdate, setOriginalRegdate] = useState(ReComment.original_regdate);
+    const [reCommenter, setReCommenter] = useState(ReComment.reCommenter);
+    const [content, setContent] = useState(ReComment.content);
+    const [regdate, setRegdate] = useState(ReComment.regdate);
+    const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommenterRole, setReCommenterRole] = useState("");
@@ -43,7 +43,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [timecount, setTimecount] = useState("1시간");
     const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(true);
-    const [updateReCommentText, setUpdateReCommentText] = useState("");
+    const [updateReCommentText, setUpdateReCommentText] = useState(ReComment.content);
 
     const navigate = useNavigate();
 
@@ -59,6 +59,8 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
     const quillRef = useRef(null);
+
+    const [ReComments, setReComments] = useState([]);
 
 
     const toolbarOptions = [
@@ -153,6 +155,8 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
         "width",
     ];
 
+    
+
     useEffect(() => {
         const getReCommenterProfileImagePath = (reCommenter) => {
             axios.get(`${ip}/Users/profileImgPath?nickname=${reCommenter}`, {
@@ -229,6 +233,22 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     }
                 })
         }
+
+        
+        const getReComments = (replyer, regdate) => {
+            axios.get(`${ip}/Board/article/reply/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
+
+            },
+                {
+
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
+                    setReComments(data);
+                })
+        }
         
      /*    axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
             {
@@ -269,59 +289,14 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
         getReCommenterProfileImagePath(ReComment.reCommenter);
         getReCommenterRole(ReComment.reCommenter);
         getLikers(ReComment.reCommenter, ReComment.regdate); 
+        getReComments(ReComment.original_replyer, ReComment.original_regdate);
+
+        setReCommentStatusDivHide(true);
 
 
-    }, []);
+    }, [addReComment, editReComment,deleteReComment]);
 
-    const registerReComment = async (e) => {
-        e.preventDefault();
-
-        if (reCommentChangeValue.length > 0) {
-            await axios.post(`${ip}/Board/article/reply/reComment`, {
-                original_replyer: originalReplyer,
-                original_regdate: originalRegdate,
-                reCommenter: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-                content: reCommentChangeValue,
-            },
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                })
-                .then((res) => {
-                    /* regenerateAccessTokenOrLogout(res, registerReComment, e); */
-                    return res.data;
-                })
-                .then((data) => {
-                    addReComment(data);
-                    setReCommentCount(reCommentCount + 1);
-                    setReCommentChangeValue("");
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            }
-                            )
-                            .then((data) => {
-                                dispatch(point(data));
-                            });
-                    }
-
-                    pointUp();
-                })
-
-        }
-        else if (reCommentChangeValue.length == 0) {
-            alert("댓글 내용을 입력해주세요.");
-            return;
-        }
-
-    }
+    
 
 
     const addLike = async (e) => {
@@ -364,6 +339,57 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
 
         }
         else return;
+    }
+
+    const registerReComment = async (e) => {
+        e.preventDefault();
+
+        if (reCommentChangeValue.length > 0) {
+            await axios.post(`${ip}/Board/article/reply/reComment`, {
+                original_replyer: originalReplyer,
+                original_regdate: originalRegdate,
+                reCommenter: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: reCommentChangeValue,
+            },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then((res) => {
+                    /* regenerateAccessTokenOrLogout(res, registerReComment, e); */
+                    return res.data;
+                })
+                .then((data) => {
+                    addReComment(data, ReComments);
+                    setOnReplyBtn(false);
+                    setReCommentCount(reCommentCount + 1);
+                    setReCommentChangeValue("");
+                    const pointUp = (/* f */) => {
+                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+                            {
+
+                            },
+                            {
+                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                            })
+                            .then((res) => {
+                                /*  f(res,pointUp,e) */
+                                return res.data;
+                            }
+                            )
+                            .then((data) => {
+                                dispatch(point(data));
+                            });
+                    }
+
+                    pointUp();
+                })
+
+        }
+        else if (reCommentChangeValue.length == 0) {
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
+
     }
 
 
@@ -416,7 +442,6 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                 })
         }
         else return;
-
     }
 
     const regenerateAccessTokenOrLogout = (res, f, e) => {
@@ -550,7 +575,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
 
 
     return (
-        <UserReCommentBox key={id}>
+        <UserReCommentBox id={id}>
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <ReCommentUserProfileBox>
                     <ReCommentUserBox>

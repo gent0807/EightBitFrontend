@@ -53,7 +53,6 @@ const FreeArticle = () => {
             src: "http://59.14.217.233:8033/EightBitBackend/resources/board/article/nomalfiles/image.png",
         }
     ]);
-    const [Comments, setComments] = useState([]);
 
     const navigate = useNavigate();
     const ip = localStorage.getItem("ip");
@@ -63,6 +62,8 @@ const FreeArticle = () => {
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
+
+    const [Comments, setComments] = useState([]);
 
 
     let likeMode = useRef(false);
@@ -241,21 +242,6 @@ const FreeArticle = () => {
                 })
         }
 
-        const getComments = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/replies?original_writer=${writer}&original_regdate=${regdate}`, {
-
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data;
-                })
-                .then(data => {
-                    setComments(data);
-                })
-        }
-
         const getReCommentCount = (writer, regdate) => {
             axios.get(`${ip}/Board/article/totalcomment/count?writer=${writer}&regdate=${regdate}`, {
 
@@ -268,6 +254,21 @@ const FreeArticle = () => {
                 })
                 .then(data => {
                     setReCommentCount(data);
+                })
+        }
+
+        const getComments = (writer, regdate) => {
+            axios.get(`${ip}/Board/article/replies?original_writer=${writer}&original_regdate=${regdate}`, {
+    
+            },
+                {
+    
+                })
+                .then(res => {
+                    return res.data;
+                })
+                .then(data => {
+                    setComments(data);
                 })
         }
 
@@ -288,8 +289,8 @@ const FreeArticle = () => {
                 setVisitcnt(data.visitcnt);
                 getUserProfileImagePath(data.writer);
                 getWriterRole(data.writer);
-                getLikers(data.writer, data.regdate);
                 getComments(data.writer, data.regdate);
+                getLikers(data.writer, data.regdate);
                 getReCommentCount(data.writer, data.regdate);
             })
 
@@ -336,10 +337,11 @@ const FreeArticle = () => {
         else return;
     }
 
-    const addComment = (data) => {
-        const lastCmtIndex = Comments.length - 1;
-        const addedCmtId = Comments[lastCmtIndex].id + 1;
-        const newComment = {
+    const addComment = (data, Comments) => {
+        if(Comments.length>0){
+            const lastCmtIndex = Comments.length - 1;
+            const addedCmtId = Comments[lastCmtIndex].id + 1;
+            const newComment = {
             id: addedCmtId,
             original_writer: writer,
             original_regdate: regdate,
@@ -347,25 +349,57 @@ const FreeArticle = () => {
             content: replyChangeValue,
             regdate: data.regdate,
             updatedate: data.updatedate,
-        };
-        setComments([...Comments, newComment]);
-        setReplyChangeValue('');
+            };
+            setComments([...Comments, newComment]);
+            setReplyChangeValue('');
+        }
+        else if(Comments.length===0){
+            const addedCmtId = 1;
+            const newComment = {
+                id: addedCmtId,
+                original_writer: writer,
+                original_regdate: regdate,
+                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: replyChangeValue,
+                regdate: data.regdate,
+                updatedate: data.updatedate,
+                };
+            setComments([...Comments, newComment]);
+            setReplyChangeValue('');
+        }
+       
     };
 
-    const addComment2 = (data) => {
-        const lastCmtIndex = Comments.length - 1;
-        const addedCmtId = Comments[lastCmtIndex].id + 1;
-        const newComment = {
+    const addComment2 = (data, Comments) => {
+        if(Comments.length>0){
+            const lastCmtIndex = Comments.length - 1;
+            const addedCmtId = Comments[lastCmtIndex].id + 1;
+            const newComment = {
             id: addedCmtId,
             original_writer: writer,
             original_regdate: regdate,
             replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            content: replyChangeValue,
+            content: replyChangeValue2,
             regdate: data.regdate,
             updatedate: data.updatedate,
-        };
-        setComments([...Comments, newComment]);
-        setReplyChangeValue2('');
+            };
+            setComments([...Comments, newComment]);
+            setReplyChangeValue2('');
+        }
+        else if(Comments.length===0){
+            const addedCmtId = 1;
+            const newComment = {
+                id: addedCmtId,
+                original_writer: writer,
+                original_regdate: regdate,
+                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: replyChangeValue2,
+                regdate: data.regdate,
+                updatedate: data.updatedate,
+                };
+            setComments([...Comments, newComment]);
+            setReplyChangeValue2('');
+        }
     }
 
     const editComment = (commentId, editValue)=>{
@@ -373,11 +407,15 @@ const FreeArticle = () => {
             if(item.id===commentId){
                 item.content=editValue;
             }
-            else return item;
+            return item;
         });
+        console.log("-----------------------------");
+        console.log(newComments);
+        console.log("-----------------------------");
 
         setComments(newComments);
     };
+
 
     const deleteComment = (commentId) => {
         let newComments = Comments.filter(item=>item.id!==commentId);
@@ -419,7 +457,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    addComment(data);
+                    addComment(data, Comments);
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -468,7 +506,8 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    addComment2(data);
+                    addComment2(data, Comments);
+                    setOnReplyBtn(false);
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -834,13 +873,16 @@ const FreeArticle = () => {
             <CommentBox>
                 {Comments.length > 0 &&
                     Comments.map(Comment => {
+                        const commentId=Comment.id;
                         return (
                             <SingleReply
+                                key={commentId}
                                 Comment={Comment}
                                 reCommentCount={reCommentCount}
+                                isEditing={commentId===selectedCommentIndex? true : false}
                                 setReCommentCount={setReCommentCount}
                                 setSelectedCommentIndex={setSelectedCommentIndex}
-                                isEditing={Comment.id===selectedCommentIndex? true : false}
+                                addComment={addComment}
                                 editComment={editComment}
                                 deleteComment={deleteComment}
                             />

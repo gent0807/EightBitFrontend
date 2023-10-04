@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import FreeArticle from "./FreeArticle";
 import { styled } from "styled-components";
+
+
 
 let Containerbox = styled.div
 `
@@ -18,9 +20,11 @@ let Containerbox = styled.div
 `
 
 const FreeArticleContainer = () => {
+
     return (
         <Containerbox>
-            <FreeArticle />
+            <FreeArticle 
+                />
         </Containerbox>
     );
 }

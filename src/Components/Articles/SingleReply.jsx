@@ -29,12 +29,12 @@ import { clearLoginState, accessToken, point } from "../Redux/User";
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCommentIndex, isEditing, editComment, deleteComment }) => {
-    const [id, setId] = useState(0);
-    const [replyer, setReplyer] = useState("");
-    const [content, setContent] = useState("");
-    const [regdate, setRegdate] = useState("");
-    const [updatedate, setUpdatedate] = useState("");
+const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedCommentIndex, isEditing, addComment, editComment, deleteComment }) => {
+    const [id, setId] = useState(Comment.id);
+    const [replyer, setReplyer] = useState(Comment.replyer);
+    const [content, setContent] = useState(Comment.content);
+    const [regdate, setRegdate] = useState(Comment.regdate);
+    const [updatedate, setUpdatedate] = useState(Comment.updatedate);
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [replyerRole, setReplyerRole] = useState("");
@@ -42,7 +42,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [reCommentHide, setReCommentHide] = useState(false);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(true);
-    const [updateReplyText, setUpdateReplyText] = useState("");
+    const [updateReplyText, setUpdateReplyText] = useState(Comment.content);
     const [selectedReCommentIndex, setSelectedReCommentIndex] = useState(0);
 
 
@@ -57,7 +57,8 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
 
     let likeMode = useRef(false);
 
-
+    
+    
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
     const quillRef = useRef(null);
@@ -152,16 +153,24 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                     return res.data;
                 })
                 .then((data) => {
+                    console.log(data);
                     if (data.length == 0) {
                         setReCommentHide(true);
                     }
                     else if (data.length > 0) {
                         setReCommentHide(false);
                     }
+                    //console.log("----------------------------------");
+                    //console.log("ReComment"+data.id);
+                    //console.log("----------------------------------");
                     setReComments(data);
                 })
         }
 
+        console.log("SingleReply useEffect");
+        console.log("----------------------------------");
+        console.log("Comment: " + Comment);
+        console.log("----------------------------------");
 
 
         /* 
@@ -188,7 +197,6 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                getReComments(data.replyer, data.regdate);
            }); 
         */
-        
         setId(Comment.id);
         setReplyer(Comment.replyer);
         setContent(Comment.content);
@@ -199,8 +207,10 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
         getReplyerRole(Comment.replyer);
         getLikers(Comment.replyer, Comment.regdate);
         getReComments(Comment.replyer, Comment.regdate);
+        
+        setReplyStatusDivHide(true);
 
-    }, []);
+    }, [editComment,addComment, deleteComment]);
 
 
     const toolbarOptions = [
@@ -337,37 +347,55 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
         else return;
     }
 
-    const addReComment = (data) => {
-        const lastCmtIndex = ReComments.length - 1;
-        const addedCmtId = ReComments[lastCmtIndex].id + 1;
-        const newReComment = {
-            id: addedCmtId,
-            original_replyer: replyer,
-            original_regdate: regdate,
-            replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            content: reCommentChangeValue,
-            regdate: data.regdate,
-            updatedate: data.updatedate,
-        };
-        setReComments([...ReComments, newReComment]);
-        setReCommentChangeValue("");
+    const addReComment = (data, ReComments) => {
+        if (ReComments.length > 0) {
+            const lastCmtIndex = ReComments.length - 1;
+            const addedCmtId = ReComments[lastCmtIndex].id + 1;
+            const newReComment = {
+                id: addedCmtId,
+                original_replyer: replyer,
+                original_regdate: regdate,
+                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: reCommentChangeValue,
+                regdate: data.regdate,
+                updatedate: data.updatedate,
+            };
+            setReComments([...ReComments, newReComment]);
+            setReCommentChangeValue("");
+        }
+        else if(ReComments.length===0){
+            const addedCmtId = 1;
+            const newReComment = {
+                id: addedCmtId,
+                original_replyer: replyer,
+                original_regdate: regdate,
+                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: reCommentChangeValue,
+                regdate: data.regdate,
+                updatedate: data.updatedate,
+            };
+            setReComments([...ReComments, newReComment]);
+            setReCommentChangeValue("");
+        }
     };
 
-    const editReComment = (ReCommentId, editValue)=>{
-        let newReComments= ReComments.map((item)=>{
-            if(item.id===ReCommentId){
-                item.content=editValue;
+    const editReComment = (ReCommentId, editValue) => {
+        let newReComments = ReComments.map((item) => {
+            if (item.id === ReCommentId) {
+                item.content = editValue;
             }
-            else return item;
+            return item;
         });
 
         setReComments(newReComments);
     };
 
     const deleteReComment = (ReCommentId) => {
-        let newReComments = ReComments.filter(item=>item.id!==ReCommentId);
+        let newReComments = ReComments.filter(item => item.id !== ReCommentId);
         setReComments(newReComments);
     }
+
+
 
 
     const updateReply = async (e) => {
@@ -386,6 +414,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                     return res.data;
                 })
                 .then((data) => {
+                    console.log("updateReplyText: " + updateReplyText);
                     editComment(id, updateReplyText);
                     setSelectedCommentIndex(0);
                     return;
@@ -410,8 +439,8 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                     return res.data;
                 })
                 .then((data) => {
-                   deleteComment(id);
-                   return;
+                    deleteComment(id);
+                    return;
                 })
 
         }
@@ -440,7 +469,8 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                     return res.data;
                 })
                 .then((data) => {
-                    addReComment(data);
+                    addReComment(data, ReComments);
+                    setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
@@ -603,7 +633,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
     }
 
     return (
-        <UserCommentBox key={id}>
+        <UserCommentBox id={id}>
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <CommentUserProfileBox>
                     <CommentUserBox>
@@ -767,13 +797,15 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                     <ReCommentBox reCommentHide={reCommentHide}>
                         {ReComments.length > 0 &&
                             ReComments.map(ReComment => {
+                                const reCommentId = ReComment.id;
                                 return (
                                     <SingleReComment
+                                        key={reCommentId}
                                         ReComment={ReComment}
                                         reCommentCount={reCommentCount}
                                         setReCommentCount={setReCommentCount}
                                         setSelectedReCommentIndex={setSelectedReCommentIndex}
-                                        isEditing={ReComment.id===selectedReCommentIndex? true : false}
+                                        isEditing={reCommentId === selectedReCommentIndex ? true : false}
                                         addReComment={addReComment}
                                         editReComment={editReComment}
                                         deleteReComment={deleteReComment}
