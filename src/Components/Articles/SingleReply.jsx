@@ -1,8 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { freeReply } from "./Reply";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -31,12 +29,12 @@ import { clearLoginState, accessToken, point } from "../Redux/User";
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReply = ({ Comment }) => {
-    const [id, setId] = useState(Comment.id);
-    const [replyer, setReplyer] = useState(Comment.replyer);
-    const [content, setContent] = useState(Comment.content);
-    const [regdate, setRegdate] = useState(Comment.regdate);
-    const [updatedate, setUpdatedate] = useState(Comment.updatedate);
+const SingleReply = ({ Comment, setSelectedCommentIndex, isEditing, editComment, deleteComment }) => {
+    const [id, setId] = useState(0);
+    const [replyer, setReplyer] = useState("");
+    const [content, setContent] = useState("");
+    const [regdate, setRegdate] = useState("");
+    const [updatedate, setUpdatedate] = useState("");
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [replyerRole, setReplyerRole] = useState("");
@@ -44,8 +42,7 @@ const SingleReply = ({ Comment }) => {
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [reCommentHide, setReCommentHide] = useState(false);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(true);
-    const [updateMode, setUpdateMode] = useState(false);
-    const [updateReplyText, setUpdateReplyText] = useState(Comment.content);
+    const [updateReplyText, setUpdateReplyText] = useState("");
 
 
     const navigate = useNavigate();
@@ -59,7 +56,6 @@ const SingleReply = ({ Comment }) => {
 
     let likeMode = useRef(false);
 
-    const [replyText, setReplyText] = useRecoilState(freeReply);
 
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
@@ -166,31 +162,34 @@ const SingleReply = ({ Comment }) => {
         }
 
 
+
+        /* 
+            axios.get(`${ip}/Board/article/reply?replyer=${Comment.replyer}&regdate=${Comment.regdate}`,
+           {
+
+           },
+           {
+
+           })
+           .then((res) => {
+               return res.data;
+           })
+           .then((data) => {
+               setReplyer(data.replyer);
+               setContent(data.content);
+               setRegdate(data.regdate);
+               setUpdatedate(data.updatedate);
+               setUpdateReplyText(data.content);
+               setReportMode(false);
+               setUpdateMode(false);
+               getReplyerProfileImagePath(data.replyer);
+               getReplyerRole(data.replyer);
+               getLikers(data.replyer, data.regdate);
+               getReComments(data.replyer, data.regdate);
+           }); 
+        */
         
-        axios.get(`${ip}/Board/article/reply?replyer=${Comment.replyer}&regdate=${Comment.regdate}`,
-            {
-
-            },
-            {
-
-            })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                setReplyer(data.replyer);
-                setContent(data.content);
-                setRegdate(data.regdate);
-                setUpdatedate(data.updatedate);
-                setUpdateReplyText(data.content);
-                setReportMode(false);
-                setUpdateMode(false);
-                getReplyerProfileImagePath(data.replyer);
-                getReplyerRole(data.replyer);
-                getLikers(data.replyer, data.regdate);
-                getReComments(data.replyer, data.regdate);
-            });
-/* 
+        setId(Comment.id);
         setReplyer(Comment.replyer);
         setContent(Comment.content);
         setRegdate(Comment.regdate);
@@ -199,10 +198,9 @@ const SingleReply = ({ Comment }) => {
         getReplyerProfileImagePath(Comment.replyer);
         getReplyerRole(Comment.replyer);
         getLikers(Comment.replyer, Comment.regdate);
-        getReComments(Comment.replyer, Comment.regdate); */
+        getReComments(Comment.replyer, Comment.regdate);
 
-
-    }, [replyText]);
+    }, []);
 
 
     const toolbarOptions = [
@@ -339,6 +337,34 @@ const SingleReply = ({ Comment }) => {
         else return;
     }
 
+    const addReComment = (data) => {
+        const lastCmtIndex = ReComments.length - 1;
+        const addedCmtId = ReComments[lastCmtIndex].id + 1;
+        const newReComment = {
+            id: addedCmtId,
+            original_replyer: replyer,
+            original_regdate: regdate,
+            replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+            content: reCommentChangeValue,
+            regdate: data.regdate,
+            updatedate: data.updatedate,
+        };
+        setReComments([...ReComments, newReComment]);
+        setReCommentChangeValue('');
+    };
+
+    const editReComment = (ReCommentId, editValue)=>{
+        let newReComments= ReComments.map((item)=>{
+            if(item.id===ReCommentId){
+                item.content=editValue;
+            }
+            else return item;
+        });
+
+        setReComments(newReComments);
+    };
+
+
     const updateReply = async (e) => {
         e.preventDefault();
 
@@ -352,29 +378,12 @@ const SingleReply = ({ Comment }) => {
                 })
                 .then((res) => {
                     /* regenerateAccessTokenOrLogout(res, updateReply, e); */
-                    if (res.status == 403) {
-
-                    }
-                    else if (res.status == 200) {
-                        console.log("updateReply 데이터베이스 저장 완료");
-                        axios.get(`${ip}/Board/article/reply?replyer=${replyer}&regdate=${regdate}`,
-                            {
-
-                            },
-                            {
-
-                            })
-                            .then((res) => {
-                                return res.data;
-                            })
-                            .then((data) => {
-                                console.log("updateReply content : " + data.content);
-                                setUpdateReplyText(data.content);
-                                setUpdateMode(false);
-                                setReplyText(data.content + "_update");
-                                return;
-                            });
-                    }
+                    return res.data;
+                })
+                .then((data) => {
+                    editComment(id, updateReplyText);
+                    setSelectedCommentIndex(0);
+                    return;
                 })
         }
 
@@ -396,7 +405,7 @@ const SingleReply = ({ Comment }) => {
                     return res.data;
                 })
                 .then((data) => {
-                    setReplyText(data + "_delete");
+                   deleteComment(id);
                 })
 
         }
@@ -425,8 +434,7 @@ const SingleReply = ({ Comment }) => {
                     return res.data;
                 })
                 .then((data) => {
-                    setReCommentChangeValue("");
-                    setReplyText(data + "_register");
+                    addReComment(data);
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -589,7 +597,7 @@ const SingleReply = ({ Comment }) => {
 
     return (
         <UserCommentBox key={id}>
-            <div style={{ display: updateMode === true ? "none" : "block" }}>
+            <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <CommentUserProfileBox>
                     <CommentUserBox>
                         <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
@@ -696,7 +704,7 @@ const SingleReply = ({ Comment }) => {
                                     Replyer={replyer}
                                     onClick={() => {
                                         setReplyStatusDivHide(true);
-                                        setUpdateMode(true);
+                                        setSelectedCommentIndex(id);
                                     }}>
                                     <span>
                                         <BsPencilSquare size={20} style={{ margin: "0px 10px -5px 0px" }} />
@@ -762,7 +770,7 @@ const SingleReply = ({ Comment }) => {
                     </ReCommentBox>
                 </ReCommentSector>
             </div>
-            <div style={{ display: updateMode === false ? "none" : "block" }}>
+            <div style={{ display: isEditing === false ? "none" : "block" }}>
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -792,7 +800,7 @@ const SingleReply = ({ Comment }) => {
                         </ReCommentInputBox>
                     </ReCommentArea>
                     <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => { setUpdateMode(false) }}>취소</CancelBtn>
+                        <CancelBtn type="button" onClick={() => { setSelectedCommentIndex(0) }}>취소</CancelBtn>
                         <ReCommentBtn>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>

@@ -1,7 +1,5 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useRecoilState, useRecoilValue } from "recoil";
-import { freeReply } from "./Reply";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +45,7 @@ const FreeArticle = () => {
     const [replyChangeValue2, setReplyChangeValue2] = useState("");
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [reCommentCount, setReCommentCount] = useState(0);
+    const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
     const inputRef = useRef();
     const [InformationImage, setInformationImage] = useState([
         {
@@ -60,13 +59,11 @@ const FreeArticle = () => {
     const ip = localStorage.getItem("ip");
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
-    /* const registerReplyText= useSelector((state) => state.registerReplyText); */
 
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
 
-    const [replyText, setReplyText] = useRecoilState(freeReply);
 
     let likeMode = useRef(false);
     const quillRef = useRef(null);
@@ -263,17 +260,17 @@ const FreeArticle = () => {
             axios.get(`${ip}/Board/article/totalcomment/count?writer=${writer}&regdate=${regdate}`, {
 
             },
-            {
+                {
 
-            })
-            .then(res => {
-                return res.data;
-            })
-            .then(data => {
-                setReCommentCount(data);
-            })
+                })
+                .then(res => {
+                    return res.data;
+                })
+                .then(data => {
+                    setReCommentCount(data);
+                })
         }
-        
+
 
 
         axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
@@ -296,26 +293,26 @@ const FreeArticle = () => {
                 getReCommentCount(data.writer, data.regdate);
             })
 
-    }, [replyText]);
+    }, []);
 
     const addLike = async (e) => {
 
         await axios.post(`${ip}/Board/article/like/`, {
-            liker:loginMaintain=="true" ? userInfo.nickName : user.nickname,
+            liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
             writer: writer,
             regdate: regdate,
         },
-        {
-            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-        })
-        .then(res => {
-            /* regenerateAccessTokenOrLogout(res, addLike, e); */
-            return res.data;
-        })
-        .then(data => {
-           setLikecount(data.length);
-           likeMode.current=true;
-        })
+            {
+                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+            })
+            .then(res => {
+                /* regenerateAccessTokenOrLogout(res, addLike, e); */
+                return res.data;
+            })
+            .then(data => {
+                setLikecount(data.length);
+                likeMode.current = true;
+            })
     }
 
 
@@ -323,36 +320,84 @@ const FreeArticle = () => {
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/like/${loginMaintain=="true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`, 
-            {
-                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-            })
-            .then(res => {
-                return res.data;
-            })
-            .then(data => {
-                setLikecount(data.length);
-                likeMode.current=false;
-            })
+            await axios.delete(`${ip}/Board/article/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`,
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then(res => {
+                    return res.data;
+                })
+                .then(data => {
+                    setLikecount(data.length);
+                    likeMode.current = false;
+                })
 
         }
         else return;
+    }
+
+    const addComment = (data) => {
+        const lastCmtIndex = Comments.length - 1;
+        const addedCmtId = Comments[lastCmtIndex].id + 1;
+        const newComment = {
+            id: addedCmtId,
+            original_writer: writer,
+            original_regdate: regdate,
+            replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+            content: replyChangeValue,
+            regdate: data.regdate,
+            updatedate: data.updatedate,
+        };
+        setComments([...Comments, newComment]);
+        setReplyChangeValue('');
+    };
+
+    const addComment2 = (data) => {
+        const lastCmtIndex = Comments.length - 1;
+        const addedCmtId = Comments[lastCmtIndex].id + 1;
+        const newComment = {
+            id: addedCmtId,
+            original_writer: writer,
+            original_regdate: regdate,
+            replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+            content: replyChangeValue,
+            regdate: data.regdate,
+            updatedate: data.updatedate,
+        };
+        setComments([...Comments, newComment]);
+        setReplyChangeValue2('');
+    }
+
+    const editComment = (commentId, editValue)=>{
+        let newComments= Comments.map((item)=>{
+            if(item.id===commentId){
+                item.content=editValue;
+            }
+            else return item;
+        });
+
+        setComments(newComments);
+    };
+
+    const deleteComment = (commentId) => {
+        let newComments = Comments.filter(item=>item.id!==commentId);
+        setComments(newComments);
     }
 
     const deleteArticle = (e) => {
         const check = window.confirm("정말 삭제하시겠습니까?");
         if (check == true) {
             axios.delete(`${ip}/Board/article/${writer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
-            {
-                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-            })
-            .then(res => {
-                /* regenerateAccessTokenOrLogout(res, deleteArticle, e); */
-                return res.data;
-            })
-            .then(data => {
-                navigate("/FreeBoard");
-            });
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then(res => {
+                    /* regenerateAccessTokenOrLogout(res, deleteArticle, e); */
+                    return res.data;
+                })
+                .then(data => {
+                    navigate("/FreeBoard");
+                });
         }
         else return;
     }
@@ -371,30 +416,29 @@ const FreeArticle = () => {
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
                 })
-                .then((res) => {        
+                .then((res) => {
                     /* regenerateAccessTokenOrLogout(res, registerReply, e); */
                     return res.data;
                 })
                 .then((data) => {
-                    setReplyChangeValue("");
-                    setReplyText(data+"_register");
-                    const pointUp= (/* f */) => {
+                    addComment(data);
+                    const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                        {
+                            {
 
-                        },
-                        {
-                            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                        })
-                        .then((res) => {
-                           /*  f(res,pointUp,e) */
-                            return res.data;
-                        }
-                        )
-                        .then((data) => {
-                            dispatch(point(data));
-                            return;
-                        });
+                            },
+                            {
+                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                            })
+                            .then((res) => {
+                                /*  f(res,pointUp,e) */
+                                return res.data;
+                            }
+                            )
+                            .then((data) => {
+                                dispatch(point(data));
+                                return;
+                            });
                     }
 
                     pointUp();
@@ -426,31 +470,30 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    setReplyChangeValue2("");
-                    setReplyText(data);
-                    const pointUp=(/* f */) => {
+                    addComment2(data);
+                    const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                        {
+                            {
 
-                        },
-                        {
-                            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                        })
-                        .then((res) => {
-                           /*  f(res,pointUp,e) */
-                            return res.data;
-                        }
-                        )
-                        .then((data) => {
-                            dispatch(point(data));
-                            return;
-                        });
+                            },
+                            {
+                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                            })
+                            .then((res) => {
+                                /*  f(res,pointUp,e) */
+                                return res.data;
+                            }
+                            )
+                            .then((data) => {
+                                dispatch(point(data));
+                                return;
+                            });
                     }
 
                     pointUp();
 
                     return;
-                    
+
                 });
         }
         else if (replyChangeValue2.length == 0) {
@@ -459,83 +502,83 @@ const FreeArticle = () => {
         }
     }
 
-    const regenerateAccessTokenOrLogout = (res, f , e) => {
-        if(res.status==403){
-            axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`,{
+    const regenerateAccessTokenOrLogout = (res, f, e) => {
+        if (res.status == 403) {
+            axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`, {
 
             },
-            {
-                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-            })
-            .then((res) =>{
-                return res.data
-            }
-            )
-            .then((data)=>{
-                if(data=="invalid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then((res) => {
+                    return res.data
                 }
-                else if(data=="accesstoken valid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="accesstoken not matched user"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken invalid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken expired"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("로그인이 만료되었습니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken not matched user"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else{
-                    const object={
-                        accessToken: data,
-                    };
-                    if(loginMaintain=="true"){
-                        userInfo.accessToken=data;
+                )
+                .then((data) => {
+                    if (data == "invalid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
                     }
-                    dispatch(accessToken(object));
-                    f(e);
-                }
-            })
+                    else if (data == "accesstoken valid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "accesstoken not matched user") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken invalid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken expired") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("로그인이 만료되었습니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken not matched user") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else {
+                        const object = {
+                            accessToken: data,
+                        };
+                        if (loginMaintain == "true") {
+                            userInfo.accessToken = data;
+                        }
+                        dispatch(accessToken(object));
+                        f(e);
+                    }
+                })
             return;
         }
-        else if(res.status==200){
+        else if (res.status == 200) {
             return res.data
-        } 
+        }
     }
 
     const deleteRefreshToken = (name) => {
@@ -543,48 +586,48 @@ const FreeArticle = () => {
     }
 
     const reportAbuse = () => {
-        axios.patch(`${ip}/Board/report/article/abuse?writer=${writer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/article/abuse?writer=${writer}&regdate=${regdate}`, {
 
-        },{
+        }, {
 
         })
-        .then((res) => {
-            return res.data;
-        })
-        .then((data) => {
-            alert("신고가 접수되었습니다.");
-            setReportMode(false);
-        })
+            .then((res) => {
+                return res.data;
+            })
+            .then((data) => {
+                alert("신고가 접수되었습니다.");
+                setReportMode(false);
+            })
     }
 
     const report19 = async () => {
-        axios.patch(`${ip}/Board/report/article/19?writer=${writer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/article/19?writer=${writer}&regdate=${regdate}`, {
 
-        },{
+        }, {
 
         })
-        .then((res) => {
-            return res.data;
-        })
-        .then((data) => {
-            alert("신고가 접수되었습니다.");
-            setReportMode(false);
-        })
+            .then((res) => {
+                return res.data;
+            })
+            .then((data) => {
+                alert("신고가 접수되었습니다.");
+                setReportMode(false);
+            })
     }
 
     const reportIncoporate = async () => {
-        axios.patch(`${ip}/Board/report/article/incoporate?writer=${writer}&regdate=${regdate}`,{
+        axios.patch(`${ip}/Board/report/article/incoporate?writer=${writer}&regdate=${regdate}`, {
 
-        },{
+        }, {
 
         })
-        .then((res) => {
-            return res.data;
-        })
-        .then((data) => {
-            alert("신고가 접수되었습니다.");
-            setReportMode(false);
-        })
+            .then((res) => {
+                return res.data;
+            })
+            .then((data) => {
+                alert("신고가 접수되었습니다.");
+                setReportMode(false);
+            })
     }
 
     const kakaoShare = async () => {
@@ -621,7 +664,7 @@ const FreeArticle = () => {
                                 <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
                                 <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineEye> {visitcnt}</ViewText>
                                 <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
-                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment>{Comments.length+reCommentCount}</ReplyText>
+                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment>{Comments.length + reCommentCount}</ReplyText>
                             </LikeViewBox>
                         </WriteViewBox>
                     </UserProfileBox>
@@ -741,7 +784,7 @@ const FreeArticle = () => {
             </InformationBox>
             {Comments.length > 0 ?
                 <div style={{ display: "flex", fontSize: "20px", justifyContent: "start", margin: "0px 0px -22.5px 0px" }}>
-                    {reCommentCount+Comments.length}개 댓글
+                    {reCommentCount + Comments.length}개 댓글
                 </div> : ""}
             <EditAllBox>
                 <LikeBtn
@@ -793,11 +836,13 @@ const FreeArticle = () => {
             <CommentBox>
                 {Comments.length > 0 &&
                     Comments.map(Comment => {
-                        console.log(Comment);
                         return (
-                            
                             <SingleReply
                                 Comment={Comment}
+                                setSelectedCommentIndex={setSelectedCommentIndex}
+                                isEditing={Comment.id===selectedCommentIndex? true : false}
+                                editComment={editComment}
+                                deleteComment={deleteComment}
                             />
                         );
                     })

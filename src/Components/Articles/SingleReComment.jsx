@@ -31,13 +31,12 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const SingleReComment = ({ ReComment }) => {
-    const [id, setId] = useState(ReComment.id);
-    const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_replyer);
-    const [originalRegdate, setOriginalRegdate] = useState(ReComment.original_regdate);
-    const [reCommenter, setReCommenter] = useState(ReComment.reCommenter);
-    const [content, setContent] = useState(ReComment.content);
-    const [regdate, setRegdate] = useState(ReComment.regdate);
-    const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
+    const [originalReplyer, setOriginalReplyer] = useState("");
+    const [originalRegdate, setOriginalRegdate] = useState("");
+    const [reCommenter, setReCommenter] = useState("");
+    const [content, setContent] = useState("");
+    const [regdate, setRegdate] = useState("");
+    const [updatedate, setUpdatedate] = useState("");
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommenterRole, setReCommenterRole] = useState("");
