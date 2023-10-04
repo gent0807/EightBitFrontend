@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { freeReply } from "./Reply";
-import { freeReComment } from "./ReComment";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -33,10 +32,11 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const SingleReply = ({ Comment }) => {
-    const [replyer, setReplyer] = useState("");
-    const [content, setContent] = useState("");
-    const [regdate, setRegdate] = useState("");
-    const [updatedate, setUpdatedate] = useState("");
+    const [id, setId] = useState(Comment.id);
+    const [replyer, setReplyer] = useState(Comment.replyer);
+    const [content, setContent] = useState(Comment.content);
+    const [regdate, setRegdate] = useState(Comment.regdate);
+    const [updatedate, setUpdatedate] = useState(Comment.updatedate);
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [replyerRole, setReplyerRole] = useState("");
@@ -45,7 +45,7 @@ const SingleReply = ({ Comment }) => {
     const [reCommentHide, setReCommentHide] = useState(false);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(true);
     const [updateMode, setUpdateMode] = useState(false);
-    const [updateReplyText, setUpdateReplyText] = useState("");
+    const [updateReplyText, setUpdateReplyText] = useState(Comment.content);
 
 
     const navigate = useNavigate();
@@ -60,7 +60,6 @@ const SingleReply = ({ Comment }) => {
     let likeMode = useRef(false);
 
     const [replyText, setReplyText] = useRecoilState(freeReply);
-    const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
 
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
@@ -166,9 +165,9 @@ const SingleReply = ({ Comment }) => {
                 })
         }
 
-        console.log("SingleReply render")
 
-        /* axios.get(`${ip}/Board/article/reply?replyer=${Comment.replyer}&regdate=${Comment.regdate}`,
+        
+        axios.get(`${ip}/Board/article/reply?replyer=${Comment.replyer}&regdate=${Comment.regdate}`,
             {
 
             },
@@ -184,12 +183,14 @@ const SingleReply = ({ Comment }) => {
                 setRegdate(data.regdate);
                 setUpdatedate(data.updatedate);
                 setUpdateReplyText(data.content);
+                setReportMode(false);
+                setUpdateMode(false);
                 getReplyerProfileImagePath(data.replyer);
                 getReplyerRole(data.replyer);
                 getLikers(data.replyer, data.regdate);
                 getReComments(data.replyer, data.regdate);
-            }); */
-
+            });
+/* 
         setReplyer(Comment.replyer);
         setContent(Comment.content);
         setRegdate(Comment.regdate);
@@ -198,10 +199,10 @@ const SingleReply = ({ Comment }) => {
         getReplyerProfileImagePath(Comment.replyer);
         getReplyerRole(Comment.replyer);
         getLikers(Comment.replyer, Comment.regdate);
-        getReComments(Comment.replyer, Comment.regdate);
+        getReComments(Comment.replyer, Comment.regdate); */
 
 
-    }, [reCommentText]);
+    }, [replyText]);
 
 
     const toolbarOptions = [
@@ -425,7 +426,7 @@ const SingleReply = ({ Comment }) => {
                 })
                 .then((data) => {
                     setReCommentChangeValue("");
-                    setReCommentText(data + "_register");
+                    setReplyText(data + "_register");
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -587,7 +588,7 @@ const SingleReply = ({ Comment }) => {
     }
 
     return (
-        <UserCommentBox key={Comment.id}>
+        <UserCommentBox key={id}>
             <div style={{ display: updateMode === true ? "none" : "block" }}>
                 <CommentUserProfileBox>
                     <CommentUserBox>

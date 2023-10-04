@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { freeReply } from "./Reply";
-import { freeReComment } from "./ReComment";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -32,12 +31,13 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const SingleReComment = ({ ReComment }) => {
-    const [originalReplyer, setOriginalReplyer] = useState("");
-    const [originalRegdate, setOriginalRegdate] = useState("");
-    const [reCommenter, setReCommenter] = useState("");
-    const [content, setContent] = useState("");
-    const [regdate, setRegdate] = useState("");
-    const [updatedate, setUpdatedate] = useState("");
+    const [id, setId] = useState(ReComment.id);
+    const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_replyer);
+    const [originalRegdate, setOriginalRegdate] = useState(ReComment.original_regdate);
+    const [reCommenter, setReCommenter] = useState(ReComment.reCommenter);
+    const [content, setContent] = useState(ReComment.content);
+    const [regdate, setRegdate] = useState(ReComment.regdate);
+    const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommenterRole, setReCommenterRole] = useState("");
@@ -60,7 +60,6 @@ const SingleReComment = ({ ReComment }) => {
     let likeMode = useRef(false);
 
     const [replyText, setReplyText] = useRecoilState(freeReply);
-    const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
     const quillRef = useRef(null);
@@ -234,8 +233,6 @@ const SingleReComment = ({ ReComment }) => {
                     }
                 })
         }
-        console.log("SingleReComment render");
-/* 
         
         axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
             {
@@ -254,14 +251,16 @@ const SingleReComment = ({ ReComment }) => {
                 setContent(data.content);
                 setRegdate(data.regdate);
                 setUpdatedate(data.updatedate);
+                setUpdateMode(false);
+                setReportMode(false);
                 setUpdateReCommentText(data.content);
                 setReCommentChangeValue("@" + data.reCommenter + "\n");
 
                 getReCommenterProfileImagePath(data.reCommenter);
                 getReCommenterRole(data.reCommenter);
                 getLikers(data.reCommenter, data.regdate);
-            }); */
-
+            }); 
+/* 
         setOriginalReplyer(ReComment.original_replyer);
         setOriginalRegdate(ReComment.original_regdate);
         setReCommenter(ReComment.reCommenter);
@@ -273,10 +272,10 @@ const SingleReComment = ({ ReComment }) => {
 
         getReCommenterProfileImagePath(ReComment.reCommenter);
         getReCommenterRole(ReComment.reCommenter);
-        getLikers(ReComment.reCommenter, ReComment.regdate);
+        getLikers(ReComment.reCommenter, ReComment.regdate); */
 
 
-    }, []);
+    }, [replyText]);
 
     const registerReComment = async (e) => {
         e.preventDefault();
@@ -297,7 +296,7 @@ const SingleReComment = ({ ReComment }) => {
                 })
                 .then((data) => {
                     setReCommentChangeValue("");
-                    setReCommentText(data + "_register");
+                    setReplyText(data + "_register");
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -390,7 +389,7 @@ const SingleReComment = ({ ReComment }) => {
                     console.log("updateReComment data: " + data);
                     setUpdateReCommentText(data);
                     setUpdateMode(false);
-                    setReCommentText(data + "_update");
+                    setReplyText(data + "_update");
                 });
         }
 
@@ -417,7 +416,7 @@ const SingleReComment = ({ ReComment }) => {
                     return res.data;
                 })
                 .then((data) => {
-                    setReCommentText(data + "_delete");
+                    setReplyText(data + "_delete");
                 })
         }
         else return;

@@ -2,7 +2,6 @@ import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRecoilState, useRecoilValue } from "recoil";
 import { freeReply } from "./Reply";
-import { freeReComment } from "./ReComment";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -68,7 +67,6 @@ const FreeArticle = () => {
     userInfo = JSON.parse(userInfo);
 
     const [replyText, setReplyText] = useRecoilState(freeReply);
-    const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
 
     let likeMode = useRef(false);
     const quillRef = useRef(null);
@@ -276,7 +274,7 @@ const FreeArticle = () => {
             })
         }
         
-        console.log("freeArticle render");
+
 
         axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
 
@@ -297,11 +295,8 @@ const FreeArticle = () => {
                 getComments(data.writer, data.regdate);
                 getReCommentCount(data.writer, data.regdate);
             })
-            .catch(err => {
-                navigate("/NotFound");
-            })
 
-    }, [replyText, reCommentText]);
+    }, [replyText]);
 
     const addLike = async (e) => {
 
