@@ -805,7 +805,7 @@ const FreeArticle = () => {
                         onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
-                                <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                                <CommentUserProfile src={loginMaintain=="true" ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
