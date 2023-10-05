@@ -4,11 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineSearch } from "react-icons/hi";
 import { CgMenuGridR } from "react-icons/cg";
 import { MdLanguage } from "react-icons/md";
-import { GiTwoCoins } from "react-icons/gi";
 import { useSelector, useDispatch } from "react-redux";
 import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
-import { clearLoginState, loginState } from "../Redux/User";
+import { clearLoginState } from "../Redux/User";
 import { Outlet } from "react-router-dom"
 
 import LogoLight from "../../img/LOGO/8bitLight.png";
@@ -62,6 +61,8 @@ const HeaderBox = () => {
     const [LanguageClickCheck, setLanguageClickCheck] = useState(false);
     const [FastClickCheck, setFastClickCheck] = useState(false);
     const [BackgroundLine, setBackgroundLine] = useState(false)
+    const [modalOnOffBtn, setModalOnOffBtn] = useState(false);
+    const [searchmodalOnOffBtn, setSearchModalOnOffBtn] = useState(false);
 
 
 
@@ -209,87 +210,14 @@ const HeaderBox = () => {
         };
     }, [WriteRef, WindowLength]);
 
-    /* useEffect(() => {
-        if (loginMaintain == "true") {
-            axios.patch(`${ip}/Users/token/${userInfo.nickName}`, {
 
-            },
-                {
-                    headers: { Authorization: `Bearer ${userInfo.accessToken}` },
-                })
-                .then((res) => {
-                    return res.data
-                }
-                )
-                .then((data) => {
-                    if (data == "invalid") {
-                        localStorage.removeItem("userInfo");
-                        localStorage.removeItem("loginMaintain");
-                    }
-                    else if (data == "accesstoken valid") {
-                        const object = {
-                            loginState: userInfo.loginState,
-                            role: userInfo.role,
-                            accessToken: userInfo.accessToken,
-                            refreshToken: userInfo.refreshToken,
-                            nickname: userInfo.nickName,
-                            profile_img_path: userInfo.profileImgPath,
-                            point: userInfo.point,
-                        };
-                        dispatch(loginState(object));
-                    }
-                    else if (data == "accesstoken not matched user") {
-                        localStorage.removeItem("userInfo");
-                        localStorage.removeItem("loginMaintain");
-                    }
-                    else if (data == "refreshtoken invalid") {
-                        localStorage.removeItem("userInfo");
-                        localStorage.removeItem("loginMaintain");
-                    }
-                    else if (data == "refreshtoken expired") {
-                        localStorage.removeItem("userInfo");
-                        localStorage.removeItem("loginMaintain");
-                    }
-                    else if (data == "refreshtoken not matched user") {
-                        localStorage.removeItem("userInfo");
-                        localStorage.removeItem("loginMaintain");
-                    }
-                    else {
-                        const object = {
-                            loginState: userInfo.loginState,
-                            role: userInfo.role,
-                            accessToken: data,
-                            refreshToken: userInfo.refreshToken,
-                            nickname: userInfo.nickName,
-                            profile_img_path: userInfo.profileImgPath,
-                            point: userInfo.point,
-                        };
-                        if (loginMaintain == "true") {
-                            userInfo.accessToken = data;
-                        }
-                        dispatch(loginState(object));
-                    }
-                    return;
-                });
-        }
-    }, []) */
 
     const OnSearch = (e) => {
         const currentSearch = e.target.value;
         setSearch(currentSearch);
     }
 
-    const deleteRefreshToken = (name) => {
-        document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
-    }
-
     const LogoutFunc = () => {
-        if(loginMaintain == "true"){
-            resetToken(userInfo.nickName);
-        }
-        else if(loginMaintain == "false"){
-            resetToken(user.nickname);
-        }
         localStorage.removeItem("userInfo");
         localStorage.removeItem("loginMaintain");
         dispatch(clearLoginState());
@@ -297,23 +225,6 @@ const HeaderBox = () => {
         setProfileClickCheck(false);
         setIsProfileLogoutCheck(true);
         navigate("/");
-    }
-
-    const resetToken = async (nickname) => {
-        await axios.patch(`${ip}/Users/token/reset/${nickname}`,
-        {
-
-        },
-        {
-            headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}` },
-        })
-        .then((res) => {
-            return res.data;
-        })
-        .then((data) => {
-            return;
-        })
-
     }
 
     const GameliHover = () => {
@@ -459,32 +370,203 @@ const HeaderBox = () => {
     return (
         <>
         <ALLNavBox>
-            <LeaveBox  ref={BtnLeaveRef}>
-            <BackgroudTopNav TopBack={scrollPosition}>
-                <Topnav>
-                    <NavBox>
-                        <LogoBox>
-                            <Link to='/'><Logo src={LogoLight} alt='로고' /></Link>
-                        </LogoBox>
-                        <NavUl>
-                            <GameLi onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
-                            <ShopLi onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
-                            <ComunityLi onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
-                            <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
-                        </NavUl>
-                    </NavBox>
-                    <AllButtonBox>
-                        <SearchInputBox>
-                            <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
-                            <SearchInputIconBox>
-                                <SearchButton><HiOutlineSearch /></SearchButton>
-                            </SearchInputIconBox>
-                        </SearchInputBox>
-                        <ButtonBox
-                            menucheck={loginMaintain == null ?
-                                false : loginMaintain === "true" ?
-                                    (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
-                        >
+            <LeaveBox ref={BtnLeaveRef}>
+
+                <BackgroudTopNav TopBack={scrollPosition}>
+
+                    <ModalFast OnOff={modalOnOffBtn}>
+                        <ModalFastMenuBox>
+                            <ModalAllOffBtn>
+                                <ModalAllOffBtnText
+                                    onClick={() => setModalOnOffBtn(false)}
+                                >
+                                    x
+                                </ModalAllOffBtnText>
+                            </ModalAllOffBtn>
+                            <ModalUserMenu>
+                                {loginMaintain == null ?
+                                    [<LineBox
+                                        onClick={() => [
+                                            ScrollTop(),
+                                            setModalOnOffBtn(false),
+                                            setSearchModalOnOffBtn(false)
+                                        ]} 
+                                        left={"20px"}
+                                        top={"7px"}
+                                        size={"15px"}
+                                        padding={"10px 0px 10px 0px"}
+                                    >
+                                        <Link to='/Login'>로그인</Link>
+                                    </LineBox>,
+                                    <MenuBox
+                                        onClick={() => [
+                                            ScrollTop(),
+                                            setModalOnOffBtn(false),
+                                            setSearchModalOnOffBtn(false)
+                                        ]}
+                                        left={"9px"}
+                                        top={"7px"}
+                                        size={"15px"}
+                                        padding={"10px 0px 10px 0px"}
+                                    >
+                                        <Link to='/SelectSign'>회원가입</Link>
+                                    </MenuBox>] :
+
+                                    loginMaintain == "true" ?
+                                        (userInfo == null ?
+                                            [<LineBox
+                                                onClick={() => [
+                                                    ScrollTop(),
+                                                    setModalOnOffBtn(false),
+                                                    setSearchModalOnOffBtn(false)
+                                                ]}
+                                                left={"20px"}
+                                                top={"7px"}
+                                                size={"15px"}
+                                                padding={"10px 0px 10px 0px"}
+                                            >
+                                                <Link to='/Login'>로그인</Link>
+                                            </LineBox>,
+
+                                            <MenuBox
+                                                onClick={() => [
+                                                    ScrollTop(),
+                                                    setModalOnOffBtn(false),
+                                                    setSearchModalOnOffBtn(false)
+                                                ]}
+                                                left={"9px"}
+                                                top={"7px"}
+                                                size={"15px"}
+                                                padding={"10px 0px 10px 0px"}
+                                            >
+                                                <Link to='/SelectSign'>회원가입</Link>
+                                            </MenuBox>] :
+
+                                            userInfo.loginState === "allok" ?
+                                                [<Profile
+                                                    click={ProfileClickCheck}
+                                                    ref={ProfileRef}
+                                                    onClick={() => ProfileMenuCheck()}
+                                                >
+                                                    <Profileimg src={localStorage.getItem("profileImageDir") + userInfo.profileImgPath} />
+                                                </Profile>,
+                                                ] :
+
+                                                [<LineBox
+                                                    onClick={() => [
+                                                        ScrollTop(),
+                                                        setModalOnOffBtn(false),
+                                                        setSearchModalOnOffBtn(false)
+                                                    ]}
+                                                    left={"20px"}
+                                                    top={"7px"}
+                                                    size={"15px"}
+                                                    padding={"10px 0px 10px 0px"}
+                                                >
+                                                    <Link to='/Login'>로그인</Link>
+                                                </LineBox>,
+
+                                                <MenuBox
+                                                    onClick={() => [
+                                                        ScrollTop(),
+                                                        setModalOnOffBtn(false),
+                                                        setSearchModalOnOffBtn(false)
+                                                    ]}
+                                                    left={"9px"}
+                                                    top={"7px"}
+                                                    size={"15px"}
+                                                    padding={"10px 0px 10px 0px"}
+                                                >
+                                                    <Link to='/SelectSign'>회원가입</Link>
+                                                </MenuBox>]) :
+
+                                        (user.login_state === "allok" ?
+                                            [<Profile
+                                                click={ProfileClickCheck}
+                                                ref={ProfileRef}
+                                                onClick={() => ProfileMenuCheck()}
+                                            >
+                                                <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                            </Profile>,
+                                            ] :
+
+                                            [<LineBox
+                                                onClick={() => [
+                                                    ScrollTop(),
+                                                    setModalOnOffBtn(false),
+                                                    setSearchModalOnOffBtn(false)
+                                                ]}
+                                                left={"20px"}
+                                                top={"7px"}
+                                                size={"15px"}
+                                                padding={"10px 0px 10px 0px"}
+                                            >
+                                                <Link to='/Login'>로그인</Link>
+                                            </LineBox>,
+
+                                            <MenuBox
+                                                onClick={() => [
+                                                    ScrollTop(),
+                                                    setModalOnOffBtn(false),
+                                                    setSearchModalOnOffBtn(false)
+                                                ]}
+                                                left={"9px"}
+                                                top={"7px"}
+                                                size={"15px"}
+                                                padding={"10px 0px 10px 0px"}
+                                            >
+                                                <Link to='/SelectSign'>회원가입</Link>
+                                            </MenuBox>])}
+                            </ModalUserMenu>
+                        </ModalFastMenuBox>
+                    </ModalFast>
+
+                    <SearchModal OnOff={searchmodalOnOffBtn}>
+
+                    </SearchModal>
+
+                    <Topnav>
+
+                        <NavBox>
+                            <NavMenuAllBox>
+                                <LogoBox>
+                                    <Link to='/'><Logo src={LogoLight} alt='로고' /></Link>
+                                </LogoBox>
+                                <NavUl>
+                                    <GameLi onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
+                                    <ShopLi onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
+                                    <ComunityLi onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
+                                    <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
+                                </NavUl>
+                            </NavMenuAllBox>
+
+                            <ModatAllBox>
+                                <SearchModalMenu
+                                    onClick={() => setSearchModalOnOffBtn(!searchmodalOnOffBtn)}
+                                >
+                                    <ModalSearchMenuIcon><HiOutlineSearch /></ModalSearchMenuIcon>
+                                </SearchModalMenu>
+                                <ModalFastMenu
+                                    onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                >
+                                    <ModalFastMenuIcon><CgMenuGridR /></ModalFastMenuIcon>
+                                </ModalFastMenu>
+                            </ModatAllBox>
+                        </NavBox>
+
+                        <AllButtonBox>
+                            <SearchInputBox>
+                                <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
+                                <SearchInputIconBox>
+                                    <SearchButton><HiOutlineSearch /></SearchButton>
+                                </SearchInputIconBox>
+                            </SearchInputBox>
+
+                            <ButtonBox
+                                menucheck={loginMaintain == null ?
+                                    false : loginMaintain === "true" ?
+                                        (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
+                            >
 
                                 {loginMaintain == null ? [] : loginMaintain == "true" ?
                                     (userInfo == null ? [] : userInfo.loginState === "allok" ?
@@ -533,20 +615,26 @@ const HeaderBox = () => {
                                     <CgMenuGridR />
                                 </MenuBox>
 
-                            <>
-                                {loginMaintain == null ?
-                                    [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}>
-                                        <Link to='/Login'>로그인</Link>
-                                    </LineBox>,
-                                    <MenuBox
-                                        onClick={() => ScrollTop()}
-                                        left={"9px"}
-                                        top={"7px"}
-                                        size={"15px"}
-                                        padding={"10px 0px 10px 0px"}
-                                    >
-                                        <Link to='/SelectSign'>회원가입</Link>
-                                    </MenuBox>] :
+                                <>
+                                    {loginMaintain == null ?
+                                        [<LineBox
+                                            onClick={() => ScrollTop()}
+                                            left={"20px"}
+                                            top={"7px"}
+                                            size={"15px"}
+                                            padding={"10px 0px 10px 0px"}
+                                        >
+                                            <Link to='/Login'>로그인</Link>
+                                        </LineBox>,
+                                        <MenuBox
+                                            onClick={() => ScrollTop()}
+                                            left={"9px"}
+                                            top={"7px"}
+                                            size={"15px"}
+                                            padding={"10px 0px 10px 0px"}
+                                        >
+                                            <Link to='/SelectSign'>회원가입</Link>
+                                        </MenuBox>] :
 
                                         loginMaintain == "true" ?
                                             (userInfo == null ?
@@ -597,23 +685,24 @@ const HeaderBox = () => {
                                                         <Link to='/Login'>로그인</Link>
                                                     </LineBox>,
 
-                                                <MenuBox
-                                                    onClick={() => ScrollTop()}
-                                                    left={"9px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
+                                                    <MenuBox
+                                                        onClick={() => ScrollTop()}
+                                                        left={"9px"}
+                                                        top={"7px"}
+                                                        size={"15px"}
+                                                        padding={"10px 0px 10px 0px"}
+                                                    >
+                                                        <Link to='/SelectSign'>회원가입</Link>
+                                                    </MenuBox>]) :
+
+                                            (user.login_state === "allok" ?
+                                                [<Profile
+                                                    click={ProfileClickCheck}
+                                                    ref={ProfileRef}
+                                                    onClick={() => ProfileMenuCheck()}
                                                 >
-                                                    <Link to='/SelectSign'>회원가입</Link>
-                                                </MenuBox>]) :
-                                        (user.login_state === "allok" ?
-                                            [<Profile
-                                                click={ProfileClickCheck}
-                                                ref={ProfileRef}
-                                                onClick={() => ProfileMenuCheck()}
-                                            >
-                                                <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
-                                            </Profile>,
+                                                    <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                                </Profile>,
 
                                                 <WriteBox
                                                     click={WriteClickCheck}
@@ -709,23 +798,24 @@ const HeaderBox = () => {
                                     </ProfileUl>
                                 </FastListBox>
 
-                            <ProfileListBox
-                                zindex={profileMenuTopZIndex.current}
-                                default={isDefaultProfileScene}
-                                logout={isProfileLogoutCheck}
-                                show={ProfileMenuShow}
-                            >
-                                <ProfileUl>
-                                    <Link to='/'>
-                                        <Profileli
-                                            padding="15px 0px 15px 13px"
-                                            onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                            setProfileClickCheck(!ProfileClickCheck)]}
-                                        >
-                                            <DropdownImg src={User} />
-                                            <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
-                                        </Profileli>
-                                    </Link>
+                                <ProfileListBox
+                                    zindex={profileMenuTopZIndex.current}
+                                    default={isDefaultProfileScene}
+                                    logout={isProfileLogoutCheck}
+                                    show={ProfileMenuShow}
+                                    mediaCheck={WindowLength}
+                                >
+                                    <ProfileUl>
+                                        <Link to='/'>
+                                            <Profileli
+                                                padding="15px 0px 15px 13px"
+                                                onClick={() => [setProfileMenuShow(!ProfileMenuShow),
+                                                setProfileClickCheck(!ProfileClickCheck)]}
+                                            >
+                                                <DropdownImg src={User} />
+                                                <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
+                                            </Profileli>
+                                        </Link>
 
                                         <Profileli
                                             padding="15px 0px 15px 13px"

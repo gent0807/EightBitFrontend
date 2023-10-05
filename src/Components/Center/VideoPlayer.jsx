@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from "styled-components";
-import VideoSample from "../../Video/maple.mp4"
+import VideoSample from "../../Video/GameVideo.mp4"
 import VideoSample2 from "../../Video/youtube.mp4"
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, EffectCoverflow, Autoplay } from "swiper";

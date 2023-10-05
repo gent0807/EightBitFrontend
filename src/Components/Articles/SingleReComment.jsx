@@ -173,7 +173,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     return res.data;
                 })
                 .then(data => {
-                    setProfileImagePath(data);
+                    setProfileImagePath(data.profileImgPath);
                 })
 
         }
