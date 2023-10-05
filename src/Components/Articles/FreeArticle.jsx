@@ -747,19 +747,20 @@ const FreeArticle = () => {
                         <RedateBox>
                             <ReportAllBoxText>신고</ReportAllBoxText>
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
-                        </RedateBox>
 
-                        <ReportBox ReportMode={reportMode}>
-                            <ReportText onClick={reportAbuse}>
-                                욕설/비방 신고
-                            </ReportText>
-                            <ReportText onClick={report19}>
-                                음란물 신고
-                            </ReportText>
-                            <ReportText onClick={reportIncoporate}>
-                                게시판 부적합 신고
-                            </ReportText>
-                        </ReportBox>
+                            <ReportBox ReportMode={reportMode}>
+                                <ReportText onClick={reportAbuse}>
+                                    욕설/비방 신고
+                                </ReportText>
+                                <ReportText onClick={report19}>
+                                    음란물 신고
+                                </ReportText>
+                                <ReportText onClick={reportIncoporate}>
+                                    게시판 부적합 신고
+                                </ReportText>
+                            </ReportBox>
+
+                        </RedateBox>
 
                         <DayBox>
                             <RegdateText>등록일 : {dayjs(regdate).format("YY.MM.DD hh:mm")}</RegdateText>
@@ -843,7 +844,7 @@ const FreeArticle = () => {
                         onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
-                                <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                                <CommentUserProfile src={loginMaintain=="true" ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
@@ -876,8 +877,7 @@ const FreeArticle = () => {
                 </LikeBtn>
 
                 <Link
-                    to='/UpdateBoard' 
-                    state={{writer:writer, regdate:regdate, title:title, content:content}}
+                    to='/UpdateBoard' state={{writer:writer, regdate:regdate, title:title, content:content}}
                     style={{
                         display: loginMaintain == null ? "none" : loginMaintain == "true" ?
                             (userInfo == null ?
@@ -1435,16 +1435,17 @@ const ReportBox = styled.div
     border-radius: 10px;
     position: absolute;
     z-index: 2;
+    margin: 0px 0px -82px 0px;
+    padding: 10px;
     background: ${props => props.theme.backgroundColor};
-    margin: 0px 0px 0px 260px;
     display: ${props => props.ReportMode == false ? "none" : "flex"};
     
 `
 
 const ReportText = styled.span
 `
-    margin: "10px 10px 10px 10px";
-    cursor: "pointer"
+    margin: 10px 10px 10px 10px;
+    cursor: pointer;
 `
 
 const EditText = styled.span

@@ -25,7 +25,7 @@ const Router = () => {
                     <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
                 </Route>
                     <Route path="/WriteBoard" element={<WriteBoard />} />
-                    <Route path="/UpdateBoard/:writer/:regdate" element={<UpdateBoard />} />
+                    <Route path="/UpdateBoard" element={<UpdateBoard />} />
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Sign" element={<Sign />} />
                     <Route path="/SelectSign" element={<SelectSign />} />
