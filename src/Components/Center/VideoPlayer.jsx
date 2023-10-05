@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from "styled-components";
-import VideoSample from "../../Video/GameVideo.mp4"
+import VideoSample from "../../Video/test10s.mp4"
 import VideoSample2 from "../../Video/youtube.mp4"
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, EffectCoverflow, Autoplay } from "swiper";
@@ -31,6 +31,7 @@ const VideoPlayler = () => {
     const PaginatonRef = useRef(null);
     const [swiper, setSwiper] = useState(null);
     const [soundOnOff, setSoundOnOff] = useState(true);
+    const [play, setPlay] = useState(true);
     const [mainImageIndex, setMainImageIndex] = useState(0);
     const [playtime, setPlaytime] = useState(0);
 
@@ -40,7 +41,7 @@ const VideoPlayler = () => {
             img: test2,
             Logo: videoLogo,
             informaion: "켜두기만 하면 캐릭터가 성장한다!",
-            video: "",
+            video: VideoSample2,
             BackgroundImg: test5,
             title: "방치모험가"
         },
@@ -82,7 +83,6 @@ const VideoPlayler = () => {
         },
     ]);
 
-    console.log(Slide[mainImageIndex].video.duration);
 
     const swiperParams =
     {
@@ -94,10 +94,15 @@ const VideoPlayler = () => {
             clickable: true
         },
 
+        autoplay: {
+            delay: 20000,
+            disableOnInteraction: false,
+          },
+
         onBeforeInit: (swiper) => {
             swiper.params.navigation.prevEl = navPrevRef.current;
             swiper.params.navigation.nextEl = navNextRef.current;
-            swiper.activeIndex = mainImageIndex
+            swiper.activeIndex = mainImageIndex;
             swiper.navigation.update();
         },
 
@@ -153,7 +158,10 @@ const VideoPlayler = () => {
         effect: "coverflow",
     }
 
-    console.log(playtime);
+    function NextSlide() {
+        swiper.slideNext();
+        setPlay(true);
+    }
 
     return (
         <VideoAllBox>
@@ -174,7 +182,7 @@ const VideoPlayler = () => {
 
                         <VideoDownloadBtn>
                             <VideoDownloadBtnIcon>
-                                <RiInformationLine />
+                                <AiOutlineDownload />
                             </VideoDownloadBtnIcon>
                             <VideoDownloadBtnText>
                                 다운로드
@@ -184,7 +192,7 @@ const VideoPlayler = () => {
                         <Link to="/">
                             <VideoInformationBtn>
                                 <VideoInformationBtnIcon>
-                                    <AiOutlineDownload />
+                                    <RiInformationLine />
                                 </VideoInformationBtnIcon>
                                 <VideoInformationBtnText>
                                     상세정보
@@ -192,30 +200,34 @@ const VideoPlayler = () => {
                             </VideoInformationBtn>
                         </Link>
 
-                        <MuteBtn>
-                            <MuteBtnIcon onClick={() => setSoundOnOff(!soundOnOff)}>
-                                {soundOnOff ? <VscMute /> : <VscUnmute />}
-                            </MuteBtnIcon>
-                        </MuteBtn>
-
                     </VideoInformationDownLoadBtnBox>
-                    
+
                 </VideoInformation>
-                    <VideoViewBox>
+                <VideoViewBox ref={setSwiper}>
                     {Slide[mainImageIndex].video === "" ? <VideoImg src={Slide[mainImageIndex].BackgroundImg} /> :
                         <VideoPlay
                             url={Slide[mainImageIndex].video}
-                            loop={true}
+                            loop={false}
                             onProgress={
                                 (progress) => { setPlaytime(progress.playedSeconds) }
                             }
                             muted={soundOnOff}
-                            playing={true}
+                            playing={play}
                             width={"100%"}
                             height={"56vw"}
+                            onEnded={() => NextSlide()}
                         />
                     }
-                    </VideoViewBox>
+                </VideoViewBox>
+
+                <MuteBtnBox>
+                    <MuteBtn>
+                        <MuteBtnIcon onClick={() => setSoundOnOff(!soundOnOff)}>
+                            {soundOnOff ? <VscMute /> : <VscUnmute />}
+                        </MuteBtnIcon>
+                    </MuteBtn>
+                </MuteBtnBox>
+
             </VideoBox>
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
@@ -250,10 +262,19 @@ const VideoPlayler = () => {
 
 export default VideoPlayler
 
+const MuteBtnBox = styled.div
+    `
+    position: absolute;
+    top: 38vw;
+    right: 3%;
+    z-index: 9999;
+`
+
 const VideoViewBox = styled.div
     `
 
 `
+
 const VideoImg = styled.img
     `
     width: 100%;
