@@ -81,7 +81,9 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                     return res.data;
                 })
                 .then(data => {
+                    console.log("프로필 경로-----------------------");
                     console.log(data);
+                    console.log("-----------------------");
                     setProfileImagePath(data);
                 })
         }
@@ -643,7 +645,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <CommentUserProfileBox>
                     <CommentUserBox>
-                        <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                        <CommentUserProfile src={localStorage.getItem("profileImageDir")+profileImagePath} />
                         <CommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{replyer}</UserNicknameText>
