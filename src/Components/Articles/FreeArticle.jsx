@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { toggle } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
@@ -47,12 +49,6 @@ const FreeArticle = () => {
     const [reCommentCount, setReCommentCount] = useState(0);
     const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
     const inputRef = useRef();
-    const [InformationImage, setInformationImage] = useState([
-        {
-            id: 1,
-            src: "http://59.14.217.233:8033/EightBitBackend/resources/board/article/nomalfiles/image.png",
-        }
-    ]);
 
     const navigate = useNavigate();
     const ip = localStorage.getItem("ip");
@@ -63,7 +59,16 @@ const FreeArticle = () => {
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
 
+    const [toggleState, setToggleState]=useRecoilState(toggle);
+
     const [Comments, setComments] = useState([]);
+
+    const [InformationImage, setInformationImage] = useState([
+        {
+            id: 1,
+            src: `${ip}/resources/board/article/nomalfiles/image.png`,
+        }
+    ]);
 
 
     let likeMode = useRef(false);
@@ -294,7 +299,7 @@ const FreeArticle = () => {
                 getReCommentCount(data.writer, data.regdate);
             })
 
-    }, []);
+    }, [toggleState]);
 
     const addLike = async (e) => {
 
@@ -457,6 +462,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState(!toggleState);
                     addComment(data, Comments);
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
@@ -688,7 +694,7 @@ const FreeArticle = () => {
                         <WriteViewBox>
                             <div style={{ display: "flex" }}>
                                 <WriterText>{writer}</WriterText>
-                                <BiLogoDevTo size={25} style={{ margin: "0px 0px 0px 0px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
+                                <BiLogoDevTo size={25} style={{ margin: "1.5px 0px 0px 0px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
                                 {regdate == updatedate ? "" :
                                     <div style={{ display: "flex", margin: "7.2px 0px 0px 2px" }}>
                                         <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
@@ -903,7 +909,7 @@ const FreeArticle = () => {
                     onSubmit={registerReply}>
                     <CommentArea>
                         <CommentProfile>
-                            <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                            <CommentUserProfile src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer

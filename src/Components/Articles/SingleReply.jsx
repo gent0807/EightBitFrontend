@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { useRecoilState } from "recoil";
+import { toggle } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -56,7 +58,8 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
     userInfo = JSON.parse(userInfo);
 
     let likeMode = useRef(false);
-
+    
+    const [toggleState, setToggleState] = useRecoilState(toggle);
     
     
     const [onReplyBtn, setOnReplyBtn] = useState(false);
@@ -415,6 +418,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                 })
                 .then((data) => {
                     console.log("updateReplyText: " + updateReplyText);
+                    setToggleState(!toggleState);
                     editComment(id, updateReplyText);
                     setSelectedCommentIndex(0);
                     return;
@@ -439,6 +443,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState(!toggleState);
                     deleteComment(id);
                     return;
                 })
@@ -469,6 +474,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState(!toggleState);
                     addReComment(data, ReComments);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
@@ -641,9 +647,9 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                         <CommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{replyer}</UserNicknameText>
-                                <BiLogoDevTo size={22} style={{ margin: "0px 0px 0px 2px", display: replyerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
+                                <BiLogoDevTo size={23} style={{ margin: "1px 0px 2px 0px", display: replyerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
                                 {regdate == updatedate ? "" :
-                                    <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
+                                    <div style={{ display: "flex", margin: "5px 0px 0px -1px" }}>
                                         <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
                                         수정됨
                                     </div>}
@@ -821,7 +827,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                             })
                         }
                     </ReCommentBox>
-                </ReCommentSector>
+                </ReCommentSector> 
             </div>
             <div style={{ display: isEditing === false ? "none" : "block" }}>
                 <ReCommentForm

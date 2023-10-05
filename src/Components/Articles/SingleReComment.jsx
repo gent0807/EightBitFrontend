@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { useRecoilState } from "recoil";
+import { toggle } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -53,6 +55,8 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
+
+    const [toggleState, setToggleState] = useRecoilState(toggle);
 
     let likeMode = useRef(false);
 
@@ -359,6 +363,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState(!toggleState);
                     addReComment(data, ReComments);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
@@ -408,6 +413,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState(!toggleState);
                     editReComment(id, updateReCommentText);
                     setSelectedReCommentIndex(0);
                     return;
@@ -437,6 +443,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState(!toggleState);
                     deleteReComment(id);
                     return;
                 })
@@ -583,9 +590,9 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                         <ReCommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{reCommenter}</UserNicknameText>
-                                <BiLogoDevTo size={21} style={{ margin: "0px 0px 0px 2px", display: reCommenterRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
+                                <BiLogoDevTo size={24} style={{ margin: "0px 0px 2px 0px", display: reCommenterRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
                                 {regdate == updatedate ? "" :
-                                    <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
+                                    <div style={{ display: "flex", margin: "5px 0px 0px -1px" }}>
                                         <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
                                         수정됨
                                     </div>}
