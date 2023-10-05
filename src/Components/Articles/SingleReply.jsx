@@ -642,7 +642,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <CommentUserProfileBox>
                     <CommentUserBox>
-                        <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                        <CommentUserProfile src={localStorage.getItem("profileImageDir")+profileImagePath} />
                         <CommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{replyer}</UserNicknameText>
