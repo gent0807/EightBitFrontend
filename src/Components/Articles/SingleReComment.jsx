@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState } from "recoil";
 import { toggle } from "./Toggle";
+import { toggle2 } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -57,6 +58,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
     userInfo = JSON.parse(userInfo);
 
     const [toggleState, setToggleState] = useRecoilState(toggle);
+    const [toggleState2, setToggleState2] = useRecoilState(toggle2);
 
     let likeMode = useRef(false);
 
@@ -363,6 +365,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState2(!toggleState2);
                     setToggleState(!toggleState);
                     addReComment(data, ReComments);
                     setOnReplyBtn(false);
@@ -413,6 +416,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState2(!toggleState2);
                     setToggleState(!toggleState);
                     editReComment(id, updateReCommentText);
                     setSelectedReCommentIndex(0);
@@ -443,6 +447,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     return res.data;
                 })
                 .then((data) => {
+                    setToggleState2(!toggleState2);
                     setToggleState(!toggleState);
                     deleteReComment(id);
                     return;

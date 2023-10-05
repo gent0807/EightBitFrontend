@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState } from "recoil";
 import { toggle } from "./Toggle";
+import { toggle2 } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -60,6 +61,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
     let likeMode = useRef(false);
     
     const [toggleState, setToggleState] = useRecoilState(toggle);
+    const [toggleState2, setToggleState2] = useRecoilState(toggle2);
     
     
     const [onReplyBtn, setOnReplyBtn] = useState(false);
@@ -208,11 +210,11 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
         getReplyerProfileImagePath(Comment.replyer);
         getReplyerRole(Comment.replyer);
         getLikers(Comment.replyer, Comment.regdate);
-        getReComments(Comment.replyer, Comment.regdate);
+        getReComments(Comment.replyer, Comment.regdate);    
         
         setReplyStatusDivHide(true);
 
-    }, [editComment,addComment, deleteComment]);
+    }, [editComment,addComment, deleteComment, toggleState2]);
 
 
     const toolbarOptions = [
@@ -788,7 +790,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                         onSubmit={registerReComment}>
                         <ReCommentArea>
                             <ReCommentProfile>
-                                <CommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                                <CommentUserProfile2 src={loginMaintain == "true " ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                             </ReCommentProfile>
                             <ReCommentInputBox>
                                 <Editer2
