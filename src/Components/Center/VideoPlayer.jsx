@@ -40,7 +40,8 @@ const VideoPlayler = () => {
             img: test2,
             Logo: videoLogo,
             informaion: "켜두기만 하면 캐릭터가 성장한다!",
-            video: VideoSample2,
+            video: "",
+            BackgroundImg: test5,
             title: "방치모험가"
         },
         {
@@ -49,6 +50,7 @@ const VideoPlayler = () => {
             Logo: videoLogo,
             informaion: "일단달려! 드릴에게 도망쳐라!",
             video: VideoSample,
+            BackgroundImg: test5,
             title: "도망런"
         },
         {
@@ -57,6 +59,7 @@ const VideoPlayler = () => {
             Logo: videoLogo,
             informaion: "수학을 풀고 강해져라!",
             video: VideoSample2,
+            BackgroundImg: test5,
             title: "매스리볼버"
         },
         {
@@ -65,6 +68,7 @@ const VideoPlayler = () => {
             Logo: videoLogo,
             informaion: "무기 강화로 당신의 운을 시험하라!",
             video: VideoSample,
+            BackgroundImg: test5,
             title: "럭키웨폰"
         },
         {
@@ -73,6 +77,7 @@ const VideoPlayler = () => {
             Logo: videoLogo,
             informaion: "인간이 되고 싶은 뱀파이어...",
             video: VideoSample2,
+            BackgroundImg: test5,
             title: "로드 오브 토파즈"
         },
     ]);
@@ -194,21 +199,23 @@ const VideoPlayler = () => {
                         </MuteBtn>
 
                     </VideoInformationDownLoadBtnBox>
-
+                    
                 </VideoInformation>
-                <VideoViewBox>
-                    <VideoPlay
-                        url={Slide[mainImageIndex].video}
-                        loop={true}
-                        onProgress={
-                            (progress) => { setPlaytime(progress.playedSeconds) }
-                        }
-                        muted={soundOnOff}
-                        playing={true}
-                        width={"100%"}
-                        height={"56vw"}
-                    />
-                </VideoViewBox>
+                    <VideoViewBox>
+                    {Slide[mainImageIndex].video === "" ? <VideoImg src={Slide[mainImageIndex].BackgroundImg} /> :
+                        <VideoPlay
+                            url={Slide[mainImageIndex].video}
+                            loop={true}
+                            onProgress={
+                                (progress) => { setPlaytime(progress.playedSeconds) }
+                            }
+                            muted={soundOnOff}
+                            playing={true}
+                            width={"100%"}
+                            height={"56vw"}
+                        />
+                    }
+                    </VideoViewBox>
             </VideoBox>
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
@@ -246,6 +253,11 @@ export default VideoPlayler
 const VideoViewBox = styled.div
     `
 
+`
+const VideoImg = styled.img
+    `
+    width: 100%;
+    height: 56vw;
 `
 
 const MuteBtn = styled.div
