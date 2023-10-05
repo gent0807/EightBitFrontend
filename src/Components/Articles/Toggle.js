@@ -1,11 +1,12 @@
 import { atom } from "recoil";
 import { useLayoutEffect } from "react";
 
-export const freeReComment = atom
+export const toggle = atom
     (
         {
-            key: "freeReComment",
-            default: "",
+            key: "toggle",
+            default: true,
         }
 
     )
+

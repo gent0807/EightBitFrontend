@@ -82,7 +82,7 @@ const Logininput = () => {
           return res.data;
         })
         .then(data => {
-          console.log(data);
+          console.log(data); 
           loginCheck = data.loginState;
           if (loginCheck == "emailok") {
             setMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>비밀번호가 틀렸습니다!</ErrorMessageText></ErrorMessageBox>])

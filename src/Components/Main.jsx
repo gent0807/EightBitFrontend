@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 const ip = `http://59.14.217.233:8033/EightBitBackend`;
 
-const profileImageDir = "http://59.14.217.233:8033/EightBitBackend/resources/Users/"
+const profileImageDir = `${ip}/resources/Users/`;
 
 const Main = () => {
 
@@ -79,7 +79,7 @@ const GlobalStyle = createGlobalStyle
     background-size: cover;
     background-repeat: no-repeat;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
   }
 `
 
