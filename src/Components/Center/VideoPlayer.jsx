@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from "styled-components";
 import VideoSample from "../../Video/maple.mp4"
-import VideoSample2 from "../../Video/video.mp4"
+import VideoSample2 from "../../Video/youtube.mp4"
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, EffectCoverflow, Autoplay } from "swiper";
 import "swiper/swiper.scss";
@@ -153,6 +153,7 @@ const VideoPlayler = () => {
     return (
         <VideoAllBox>
             <VideoBox>
+                <VideoBackground />
                 <VideoInformation>
                     <VideoInformationLogoBox>
                         <VideoInformationLogo src={Slide[mainImageIndex].Logo} />
@@ -205,9 +206,8 @@ const VideoPlayler = () => {
                         muted={soundOnOff}
                         playing={true}
                         width={"100%"}
-                        height={"100%"}
+                        height={"56vw"}
                     />
-                    <VideoBackground />
                 </VideoViewBox>
             </VideoBox>
             <GameSlideBox>
@@ -485,7 +485,7 @@ const GameSlideBox = styled.div
     `
     max-width: 1280px;
     position: relative;
-    margin: -160px auto 0px auto;
+    margin: -12vw auto 0px auto;
     padding: 0px 20px 0px 20px;
     z-index: 1000;
 
@@ -579,15 +579,19 @@ const SlideBox = styled.div
 const VideoPlay = styled(ReactPlayer)
     `
     width: 100%;
-    height: 100%;
+    height: 56vw;
 `
 
 const VideoBackground = styled.div
     `
-    position: relative;
-    background: rgba(25,25,25,1);
-    box-shadow: 2px -8px 11px 13px rgba(25,25,25,1);
-    z-index: 1000;
+    position: absolute;
+    background: linear-gradient(to top, rgba(25, 25, 25, 1) 5%, rgba(25, 25, 25, 0.9) 20%, rgba(25, 25, 25, 0) 54%);
+    height: 56vw;
+    top: 0%;
+    left: 0%;
+    bottom: 0%;
+    right: 0%;
+    z-index: 999;
     pointer-events: none;
 `
 

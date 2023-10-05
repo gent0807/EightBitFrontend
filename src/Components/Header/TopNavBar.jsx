@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
 import { clearLoginState } from "../Redux/User";
+import { Outlet } from "react-router-dom"
 
 import LogoLight from "../../img/LOGO/8bitLight.png";
 
@@ -367,6 +368,7 @@ const HeaderBox = () => {
     }, [WindowLength])
 
     return (
+        <>
         <ALLNavBox>
             <LeaveBox ref={BtnLeaveRef}>
 
@@ -963,6 +965,8 @@ const HeaderBox = () => {
                 </BackgroudSubNav>
             </LeaveBox>
         </ALLNavBox>
+        <Outlet />
+        </>
     );
 }
 
@@ -1385,6 +1389,7 @@ const NavUl = styled.ul
     display: flex;
     margin: 12px 0px 12px 0px;
     white-space: nowrap;
+    height: 27px;
     overflow: scroll;
 
     &::-webkit-scrollbar

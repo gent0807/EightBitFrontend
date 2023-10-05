@@ -1,12 +1,16 @@
 import styled from "styled-components";
+import { Outlet } from "react-router-dom"
 
 const Footer = () => {
     return (
+        <>
+        <Outlet />
         <FooterBackground>
             <FooterContainer>
                 <FooterText>Copyright 2023. 8bit. All rights reserved.</FooterText>
             </FooterContainer>
         </FooterBackground>
+        </>
     );
 }
 
