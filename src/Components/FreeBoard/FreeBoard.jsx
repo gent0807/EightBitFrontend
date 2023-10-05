@@ -410,6 +410,7 @@ const LimitSelectList = styled(FitterSelectList)
 
 const FreeBoardSearchInputBox = styled(SearchInputBox)
     `
+    display: flex;
     border: solid 2px ${(props) => props.theme.borderColor};
     height: 39px;
     width: 248px;
@@ -417,19 +418,22 @@ const FreeBoardSearchInputBox = styled(SearchInputBox)
 
 const FreeBoardSearchInput = styled(SearchInput)
     `
+    display: block;
     margin: 0px 0px 0px 0px;
-    padding: 3px 0px 0px 11px;
-    height: 36px;
+    padding: 0px 0px 0px 11px;
+    height: 39px;
 `
 
 const FreeBoardSearchIconBox = styled(SearchInputIconBox)
     `
+    display: block;
     margin: 0px 0px 0px 0px;
     height: 39px;
 `
 
 const FreeBoardSearchBtn = styled(SearchButton)
     `
+    display: block;
     color: black;
     padding: 5px 8px 0px 0px;
 `

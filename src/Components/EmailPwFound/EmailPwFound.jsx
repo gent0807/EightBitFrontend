@@ -317,7 +317,7 @@ function EmailPwFound() {
   return (
     <EmPwFoundT>
       <EmPwFoundTop>
-        <Link to='/'><EmPwLogo src={isDarkmode ? LogoDark : LogoLight} alt='로고' /></Link>
+        <Link to='/'><EmPwLogo src={isDarkmode ? LogoLight : LogoDark} alt='로고' /></Link>
       </EmPwFoundTop>
       <EwPwBox>
         <EmPwForm onSubmit={update}>

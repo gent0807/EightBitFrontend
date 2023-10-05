@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
 import { clearLoginState, loginState } from "../Redux/User";
+import { Outlet } from "react-router-dom"
 
 import LogoLight from "../../img/LOGO/8bitLight.png";
 
@@ -62,6 +63,8 @@ const HeaderBox = () => {
     const [FastClickCheck, setFastClickCheck] = useState(false);
     const [BackgroundLine, setBackgroundLine] = useState(false)
 
+
+
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -80,6 +83,21 @@ const HeaderBox = () => {
     let FastRef = useRef(null);
     let WriteRef = useRef(null);
     let BtnLeaveRef = useRef(null);
+
+    const [WindowLength, setWindowLength] = useState(window.innerWidth);
+
+    console.log(WindowLength);
+
+    const handleResize = () => {
+        setWindowLength(window.innerWidth);
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        }
+    })
 
     useEffect(() => {
         function handleOuside(e) {
@@ -104,15 +122,19 @@ const HeaderBox = () => {
         };
     }, [BtnLeaveRef]);
 
-    console.log(BtnLeaveRef);
-
     useEffect(() => {
         function handleOuside(e) {
             if (LanguageRef.current && !LanguageRef.current.contains(e.target)) {
                 setLanguageClickCheck(false);
                 setIsLanguageMenuShow(false);
             }
+
         };
+
+        if (WindowLength <= 1342) {
+            setLanguageClickCheck(false);
+            setIsLanguageMenuShow(false);
+        }
 
         if (!LanguageMenuShow) {
             document.addEventListener("click", handleOuside);
@@ -120,7 +142,7 @@ const HeaderBox = () => {
         return () => {
             document.removeEventListener("click", handleOuside);
         };
-    }, [LanguageRef]);
+    }, [LanguageRef, WindowLength]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -130,13 +152,18 @@ const HeaderBox = () => {
             }
         };
 
+        if (WindowLength <= 1342) {
+            setFastClickCheck(false);
+            setIsFastMenuShow(false);
+        }
+
         if (!FastMenuShow) {
             document.addEventListener("click", handleOuside);
         }
         return () => {
             document.removeEventListener("click", handleOuside);
         };
-    }, [FastRef]);
+    }, [FastRef, WindowLength]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -146,13 +173,18 @@ const HeaderBox = () => {
             }
         };
 
+        if (WindowLength <= 1342) {
+            setProfileMenuShow(false);
+            setProfileClickCheck(false);
+        }
+
         if (!ProfileMenuShow) {
             document.addEventListener("click", handleOuside);
         }
         return () => {
             document.removeEventListener("click", handleOuside);
         };
-    }, [ProfileRef]);
+    }, [ProfileRef, WindowLength]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -163,13 +195,19 @@ const HeaderBox = () => {
             }
         };
 
+        if (WindowLength <= 1342) {
+            setIsWriteMenuShow(false);
+            setIsWriteMenuClickCheck(false);
+            setWriteClickCheck(false);
+        }
+
         if (!WriteMenuShow) {
             document.addEventListener("click", handleOuside);
         }
         return () => {
             document.removeEventListener("click", handleOuside);
         };
-    }, [WriteRef]);
+    }, [WriteRef, WindowLength]);
 
     /* useEffect(() => {
         if (loginMaintain == "true") {
@@ -402,42 +440,51 @@ const HeaderBox = () => {
     }
 
     const [scrollPosition, setScrollPosition] = useState(0);
+
     const updateScroll = () => {
         setScrollPosition(window.scrollY || document.documentElement.scrollTop);
     }
+
     useEffect(() => {
         window.addEventListener('scroll', updateScroll);
     });
 
+    useEffect(() => {
+        if (WindowLength >= 1342) {
+            setModalOnOffBtn(false);
+            setSearchModalOnOffBtn(false);
+        }
+    }, [WindowLength])
 
     return (
+        <>
         <ALLNavBox>
-            <LeaveBox ref={BtnLeaveRef}>
-                <BackgroudTopNav TopBack={scrollPosition}>
-                    <Topnav>
-                        <NavBox>
-                            <LogoBox>
-                                <Link to='/'><Logo src={LogoLight} alt='로고' /></Link>
-                            </LogoBox>
-                            <NavUl>
-                                <GameLi onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
-                                <ShopLi onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
-                                <ComunityLi onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
-                                <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
-                            </NavUl>
-                        </NavBox>
-                        <AllButtonBox>
-                            <SearchInputBox>
-                                <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
-                                <SearchInputIconBox>
-                                    <SearchButton><HiOutlineSearch /></SearchButton>
-                                </SearchInputIconBox>
-                            </SearchInputBox>
-                            <ButtonBox
-                                menucheck={loginMaintain == null ?
-                                    false : loginMaintain === "true" ?
-                                        (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
-                            >
+            <LeaveBox  ref={BtnLeaveRef}>
+            <BackgroudTopNav TopBack={scrollPosition}>
+                <Topnav>
+                    <NavBox>
+                        <LogoBox>
+                            <Link to='/'><Logo src={LogoLight} alt='로고' /></Link>
+                        </LogoBox>
+                        <NavUl>
+                            <GameLi onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
+                            <ShopLi onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
+                            <ComunityLi onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
+                            <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
+                        </NavUl>
+                    </NavBox>
+                    <AllButtonBox>
+                        <SearchInputBox>
+                            <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
+                            <SearchInputIconBox>
+                                <SearchButton><HiOutlineSearch /></SearchButton>
+                            </SearchInputIconBox>
+                        </SearchInputBox>
+                        <ButtonBox
+                            menucheck={loginMaintain == null ?
+                                false : loginMaintain === "true" ?
+                                    (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
+                        >
 
                                 {loginMaintain == null ? [] : loginMaintain == "true" ?
                                     (userInfo == null ? [] : userInfo.loginState === "allok" ?
@@ -486,20 +533,20 @@ const HeaderBox = () => {
                                     <CgMenuGridR />
                                 </MenuBox>
 
-                                <>
-                                    {loginMaintain == null ?
-                                        [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}>
-                                            <Link to='/Login'>로그인</Link>
-                                        </LineBox>,
-                                        <MenuBox
-                                            onClick={() => ScrollTop()}
-                                            left={"9px"}
-                                            top={"7px"}
-                                            size={"15px"}
-                                            padding={"10px 0px 10px 0px"}
-                                        >
-                                            <Link to='/SelectSign'>회원가입</Link>
-                                        </MenuBox>] :
+                            <>
+                                {loginMaintain == null ?
+                                    [<LineBox onClick={() => ScrollTop()} left={"20px"} top={"7px"} size={"15px"} padding={"10px 0px 10px 0px"}>
+                                        <Link to='/Login'>로그인</Link>
+                                    </LineBox>,
+                                    <MenuBox
+                                        onClick={() => ScrollTop()}
+                                        left={"9px"}
+                                        top={"7px"}
+                                        size={"15px"}
+                                        padding={"10px 0px 10px 0px"}
+                                    >
+                                        <Link to='/SelectSign'>회원가입</Link>
+                                    </MenuBox>] :
 
                                         loginMaintain == "true" ?
                                             (userInfo == null ?
@@ -550,23 +597,23 @@ const HeaderBox = () => {
                                                         <Link to='/Login'>로그인</Link>
                                                     </LineBox>,
 
-                                                    <MenuBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"9px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/SelectSign'>회원가입</Link>
-                                                    </MenuBox>]) :
-                                            (user.login_state === "allok" ?
-                                                [<Profile
-                                                    click={ProfileClickCheck}
-                                                    ref={ProfileRef}
-                                                    onClick={() => ProfileMenuCheck()}
+                                                <MenuBox
+                                                    onClick={() => ScrollTop()}
+                                                    left={"9px"}
+                                                    top={"7px"}
+                                                    size={"15px"}
+                                                    padding={"10px 0px 10px 0px"}
                                                 >
-                                                    <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
-                                                </Profile>,
+                                                    <Link to='/SelectSign'>회원가입</Link>
+                                                </MenuBox>]) :
+                                        (user.login_state === "allok" ?
+                                            [<Profile
+                                                click={ProfileClickCheck}
+                                                ref={ProfileRef}
+                                                onClick={() => ProfileMenuCheck()}
+                                            >
+                                                <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                            </Profile>,
 
                                                 <WriteBox
                                                     click={WriteClickCheck}
@@ -662,23 +709,23 @@ const HeaderBox = () => {
                                     </ProfileUl>
                                 </FastListBox>
 
-                                <ProfileListBox
-                                    zindex={profileMenuTopZIndex.current}
-                                    default={isDefaultProfileScene}
-                                    logout={isProfileLogoutCheck}
-                                    show={ProfileMenuShow}
-                                >
-                                    <ProfileUl>
-                                        <Link to='/'>
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                                setProfileClickCheck(!ProfileClickCheck)]}
-                                            >
-                                                <DropdownImg src={User} />
-                                                <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
-                                            </Profileli>
-                                        </Link>
+                            <ProfileListBox
+                                zindex={profileMenuTopZIndex.current}
+                                default={isDefaultProfileScene}
+                                logout={isProfileLogoutCheck}
+                                show={ProfileMenuShow}
+                            >
+                                <ProfileUl>
+                                    <Link to='/'>
+                                        <Profileli
+                                            padding="15px 0px 15px 13px"
+                                            onClick={() => [setProfileMenuShow(!ProfileMenuShow),
+                                            setProfileClickCheck(!ProfileClickCheck)]}
+                                        >
+                                            <DropdownImg src={User} />
+                                            <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
+                                        </Profileli>
+                                    </Link>
 
                                         <Profileli
                                             padding="15px 0px 15px 13px"
@@ -828,12 +875,125 @@ const HeaderBox = () => {
                 </BackgroudSubNav>
             </LeaveBox>
         </ALLNavBox>
+        <Outlet />
+        </>
     );
 }
 
 export const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+const ModalAllOffBtn = styled.div
+    `
+    display: flex;
+    color: white;
+    font-size: 45px;
+    justify-content: end;
+    cursor: pointer;
+`
+
+const ModalAllOffBtnText = styled.span
+    `
+    margin: 14px 23px 0px 0px;
+`
+
+const ModatAllBox = styled.div
+    `
+    display: flex;
+`
+
+const ModalUserMenu = styled.div
+    `
+    display: flex;
+    justify-content: center;
+`
+
+const ModalFast = styled.div
+    `
+    display: ${props => props.OnOff ? "flex" : "none"};
+    justify-content: end;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(25,25,25,0.3);
+    z-index:99999;
+`
+
+const ModalFastMenuBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    width: 375px;
+    height: 100%;
+    background: rgba(25,25,25,1);
+
+    @media (min-width:250px) and (max-width:768px)
+    {
+         width: 100%;
+    }
+
+`
+
+const SearchModal = styled.div
+    `
+    display: ${props => props.OnOff ? "flex" : "none"};
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(25,25,25,1);
+`
+
+const ModalFastMenu = styled.div
+    `
+    display: none;
+
+    @media (min-width:250px) and (max-width:1342px)
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 35px;
+        cursor: pointer;
+        margin: -10px 0px 0px 10px;
+    }
+`
+
+const SearchModalMenu = styled.div
+    `
+    display: none;
+
+    @media (min-width:250px) and (max-width:1342px)
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 35px;
+        cursor: pointer;
+        margin: -10px 0px 0px 0px;
+    }
+`
+
+const NavMenuAllBox = styled.div
+    `
+    display: flex;
+`
+
+const ModalFastMenuIcon = styled.i
+    `
+
+`
+
+const ModalSearchMenuIcon = styled.i
+    `
+
+`
 
 const LeaveBox = styled.div
     `
@@ -878,12 +1038,11 @@ const BackgroudTopNav = styled.div
     @media (min-width:250px) and (max-width:666px)
     {
         width: 100%;
-        height: 260px;
     }
 
     @media (min-width:667px) and (max-width:1342px)
     {
-        height: 160px;
+        height: 78px;
     }
 `
 
@@ -1029,9 +1188,10 @@ const GameLi = styled.li
     padding: 0px 20px 0px 20px;
     list-style: none;
     white-space: nowrap;
-    &
+    font-size: 25px;
+    @media (min-width:250px) and (max-width:666px)
     {
-        font-size: 25px;
+        font-size: 20px;
     }
     a
     {
@@ -1078,13 +1238,18 @@ const Topnav = styled.header
     a{
         text-decoration: none;
         font-weight: bold;
-        font-size: 25px;
         -webkit-tap-highlight-color:transparent;
     }
 
-    @media (min-width:250px) and (max-width:1342px)
+    @media (min-width:667px) and (max-width:1342px)
     {
         flex-direction: column;
+    }
+
+    @media (min-width:250px) and (max-width:666px)
+    {
+        flex-direction: column;
+        height: 72px;
     }
 
 `
@@ -1093,11 +1258,22 @@ const Logo = styled.img
     `
     width: 144px;
     height: 72px;
+
+     @media (min-width:250px) and (max-width:666px)
+    {
+        width: 95px;
+        height: 46px;
+    }
 `
 
 const LogoBox = styled.div
     `
     margin: -13px 0px 0px 0px;
+
+    @media (min-width:250px) and (max-width:666px)
+    {
+        margin: 0px 0px 0px 0px;
+    }
 `
 
 const NavBox = styled.div
@@ -1108,14 +1284,13 @@ const NavBox = styled.div
 
     @media (min-width:250px) and (max-width:666px)
     {
-        flex-direction: column;
         margin: 12px 0px 0px 0px;
         text-align: center;
     }
 
     @media (min-width:666px) and (max-width:1342px)
     {
-        justify-content: center;
+        justify-content: space-between;
     }
 `
 
@@ -1124,11 +1299,19 @@ const NavUl = styled.ul
     display: flex;
     margin: 12px 0px 12px 0px;
     white-space: nowrap;
+    height: 27px;
+    overflow: scroll;
 
-    @media (min-width:250px) and (max-width:666px)
+    &::-webkit-scrollbar
     {
+        display: none;
+    }
+
+    @media (min-width:250px) and (max-width:784px)
+    {
+        width: 48vw;
         padding: 0px;
-        justify-content: center;
+        justify-content: start;
     }
 
 `
@@ -1159,12 +1342,12 @@ const AllButtonBox = styled.div
 
     @media (min-width:250px) and (max-width:666px)
     {
-        flex-direction: column;
+        display: none;
     }
 
     @media (min-width:666px) and (max-width:1342px)
     {
-        margin: -10px 13px 0px 0px;
+        display: none;
     }
 `
 
@@ -1187,6 +1370,7 @@ const MenuBox = styled.div
         font-size:23px;
         font-weight: lighter;
         color: white;
+        text-decoration: none;
         -webkit-tap-highlight-color:transparent;    
     }
 
@@ -1217,6 +1401,11 @@ export const SearchInputBox = styled.div
     display: flex;
     border: solid 3px #3c3c3c;
     border-radius: 13px;
+
+    @media (min-width:666px) and (max-width:1342px)
+    {
+        display: none;
+    }
 }
 `
 
@@ -1284,12 +1473,6 @@ const DropdownImg = styled.img
     height: 33px;
 `
 
-const UserImg = styled(DropdownImg)
-    `
-    border-radius: 26px;
-`
-
-
 const ProFileSlideDown = keyframes
     `
     0%{
@@ -1301,71 +1484,19 @@ const ProFileSlideDown = keyframes
     }
 `
 
-const ProFileSlideUp = keyframes
-    `
-    0%{
-        height: 370px;
-    }
-    100%{
-        height: 0px;
-    }
-`
-
-const LanguageSlideDown = keyframes
-    `
-    0%{
-        height: 0px;
-    }
-    100%{
-        height: 119px;
-    }
-    }
-`
-
-const LanguageSlideUp = keyframes
-    `
-    0%{
-        height: 119px;
-    }
-    100%{
-        height: 0px;
-    }
-`
-
-const WriteSlideDown = keyframes
-    `
-    0%{
-        height: 0px;
-    }
-    100%{
-        height: 119px;
-    }
-    }
-`
-
-const WriteSlideUp = keyframes
-    `
-    0%{
-        height: 119px;
-    }
-    100%{
-        height: 0px;
-    }
-`
-
 const ProfileListBox = styled.div
     `
-    display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
-    width: 217px;
-    margin: 59px 0px 0px 158.5px;
-    box-shadow: 0px 0px 0px 3px ${props => props.theme.borderColor} inset;
-    background: white;  
-    height: ${props => props.show ? "370px" : "0px"};
-    border-radius: 10px;
-    position: absolute;
-    animation: ${props => props.show ? ProFileSlideDown : ProFileSlideUp} 0.25s;
-    overflow: hidden;
-    z-index: ${props => props.zindex ? 2 : 1};
+display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
+width: 217px;
+margin: 59px 0px 0px 158.5px;
+box-shadow: 0px 0px 0px 3px ${props => props.theme.borderColor} inset;
+background: white;  
+height: ${props => props.show ? "370px" : "0px"};
+border-radius: 10px;
+position: absolute;
+animation: ${props => props.show ? ProFileSlideDown : "none"} 0.25s;
+overflow: hidden;
+z-index: ${props => props.zindex ? 2 : 1};
 `
 
 const LanguageListBox = styled(ProfileListBox)
@@ -1375,6 +1506,12 @@ const LanguageListBox = styled(ProfileListBox)
     margin: ${props => props.margin ? "59px 0px 0px -21.4px" : "59px 0px 0px -74px"};
     height: ${props => props.show ? "370px" : "0px"};
     z-index: ${props => props.zindex ? 2 : 1};
+
+    @media (min-width:666px) and (max-width:1342px)
+    {
+        display: none;
+        height: 0px;
+    }
 `
 
 const FastListBox = styled(ProfileListBox)

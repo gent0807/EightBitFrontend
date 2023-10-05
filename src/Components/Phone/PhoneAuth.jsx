@@ -163,7 +163,7 @@ const Phone = () => {
     return (
         <PhoneBox>
             <LogoBox>
-                <Link to='/'><PhoneAuthLOGO src={isDarkmode ? LogoDark : LogoLight} alt='로고' /></Link>
+                <Link to='/'><PhoneAuthLOGO src={isDarkmode ? LogoLight : LogoDark} alt='로고' /></Link>
             </LogoBox>
 
             <IntroduceBox>
@@ -294,6 +294,7 @@ const PhoneInputAllBox = styled.div
 const PhoneTitle = styled.span
     `
     font-weight: bold;
+    color: ${(props) => props.theme.textColor};
 `
 
 const PhoneInputBox = styled.div
@@ -386,4 +387,5 @@ const IntroduceBox = styled.div
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: ${(props) => props.theme.textColor};
 `

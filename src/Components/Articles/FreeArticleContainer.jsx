@@ -9,6 +9,7 @@ let Containerbox = styled.div
 `
     margin: 0 auto;
     max-width: 1280px;
+    min-height: 1000px;
     padding: 267px 0px 54px 0px;
     color: ${props=>props.theme.textColor};
     background: ${props => props.theme.backgroundColor};
