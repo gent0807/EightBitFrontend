@@ -92,8 +92,7 @@ const SingleReply = ({ Comment }) => {
                     return res.data;
                 })
                 .then(data => {
-                    console.log(data);
-                    setProfileImagePath(data);
+                    setProfileImagePath(data.profileImgPath);
                 })
         }
 

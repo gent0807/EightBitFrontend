@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 const ip = `http://59.14.217.233:8033/EightBitBackend`;
 
-const profileImageDir = "http://59.14.217.233:8033/EightBitBackend/resources/Users/profileImage/"
+const profileImageDir = "http://59.14.217.233:8033/EightBitBackend/resources/Users/"
 
 const Main = () => {
 

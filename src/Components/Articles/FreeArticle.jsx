@@ -50,10 +50,11 @@ const FreeArticle = () => {
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [totalComment, setTotalComment] = useState(0);
     const inputRef = useRef();
+    const ip = localStorage.getItem("ip");
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
-            src: "http://59.14.217.233:8033/EightBitBackend/resources/Users/seopseop/file/image/image.png",
+            src: `${ip}/resources/board/article/nomalfiles/image.png`,
         }
     ]);
     const [Comment, setComment] = useState([
@@ -75,7 +76,6 @@ const FreeArticle = () => {
     ]);
 
     const navigate = useNavigate();
-    const ip = localStorage.getItem("ip");
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     /* const registerReplyText= useSelector((state) => state.registerReplyText); */
@@ -194,8 +194,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
-                    console.log(data);
-                    setProfileImagePath(data);
+                    setProfileImagePath(data.profileImgPath);
                 })
 
         }
