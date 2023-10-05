@@ -838,7 +838,7 @@ const FreeArticle = () => {
                 </LikeBtn>
 
                 <Link
-                    to={`/UpdateBoard/${writer}/${regdate}/${title}/${content}}`}
+                    to='/UpdateBoard' state={{writer:writer, regdate:regdate, title:title, content:content}}
                     style={{
                         display: loginMaintain == null ? "none" : loginMaintain == "true" ?
                             (userInfo == null ?
