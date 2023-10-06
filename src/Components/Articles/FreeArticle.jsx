@@ -1000,6 +1000,23 @@ const Editer = styled(ReactQuill)
         order: 2;
     }
 
+    .ql-snow .ql-picker.ql-expanded .ql-picker-options {
+        display: block;
+        margin-top: -135px;
+        top: 100%;
+        z-index: 1;
+    }
+
+    .ql-snow .ql-tooltip {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0px 0px 5px #ddd;
+        color: #444;
+        padding: 5px 12px;
+        white-space: nowrap;
+        margin: 190px 0px 0px 150px;
+    }
+
 `
 
 const Editer2 = styled(ReactQuill)
@@ -1014,7 +1031,7 @@ const Editer2 = styled(ReactQuill)
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
-        min-height: 100px;
+        min-height: 140px;
         font-size: 20px;
     }
 
@@ -1061,6 +1078,22 @@ const Editer2 = styled(ReactQuill)
         order: 2;
     }
 
+    .ql-snow .ql-picker.ql-expanded .ql-picker-options {
+        display: block;
+        margin-top: -135px;
+        top: 100%;
+        z-index: 1;
+    }
+
+    .ql-snow .ql-tooltip {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0px 0px 5px #ddd;
+        color: #444;
+        padding: 5px 12px;
+        white-space: nowrap;
+        margin: 50px 0px 0px 150px;
+    }
 `
 
 const CommentreplyBox = styled.div
@@ -1463,7 +1496,7 @@ const FileDownloadBox = styled.div
     border-radius: 10px;
     position: absolute;
     z-index: 2;
-    margin: 40px 0px 0px 1112px;
+    margin: 60px 0px 0px 1112px;
     background: ${props => props.theme.backgroundColor};
     font-size: 18px;
     display: ${props => props.FileDownloadMode == false ? "none" : "block"};
@@ -1475,7 +1508,7 @@ const ShareBox = styled.div
     border-radius: 10px;
     position: absolute;
     z-index: 2;
-    margin: 40px 0px 0px 1132px;
+    margin: 60px 0px 0px 1132px;
     background: ${props => props.theme.backgroundColor};
     font-size: 18px;
     display: ${props => props.ShareMode == false ? "none" : "block"};

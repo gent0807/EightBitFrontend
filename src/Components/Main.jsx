@@ -79,7 +79,7 @@ const GlobalStyle = createGlobalStyle
     background-size: cover;
     background-repeat: no-repeat;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
   }
 `
 
