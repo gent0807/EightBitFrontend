@@ -18,7 +18,7 @@ const Main = () => {
   const isDarkmode = useRecoilValue(isDark);
 
   return (
-    <ThemeProvider theme={isDarkmode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={isDarkmode ? lightTheme : darkTheme}>
       <GlobalStyle />
       <Router />
     </ThemeProvider>
