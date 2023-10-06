@@ -29,6 +29,34 @@ const Darkmode = () => {
         }
     };
 
+    const [WindowLength, setWindowLength] = useState(window.innerWidth);
+
+    const handleResize = () => {
+        setWindowLength(window.innerWidth);
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        }
+    })
+
+    useEffect(() => {
+       if ( WindowLength <= 1343)
+       {
+            if(Darkmode === false)
+            {
+                setstateSunDarkMode(true);
+                setstateMoonDarkMode(false);
+            }else{
+                setstateSunDarkMode(false);
+                setstateMoonDarkMode(true);
+            }
+       }
+       
+    }, [WindowLength])
+
     return (
         <IconsBox change={Darkmode} onClick={ToggleBtn}>
             <Icons Move={Darkmode} stateSunDarkMode={stateSunDarkMode} stateMoonDarkMode={stateMoonDarkMode} />
@@ -156,5 +184,6 @@ const Icons = styled.div
     border-radius: 20px;
     background: white;
     -webkit-user-select: none;
+    z-index: 1;
 `
 

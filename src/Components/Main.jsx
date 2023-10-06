@@ -5,7 +5,7 @@ import { isDark } from './Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-const ip = `http://localhost:8033/EightBitBackend`;
+const ip = `http://59.14.217.233:8033/EightBitBackend`;
 
 const profileImageDir = `${ip}/resources/Users/`;
 
@@ -79,7 +79,7 @@ const GlobalStyle = createGlobalStyle
     background-size: cover;
     background-repeat: no-repeat;
     width: 100vw;
-    min-height: 100vh;
+    height: 100%;
   }
 `
 

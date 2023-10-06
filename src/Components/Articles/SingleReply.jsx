@@ -27,12 +27,12 @@ import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { clearLoginState, accessToken, point } from "../Redux/User";
-
+import ReplyReportModal from "./ReplyReportModal"
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedCommentIndex, isEditing, addComment, editComment, deleteComment }) => {
+const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCommentIndex, isEditing, addComment, editComment, deleteComment, key }) => {
     const [id, setId] = useState(Comment.id);
     const [replyer, setReplyer] = useState(Comment.replyer);
     const [content, setContent] = useState(Comment.content);
@@ -59,11 +59,11 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
     userInfo = JSON.parse(userInfo);
 
     let likeMode = useRef(false);
-    
+
     const [toggleState, setToggleState] = useRecoilState(toggle);
     const [toggleState2, setToggleState2] = useRecoilState(toggle2);
-    
-    
+
+
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
     const quillRef = useRef(null);
@@ -157,7 +157,6 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                     return res.data;
                 })
                 .then((data) => {
-                    console.log(data);
                     if (data.length == 0) {
                         setReCommentHide(true);
                     }
@@ -210,11 +209,11 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
         getReplyerProfileImagePath(Comment.replyer);
         getReplyerRole(Comment.replyer);
         getLikers(Comment.replyer, Comment.regdate);
-        getReComments(Comment.replyer, Comment.regdate);    
-        
+        getReComments(Comment.replyer, Comment.regdate);
+
         setReplyStatusDivHide(true);
 
-    }, [editComment,addComment, deleteComment, toggleState2]);
+    }, [editComment, addComment, deleteComment, toggleState2]);
 
 
     const toolbarOptions = [
@@ -367,7 +366,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
             setReComments([...ReComments, newReComment]);
             setReCommentChangeValue("");
         }
-        else if(ReComments.length===0){
+        else if (ReComments.length === 0) {
             const addedCmtId = 1;
             const newReComment = {
                 id: addedCmtId,
@@ -595,56 +594,21 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
 
-    const reportAbuse = async () => {
-        axios.patch(`${ip}/Board/report/reply/abuse?replyer=${replyer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
-    const report19 = async () => {
-        axios.patch(`${ip}/Board/report/reply/19?replyer=${replyer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            });
-    }
-    const reportIncoporate = async () => {
-        axios.patch(`${ip}/Board/report/reply/incoporate?replyer=${replyer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
     return (
         <UserCommentBox id={id}>
+
+            <ReplyReportModal
+                replyer={replyer}
+                regdate={regdate}
+                ReportMode={reportMode}
+                setReportMode={setReportMode}
+                id={key}
+            />
+
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <CommentUserProfileBox>
                     <CommentUserBox>
-                        <CommentUserProfile src={localStorage.getItem("profileImageDir")+profileImagePath} />
+                        <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                         <CommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{replyer}</UserNicknameText>
@@ -666,24 +630,15 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
 
                         </CommentInformationAllBox>
                     </CommentUserBox>
+
                     <div style={{ margin: "15px 0px 0px 0px" }}>
                         <RedateBox>
                             신고
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
-                        <ReportBox ReportMode={reportMode}>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={reportAbuse}>
-                                욕설/비방 신고
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report19}>
-                                음란물 신고
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={reportIncoporate}>
-                                게시판 부적합 신고
-                            </div>
-                        </ReportBox>
                         <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
+                    
                 </CommentUserProfileBox>
                 <CommentInformationBox>
                     <CommentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
@@ -828,7 +783,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                             })
                         }
                     </ReCommentBox>
-                </ReCommentSector> 
+                </ReCommentSector>
             </div>
             <div style={{ display: isEditing === false ? "none" : "block" }}>
                 <ReCommentForm

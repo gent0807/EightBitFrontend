@@ -161,7 +161,7 @@ const WriteBoard = () => {
     }, [files]
     );
 
-    console.log(files)
+    console.log(files);
 
     const handleFilterFile = useCallback(
         (id) => {

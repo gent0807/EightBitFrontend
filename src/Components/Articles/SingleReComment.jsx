@@ -26,6 +26,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { clearLoginState, accessToken, point } from "../Redux/User";
+import ReCommentReportModal from "./ReCommentReportModal";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -539,55 +540,17 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
 
-    const reportAbuse = async () => {
-        axios.patch(`${ip}/Board/report/reComment/abuse?reCommenter=${reCommenter}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
-    const report19 = async () => {
-        axios.patch(`${ip}/Board/report/reComment/19?reCommenter=${reCommenter}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-    const reportIncoporate = async () => {
-        axios.patch(`${ip}/Board/report/reComment/incoporate?reCommenter=${reCommenter}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
-
-
 
     return (
         <UserReCommentBox id={id}>
+
+            <ReCommentReportModal
+                reCommenter={reCommenter}
+                regdate={regdate}
+                setReportMode={setReportMode}
+                ReportMode={reportMode}
+            />
+
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <ReCommentUserProfileBox>
                     <ReCommentUserBox>
@@ -613,21 +576,12 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                         </ReCommentInformationAllBox>
                     </ReCommentUserBox>
                     <div style={{ margin: "15px 0px 0px 0px" }}>
+
                         <RedateBox>
                             신고
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
-                        <ReportBox ReportMode={reportMode}>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={reportAbuse}>
-                                욕설/비방 신고
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report19}>
-                                음란물 신고
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={reportIncoporate}>
-                                게시판 부적합 신고
-                            </div>
-                        </ReportBox>
+                        
                         <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
                 </ReCommentUserProfileBox>
@@ -767,7 +721,9 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                     onSubmit={updateReComment}>
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <ReCommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath: localStorage.getItem("profileImageDir") + user.profile_img_path} />
+
+                            <ReCommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_pathloginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2

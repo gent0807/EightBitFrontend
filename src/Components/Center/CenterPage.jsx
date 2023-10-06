@@ -49,7 +49,6 @@ const CenterPage = () => {
     const [Slide, setSlide] = useState([
         {
             id: 1,
-            lank: 1,
             img: test,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
@@ -79,6 +78,7 @@ const CenterPage = () => {
             title: "모험가키우기"
         },
     ]);
+
     const [AdSlide, setAdSlide] = useState([
         {
             id: 1,

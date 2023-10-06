@@ -26,6 +26,8 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
 import { clearLoginState, accessToken, point } from "../Redux/User";
+import FreeReportModal from "./FreeReportModal";
+import ReplyReportModal from "./ReplyReportModal"
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -49,9 +51,9 @@ const FreeArticle = () => {
     const [reCommentCount, setReCommentCount] = useState(0);
     const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
     const inputRef = useRef();
+    const ip = localStorage.getItem("ip");
 
     const navigate = useNavigate();
-    const ip = localStorage.getItem("ip");
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
@@ -627,51 +629,6 @@ const FreeArticle = () => {
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
 
-    const reportAbuse = () => {
-        axios.patch(`${ip}/Board/report/article/abuse?writer=${writer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
-    const report19 = async () => {
-        axios.patch(`${ip}/Board/report/article/19?writer=${writer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
-    const reportIncoporate = async () => {
-        axios.patch(`${ip}/Board/report/article/incoporate?writer=${writer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
     const kakaoShare = async () => {
         setShareMode(false);
     }
@@ -686,52 +643,82 @@ const FreeArticle = () => {
 
     return (
         <FreeArticleBox>
+            
+        <FreeReportModal
+            ReportMode={reportMode}
+            setReportMode={setReportMode}
+        />
+        
             <UserBox>
                 <UserinformationBox>
                     <UserProfileBox>
                         <UserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                         <WriteViewBox>
-                            <div style={{ display: "flex" }}>
-                                <WriterText>{writer}</WriterText>
-                                <BiLogoDevTo size={25} style={{ margin: "1.5px 0px 0px 0px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
-                                {regdate == updatedate ? "" :
-                                    <div style={{ display: "flex", margin: "7.2px 0px 0px 2px" }}>
-                                        <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
-                                        수정됨
-                                    </div>}
 
-                            </div>
+                            <Correction>
+                                <WriterText>{writer}</WriterText>
+                                <CorrectionIcon writerRole={writerRole}>
+                                    <BiLogoDevTo />
+                                </CorrectionIcon>
+                                
+                                {regdate == updatedate ? "" :
+                                    <CorrectionTextBox>
+                                        <CorrectionTextBoxIcon>
+                                            <AiFillCheckCircle />
+                                        </CorrectionTextBoxIcon>
+                                        <CorrectionText>
+                                            수정됨
+                                        </CorrectionText>
+                                    </CorrectionTextBox>}
+
+                            </Correction>
+
                             <LikeViewBox>
-                                <LikeText><BsHandThumbsUp size={22} style={{ margin: "0px 0px -4px 0px" }}></BsHandThumbsUp> {likecount}</LikeText>
-                                <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
-                                <ViewText><AiOutlineEye size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineEye> {visitcnt}</ViewText>
-                                <BsDot style={{ margin: "4px 1px 0px 0px" }}></BsDot>
-                                <ReplyText><AiOutlineComment size={27} style={{ margin: "0px 0px -7px -2px" }}></AiOutlineComment>{Comments.length + reCommentCount}</ReplyText>
+                                <LikeViewIcon>
+                                    <BsHandThumbsUp/>
+                                </LikeViewIcon>
+
+                                <LikeText>{likecount}</LikeText>
+                                
+                                <LikeBtnDot>
+                                    <BsDot/>
+                                </LikeBtnDot>
+
+                                <ViewIcon>
+                                    <AiOutlineEye />
+                                </ViewIcon>
+
+                                <ViewText>{visitcnt}</ViewText>
+
+                                <LikeBtnDot>
+                                    <BsDot/>
+                                </LikeBtnDot>
+
+                                <ReplyIcon>
+                                    <AiOutlineComment/>
+                                </ReplyIcon>
+
+                                <ReplyText>{Comments.length + reCommentCount}</ReplyText>
+
                             </LikeViewBox>
+
                         </WriteViewBox>
+
                     </UserProfileBox>
-                    <div style={{ margin: "0px 10px 0px 0px" }}>
+
+                    <ReportAllBox>
                         <RedateBox>
-                            신고
+                            <ReportAllBoxText>신고</ReportAllBoxText>
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
-                        <ReportBox ReportMode={reportMode}>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={reportAbuse}>
-                                욕설/비방 신고
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report19}>
-                                음란물 신고
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={reportIncoporate}>
-                                게시판 부적합 신고
-                            </div>
-                        </ReportBox>
+
                         <DayBox>
                             <RegdateText>등록일 : {dayjs(regdate).format("YY.MM.DD hh:mm")}</RegdateText>
                             <DayBoxBar></DayBoxBar>
                             <EditText>수정일 : {dayjs(updatedate).format("YY.MM.DD hh:mm")}</EditText>
                         </DayBox>
-                    </div>
+
+                    </ReportAllBox>
 
                 </UserinformationBox>
             </UserBox>
@@ -752,11 +739,13 @@ const FreeArticle = () => {
                                     setFileDownloadMode(false);
                                 }} />
                         </ShareArea>
+
                         <FileDownloadBox FileDownloadMode={fileDownloadMode}>
-                            <div style={{ margin: "10px 10px 10px 10px", display: "flex", cursor: "pointer" }} onClick={downloadFile}>
+                            <DownloadText onClick={downloadFile}>
                                 첨부파일
-                            </div>
+                            </DownloadText>
                         </FileDownloadBox>
+
                         <ShareBox ShareMode={shareMode}>
                             <div style={{ margin: "10px 10px 10px 10px", display: "flex", cursor: "pointer" }} onClick={kakaoShare}>
                                 <RiKakaoTalkFill size={22} style={{ margin: "0px 10px 0px 0px" }} />
@@ -770,7 +759,7 @@ const FreeArticle = () => {
                     </TitleBox>
                     <TitleLine></TitleLine>
                     <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
-                    <br></br>
+
                     {InformationImage.length > 0 &&
                         InformationImage.map(Image => {
                             return (
@@ -894,8 +883,7 @@ const FreeArticle = () => {
                         );
                     })
                 }
-                <br></br>
-                <br></br>
+
                 <CommentForm
                     LoginMaintain={loginMaintain}
                     UserInfo={userInfo} User={userInfo == null ?
@@ -926,12 +914,57 @@ const FreeArticle = () => {
                         <CommentBtn>댓글 쓰기</CommentBtn>
                     </CommentBtnBox>
                 </CommentForm>
+
             </CommentBox>
         </FreeArticleBox >
     );
 }
 
 export default FreeArticle;
+
+const ReportAllBox = styled.div
+`
+    margin: 0px 10px 0px 0px;
+`
+
+const ReportAllBoxText = styled.span
+`
+
+`
+
+const Correction = styled.div
+`
+    display: flex;
+`
+
+const CorrectionTextBox = styled.div
+`
+    display: flex;
+    margin: 7.2px 0px 0px 2px;
+`
+
+const CorrectionTextBoxIcon = styled.i
+`
+    svg
+    {
+        margin: 1px 3px 0px 3px;
+    }
+`
+
+const CorrectionText = styled.span
+`
+
+`
+
+const CorrectionIcon = styled.i
+`
+    display: ${props => props.writerRole === "DEVELOPER" ? "block" : "none"};
+    svg
+    {
+        font-size: 25px;
+        margin: 1.5px 0px 0px 0px;
+    }
+`
 
 const ReCommentBtnBox = styled.div
     `
@@ -959,6 +992,14 @@ const Editer = styled(ReactQuill)
         margin: 0px -2px -2px 0px;
         min-height: 200px;
         font-size: 20px;
+    }
+
+    .ql-snow .ql-picker.ql-expanded .ql-picker-options
+    {
+        display: block;
+        margin-top: -133px;
+        top: 100%;
+        z-index: 1;
     }
 
     .ql-editor::-webkit-scrollbar 
@@ -1180,6 +1221,7 @@ const CommentArea = styled.div
     `
     display: grid;
     grid-template-columns: 0fr 3fr ;
+    margin: 60px 0px 0px 0px;
 `
 
 const CommentArea2 = styled.div
@@ -1316,16 +1358,40 @@ const WriterText = styled.span
 
 const LikeText = styled.span
     `
-    margin: 2px 2px 0px 0px;
+    margin: 2px 0px 0px 5px;
+    svg
+    {
+        font-size: 22px;
+        margin: 0px 0px -4px 0px;
+    }
+`
+
+const ViewIcon = styled.i
+`
+    svg
+    {
+        margin: 0px 0px -7px -2px;
+        font-size: 27px;
+    }
 `
 
 const ViewText = styled.span
     `
-    margin: 0px 2px 0px 0px;    
+    margin: 2px 0px 0px 5px; 
 `
 
 const ReplyText = styled.span
     `
+    margin: 2px 0px 0px 5px;
+`
+
+const ReplyIcon = styled.i
+`
+    svg
+    {
+        font-size: 27px;
+        margin: -1px 0px -7px -2px;
+    }
 `
 
 const RegdateText = styled.span
@@ -1345,16 +1411,24 @@ const RedateBox = styled.div
     margin: 0px 0px 17px 0px;
 `
 
-const ReportBox = styled.div
+const ModelReportBox = styled.div
     `
+    flex-direction: column;
     border: 1px solid ${props => props.theme.textColor};
     border-radius: 10px;
     position: absolute;
     z-index: 2;
+    margin: 0px 0px -82px 0px;
+    padding: 10px;
     background: ${props => props.theme.backgroundColor};
-    margin: 0px 0px 0px 260px;
-    display: ${props => props.ReportMode == false ? "none" : "block"};
+    display: ${props => props.ReportMode == false ? "none" : "flex"};
     
+`
+
+const ReportText = styled.span
+`
+    margin: 10px 10px 10px 10px;
+    cursor: pointer;
 `
 
 const EditText = styled.span
@@ -1404,7 +1478,19 @@ const LikeViewBox = styled.div
     `
     display: flex;
     font-size: 20px;
-    margin: 9px 0px 0px 0px;
+`
+
+const LikeViewIcon = styled.i
+`
+    font-size: 22px;
+`
+
+const LikeBtnDot = styled.i
+`
+    svg
+    {
+        margin: 4px 1px 0px 0px;
+    }
 `
 
 const UserBox = styled.div
@@ -1500,6 +1586,12 @@ const FileDownloadBox = styled.div
     background: ${props => props.theme.backgroundColor};
     font-size: 18px;
     display: ${props => props.FileDownloadMode == false ? "none" : "block"};
+`
+
+const DownloadText = styled.span
+`
+    margin: 10px 10px 10px 10px;
+    cursor: pointer;
 `
 
 const ShareBox = styled.div
