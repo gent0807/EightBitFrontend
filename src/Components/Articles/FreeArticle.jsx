@@ -26,6 +26,8 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
 import { clearLoginState, accessToken, point } from "../Redux/User";
+import FreeReportModal from "./FreeReportModal";
+import ReplyReportModal from "./ReplyReportModal"
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -627,51 +629,6 @@ const FreeArticle = () => {
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
 
-    const reportAbuse = () => {
-        axios.patch(`${ip}/Board/report/article/abuse?writer=${writer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
-    const report19 = async () => {
-        axios.patch(`${ip}/Board/report/article/19?writer=${writer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
-    const reportIncoporate = async () => {
-        axios.patch(`${ip}/Board/report/article/incoporate?writer=${writer}&regdate=${regdate}`, {
-
-        }, {
-
-        })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                alert("신고가 접수되었습니다.");
-                setReportMode(false);
-            })
-    }
-
     const kakaoShare = async () => {
         setShareMode(false);
     }
@@ -686,6 +643,12 @@ const FreeArticle = () => {
 
     return (
         <FreeArticleBox>
+            
+        <FreeReportModal
+            ReportMode={reportMode}
+            setReportMode={setReportMode}
+        />
+        
             <UserBox>
                 <UserinformationBox>
                     <UserProfileBox>
@@ -747,19 +710,6 @@ const FreeArticle = () => {
                         <RedateBox>
                             <ReportAllBoxText>신고</ReportAllBoxText>
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
-
-                            <ReportBox ReportMode={reportMode}>
-                                <ReportText onClick={reportAbuse}>
-                                    욕설/비방 신고
-                                </ReportText>
-                                <ReportText onClick={report19}>
-                                    음란물 신고
-                                </ReportText>
-                                <ReportText onClick={reportIncoporate}>
-                                    게시판 부적합 신고
-                                </ReportText>
-                            </ReportBox>
-
                         </RedateBox>
 
                         <DayBox>
@@ -844,7 +794,7 @@ const FreeArticle = () => {
                         onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
-                                <CommentUserProfile src={loginMaintain=="true" ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                <CommentUserProfile src={loginMaintain=="true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
@@ -946,7 +896,7 @@ const FreeArticle = () => {
                     onSubmit={registerReply}>
                     <CommentArea>
                         <CommentProfile>
-                            <CommentUserProfile src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                            <CommentUserProfile src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer
@@ -1428,7 +1378,7 @@ const RedateBox = styled.div
     margin: 0px 0px 17px 0px;
 `
 
-const ReportBox = styled.div
+const ModelReportBox = styled.div
     `
     flex-direction: column;
     border: 1px solid ${props => props.theme.textColor};

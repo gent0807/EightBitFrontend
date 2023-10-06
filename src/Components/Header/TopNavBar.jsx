@@ -289,6 +289,9 @@ const HeaderBox = () => {
         setWriteClickCheck(false);
         setIsWriteMenuShow(false);
         setIsWriteMenuClickCheck(false);
+        return(
+            <div>드롭다운!!!!!!!!!!!!</div>
+        )
     }
 
     const LanguageMenuNotCheck = () => {

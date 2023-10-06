@@ -10,7 +10,7 @@ function PaginationNav({ total, limit, page, setPage }) {
   const FirstReset = useRecoilValue(firstReset);
   const [CFirstReset, setCFirstReset] = useRecoilState(firstReset);
   let firstNum = FirstReset ? WindowLength <= 666 ? currPage - (currPage % 5) + 1 : currPage - (currPage % 10) + 1 : 1;
-  console.log(WindowLength, firstNum, numPages);
+  console.log("firstNum : ",firstNum, "numPages : ", numPages, "currPageFirst : ", 20 - (20 % 10) + 1, "currPage : ", currPage,"Page : ", page);
 
   const handleResize = () => {
     setWindowLength(window.innerWidth);
