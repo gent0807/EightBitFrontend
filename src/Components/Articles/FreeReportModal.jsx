@@ -347,7 +347,7 @@ const Radio19Btnlabel = styled(RadioBtnlabel)
         height: 10px;
         background: #fff;
         border-radius: 50%;
-        margin: 8px 0px 0px -141px;
+        margin: 8px 0px 0px -140px;
     }
 `
 
