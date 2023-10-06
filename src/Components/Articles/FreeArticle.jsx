@@ -805,7 +805,7 @@ const FreeArticle = () => {
                         onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
-                                <CommentUserProfile src={loginMaintain=="true" ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                <CommentUserProfile src={loginMaintain=="true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
@@ -908,7 +908,7 @@ const FreeArticle = () => {
                     onSubmit={registerReply}>
                     <CommentArea>
                         <CommentProfile>
-                            <CommentUserProfile src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                            <CommentUserProfile src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer
@@ -1025,7 +1025,7 @@ const Editer2 = styled(ReactQuill)
     flex-direction: column;
     
     .ql-editor.ql-blank::before{
-        color: ${props => props.theme.textColor};;
+        color: ${props => props.theme.textColor};
     }
 
     .ql-editor

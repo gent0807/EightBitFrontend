@@ -790,7 +790,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                         onSubmit={registerReComment}>
                         <ReCommentArea>
                             <ReCommentProfile>
-                                <CommentUserProfile2 src={loginMaintain == "true " ? localStorage.getItem("profileImageDir") + userInfo.profileImagePath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath: localStorage.getItem("profileImageDir") + user.profile_img_path} />
                             </ReCommentProfile>
                             <ReCommentInputBox>
                                 <Editer2
@@ -847,7 +847,7 @@ const SingleReply = ({ Comment, reCommentCount,  setReCommentCount, setSelectedC
                     onSubmit={updateReply}>
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <CommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                            <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath: localStorage.getItem("profileImageDir") + user.profile_img_path} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
@@ -885,7 +885,7 @@ const Editer2 = styled(ReactQuill)
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
-        min-height: 80px;
+        min-height: 110px;
         font-size: 20px;
     }
 
@@ -926,6 +926,16 @@ const Editer2 = styled(ReactQuill)
     .ql-toolbar.ql-toolbar.ql-snow
     {
         order: 2;
+    }
+
+    .ql-snow .ql-tooltip {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0px 0px 5px #ddd;
+        color: #444;
+        padding: 5px 12px;
+        white-space: nowrap;
+        margin: 100px 0px 0px 150px;
     }
 
 `
