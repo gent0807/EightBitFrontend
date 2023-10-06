@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { freeReComment } from "./ReComment";
+import { useRecoilState } from "recoil";
+import { toggle } from "./Toggle";
+import { toggle2 } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -10,10 +11,12 @@ import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { AiOutlineComment } from "react-icons/ai";
+import { BsDot } from "react-icons/bs";
 import { SlOptions } from "react-icons/sl";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import dayjs from "dayjs";
+import DOMPurify from "dompurify";
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
@@ -22,22 +25,29 @@ import Siren from "../../img/Siren/Siren.png";
 import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { point } from "../Redux/User";
+import { clearLoginState, accessToken, point } from "../Redux/User";
+import ReCommentReportModal from "./ReCommentReportModal";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReComment = ({ ReComment }) => {
+const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSelectedReCommentIndex, isEditing, addReComment, editReComment, deleteReComment }) => {
+    const [id, setId] = useState(ReComment.id);
+    const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_replyer);
+    const [originalRegdate, setOriginalRegdate] = useState(ReComment.original_regdate);
+    const [reCommenter, setReCommenter] = useState(ReComment.reCommenter);
+    const [content, setContent] = useState(ReComment.content);
+    const [regdate, setRegdate] = useState(ReComment.regdate);
+    const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
     const [likecount, setLikecount] = useState(0);
     const [profileImagePath, setProfileImagePath] = useState("");
-    const [writerRole, setWriterRole] = useState("");
+    const [reCommenterRole, setReCommenterRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [timecount, setTimecount] = useState("1시간");
     const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(true);
-    const [updateMode, setUpdateMode] = useState(false);
-    const [updateReCommentText, setUpdateReCommentText] = useState("");
+    const [updateReCommentText, setUpdateReCommentText] = useState(ReComment.content);
 
     const navigate = useNavigate();
 
@@ -47,13 +57,17 @@ const SingleReComment = ({ ReComment }) => {
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
-    let likeMode = useRef(false);
 
-    const [reCommentText, setReCommentText] = useRecoilState(freeReComment);
+    const [toggleState, setToggleState] = useRecoilState(toggle);
+    const [toggleState2, setToggleState2] = useRecoilState(toggle2);
+
+    let likeMode = useRef(false);
 
     const [onReplyBtn, setOnReplyBtn] = useState(false);
 
     const quillRef = useRef(null);
+
+    const [ReComments, setReComments] = useState([]);
 
 
     const toolbarOptions = [
@@ -148,9 +162,11 @@ const SingleReComment = ({ ReComment }) => {
         "width",
     ];
 
+
+
     useEffect(() => {
-        const getUsreProfileImagePath = (writer) => {
-            axios.get(`${ip}/Users/profileImgPath?nickname=${writer}`, {
+        const getReCommenterProfileImagePath = (reCommenter) => {
+            axios.get(`${ip}/Users/profileImgPath?nickname=${reCommenter}`, {
 
             },
                 {
@@ -160,14 +176,13 @@ const SingleReComment = ({ ReComment }) => {
                     return res.data;
                 })
                 .then(data => {
-                    console.log(data);
-                    setProfileImagePath(data);
+                    setProfileImagePath(data.profileImgPath);
                 })
 
         }
 
-        const getUserRole = (writer) => {
-            axios.get(`${ip}/Users/role?nickname=${writer}`, {
+        const getReCommenterRole = (reCommenter) => {
+            axios.get(`${ip}/Users/role?nickname=${reCommenter}`, {
 
             },
                 {
@@ -177,100 +192,146 @@ const SingleReComment = ({ ReComment }) => {
                     return res.data;
                 })
                 .then(data => {
-                    console.log(data);
-                    setWriterRole(data);
+                    setReCommenterRole(data);
                 })
 
         }
 
-        getUsreProfileImagePath(ReComment.writer);
-        getUserRole(ReComment.writer);
-        setReCommentChangeValue("@" + ReComment.writer + "\n");
-        setUpdateReCommentText(ReComment.content);
-    }, [reCommentText]);
+        const getLikers = (reCommenter, regdate) => {
+            axios.get(`${ip}/Board/article/reply/reComment/likers?reCommenter=${reCommenter}&regdate=${regdate}`, {
 
-    const registerReComment = async (e) => {
-        e.preventDefault();
-
-        if (reCommentChangeValue.length > 11) {
-            axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+            },
                 {
 
-                },
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
                 .then((res) => {
                     return res.data;
-                }
-                )
+                })
                 .then((data) => {
-                    dispatch(point(data));
-                });
-        }
-        else if (reCommentChangeValue.length <= 11) {
-            alert("댓글을 입력해주세요.");
-            return;
-        }
-    };
-
-    const updateReComment = async (e) => {
-        e.preventDefault();
-        if (updateReCommentText.length > 11) {
-            setUpdateMode(false);
-        }
-
-        else if (updateReCommentText.length <= 11) {
-            alert("댓글을 입력해주세요.");
-            return;
-        }
-
-    };
-
-
-    const getNewLikeCount = async () => {
-        axios.get(`${ip}/Board/article/like?writer=${ReComment.writer}&regdate=${ReComment.regdate}`, {
-
-        }, {
-
-        })
-            .then(res => {
-                return res.data;
-            })
-            .then(data => {
-                setLikecount(data.likecount);
-            })
-    }
-
-    const countUpLike = async (e) => {
-        if (loginMaintain != "true") {
-            if (user.login_state != "allok") {
-                alert("로그인이 필요합니다.");
-                navigate("/Login");
-                return;
-            }
+                    setLikecount(data.length);
+                    if (loginMaintain == "true") {
+                        if (userInfo != null) {
+                            for (let i = 0; i < data.length; i++) {
+                                if (data[i] == userInfo.nickName) {
+                                    likeMode.current = true;
+                                    break;
+                                }
+                                else {
+                                    likeMode.current = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (loginMaintain == "false") {
+                        if (user.nickname != null) {
+                            for (let i = 0; i < data.length; i++) {
+                                if (data[i] == user.nickname) {
+                                    likeMode.current = true;
+                                    break;
+                                }
+                                else {
+                                    likeMode.current = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (loginMaintain == null) {
+                        likeMode.current = false;
+                    }
+                })
         }
 
 
-        await axios.patch(`${ip}/Board/article/like/up?writer=${ReComment.writer}&regdate=${ReComment.regdate}`, {
+        const getReComments = (replyer, regdate) => {
+            axios.get(`${ip}/Board/article/reply/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
 
+            },
+                {
+
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
+                    setReComments(data);
+                })
+        }
+
+        /*    axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
+               {
+   
+               },
+               {
+   
+               })
+               .then((res) => {
+                   return res.data;
+               })
+               .then((data) => {
+                   setOriginalReplyer(data.original_replyer);
+                   setOriginalRegdate(data.original_regdate);
+                   setReCommenter(data.reCommenter);
+                   setContent(data.content);
+                   setRegdate(data.regdate);
+                   setUpdatedate(data.updatedate);
+                   setReportMode(false);
+                   setUpdateReCommentText(data.content);
+                   setReCommentChangeValue("@" + data.reCommenter + "\n");
+   
+                   getReCommenterProfileImagePath(data.reCommenter);
+                   getReCommenterRole(data.reCommenter);
+                   getLikers(data.reCommenter, data.regdate);
+               });  */
+
+        setId(ReComment.id);
+        setOriginalReplyer(ReComment.original_replyer);
+        setOriginalRegdate(ReComment.original_regdate);
+        setReCommenter(ReComment.reCommenter);
+        setContent(ReComment.content);
+        setRegdate(ReComment.regdate);
+        setUpdatedate(ReComment.updatedate);
+        setUpdateReCommentText(ReComment.content);
+        setReCommentChangeValue("@" + ReComment.reCommenter + "\n");
+
+        getReCommenterProfileImagePath(ReComment.reCommenter);
+        getReCommenterRole(ReComment.reCommenter);
+        getLikers(ReComment.reCommenter, ReComment.regdate);
+        getReComments(ReComment.original_replyer, ReComment.original_regdate);
+
+        setReCommentStatusDivHide(true);
+
+
+    }, [addReComment, editReComment, deleteReComment]);
+
+
+
+
+    const addLike = async (e) => {
+
+        await axios.post(`${ip}/Board/article/reply/reComment/like/`, {
+            liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+            reCommenter: reCommenter,
+            regdate: regdate,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
             .then(res => {
+                /* regenerateAccessTokenOrLogout(res, addLike, e); */
                 return res.data;
             })
             .then(data => {
+                setLikecount(data.length);
                 likeMode.current = true;
-                getNewLikeCount();
             })
     }
 
-    const countDownLike = async () => {
+
+
+
+    const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.patch(`${ip}/Board/article/like/down?writer=${ReComment.writer}&regdate=${ReComment.regdate}`, {
-            },
+            await axios.delete(`${ip}/Board/article/reply/reComment/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
@@ -278,72 +339,254 @@ const SingleReComment = ({ ReComment }) => {
                     return res.data;
                 })
                 .then(data => {
+                    /* regenerateAccessTokenOrLogout(res, reduceLike, e); */
+                    setLikecount(data.length);
                     likeMode.current = false;
-                    getNewLikeCount();
                 })
 
         }
         else return;
     }
 
-    const report1 = async () => {
-        setReportMode(false);
+    const registerReComment = async (e) => {
+        e.preventDefault();
+
+        if (reCommentChangeValue.length > 0) {
+            await axios.post(`${ip}/Board/article/reply/reComment`, {
+                original_replyer: originalReplyer,
+                original_regdate: originalRegdate,
+                reCommenter: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: reCommentChangeValue,
+            },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then((res) => {
+                    /* regenerateAccessTokenOrLogout(res, registerReComment, e); */
+                    return res.data;
+                })
+                .then((data) => {
+                    setToggleState2(!toggleState2);
+                    setToggleState(!toggleState);
+                    addReComment(data, ReComments);
+                    setOnReplyBtn(false);
+                    setReCommentCount(reCommentCount + 1);
+                    setReCommentChangeValue("");
+                    const pointUp = (/* f */) => {
+                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
+                            {
+
+                            },
+                            {
+                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                            })
+                            .then((res) => {
+                                /*  f(res,pointUp,e) */
+                                return res.data;
+                            }
+                            )
+                            .then((data) => {
+                                dispatch(point(data));
+                            });
+                    }
+
+                    pointUp();
+                })
+
+        }
+        else if (reCommentChangeValue.length == 0) {
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
+
     }
 
-    const report2 = async () => {
-        setReportMode(false);
-    }
-    const report3 = async () => {
-        setReportMode(false);
-    }
+
+    const updateReComment = async (e) => {
+        e.preventDefault();
+        if (updateReCommentText.length > 0) {
+            await axios.patch(`${ip}/Board/article/reply/reComment?reCommenter=${reCommenter}&regdate=${regdate}`,
+                {
+                    content: updateReCommentText,
+                },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then((res) => {
+                    /* regenerateAccessTokenOrLogout(res, updateReComment, e); */
+                    return res.data;
+                })
+                .then((data) => {
+                    setToggleState2(!toggleState2);
+                    setToggleState(!toggleState);
+                    editReComment(id, updateReCommentText);
+                    setSelectedReCommentIndex(0);
+                    return;
+                });
+        }
+
+        else if (updateReCommentText.length == 0) {
+            alert("댓글을 입력해주세요.");
+            return;
+        }
+
+    };
 
 
+
+
+    const deleteReCommentInServer = async () => {
+        const check = window.confirm("정말 삭제하시겠습니까?");
+        if (check == true) {
+            await axios.delete(`${ip}/Board/article/reply/reComment/${reCommenter}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
+
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then((res) => {
+                    /* regenerateAccessTokenOrLogout(res, deleteReComment, e); */
+                    return res.data;
+                })
+                .then((data) => {
+                    setToggleState2(!toggleState2);
+                    setToggleState(!toggleState);
+                    deleteReComment(id);
+                    return;
+                })
+        }
+        else return;
+    }
+
+    const regenerateAccessTokenOrLogout = (res, f, e) => {
+        if (res.status == 403) {
+            axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`, {
+
+            },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then((res) => {
+                    return res.data
+                }
+                )
+                .then((data) => {
+                    if (data == "invalid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "accesstoken valid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "accesstoken not matched user") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken invalid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken expired") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("로그인이 만료되었습니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken not matched user") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else {
+                        const object = {
+                            accessToken: data,
+                        };
+                        if (loginMaintain == "true") {
+                            userInfo.accessToken = data;
+                        }
+                        dispatch(accessToken(object));
+                        f(e);
+                    }
+                })
+            return;
+        }
+        else if (res.status == 200) {
+            return res.data
+        }
+    }
+
+    const deleteRefreshToken = (name) => {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+    }
 
 
     return (
-        <UserReCommentBox key={ReComment.id}>
-            <div style={{ display: updateMode === true ? "none" : "block" }}>
+        <UserReCommentBox id={id}>
+
+            <ReCommentReportModal
+                reCommenter={reCommenter}
+                regdate={regdate}
+                setReportMode={setReportMode}
+                ReportMode={reportMode}
+            />
+
+            <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <ReCommentUserProfileBox>
                     <ReCommentUserBox>
                         <ReCommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
                         <ReCommentInformationAllBox>
                             <div style={{ display: "flex" }}>
-                                <UserNicknameText>{ReComment.writer}</UserNicknameText>
-                                <BiLogoDevTo size={21} style={{ margin: "0px 0px 0px 2px", display: writerRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
-                                {ReComment.regdate == ReComment.updatedate ? "" :
-                                    <div style={{ display: "flex", margin: "5px 0px 0px 2px" }}>
+                                <UserNicknameText>{reCommenter}</UserNicknameText>
+                                <BiLogoDevTo size={24} style={{ margin: "0px 0px 2px 0px", display: reCommenterRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
+                                {regdate == updatedate ? "" :
+                                    <div style={{ display: "flex", margin: "5px 0px 0px -1px" }}>
                                         <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
                                         수정됨
                                     </div>}
 
                             </div>
                             <div style={{ display: "flex" }}>
+                                <BsHandThumbsUp size={17} style={{ margin: "3px 0px 0px 0px" }} />
+                                <ReCommentreplyLikeCount>{likecount}</ReCommentreplyLikeCount>
+                                <BsDot style={{ margin: "3px -1px 0px -2px" }}></BsDot>
                                 <ReCommentreplyIcon>약 {timecount} 전</ReCommentreplyIcon>
                             </div>
 
                         </ReCommentInformationAllBox>
                     </ReCommentUserBox>
                     <div style={{ margin: "15px 0px 0px 0px" }}>
+
                         <RedateBox>
                             신고
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
-                        <ReportBox ReportMode={reportMode}>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report1}>
-                                욕설/비방 신고
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report2}>
-                                음란물 신고
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", cursor: "pointer" }} onClick={report3}>
-                                게시판 부적합 신고
-                            </div>
-                        </ReportBox>
-                        <Regdate>{dayjs(ReComment.regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
+                        
+                        <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
                 </ReCommentUserProfileBox>
                 <ReCommentInformationBox>
-                    <ReCommentText>{ReComment.content}</ReCommentText>
+                    <ReCommentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
                 </ReCommentInformationBox>
                 <ReCommentreplyBox>
                     <ReCommentreplyAllBox>
@@ -355,7 +598,6 @@ const SingleReComment = ({ ReComment }) => {
                             UserNicknameCheck={user.nickname}
                             UserNickname={userInfo == null ?
                                 null : userInfo.nickName}
-                            Writer={ReComment.writer}
                             onClick={() => setOnReplyBtn(!onReplyBtn)}>
                             {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
                         </ReCommentreplyBtn>
@@ -363,10 +605,16 @@ const SingleReComment = ({ ReComment }) => {
                     <div>
                         <ReCommentreplyLikeAllBox>
                             <ReCommentreplyLikeBtn
-                                onClick={() => { likeMode.current === false ? countUpLike() : countDownLike() }}>
+                                LoginMaintain={loginMaintain}
+                                UserInfo={userInfo} User={userInfo == null ?
+                                    null : userInfo.loginState}
+                                UserCheck={user.login_state}
+                                UserNicknameCheck={user.nickname}
+                                UserNickname={userInfo == null ?
+                                    null : userInfo.nickName}
+                                onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
                                 {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                             </ReCommentreplyLikeBtn>
-                            <ReCommentreplyLikeCount>{likecount}</ReCommentreplyLikeCount>
                             <OptionBox
                                 LoginMaintain={loginMaintain}
                                 User={user.login_state}
@@ -379,7 +627,7 @@ const SingleReComment = ({ ReComment }) => {
                                 UserInfoRole={userInfo == null ?
                                     (user.login_state === "allok" ?
                                         user.role : null) : userInfo.role}
-                                Writer={ReComment.writer}
+                                ReCommenter={reCommenter}
                                 onClick={() => { setReCommentStatusDivHide(!reCommentStatusDivHide) }}><SlOptions />
                             </OptionBox>
                         </ReCommentreplyLikeAllBox>
@@ -397,17 +645,19 @@ const SingleReComment = ({ ReComment }) => {
                                     UserInfoRole={userInfo == null ?
                                         (user.login_state === "allok" ?
                                             user.role : null) : userInfo.role}
-                                    Writer={ReComment.writer}
+                                    ReCommenter={reCommenter}
                                     onClick={() => {
                                         setReCommentStatusDivHide(true);
-                                        setUpdateMode(true);
+                                        setSelectedReCommentIndex(id);
                                     }}>
                                     <span>
                                         <BsPencilSquare size={20} style={{ margin: "0px 10px -5px 0px" }} />
                                         수정하기
                                     </span>
                                 </UpdateReply>
-                                <DeleteReply>
+                                <DeleteReply
+                                    onClick={deleteReCommentInServer}
+                                >
                                     <span>
                                         <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
                                         삭제하기
@@ -431,12 +681,11 @@ const SingleReComment = ({ ReComment }) => {
                     UserNickname={userInfo == null ?
                         null : userInfo.nickName}
 
-                    Writer={ReComment.writer}
 
                     onSubmit={registerReComment}>
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <ReCommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                            <ReCommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
@@ -455,7 +704,7 @@ const SingleReComment = ({ ReComment }) => {
                 </ReCommentForm>
                 )}
             </div>
-            <div style={{ display: updateMode === false ? "none" : "block", margin: "40px 0px 0px 0px" }}>
+            <div style={{ display: isEditing === false ? "none" : "block", margin: "40px 0px 0px 0px" }}>
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -469,12 +718,10 @@ const SingleReComment = ({ ReComment }) => {
                     UserNickname={userInfo == null ?
                         null : userInfo.nickName}
 
-                    Writer={ReComment.writer}
-
                     onSubmit={updateReComment}>
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <ReCommentUserProfile2 src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                            <ReCommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_pathloginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
@@ -487,7 +734,7 @@ const SingleReComment = ({ ReComment }) => {
                         </ReCommentInputBox>
                     </ReCommentArea>
                     <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => { setUpdateMode(false) }}>취소</CancelBtn>
+                        <CancelBtn type="button" onClick={() => { setSelectedReCommentIndex(0) }}>취소</CancelBtn>
                         <ReCommentBtn>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>
@@ -541,8 +788,8 @@ const UserNicknameText = styled.span
 
 const ReCommentreplyIcon = styled.div
     `
-    margin: 4px 0px 0px 2px;
-    font-size: 14px;   
+    margin: 3px 0px 0px 2px;
+    font-size: 16px;   
 `
 
 const ReCommentreplyCount = styled.span
@@ -584,9 +831,9 @@ const ReCommentInformationBox = styled.div
     font-weight: bold;
 `
 
-const ReCommentText = styled.span
+const ReCommentText = styled.div
     `
-
+    font-size: 23px;
 `
 
 const ReCommentreplyBox = styled.div
@@ -614,8 +861,8 @@ const SettingReplyStatusBox = styled.div
 const UpdateReply = styled.div
     `
     margin: 9px 20px 12px 18px;
-    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer ? "flex" : "none") : "none")) :
-        (props.User === "allok" ? (props.UserInfoNickname == props.Writer ? "flex" : "none") : "none")};
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.ReCommenter ? "flex" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.ReCommenter ? "flex" : "none") : "none")};
     cursor: pointer;
     align-items: center;
     font-size: 18px;
@@ -653,24 +900,27 @@ const ReCommentreplyLikeAllBox = styled.div
 
 const ReCommentreplyLikeBtn = styled.div
     `
+    color: orange;
     cursor: pointer;
     font-size: 22px;
-    margin: 0px 5px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
+        (props.UserCheck === "allok" ? "block" : "none")};
 `
 
 
 const ReCommentreplyLikeCount = styled.span
     `
-    margin: 3px 0px 0px 0px;
+    margin: 3px 3px 0px 3px;
     font-size: 17px;
     font-weight: bold;
 `
 
 const OptionBox = styled.div
     `
-    margin: 3px 0px 0px 15px;
-    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
-        (props.User === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
+    margin: 3px 0px 0px 12px;
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.ReCommenter || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.ReCommenter || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
     cursor : pointer;
 `
 

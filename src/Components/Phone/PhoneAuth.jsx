@@ -294,6 +294,7 @@ const PhoneInputAllBox = styled.div
 const PhoneTitle = styled.span
     `
     font-weight: bold;
+    color: ${(props) => props.theme.textColor};
 `
 
 const PhoneInputBox = styled.div
@@ -386,4 +387,5 @@ const IntroduceBox = styled.div
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: ${(props) => props.theme.textColor};
 `

@@ -5,9 +5,9 @@ import { isDark } from './Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-const ip = `http://218.155.175.176:8033/EightBitBackend`;
+const ip = `http://59.14.217.233:8033/EightBitBackend`;
 
-const profileImageDir = "http://218.155.175.176:8033/EightBitBackend/resources/Users/profileImage/"
+const profileImageDir = `${ip}/resources/Users/`;
 
 const Main = () => {
 
@@ -20,9 +20,9 @@ const Main = () => {
   return (
     <ThemeProvider theme={isDarkmode ? darkTheme : lightTheme}>
       <GlobalStyle />
-      <DarkModeBox>
-        <Router />
-      </DarkModeBox>
+          <DarkModeBox>
+              <Router />
+          </DarkModeBox>
     </ThemeProvider>
   );
 }
@@ -72,11 +72,15 @@ const lightTheme =
 
 const GlobalStyle = createGlobalStyle
   `
-  ${DarkModeBox}
+  html,
+  body
   {
     background-color: ${(props) => props.theme.backgroundColor};
-
     transition: background-color 0.5s, background 0.5s, color 0.5s, box-shadow 0.5s, border 0.5s, accent-color 0.5s;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 100%;
   }
 `
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, FC } from 'react';
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -49,7 +49,6 @@ const CenterPage = () => {
     const [Slide, setSlide] = useState([
         {
             id: 1,
-            lank: 1,
             img: test,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
@@ -79,6 +78,7 @@ const CenterPage = () => {
             title: "모험가키우기"
         },
     ]);
+
     const [AdSlide, setAdSlide] = useState([
         {
             id: 1,

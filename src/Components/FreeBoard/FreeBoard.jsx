@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 const FreeBoard = () => {
     const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
-    const [Fitter, setFitter] = useState("미정");
+    const [Fitter, setFitter] = useState("최신순");
     const [LimtText, setLimtText] = useState("20개씩");
     const [limit, setLimit] = useState(20);
     const [page, setPage] = useState(1);
@@ -122,10 +122,10 @@ const FreeBoard = () => {
                 <FitterBox>
                     <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                         <FitterSelectBox show={FitterDropdown}>
-                            <FitterSelectList onClick={setFitterValue}>미정</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>미정</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>추천</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>미정</FitterSelectList>
+                            <FitterSelectList onClick={setFitterValue}>댓글순</FitterSelectList>
+                            <FitterSelectList onClick={setFitterValue}>조회순</FitterSelectList>
+                            <FitterSelectList onClick={setFitterValue}>추천순</FitterSelectList>
+                            <FitterSelectList onClick={setFitterValue}>과거순</FitterSelectList>
                         </FitterSelectBox>
                         <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
                         <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
@@ -146,7 +146,7 @@ const FreeBoard = () => {
             <BoardBox>
                 <BoardContentAllBox>
                     {posts.length === 0 && <NotPage />}
-                    {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt }) => (
+                    {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt, reply_count }) => (
                         <BoardContentBox key={id}>
                             <BoardContentNumber>{id}</BoardContentNumber>
                             <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>
@@ -410,6 +410,7 @@ const LimitSelectList = styled(FitterSelectList)
 
 const FreeBoardSearchInputBox = styled(SearchInputBox)
     `
+    display: flex;
     border: solid 2px ${(props) => props.theme.borderColor};
     height: 39px;
     width: 248px;
@@ -417,19 +418,22 @@ const FreeBoardSearchInputBox = styled(SearchInputBox)
 
 const FreeBoardSearchInput = styled(SearchInput)
     `
+    display: block;
     margin: 0px 0px 0px 0px;
-    padding: 3px 0px 0px 11px;
-    height: 36px;
+    padding: 0px 0px 0px 11px;
+    height: 39px;
 `
 
 const FreeBoardSearchIconBox = styled(SearchInputIconBox)
     `
+    display: block;
     margin: 0px 0px 0px 0px;
     height: 39px;
 `
 
 const FreeBoardSearchBtn = styled(SearchButton)
     `
+    display: block;
     color: black;
     padding: 5px 8px 0px 0px;
 `

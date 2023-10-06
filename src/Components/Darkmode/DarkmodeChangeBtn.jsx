@@ -1,5 +1,6 @@
 import { useRecoilState } from "recoil";
-import { isDark } from "../Darkmode/Darkmode";
+import { useState, useRef, useEffect } from "react";
+import { isDark } from "./Darkmode";
 import { styled, keyframes } from "styled-components";
 import { icons } from "react-icons/lib";
 import { BsSunFill } from "react-icons/bs";
@@ -10,15 +11,55 @@ import light from "../../img/Darkmode/light.png";
 const Darkmode = () => {
 
     const [Darkmode, setDarkmode] = useRecoilState(isDark);
+    const [stateSunDarkMode, setstateSunDarkMode ] = useState(true);
+    const [stateMoonDarkMode, setstateMoonDarkMode ] = useState(true);
 
     const ToggleBtn = () => {
         setDarkmode((prev) => !prev);
+
         localStorage.setItem("mode", String(!Darkmode));
+
+        if(Darkmode === false)
+        {
+            setstateSunDarkMode(true);
+            setstateMoonDarkMode(false);
+        }else{
+            setstateSunDarkMode(false);
+            setstateMoonDarkMode(true);
+        }
     };
+
+    const [WindowLength, setWindowLength] = useState(window.innerWidth);
+
+    const handleResize = () => {
+        setWindowLength(window.innerWidth);
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        }
+    })
+
+    useEffect(() => {
+       if ( WindowLength <= 1343)
+       {
+            if(Darkmode === false)
+            {
+                setstateSunDarkMode(true);
+                setstateMoonDarkMode(false);
+            }else{
+                setstateSunDarkMode(false);
+                setstateMoonDarkMode(true);
+            }
+       }
+       
+    }, [WindowLength])
 
     return (
         <IconsBox change={Darkmode} onClick={ToggleBtn}>
-            <Icons Move={Darkmode} />
+            <Icons Move={Darkmode} stateSunDarkMode={stateSunDarkMode} stateMoonDarkMode={stateMoonDarkMode} />
             <IconsAllBox>
                 <SunIcon Opacity={Darkmode}><BsSunFill /></SunIcon>
                 <MoonIcon Opacity={Darkmode}><BsFillMoonFill /></MoonIcon>
@@ -89,7 +130,7 @@ const SunIcon = styled.i
     animation: ${props => props.Opacity ? IconOpacityDown : IconOpacityUp} 0.4s;
 `
 
-const IconRight = keyframes
+const IconLeft = keyframes
     `
     0%
     {
@@ -100,7 +141,18 @@ const IconRight = keyframes
     }
 `
 
-const IconLeft = keyframes
+const IconRightDefalut = keyframes
+    `
+    0%
+    {
+        margin-left: 30px;
+    100%
+    {
+        margin-left: 30px;
+    }
+`
+
+const IconRight = keyframes
     `
     0%
     {
@@ -108,18 +160,30 @@ const IconLeft = keyframes
     100%
     {
         margin-left: 30px;
+    }
+`
+
+const IconLeftDefalut = keyframes
+    `
+    0%
+    {
+        margin-left: 0px;
+    100%
+    {
+        margin-left: 0px;
     }
 `
 
 const Icons = styled.div
     `
     position: absolute;
-    animation: ${props => props.Move ? IconRight : IconLeft} 0.4s;
+    animation: ${props => props.Move ? props => props.stateMoonDarkMode ? IconLeftDefalut : IconLeft : props => props.stateSunDarkMode ? IconRightDefalut : IconRight} 0.4s;
     margin-left: ${props => props.Move ? "0px" : "30px"};
     width: 20px;
     height: 20px;
     border-radius: 20px;
     background: white;
     -webkit-user-select: none;
+    z-index: 1;
 `
 
