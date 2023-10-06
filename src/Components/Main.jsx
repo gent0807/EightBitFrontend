@@ -20,19 +20,12 @@ const Main = () => {
   return (
     <ThemeProvider theme={isDarkmode ? darkTheme : lightTheme}>
       <GlobalStyle />
-          <DarkModeBox>
-              <Router />
-          </DarkModeBox>
+      <Router />
     </ThemeProvider>
   );
 }
 
 export default Main;
-
-const DarkModeBox = styled.div
-  `
-  
-`
 
 const darkTheme =
 {
@@ -71,16 +64,37 @@ const lightTheme =
 };
 
 const GlobalStyle = createGlobalStyle
-  `
-  html,
+`
   body
   {
-    background-color: ${(props) => props.theme.backgroundColor};
-    transition: background-color 0.5s, background 0.5s, color 0.5s, box-shadow 0.5s, border 0.5s, accent-color 0.5s;
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 100vw;
-    height: 100%;
+      font-family: "NanumSquareR";
+
+      input
+      {
+          font-family: "NanumSquareR";
+
+          &::placeholder
+          {
+              font-family: "NanumSquareR";
+          }
+
+      }
+
+      input[type=password] 
+      {
+          font-family: none;
+      }
+  
+      button
+      {
+          font-family: "NanumSquareR";
+      }
+
+      background-color: ${(props) => props.theme.backgroundColor};
+      transition: background-color 0.5s, background 0.5s, color 0.5s, box-shadow 0.5s, border 0.5s, accent-color 0.5s;
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 100%;
   }
 `
 
