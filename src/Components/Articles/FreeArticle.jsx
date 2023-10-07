@@ -1586,9 +1586,10 @@ const FileDownloadBox = styled.div
     background: ${props => props.theme.backgroundColor};
     font-size: 18px;
     display: ${props => props.FileDownloadMode == false ? "none" : "block"};
+    
 `
 
-const DownloadText = styled.span
+const DownloadText = styled.div
 `
     margin: 10px 10px 10px 10px;
     cursor: pointer;

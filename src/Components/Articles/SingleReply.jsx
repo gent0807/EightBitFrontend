@@ -638,7 +638,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                         </RedateBox>
                         <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
-                    
+
                 </CommentUserProfileBox>
                 <CommentInformationBox>
                     <CommentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
