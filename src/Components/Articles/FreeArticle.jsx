@@ -27,7 +27,10 @@ import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
 import { clearLoginState, accessToken, point } from "../Redux/User";
 import FreeReportModal from "./FreeReportModal";
-import ReplyReportModal from "./ReplyReportModal"
+import ReplyPagination from "./ReplyPagination";
+import DeleteModal from "./DeleteModal";
+import NotPage from "./NotPage";
+
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -43,6 +46,7 @@ const FreeArticle = () => {
     const [profileImagePath, setProfileImagePath] = useState("");
     const [writerRole, setWriterRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
+    const [deleteMode, setDeleteMode] = useState(false);
     const [shareMode, setShareMode] = useState(false);
     const [fileDownloadMode, setFileDownloadMode] = useState(false);
     const [replyChangeValue, setReplyChangeValue] = useState("");
@@ -50,6 +54,9 @@ const FreeArticle = () => {
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [reCommentCount, setReCommentCount] = useState(0);
     const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
+    const FolderRef = useRef(null);
+    const ShareRef = useRef(null);
+
     const inputRef = useRef();
     const ip = localStorage.getItem("ip");
 
@@ -61,7 +68,7 @@ const FreeArticle = () => {
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
 
-    const [toggleState, setToggleState]=useRecoilState(toggle);
+    const [toggleState, setToggleState] = useRecoilState(toggle);
 
     const [Comments, setComments] = useState([]);
 
@@ -71,6 +78,10 @@ const FreeArticle = () => {
             src: `${ip}/resources/board/article/nomalfiles/image.png`,
         }
     ]);
+
+    const [limit, setLimit] = useState(5);
+    const [page, setPage] = useState(1);
+    const offset = (page - 1) * limit;
 
 
     let likeMode = useRef(false);
@@ -265,10 +276,10 @@ const FreeArticle = () => {
 
         const getComments = (writer, regdate) => {
             axios.get(`${ip}/Board/article/replies?original_writer=${writer}&original_regdate=${regdate}`, {
-    
+
             },
                 {
-    
+
                 })
                 .then(res => {
                     return res.data;
@@ -344,22 +355,22 @@ const FreeArticle = () => {
     }
 
     const addComment = (data, Comments) => {
-        if(Comments.length>0){
+        if (Comments.length > 0) {
             const lastCmtIndex = Comments.length - 1;
             const addedCmtId = Comments[lastCmtIndex].id + 1;
             const newComment = {
-            id: addedCmtId,
-            original_writer: writer,
-            original_regdate: regdate,
-            replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            content: replyChangeValue,
-            regdate: data.regdate,
-            updatedate: data.updatedate,
+                id: addedCmtId,
+                original_writer: writer,
+                original_regdate: regdate,
+                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: replyChangeValue,
+                regdate: data.regdate,
+                updatedate: data.updatedate,
             };
             setComments([...Comments, newComment]);
             setReplyChangeValue('');
         }
-        else if(Comments.length===0){
+        else if (Comments.length === 0) {
             const addedCmtId = 1;
             const newComment = {
                 id: addedCmtId,
@@ -369,30 +380,30 @@ const FreeArticle = () => {
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
-                };
+            };
             setComments([...Comments, newComment]);
             setReplyChangeValue('');
         }
-       
+
     };
 
     const addComment2 = (data, Comments) => {
-        if(Comments.length>0){
+        if (Comments.length > 0) {
             const lastCmtIndex = Comments.length - 1;
             const addedCmtId = Comments[lastCmtIndex].id + 1;
             const newComment = {
-            id: addedCmtId,
-            original_writer: writer,
-            original_regdate: regdate,
-            replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            content: replyChangeValue2,
-            regdate: data.regdate,
-            updatedate: data.updatedate,
+                id: addedCmtId,
+                original_writer: writer,
+                original_regdate: regdate,
+                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: replyChangeValue2,
+                regdate: data.regdate,
+                updatedate: data.updatedate,
             };
             setComments([...Comments, newComment]);
             setReplyChangeValue2('');
         }
-        else if(Comments.length===0){
+        else if (Comments.length === 0) {
             const addedCmtId = 1;
             const newComment = {
                 id: addedCmtId,
@@ -402,16 +413,16 @@ const FreeArticle = () => {
                 content: replyChangeValue2,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
-                };
+            };
             setComments([...Comments, newComment]);
             setReplyChangeValue2('');
         }
     }
 
-    const editComment = (commentId, editValue)=>{
-        let newComments= Comments.map((item)=>{
-            if(item.id===commentId){
-                item.content=editValue;
+    const editComment = (commentId, editValue) => {
+        let newComments = Comments.map((item) => {
+            if (item.id === commentId) {
+                item.content = editValue;
             }
             return item;
         });
@@ -424,26 +435,8 @@ const FreeArticle = () => {
 
 
     const deleteComment = (commentId) => {
-        let newComments = Comments.filter(item=>item.id!==commentId);
+        let newComments = Comments.filter(item => item.id !== commentId);
         setComments(newComments);
-    }
-
-    const deleteArticle = (e) => {
-        const check = window.confirm("정말 삭제하시겠습니까?");
-        if (check == true) {
-            axios.delete(`${ip}/Board/article/${writer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                })
-                .then(res => {
-                    /* regenerateAccessTokenOrLogout(res, deleteArticle, e); */
-                    return res.data;
-                })
-                .then(data => {
-                    navigate("/FreeBoard");
-                });
-        }
-        else return;
     }
 
     const registerReply = async (e) => {
@@ -641,14 +634,54 @@ const FreeArticle = () => {
         setFileDownloadMode(false);
     }
 
+    const Floderhandle = () => {
+        setFileDownloadMode(!fileDownloadMode);
+        setShareMode(false);
+    }
+
+    const Sharehandle = () => {
+        setShareMode(!shareMode);
+        setFileDownloadMode(false);
+    }
+
+    useEffect(() => {
+        function handleOuside(e) {
+            if (FolderRef.current && !FolderRef.current.contains(e.target)) {
+                setFileDownloadMode(false);
+            }
+        };
+
+        if (!fileDownloadMode) {
+            document.addEventListener("click", handleOuside);
+        }
+        return () => {
+            document.removeEventListener("click", handleOuside);
+        };
+    }, [FolderRef]);
+
+    useEffect(() => {
+        function handleOuside(e) {
+            if (ShareRef.current && !ShareRef.current.contains(e.target)) {
+                setShareMode(false);
+            }
+        };
+
+        if (!shareMode) {
+            document.addEventListener("click", handleOuside);
+        }
+        return () => {
+            document.removeEventListener("click", handleOuside);
+        };
+    }, [ShareRef]);
+
     return (
         <FreeArticleBox>
-            
-        <FreeReportModal
-            ReportMode={reportMode}
-            setReportMode={setReportMode}
-        />
-        
+
+            <FreeReportModal
+                ReportMode={reportMode}
+                setReportMode={setReportMode}
+            />
+
             <UserBox>
                 <UserinformationBox>
                     <UserProfileBox>
@@ -660,7 +693,7 @@ const FreeArticle = () => {
                                 <CorrectionIcon writerRole={writerRole}>
                                     <BiLogoDevTo />
                                 </CorrectionIcon>
-                                
+
                                 {regdate == updatedate ? "" :
                                     <CorrectionTextBox>
                                         <CorrectionTextBoxIcon>
@@ -675,13 +708,13 @@ const FreeArticle = () => {
 
                             <LikeViewBox>
                                 <LikeViewIcon>
-                                    <BsHandThumbsUp/>
+                                    <BsHandThumbsUp />
                                 </LikeViewIcon>
 
                                 <LikeText>{likecount}</LikeText>
-                                
+
                                 <LikeBtnDot>
-                                    <BsDot/>
+                                    <BsDot />
                                 </LikeBtnDot>
 
                                 <ViewIcon>
@@ -691,11 +724,11 @@ const FreeArticle = () => {
                                 <ViewText>{visitcnt}</ViewText>
 
                                 <LikeBtnDot>
-                                    <BsDot/>
+                                    <BsDot />
                                 </LikeBtnDot>
 
                                 <ReplyIcon>
-                                    <AiOutlineComment/>
+                                    <AiOutlineComment />
                                 </ReplyIcon>
 
                                 <ReplyText>{Comments.length + reCommentCount}</ReplyText>
@@ -727,35 +760,46 @@ const FreeArticle = () => {
                     <TitleBox>
                         <TitleText>{title}</TitleText>
                         <ShareArea>
-                            <FcOpenedFolder size={35} style={{ margin: "0px 17px -4px 0px", cursor: "pointer" }} onClick={
-                                () => {
-                                    setFileDownloadMode(!fileDownloadMode);
-                                    setShareMode(false);
-                                }
-                            } />
-                            <FiShare size={30} style={{ cursor: "pointer" }} onClick={
-                                () => {
-                                    setShareMode(!shareMode);
-                                    setFileDownloadMode(false);
-                                }} />
+
+                            <FloderBox ref={FolderRef}>
+                                <FloderBoxIcon>
+                                    <FcOpenedFolder
+                                        onClick={
+                                            () => {
+                                                Floderhandle()
+                                            }
+                                        } />
+                                </FloderBoxIcon>
+
+                                <FloderMenu fileDownloadMode={fileDownloadMode}>
+                                    <Floderli><FloderText>첨부파일</FloderText></Floderli>
+                                </FloderMenu>
+                            </FloderBox>
+
+                            <ShareBox ref={ShareRef}>
+                                <ShareBoxIcon>
+                                    <FiShare
+                                        onClick={
+                                            () => {
+                                                Sharehandle()
+                                            }} />
+                                </ShareBoxIcon>
+
+                                <ShareMenu ShareMode={shareMode}>
+                                    <Shareli>
+                                        <RiKakaoTalkFill/>
+                                        <ShareText>kakao</ShareText>
+                                    </Shareli>
+
+                                    <Shareli>
+                                        <RiInstagramFill/>
+                                        <ShareText>instagram</ShareText>
+                                    </Shareli>
+                                </ShareMenu>
+                            </ShareBox>
+
                         </ShareArea>
 
-                        <FileDownloadBox FileDownloadMode={fileDownloadMode}>
-                            <DownloadText onClick={downloadFile}>
-                                첨부파일
-                            </DownloadText>
-                        </FileDownloadBox>
-
-                        <ShareBox ShareMode={shareMode}>
-                            <div style={{ margin: "10px 10px 10px 10px", display: "flex", cursor: "pointer" }} onClick={kakaoShare}>
-                                <RiKakaoTalkFill size={22} style={{ margin: "0px 10px 0px 0px" }} />
-                                kakao
-                            </div>
-                            <div style={{ margin: "10px 10px 10px 10px", display: "flex", cursor: "pointer" }} onClick={instagramShare}>
-                                <RiInstagramFill size={22} style={{ margin: "0px 10px 0px 0px" }} />
-                                instagram
-                            </div>
-                        </ShareBox>
                     </TitleBox>
                     <TitleLine></TitleLine>
                     <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
@@ -794,7 +838,7 @@ const FreeArticle = () => {
                         onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
-                                <CommentUserProfile src={loginMaintain=="true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                <CommentUserProfile src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
@@ -827,7 +871,7 @@ const FreeArticle = () => {
                 </LikeBtn>
 
                 <Link
-                    to='/UpdateBoard' state={{writer:writer, regdate:regdate, title:title, content:content}}
+                    to='/UpdateBoard' state={{ writer: writer, regdate: regdate, title: title, content: content }}
                     style={{
                         display: loginMaintain == null ? "none" : loginMaintain == "true" ?
                             (userInfo == null ?
@@ -839,6 +883,16 @@ const FreeArticle = () => {
                     }}>
                     수정
                 </Link>
+
+                <DeleteModal 
+                    setDeleteMode={setDeleteMode}
+                    deleteMode={deleteMode}
+                    regdate={regdate}
+                    writer={writer}
+                    loginMaintain={loginMaintain}
+                    userInfo={userInfo}
+                    user={user}
+                />
 
                 <DeleteBtn
                     LoginMaintain={loginMaintain}
@@ -853,7 +907,7 @@ const FreeArticle = () => {
                         (user.login_state === "allok" ?
                             user.role : null) : userInfo.role}
                     Writer={writer}
-                    onClick={deleteArticle}
+                    onClick={() => setDeleteMode(!deleteMode)}
                 >
                     삭제
                 </DeleteBtn>
@@ -865,15 +919,16 @@ const FreeArticle = () => {
             <CommentLine></CommentLine>
 
             <CommentBox>
+                {Comments.length === 0 && <NotPage />}
                 {Comments.length > 0 &&
-                    Comments.map(Comment => {
-                        const commentId=Comment.id;
+                    Comments.slice(offset, offset + limit).map(Comment => {
+                        const commentId = Comment.id;
                         return (
                             <SingleReply
                                 key={commentId}
                                 Comment={Comment}
                                 reCommentCount={reCommentCount}
-                                isEditing={commentId===selectedCommentIndex? true : false}
+                                isEditing={commentId === selectedCommentIndex ? true : false}
                                 setReCommentCount={setReCommentCount}
                                 setSelectedCommentIndex={setSelectedCommentIndex}
                                 addComment={addComment}
@@ -883,6 +938,14 @@ const FreeArticle = () => {
                         );
                     })
                 }
+
+                <ReplyPagination
+                    total={Comments.length}
+                    limit={limit}
+                    page={page}
+                    setPage={setPage}
+                    offset={offset}
+                />
 
                 <CommentForm
                     LoginMaintain={loginMaintain}
@@ -922,29 +985,111 @@ const FreeArticle = () => {
 
 export default FreeArticle;
 
-const ReportAllBox = styled.div
+const FloderText = styled.span
 `
+    font-weight: bold;
+`
+
+const ShareText = styled.span
+`
+    margin: 2px 0px 0px 9px;
+    font-weight: bold;
+`
+
+const ShareBox = styled.div
+    `
+    display: flex;
+    align-items: end;
+`
+
+const ShareBoxIcon = styled.i
+    `
+    cursor: pointer;
+
+    svg
+    {
+        font-size: 30px;
+    }
+`
+
+const FloderBox = styled.div
+    `
+    display: flex;
+    align-items: end;
+`
+
+const ShareMenu = styled.ul
+    `
+    display: ${props => props.ShareMode ? "block" : "none"};
+    padding: 10px;
+    position: absolute;
+    list-style: none;
+    margin: 0px 0px -76px -45px;
+    background: white;
+    border: solid 1px ${props => props.theme.borderColor};
+    border-radius: 10px;
+`
+
+const Shareli = styled.li
+    `
+    display: flex;
+    cursor: pointer;
+    svg
+    {
+        font-size: 22px;
+    }
+`
+
+const FloderMenu = styled.ul
+    `
+    display: ${props => props.fileDownloadMode ? "block" : "none"};
+    position: absolute;
+    padding: 10px;
+    list-style: none;
+    margin: 0px 0px -44px -24px;
+    background: white;
+    border: solid 1px ${props => props.theme.borderColor};
+    border-radius: 10px;
+`
+
+const Floderli = styled.li
+    `
+    cursor: pointer;
+`
+
+const FloderBoxIcon = styled.i
+    `
+    cursor: pointer;
+    svg
+    {
+        font-size: 35px;
+        margin: 0px 10px -6px 0px;
+    }
+`
+
+const ReportAllBox = styled.div
+    `
     margin: 0px 10px 0px 0px;
 `
 
 const ReportAllBoxText = styled.span
-`
+    `
 
 `
 
 const Correction = styled.div
-`
+    `
     display: flex;
 `
 
 const CorrectionTextBox = styled.div
-`
+    `
     display: flex;
     margin: 7.2px 0px 0px 2px;
 `
 
 const CorrectionTextBoxIcon = styled.i
-`
+    `
     svg
     {
         margin: 1px 3px 0px 3px;
@@ -952,12 +1097,12 @@ const CorrectionTextBoxIcon = styled.i
 `
 
 const CorrectionText = styled.span
-`
+    `
 
 `
 
 const CorrectionIcon = styled.i
-`
+    `
     display: ${props => props.writerRole === "DEVELOPER" ? "block" : "none"};
     svg
     {
@@ -1194,27 +1339,11 @@ const CommentreplyBtn2 = styled(CommentreplyBtn)
     `
     margin: 0px 0px 0px 0px;
 `
-const CommentText = styled.span
-    `
-
-`
-
-const CommentInformationBox = styled.div
-    `
-    padding: 0px 0px 0px 67px;
-    font-size: 20px;
-    font-weight: bold;
-`
 
 const CommentLine = styled.hr
     `
     width: 100%;
     border: 0.1px solid ${props => props.theme.textColor};
-`
-
-const CommentUserBox = styled.div
-    `
-    display: flex;
 `
 
 const CommentArea = styled.div
@@ -1367,7 +1496,7 @@ const LikeText = styled.span
 `
 
 const ViewIcon = styled.i
-`
+    `
     svg
     {
         margin: 0px 0px -7px -2px;
@@ -1386,7 +1515,7 @@ const ReplyText = styled.span
 `
 
 const ReplyIcon = styled.i
-`
+    `
     svg
     {
         font-size: 27px;
@@ -1409,26 +1538,6 @@ const RedateBox = styled.div
     justify-content: end;
     cursor: pointer;
     margin: 0px 0px 17px 0px;
-`
-
-const ModelReportBox = styled.div
-    `
-    flex-direction: column;
-    border: 1px solid ${props => props.theme.textColor};
-    border-radius: 10px;
-    position: absolute;
-    z-index: 2;
-    margin: 0px 0px -82px 0px;
-    padding: 10px;
-    background: ${props => props.theme.backgroundColor};
-    display: ${props => props.ReportMode == false ? "none" : "flex"};
-    
-`
-
-const ReportText = styled.span
-`
-    margin: 10px 10px 10px 10px;
-    cursor: pointer;
 `
 
 const EditText = styled.span
@@ -1481,12 +1590,12 @@ const LikeViewBox = styled.div
 `
 
 const LikeViewIcon = styled.i
-`
+    `
     font-size: 22px;
 `
 
 const LikeBtnDot = styled.i
-`
+    `
     svg
     {
         margin: 4px 1px 0px 0px;
@@ -1573,36 +1682,6 @@ const DayBox = styled.div
 const ShareArea = styled.div
     `
     display: flex;
-    align-items: end;
 `
 
-const FileDownloadBox = styled.div
-    `
-    border: 1px solid ${props => props.theme.textColor};
-    border-radius: 10px;
-    position: absolute;
-    z-index: 2;
-    margin: 60px 0px 0px 1112px;
-    background: ${props => props.theme.backgroundColor};
-    font-size: 18px;
-    display: ${props => props.FileDownloadMode == false ? "none" : "block"};
-`
-
-const DownloadText = styled.span
-`
-    margin: 10px 10px 10px 10px;
-    cursor: pointer;
-`
-
-const ShareBox = styled.div
-    `
-    border: 1px solid ${props => props.theme.textColor};
-    border-radius: 10px;
-    position: absolute;
-    z-index: 2;
-    margin: 60px 0px 0px 1132px;
-    background: ${props => props.theme.backgroundColor};
-    font-size: 18px;
-    display: ${props => props.ShareMode == false ? "none" : "block"};
-`
 
