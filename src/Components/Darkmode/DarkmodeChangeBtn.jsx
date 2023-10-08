@@ -75,7 +75,7 @@ const IconsBox = styled.div
     `
     cursor: pointer;
     background: white;
-    background: ${props => props.change ? "rgba(55,65,118,1)" : "rgba(0,144,249,1)"};
+    background: ${props => props.change ? "rgba(55,65,118,1)" : "rgba(0,144,249,1)" };
     border-radius: 42px;
     margin: 16px -6px 0px 19px;
     padding: 5px;
@@ -127,7 +127,7 @@ const SunIcon = styled.i
     `
     font-size:16px;
     opacity: ${props => props.Opacity ? "100%" : "0%"};
-    animation: ${props => props.Opacity ? IconOpacityDown : IconOpacityUp} 0.4s;
+    animation: ${props => props.Opacity ? IconOpacityDown : IconOpacityUp } 0.4s;
 `
 
 const IconLeft = keyframes
@@ -177,7 +177,7 @@ const IconLeftDefalut = keyframes
 const Icons = styled.div
     `
     position: absolute;
-    animation: ${props => props.Move ? props => props.stateMoonDarkMode ? IconLeftDefalut : IconLeft : props => props.stateSunDarkMode ? IconRightDefalut : IconRight} 0.4s;
+    animation: ${props => props.Move ? props => props.stateMoonDarkMode ? IconLeftDefalut : IconLeft : props => props.stateSunDarkMode ? IconRightDefalut : IconRight } 0.4s;
     margin-left: ${props => props.Move ? "0px" : "30px"};
     width: 20px;
     height: 20px;
