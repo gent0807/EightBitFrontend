@@ -970,7 +970,7 @@ const Editer2 = styled(ReactQuill)
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
-        min-height: 80px;
+        min-height: 120px;
         font-size: 20px;
     }
 
@@ -1011,6 +1011,23 @@ const Editer2 = styled(ReactQuill)
     .ql-toolbar.ql-toolbar.ql-snow
     {
         order: 2;
+    }
+
+    .ql-snow .ql-picker.ql-expanded .ql-picker-options {
+        display: block;
+        margin-top: -135px;
+        top: 100%;
+        z-index: 1;
+    }
+
+    .ql-snow .ql-tooltip {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0px 0px 5px #ddd;
+        color: #444;
+        padding: 5px 12px;
+        white-space: nowrap;
+        margin: 115px 0px 0px 86px;
     }
 
 `

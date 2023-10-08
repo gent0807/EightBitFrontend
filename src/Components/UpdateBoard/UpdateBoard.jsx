@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
-import { useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
 import { ImageDrop } from "quill-image-drop-module";
@@ -17,6 +17,7 @@ import PDF from "../../img/FileList/pdf.png";
 import TXT from "../../img/FileList/txt.png";
 import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
+import { accessToken, clearLoginState, point } from '../Redux/User';
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -24,15 +25,18 @@ Quill.register("modules/imageResize", ImageResize);
 
 const UpdateBoard = () => {
     const location = useLocation();
-    const writer=location.state.writer;
-    const regdate=location.state.regdate;
-    const title=location.state.title;
-    const content=location.state.content;
-    console.log(writer, regdate, title, content);
-    const [WriterChangeValue, setWriterChangeValue] = useState("");
+    const writer = location.state.writer;
+    const regdate = location.state.regdate;
+    const title = location.state.title;
+    const content = location.state.content;
+
+    const [WriterChangeValue, setWriterChangeValue] = useState(title);
+    const [EditerValue, setEditerValue] = useState(content);
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
+    
     const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     const loginMaintain = localStorage.getItem("loginMaintain");
@@ -43,7 +47,7 @@ const UpdateBoard = () => {
     const fileId = useRef(0);
 
     const quillRef = useRef(null);
-    const [EditerValue, setEditerValue] = useState("");
+
     const toolbarOptions = [
         ["link", "image", "video"],
         [{ header: [1, 2, 3, false] }],
@@ -165,7 +169,7 @@ const UpdateBoard = () => {
     }, [files]
     );
 
-    console.log(files)
+    console.log(files);
 
     const handleFilterFile = useCallback(
         (id) => {
@@ -234,6 +238,9 @@ const UpdateBoard = () => {
         return () => resetDragEvents();
     }, [initDragEvents, resetDragEvents]);
 
+
+
+    
     const OncheckSubmit = (e) => {
         /*  const registFile = (writer, regdate) => {
              const fd = new FormData();
@@ -280,138 +287,130 @@ const UpdateBoard = () => {
         }
 
 
-        axios.post(`${ip}/Board/article`, {
+        axios.patch(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
             title: WriterChangeValue,
             content: EditerValue,
-            writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-        },
+            },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
             })
             .then((res) => {
-                /* if(res.status==403){
-                    axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`,{
-
-                    },
-                    {
-                        headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                    })
-                    .then((res) =>{
-                        return res.data
-                    }
-                    )
-                    .then((data)=>{
-                        if(data=="invalid"){
-                            localStorage.removeItem("userInfo");
-                            localStorage.removeItem("loginMaintain");
-                            dispatch(clearLoginState());
-                            deleteRefreshToken("refreshToken");
-                            window.alert("인증되지 않은 접근입니다.");
-                            navigate('/Login');
-                        }
-                        else if(data=="accesstoken valid"){
-                            localStorage.removeItem("userInfo");
-                            localStorage.removeItem("loginMaintain");
-                            dispatch(clearLoginState());
-                            deleteRefreshToken("refreshToken");
-                            window.alert("인증되지 않은 접근입니다.");
-                            navigate('/Login');
-                        }
-                        else if(data=="accesstoken not matched user"){
-                            localStorage.removeItem("userInfo");
-                            localStorage.removeItem("loginMaintain");
-                            dispatch(clearLoginState());
-                            deleteRefreshToken("refreshToken");
-                            window.alert("인증되지 않은 접근입니다.");
-                            navigate('/Login');
-                        }
-                        else if(data=="refreshtoken invalid"){
-                            localStorage.removeItem("userInfo");
-                            localStorage.removeItem("loginMaintain");
-                            dispatch(clearLoginState());
-                            deleteRefreshToken("refreshToken");
-                            window.alert("인증되지 않은 접근입니다.");
-                            navigate('/Login');
-                        }
-                        else if(data=="refreshtoken expired"){
-                            localStorage.removeItem("userInfo");
-                            localStorage.removeItem("loginMaintain");
-                            dispatch(clearLoginState());
-                            deleteRefreshToken("refreshToken");
-                            window.alert("로그인이 만료되었습니다.");
-                            navigate('/Login');
-                        }
-                        else if(data=="refreshtoken not matched user"){
-                            localStorage.removeItem("userInfo");
-                            localStorage.removeItem("loginMaintain");
-                            dispatch(clearLoginState());
-                            deleteRefreshToken("refreshToken");
-                            window.alert("인증되지 않은 접근입니다.");
-                            navigate('/Login');
-                        }
-                        else{
-                            const object={
-                                accessToken: data,
-                            };
-                            if(loginMaintain=="true"){
-                                userInfo.accessToken=data;
-                            }
-                            dispatch(accessToken(object));
-                            OncheckSubmit(e);
-                        }
-                    })
-                    return;
-                }
-                else if(res.status==200){
-                    return res.data
-                } */
-                return res.data
-            })
-            .then((data) => {
+                /* regenerateAccessTokenOrLogout(res, OncheckSubmit, e) */
                 if (files.length == 0) {
-                    console.log("this is no file");
-                    navigate('/FreeArticle/' + data.writer + '/' + data.regdate);
+                    navigate('/FreeArticle/' + writer + '/' + regdate);
                     return;
                 }
                 else if (files.length > 0) {
-                    const writer = data.writer;
-                    const regdate = data.regdate;
 
                     const fd = new FormData();
 
                     Object.values(files).forEach((file) => fd.append("file", file));
 
-                    axios.post(`${ip}/Board/article/file/images`, fd, {
-                        headers: {
+                    axios.patch(`${ip}/Board/article/shareFiles?writer=${writer}&regdate=${regdate}`, fd, 
+                    {
+                        headers: 
+                        {
                             Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
                             "Content-Type": `multipart/form-data;   `
                         }
-                    }
-                    )
-                        .then((res) => {
-                            return res.data
-                        }
-                        )
-                        .then((data) => {
-                            console.log(data);
-                            console.log(userInfo.accessToken);
-                            console.log(user.access_token);
-                            navigate('/FreeArticle/' + writer + '/' + regdate);
-                        }
-
-                        )
+                    })
+                    .then((res) => {
+                        navigate('/FreeArticle/' + writer + '/' + regdate);
+                        return;
+                    })
 
 
                 }
             })
+           
 
     }
 
-    console.log(EditerValue);
+
+    const regenerateAccessTokenOrLogout = (res, f , e) => {
+        if(res.status==403){
+            axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`,{
+
+            },
+            {
+                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+            })
+            .then((res) =>{
+                return res.data
+            }
+            )
+            .then((data)=>{
+                if(data=="invalid"){
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("loginMaintain");
+                    dispatch(clearLoginState());
+                    deleteRefreshToken("refreshToken");
+                    window.alert("인증되지 않은 접근입니다.");
+                    navigate('/Login');
+                }
+                else if(data=="accesstoken valid"){
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("loginMaintain");
+                    dispatch(clearLoginState());
+                    deleteRefreshToken("refreshToken");
+                    window.alert("인증되지 않은 접근입니다.");
+                    navigate('/Login');
+                }
+                else if(data=="accesstoken not matched user"){
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("loginMaintain");
+                    dispatch(clearLoginState());
+                    deleteRefreshToken("refreshToken");
+                    window.alert("인증되지 않은 접근입니다.");
+                    navigate('/Login');
+                }
+                else if(data=="refreshtoken invalid"){
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("loginMaintain");
+                    dispatch(clearLoginState());
+                    deleteRefreshToken("refreshToken");
+                    window.alert("인증되지 않은 접근입니다.");
+                    navigate('/Login');
+                }
+                else if(data=="refreshtoken expired"){
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("loginMaintain");
+                    dispatch(clearLoginState());
+                    deleteRefreshToken("refreshToken");
+                    window.alert("로그인이 만료되었습니다.");
+                    navigate('/Login');
+                }
+                else if(data=="refreshtoken not matched user"){
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("loginMaintain");
+                    dispatch(clearLoginState());
+                    deleteRefreshToken("refreshToken");
+                    window.alert("인증되지 않은 접근입니다.");
+                    navigate('/Login');
+                }
+                else{
+                    const object={
+                        accessToken: data,
+                    };
+                    if(loginMaintain=="true"){
+                        userInfo.accessToken=data;
+                    }
+                    dispatch(accessToken(object));
+                    f(e);
+                }
+            })
+            return;
+        }
+        else if(res.status==200){
+            return res.data
+        } 
+    }
 
     const deleteRefreshToken = (name) => {
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
+
+    console.log(EditerValue);
 
 
     return (
@@ -471,10 +470,10 @@ const UpdateBoard = () => {
                         }
                     </FileList>
                 </FileUploadBox>
-                <SubmitBtnBox>
-                    <Link to="/FreeBoard"><CancelBtn>취소</CancelBtn></Link>
-                    <SubmitBtn>등록</SubmitBtn>
-                </SubmitBtnBox>
+                <SubmitBtnBox1>
+                    <Link to="/FreeBoard"><CancelBtn1>취소</CancelBtn1></Link>
+                    <SubmitBtn1>수정</SubmitBtn1>
+                </SubmitBtnBox1>
             </WriteBoardSubmit>
         </WriterInputBox>
     );
@@ -579,18 +578,18 @@ const WriteBoardSubmit = styled.form
     flex-direction: column;
 `
 
-const SubmitBtnBox = styled.div
+const SubmitBtnBox1 = styled.div
     `
     display: flex;
     justify-content: end;
     margin: 0px 20px 30px 20px;
 `
 
-const SubmitBtn = styled.button
+const SubmitBtn1 = styled.button
     `
     color: black;
     border: solid 3px ${props => props.theme.borderColor};
-    background: ${props => props.theme.DropDownListColor};
+    background: #6a9dda;
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
@@ -606,9 +605,11 @@ const SubmitBtn = styled.button
     }
 `
 
-const CancelBtn = styled(SubmitBtn)
+const CancelBtn1 = styled(SubmitBtn1)
     `
     margin: 0px 0px 0px 0px;
+    cursor: pointer;
+
 `
 
 const FileNumber = styled.div

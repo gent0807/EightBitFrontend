@@ -985,7 +985,7 @@ const FreeArticle = () => {
 
 export default FreeArticle;
 
-const FloderText = styled.span
+const FloderText = styled.div
 `
     font-weight: bold;
 `
@@ -1025,7 +1025,7 @@ const ShareMenu = styled.ul
     position: absolute;
     list-style: none;
     margin: 0px 0px -76px -45px;
-    background: white;
+    background: ${props => props.theme.backgroundColor};
     border: solid 1px ${props => props.theme.borderColor};
     border-radius: 10px;
 `
@@ -1047,9 +1047,9 @@ const FloderMenu = styled.ul
     padding: 10px;
     list-style: none;
     margin: 0px 0px -44px -24px;
-    background: white;
     border: solid 1px ${props => props.theme.borderColor};
     border-radius: 10px;
+    background: ${props => props.theme.backgroundColor};
 `
 
 const Floderli = styled.li
@@ -1278,7 +1278,7 @@ const Editer2 = styled(ReactQuill)
         color: #444;
         padding: 5px 12px;
         white-space: nowrap;
-        margin: 50px 0px 0px 150px;
+        margin: 130px 0px 0px 150px;
     }
 `
 

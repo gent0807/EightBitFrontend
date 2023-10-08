@@ -17,7 +17,6 @@ import TXT from "../../img/FileList/txt.png";
 import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
 import { accessToken, clearLoginState, point } from '../Redux/User';
-import { object } from 'prop-types';
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -25,8 +24,10 @@ Quill.register("modules/imageResize", ImageResize);
 
 const WriteBoard = () => {
     const [WriterChangeValue, setWriterChangeValue] = useState("");
+    const [EditerValue, setEditerValue] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
+    
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let userInfo = localStorage.getItem("userInfo");
@@ -39,7 +40,6 @@ const WriteBoard = () => {
     const fileId = useRef(0);
 
     const quillRef = useRef(null);
-    const [EditerValue, setEditerValue] = useState("");
     const toolbarOptions = [
         ["link", "image", "video"],
         [{ header: [1, 2, 3, false] }],
@@ -230,6 +230,9 @@ const WriteBoard = () => {
         return () => resetDragEvents();
     }, [initDragEvents, resetDragEvents]);
 
+
+
+    
     const OncheckSubmit = (e) => {
         /*  const registFile = (writer, regdate) => {
              const fd = new FormData();
@@ -301,7 +304,7 @@ const WriteBoard = () => {
 
                     Object.values(files).forEach((file) => fd.append("file", file));
 
-                    axios.post(`${ip}/Board/article/file/images`, fd, {
+                    axios.post(`${ip}/Board/article/shareFiles`, fd, {
                         headers: {
                             Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
                             "Content-Type": `multipart/form-data;`
@@ -621,7 +624,6 @@ const SubmitBtn = styled.button
 const CancelBtn = styled(SubmitBtn)
     `
     margin: 0px 0px 0px 0px;
-    background: white;
 
 `
 
