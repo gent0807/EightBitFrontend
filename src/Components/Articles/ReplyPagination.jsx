@@ -3,14 +3,11 @@ import { useState, useRef, useEffect } from "react";
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { firstReset } from "../Darkmode/Darkmode";
 
-function PaginationNav({ total, limit, page, setPage }) {
+function ReplyPagination({ total, limit, page, setPage }) {
   const numPages = total > 0 && limit > 0 ? Math.ceil(total / limit) : 1;
   const [currPage, setCurrPage] = useState(page);
   const [WindowLength, setWindowLength] = useState(window.innerWidth);
-  const FirstReset = useRecoilValue(firstReset);
-  const [CFirstReset, setCFirstReset] = useRecoilState(firstReset);
-  let firstNum = FirstReset ? WindowLength <= 666 ? currPage - (currPage % 5) + 1 : currPage - (currPage % 10) + 1 : 1;
-  console.log("firstNum : ",firstNum, "numPages : ", numPages, "currPageFirst : ", 20 - (20 % 10) + 1, "currPage : ", currPage,"Page : ", page);
+  let firstNum = currPage - (currPage % 5) + 1 ;
 
   const handleResize = () => {
     setWindowLength(window.innerWidth);
@@ -24,32 +21,32 @@ function PaginationNav({ total, limit, page, setPage }) {
   })
 
   const ScrollTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 1264, behavior: "smooth" });
   }
 
   return (
     <>
       <Nav>
-        <Button onClick={() => { setPage(1); setCurrPage(1); setCFirstReset(true); ScrollTop(); }} off={page === 1}>
+        <Button onClick={() => { setPage(1); setCurrPage(1); ScrollTop(); }} off={page === 1}>
           &lt;
           &lt;
         </Button>
         <Button
-          onClick={() => { setPage(page - 1); setCurrPage(page - 2); setCFirstReset(true); ScrollTop(); }}
+          onClick={() => { setPage(page - 1); setCurrPage(page - 2); ScrollTop(); }}
           off={page === 1}>
           &lt;
         </Button>
         <Button
-          onClick={() => { setPage(firstNum); setCFirstReset(true); ScrollTop(); }}
+          onClick={() => { setPage(firstNum); ScrollTop(); }}
           aria-current={page === firstNum ? "page" : null}>
           {firstNum}
         </Button>
         {Array(numPages - firstNum).fill().map((_, i) => {
-          if (i <= Math.round(WindowLength <= 666 ? 3 : 8)) {
+          if (i <= Math.round(3)) {
             return (
               <Button
                 key={i + 1}
-                onClick={() => { setPage(firstNum + 1 + i); setCFirstReset(true); ScrollTop(); }}
+                onClick={() => { setPage(firstNum + 1 + i); ScrollTop(); }}
                 aria-current={page === firstNum + 1 + i ? "page" : null}>
                 {firstNum + 1 + i}
               </Button>
@@ -57,11 +54,11 @@ function PaginationNav({ total, limit, page, setPage }) {
           }
         })}
         <Button
-          onClick={() => { setPage(page + 1); setCurrPage(page); setCFirstReset(true); ScrollTop(); }}
+          onClick={() => { setPage(page + 1); setCurrPage(page); ScrollTop(); }}
           off={page === numPages}>
           &gt;
         </Button>
-        <Button onClick={() => { setPage(numPages); setCurrPage(numPages); setCFirstReset(true); ScrollTop(); }} off={page === numPages}>
+        <Button onClick={() => { setPage(numPages); setCurrPage(numPages); ScrollTop(); }} off={page === numPages}>
           &gt;
           &gt;
         </Button>
@@ -70,7 +67,7 @@ function PaginationNav({ total, limit, page, setPage }) {
   );
 }
 
-export default PaginationNav;
+export default ReplyPagination;
 
 const Nav = styled.nav`
   display: flex;
