@@ -682,6 +682,8 @@ const FreeArticle = () => {
         };
     }, [ShareRef]);
 
+    console.log( "삭제되는 reply, regdate",ModalReplyDeleteReplyer,ModalReplyDeleteRegdate);
+
     return (
         <FreeArticleBox>
 
@@ -956,11 +958,15 @@ const FreeArticle = () => {
                                 addComment={addComment}
                                 editComment={editComment}
                                 deleteComment={deleteComment}
+
                                 setModalReplyDeleteRegdate={setModalReplyDeleteRegdate}
                                 setModalReplyDeleteReplyer={setModalReplyDeleteReplyer}
+
                                 setModalReplyDeleteSetToggleState={setModalReplyDeleteSetToggleState}
                                 setModalReplyDeleteToggleState={setModalReplyDeleteToggleState}
+
                                 setModalReplyDeleteId={setModalReplyDeleteId}
+                                
                                 setReplyDeleteMode={setReplyDeleteMode}
                                 ReplyDeleteMode={ReplyDeleteMode}
                             />

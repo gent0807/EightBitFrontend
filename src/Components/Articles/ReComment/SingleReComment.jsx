@@ -302,11 +302,8 @@ const SingleReComment = ({
                });  */
 
         setId(ReComment.id);
-        setModalreCommentId(ReComment.id)
-        setModalreRegdate(regdate);
         setModalToggleState2(toggleState2);
         setModalToggleState(toggleState);
-        setModalreCommenter(ReComment.reCommenter);
         setOriginalReplyer(ReComment.original_replyer);
         setOriginalRegdate(ReComment.original_regdate);
         setReCommenter(ReComment.reCommenter);
@@ -672,7 +669,7 @@ const SingleReComment = ({
                                 </UpdateReply>
 
                                 <DeleteReply
-                                    onClick={() => setReDeleteMode(!RedeleteMode)}
+                                    onClick={() => {setReDeleteMode(!RedeleteMode); setModalreCommentId(id); setModalreCommenter(reCommenter); setModalreRegdate(regdate)}}
                                 >
                                     <span>
                                         <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />

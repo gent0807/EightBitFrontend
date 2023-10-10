@@ -1606,7 +1606,7 @@ const FastListBox = styled(ProfileListBox)
     `
     display: ${props => props.default ? "block" : "none"};
     width: 310px;
-    margin: 59px 0px 0px 66px;
+    margin: 59px 0px 0px 11px;
     height: ${props => props.show ? "378px" : "0px"};
     z-index: ${props => props.zindex ? 2 : 1};
 `

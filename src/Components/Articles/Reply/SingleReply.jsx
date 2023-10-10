@@ -29,7 +29,7 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReplyReportModal from "./ReplyReportModal"
 import ReCommentDeleteModal from "../ReComment/ReCommentDeleteModal";
-import ReplyDeleteModal from "./ReplyDeleteModal";
+import ReplyUpdateCommentModal from "./ReplyUpdateCommentModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -47,6 +47,7 @@ const SingleReply = ({
     setModalReplyDeleteRegdate,
     setModalReplyDeleteReplyer,
     setModalReplyDeleteToggleState,
+    setModalReplyDeleteSetToggleState,
     setModalReplyDeleteId,
     setReplyDeleteMode,
     ReplyDeleteMode,
@@ -71,6 +72,8 @@ const SingleReply = ({
     const [ModalreRegdate, setModalreRegdate] = useState("");
     const [ModalToggleState2, setModalToggleState2] = useState("");
     const [ModalToggleState, setModalToggleState] = useState("");
+    const [ModalReplyUpdateComment, setModalReplyUpdateComment] = useState("");
+    const [ModalReplyUpdateCommentOnOff, setModalReplyUpdateCommentOnOff] = useState(false);
     const SettingRef = useRef(null);
 
 
@@ -225,10 +228,7 @@ const SingleReply = ({
            }); 
         */
         setId(Comment.id);
-        setModalReplyDeleteRegdate(regdate);
-        setModalReplyDeleteReplyer(replyer);
         setModalReplyDeleteToggleState(toggleState);
-        setModalReplyDeleteId(id);
         setReplyer(Comment.replyer);
         setContent(Comment.content);
         setRegdate(Comment.regdate);
@@ -454,11 +454,18 @@ const SingleReply = ({
         }
 
         else if (updateReplyText.length == 0) {
-            alert("댓글을 입력해주세요.");
+            setModalReplyUpdateCommentOnOff(true);
+            setModalReplyUpdateComment(
+                <ReplyUpdateCommentModal
+                    setModalReplyUpdateCommentOnOff={setModalReplyUpdateCommentOnOff}
+                    ModalReplyUpdateCommentOnOff={ModalReplyUpdateCommentOnOff}
+                 />
+            );
             return;
         }
     }
 
+    console.log(updateReplyText.length, updateReplyText);
 
     const registerReComment = async (e) => {
         e.preventDefault();
@@ -508,7 +515,7 @@ const SingleReply = ({
 
         }
         else if (reCommentChangeValue.length == 0) {
-            alert("댓글 내용을 입력해주세요.");
+            alert("댓글 내용을 입력해주세요!");
             return;
         }
 
@@ -714,7 +721,7 @@ const SingleReply = ({
                             ref={SettingRef}
                         >
                             <SlOptions />
-                        
+
                             <SettingReplyStatusDiv ReplyStatusDivHide={replyStatusDivHide}>
                                 <UpdateReply
                                     LoginMaintain={loginMaintain}
@@ -740,7 +747,12 @@ const SingleReply = ({
                                 </UpdateReply>
 
                                 <DeleteReply
-                                    onClick={() => setReplyDeleteMode(!ReplyDeleteMode)}>
+                                    onClick={() => {
+                                        setReplyDeleteMode(!ReplyDeleteMode);
+                                        setModalReplyDeleteReplyer(replyer);
+                                        setModalReplyDeleteRegdate(regdate);
+                                        setModalReplyDeleteId(id);
+                                    }}>
                                     <span>
                                         <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
                                         삭제하기
@@ -839,6 +851,9 @@ const SingleReply = ({
 
             </div>
             <div style={{ display: isEditing === false ? "none" : "block" }}>
+
+                { ModalReplyUpdateCommentOnOff ? ModalReplyUpdateComment : <></> }
+
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -852,14 +867,15 @@ const SingleReply = ({
                     UserNickname={userInfo == null ?
                         null : userInfo.nickName}
 
-                    onSubmit={updateReply}>
+                    onSubmit={updateReply}
+                >
                     <ReCommentArea>
                         <ReCommentProfile>
                             <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
-                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
+                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해"
                                 value={updateReplyText}
                                 onChange={(content, delta, source, editor) => setUpdateReplyText(editor.getHTML())}
                                 modules={modules}
@@ -868,8 +884,8 @@ const SingleReply = ({
                         </ReCommentInputBox>
                     </ReCommentArea>
                     <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => { setSelectedCommentIndex(0) }}>취소</CancelBtn>
-                        <ReCommentBtn>댓글 수정</ReCommentBtn>
+                        <CancelBtn type="button" onClick={() => setSelectedCommentIndex(0)}>취소</CancelBtn>
+                        <ReCommentBtn onClick={() => setModalReplyUpdateCommentOnOff(!ModalReplyUpdateCommentOnOff)}>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>
             </div>

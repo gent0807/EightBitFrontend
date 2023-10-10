@@ -272,7 +272,7 @@ const MuteBtnBox = styled.div
 
 const VideoViewBox = styled.div
     `
-
+    
 `
 
 const VideoImg = styled.img
@@ -612,7 +612,10 @@ const SlideBox = styled.div
 const VideoPlay = styled(ReactPlayer)
     `
     width: 100%;
-    height: 56vw;
+    video
+    {
+        height: initial !important;
+    }
 `
 
 const VideoBackground = styled.div
