@@ -477,8 +477,7 @@ const FreeArticle = () => {
                             .then((res) => {
                                 /*  f(res,pointUp,e) */
                                 return res.data;
-                            }
-                            )
+                            })
                             .then((data) => {
                                 dispatch(point(data));
                                 return;
