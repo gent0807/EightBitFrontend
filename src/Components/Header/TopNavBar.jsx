@@ -949,10 +949,10 @@ const HeaderBox = () => {
                                 <Link to='/'><SubNavText>위시리스트</SubNavText></Link>
                             </ShopSubNav>
                             <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
-                                <Link to='/'><SubNavText>공지사항</SubNavText></Link>
+                                <Link to='/FreeBoard'><SubNavText>공지사항</SubNavText></Link>
                                 <Link to='/'><SubNavText>이벤트</SubNavText></Link>
-                                <Link to='/'><SubNavText>공략게시판</SubNavText></Link>
-                                <Link to='/'><SubNavText>토론게시판</SubNavText></Link>
+                                <Link to='/FreeBoard'><SubNavText>공략게시판</SubNavText></Link>
+                                <Link to='/FreeBoard'><SubNavText>토론게시판</SubNavText></Link>
                                 <Link to='/FreeBoard'><SubNavText>자유게시판</SubNavText></Link>
                             </ComunitySubNav>
                             <SupportSubNav display={isSupprotTabCheck} TopBack={scrollPosition}>
@@ -1606,7 +1606,7 @@ const FastListBox = styled(ProfileListBox)
     `
     display: ${props => props.default ? "block" : "none"};
     width: 310px;
-    margin: 59px 0px 0px 66px;
+    margin: 59px 0px 0px 11px;
     height: ${props => props.show ? "378px" : "0px"};
     z-index: ${props => props.zindex ? 2 : 1};
 `

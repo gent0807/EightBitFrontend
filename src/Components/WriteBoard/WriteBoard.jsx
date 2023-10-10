@@ -17,7 +17,6 @@ import TXT from "../../img/FileList/txt.png";
 import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
 import { accessToken, clearLoginState, point } from '../Redux/User';
-import { object } from 'prop-types';
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -25,8 +24,10 @@ Quill.register("modules/imageResize", ImageResize);
 
 const WriteBoard = () => {
     const [WriterChangeValue, setWriterChangeValue] = useState("");
+    const [EditerValue, setEditerValue] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
+
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let userInfo = localStorage.getItem("userInfo");
@@ -39,7 +40,6 @@ const WriteBoard = () => {
     const fileId = useRef(0);
 
     const quillRef = useRef(null);
-    const [EditerValue, setEditerValue] = useState("");
     const toolbarOptions = [
         ["link", "image", "video"],
         [{ header: [1, 2, 3, false] }],
@@ -158,8 +158,7 @@ const WriteBoard = () => {
 
         setFiles(tempFiles);
 
-    }, [files]
-    );
+    }, [files]);
 
     console.log(files);
 
@@ -230,38 +229,38 @@ const WriteBoard = () => {
         return () => resetDragEvents();
     }, [initDragEvents, resetDragEvents]);
 
+
+
+
     const OncheckSubmit = (e) => {
-        /*  const registFile = (writer, regdate) => {
-             const fd = new FormData();
- 
-             Object.values(files).forEach((file) => fd.append("file", file));
- 
-             axios({
-                 method: "post",
-                 url: `${ip}/Board/article/file/images`,
-                 data: fd,
-                 headers: {
-                     Authorization: {Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`},
-                     'Content-Type': 'multipart/form-data'
-                 }
-             })
-             .then((res) => {
-                 return res.data
-             }
-             )
-             .then((data) =>{
-                 console.log(data);
-                 console.log(userInfo.accessToken);
-                 console.log(user.access_token);
-                 navigate('/FreeArticle/'+writer+'/'+regdate);
-             }
-                 
-             )
-         } */
+        const registFile = async (writer, regdate) => {
+            const fd = new FormData();
+
+            fd.append("writer", writer);
+            fd.append("regdate", regdate);
+            Object.values(files).forEach((file) => fd.append("file", file));
+
+            await axios.post(`${ip}/Board/article/shareFiles`, fd, {
+                headers: {
+                    Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                    "Content-Type": `multipart/form-data;`
+                }
+                })
+                .then((res) => {
+                    return res.data
+                }
+                )
+                .then((data) => {
+                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    return;
+                }
+                )
+        }
 
         e.preventDefault();
 
         console.log(files.map(file => file.object));
+        
         if (WriterChangeValue.length < 5 && EditerValue.length > 20) {
             window.alert("제목을 5자 이상 입력해주세요!");
             return;
@@ -280,7 +279,7 @@ const WriteBoard = () => {
             title: WriterChangeValue,
             content: EditerValue,
             writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            },
+        },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
             })
@@ -289,134 +288,112 @@ const WriteBoard = () => {
                 return res.data;
             })
             .then((data) => {
-                const writer=data.writer;
-                const regdate=data.regdate;
+                const writer = data.writer;
+                const regdate = data.regdate;
 
-                if (files.length == 0) {
-                
+                if (files.length > 0) {
+
+                    registFile(writer, regdate);
+
                 }
-                else if (files.length > 0) {
 
-                    const fd = new FormData();
+                axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=10`,
+                    {
 
-                    Object.values(files).forEach((file) => fd.append("file", file));
-
-                    axios.post(`${ip}/Board/article/file/images`, fd, {
-                        headers: {
-                            Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                            "Content-Type": `multipart/form-data;`
-                        }
+                    },
+                    {
+                        headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                    })
+                    .then((res) => {
+                        return res.data;
                     }
                     )
-                    .then((res) => {
-                            return res.data
-                        }
-                    )
                     .then((data) => {
-                           
-                        }
-                    )
-
-
-                }
-
-                axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=10`, 
-                {
-                    
-                },
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                })
-                .then((res) => {
-                    return res.data;
-                }                 
-                )
-                .then((data) => {
-                    dispatch(point(data));
-                    navigate('/FreeArticle/' + writer + '/' + regdate);
-                    return;
-                });
+                        dispatch(point(data));
+                        navigate('/FreeArticle/' + writer + '/' + regdate);
+                        return;
+                    });
             })
 
     }
 
-    const regenerateAccessTokenOrLogout = (res, f , e) => {
-        if(res.status==403){
-            axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`,{
+    const regenerateAccessTokenOrLogout = (res, f, e) => {
+        if (res.status == 403) {
+            axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`, {
 
             },
-            {
-                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-            })
-            .then((res) =>{
-                return res.data
-            }
-            )
-            .then((data)=>{
-                if(data=="invalid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then((res) => {
+                    return res.data
                 }
-                else if(data=="accesstoken valid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="accesstoken not matched user"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken invalid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken expired"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("로그인이 만료되었습니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken not matched user"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else{
-                    const object={
-                        accessToken: data,
-                    };
-                    if(loginMaintain=="true"){
-                        userInfo.accessToken=data;
+                )
+                .then((data) => {
+                    if (data == "invalid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
                     }
-                    dispatch(accessToken(object));
-                    f(e);
-                }
-            })
+                    else if (data == "accesstoken valid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "accesstoken not matched user") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken invalid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken expired") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("로그인이 만료되었습니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken not matched user") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else {
+                        const object = {
+                            accessToken: data,
+                        };
+                        if (loginMaintain == "true") {
+                            userInfo.accessToken = data;
+                        }
+                        dispatch(accessToken(object));
+                        f(e);
+                    }
+                })
             return;
         }
-        else if(res.status==200){
+        else if (res.status == 200) {
             return res.data
-        } 
+        }
     }
 
     const deleteRefreshToken = (name) => {
@@ -440,7 +417,6 @@ const WriteBoard = () => {
                         placeholder="내용을 입력해 주세요!"
                         value={EditerValue}
                         onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
-                        theme="snow"
                         modules={modules}
                         formats={formats}
                     ></Editer>
@@ -499,11 +475,22 @@ const Editer = styled(ReactQuill)
     display: flex;
     flex-direction: column;
     
+    .ql-editor.ql-blank::before
+    {
+        color:${props=>props.theme.textColor};
+    }
+
+    .ql-editor p
+    {
+        color:${props=>props.theme.textColor};
+    }
+
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
         min-height: 600px;
         font-size: 20px;
+        background: ${props => props.theme.backgroundColor};
     }
 
     .ql-editor::-webkit-scrollbar 
@@ -516,6 +503,12 @@ const Editer = styled(ReactQuill)
         background: gray;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
+    }
+
+    .ql-snow .ql-tooltip
+    {
+        left: 1% !important;
+        top: -1% !important;
     }
 
     .ql-container::-webkit-scrollbar-thumb
@@ -621,7 +614,6 @@ const SubmitBtn = styled.button
 const CancelBtn = styled(SubmitBtn)
     `
     margin: 0px 0px 0px 0px;
-    background: white;
 
 `
 
@@ -682,6 +674,10 @@ const FileUploadLabel = styled.label
 const FileUploadText = styled.div
     `
     color: ${props => props.checkFile ? "#55aaff" : "black"};
+    svg
+    {
+        color: ${props => props.checkFile ? "#55aaff" : props => props.theme.textColor};
+    }
 `
 
 const WriterInputBox = styled.div
@@ -701,7 +697,7 @@ const FileUploadBox = styled.div
     border-radius: 20px;
     justify-content: center;
     padding: 19px 0px 0px 0px;
-    background: ${props => props.checkFile ? "rgb(0,0,0,0.04)" : "white"};
+    background: ${props => props.checkFile ? "rgb(0,0,0,0.04)" : props.theme.backgroundColor};
     min-height: 135px;
     @media (hover: hover)
     {
@@ -724,6 +720,11 @@ const WriterInput = styled.input
     margin: 0px 20px 30px 20px;
     height: 70px;
     font-size: 23px;
+    color : ${props => props.theme.textColor}; 
+    background: ${props => props.theme.backgroundColor};   
+    &::placeholder{
+        color:${props=>props.theme.textColor};
+    }
 `
 
 const FileUpload = styled.input

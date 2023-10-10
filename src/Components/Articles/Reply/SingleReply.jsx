@@ -2,8 +2,8 @@ import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState } from "recoil";
-import { toggle } from "./Toggle";
-import { toggle2 } from "./Toggle";
+import { toggle } from "../Toggle";
+import { toggle2 } from "../Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -21,18 +21,38 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
-import Siren from "../../img/Siren/Siren.png";
-import SingleReComment from "./SingleReComment";
+import Siren from "../../../img/Siren/Siren.png";
+import SingleReComment from "../ReComment/SingleReComment";
 import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { clearLoginState, accessToken, point } from "../Redux/User";
+import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReplyReportModal from "./ReplyReportModal"
+import ReCommentDeleteModal from "../ReComment/ReCommentDeleteModal";
+import ReplyUpdateCommentModal from "./ReplyUpdateCommentModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCommentIndex, isEditing, addComment, editComment, deleteComment, key }) => {
+const SingleReply = ({
+    Comment,
+    reCommentCount,
+    setReCommentCount,
+    setSelectedCommentIndex,
+    isEditing,
+    addComment,
+    editComment,
+    deleteComment,
+    key,
+    setModalReplyDeleteRegdate,
+    setModalReplyDeleteReplyer,
+    setModalReplyDeleteToggleState,
+    setModalReplyDeleteSetToggleState,
+    setModalReplyDeleteId,
+    setReplyDeleteMode,
+    ReplyDeleteMode,
+}) => {
+    const [ModalReplyUpdateCommentOnOff, setModalReplyUpdateCommentOnOff] = useState(false);
     const [id, setId] = useState(Comment.id);
     const [replyer, setReplyer] = useState(Comment.replyer);
     const [content, setContent] = useState(Comment.content);
@@ -44,9 +64,16 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
     const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [reCommentHide, setReCommentHide] = useState(false);
-    const [replyStatusDivHide, setReplyStatusDivHide] = useState(true);
-    const [updateReplyText, setUpdateReplyText] = useState(Comment.content);
+    const [replyStatusDivHide, setReplyStatusDivHide] = useState(false);
+    const [updateReplyText, setUpdateReplyText] = useState("");
     const [selectedReCommentIndex, setSelectedReCommentIndex] = useState(0);
+    const [ModalReCommenterdeleteMode, setModalReCommenterdeleteMode] = useState(false);
+    const [ModalreCommenter, setModalreCommenter] = useState("");
+    const [ModalreCommentId, setModalreCommentId] = useState("");
+    const [ModalreRegdate, setModalreRegdate] = useState("");
+    const [ModalToggleState2, setModalToggleState2] = useState("");
+    const [ModalToggleState, setModalToggleState] = useState("");
+    const SettingRef = useRef(null);
 
 
     const navigate = useNavigate();
@@ -70,6 +97,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
 
     const [ReComments, setReComments] = useState([]);
 
+    console.log(ModalReplyUpdateCommentOnOff);
 
     useEffect(() => {
         const getReplyerProfileImagePath = (replyer) => {
@@ -170,12 +198,6 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                 })
         }
 
-        console.log("SingleReply useEffect");
-        console.log("----------------------------------");
-        console.log("Comment: " + Comment);
-        console.log("----------------------------------");
-
-
         /* 
             axios.get(`${ip}/Board/article/reply?replyer=${Comment.replyer}&regdate=${Comment.regdate}`,
            {
@@ -201,6 +223,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
            }); 
         */
         setId(Comment.id);
+        setModalReplyDeleteToggleState(toggleState);
         setReplyer(Comment.replyer);
         setContent(Comment.content);
         setRegdate(Comment.regdate);
@@ -211,7 +234,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
         getLikers(Comment.replyer, Comment.regdate);
         getReComments(Comment.replyer, Comment.regdate);
 
-        setReplyStatusDivHide(true);
+        setReplyStatusDivHide(false);
 
     }, [editComment, addComment, deleteComment, toggleState2]);
 
@@ -404,7 +427,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
     const updateReply = async (e) => {
         e.preventDefault();
 
-        if (updateReplyText.length > 0) {
+        if (updateReplyText !== '<p><br></p>') {
             await axios.patch(`${ip}/Board/article/reply?replyer=${replyer}&regdate=${regdate}`,
                 {
                     content: updateReplyText,
@@ -421,40 +444,15 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                     setToggleState(!toggleState);
                     editComment(id, updateReplyText);
                     setSelectedCommentIndex(0);
-                    return;
                 })
         }
 
-        else if (updateReplyText.length == 0) {
-            alert("댓글을 입력해주세요.");
-            return;
+        else if (updateReplyText === '<p><br></p>' && updateReplyText.length === 11) {
+            setModalReplyUpdateCommentOnOff(true);
         }
     }
 
-    const deleteReply = () => {
-        const check = window.confirm("정말 삭제하시겠습니까?");
-        if (check == true) {
-            axios.delete(`${ip}/Board/article/reply/${replyer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                })
-                .then((res) => {
-                    /* regenerateAccessTokenOrLogout(res, deleteReply, e); */
-                    return res.data;
-                })
-                .then((data) => {
-                    setToggleState(!toggleState);
-                    deleteComment(id);
-                    return;
-                })
-
-        }
-        else {
-            return;
-        }
-
-    }
-
+    console.log(updateReplyText.length, updateReplyText);
 
     const registerReComment = async (e) => {
         e.preventDefault();
@@ -504,7 +502,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
 
         }
         else if (reCommentChangeValue.length == 0) {
-            alert("댓글 내용을 입력해주세요.");
+            alert("댓글 내용을 입력해주세요!");
             return;
         }
 
@@ -594,6 +592,21 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
 
+    useEffect(() => {
+        function handleOuside(e) {
+            if (SettingRef.current && !SettingRef.current.contains(e.target)) {
+                setReplyStatusDivHide(false);
+            }
+        };
+
+        if (!replyStatusDivHide) {
+            document.addEventListener("click", handleOuside);
+        }
+        return () => {
+            document.removeEventListener("click", handleOuside);
+        };
+    }, [SettingRef]);
+
     return (
         <UserCommentBox id={id}>
 
@@ -638,7 +651,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                         </RedateBox>
                         <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
-                    
+
                 </CommentUserProfileBox>
                 <CommentInformationBox>
                     <CommentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
@@ -660,41 +673,43 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                             UserNicknameCheck={user.nickname}
                             UserNickname={userInfo == null ?
                                 null : userInfo.nickName}
-                            onClick={() => setOnReplyBtn(!onReplyBtn)}>
+                            onClick={() => {setOnReplyBtn(!onReplyBtn)}}>
                             {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
                         </CommentreplyBtn>
                     </CommentreplyAllBox>
-                    <div>
-                        <CommentreplyLikeAllBox>
-                            <CommentreplyLikeBtn
-                                LoginMaintain={loginMaintain}
-                                UserInfo={userInfo} User={userInfo == null ?
-                                    null : userInfo.loginState}
-                                UserCheck={user.login_state}
-                                UserNicknameCheck={user.nickname}
-                                UserNickname={userInfo == null ?
-                                    null : userInfo.nickName}
-                                onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
-                                {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
-                            </CommentreplyLikeBtn>
-                            <OptionBox
-                                LoginMaintain={loginMaintain}
-                                User={user.login_state}
-                                UserInfo={userInfo}
-                                UserInfoState={userInfo == null ?
-                                    null : userInfo.loginState}
-                                UserInfoNickname={userInfo == null ?
-                                    (user.login_state === "allok" ?
-                                        user.nickname : null) : userInfo.nickName}
-                                UserInfoRole={userInfo == null ?
-                                    (user.login_state === "allok" ?
-                                        user.role : null) : userInfo.role}
-                                Replyer={replyer}
-                                onClick={() => { setReplyStatusDivHide(!replyStatusDivHide) }}><SlOptions />
-                            </OptionBox>
-                        </CommentreplyLikeAllBox>
-                        <SettingReplyStatusDiv ReplyStatusDivHide={replyStatusDivHide}>
-                            <SettingReplyStatusBox>
+
+                    <CommentreplyLikeAllBox>
+                        <CommentreplyLikeBtn
+                            LoginMaintain={loginMaintain}
+                            UserInfo={userInfo} User={userInfo == null ?
+                                null : userInfo.loginState}
+                            UserCheck={user.login_state}
+                            UserNicknameCheck={user.nickname}
+                            UserNickname={userInfo == null ?
+                                null : userInfo.nickName}
+                            onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
+                            {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
+                        </CommentreplyLikeBtn>
+
+                        <OptionBox
+                            LoginMaintain={loginMaintain}
+                            User={user.login_state}
+                            UserInfo={userInfo}
+                            UserInfoState={userInfo == null ?
+                                null : userInfo.loginState}
+                            UserInfoNickname={userInfo == null ?
+                                (user.login_state === "allok" ?
+                                    user.nickname : null) : userInfo.nickName}
+                            UserInfoRole={userInfo == null ?
+                                (user.login_state === "allok" ?
+                                    user.role : null) : userInfo.role}
+                            Replyer={replyer}
+                            onClick={() => { setReplyStatusDivHide(!replyStatusDivHide) }}
+                            ref={SettingRef}
+                        >
+                            <SlOptions />
+
+                            <SettingReplyStatusDiv ReplyStatusDivHide={replyStatusDivHide}>
                                 <UpdateReply
                                     LoginMaintain={loginMaintain}
                                     User={user.login_state}
@@ -709,7 +724,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                                             user.role : null) : userInfo.role}
                                     Replyer={replyer}
                                     onClick={() => {
-                                        setReplyStatusDivHide(true);
+                                        setReplyStatusDivHide(false);
                                         setSelectedCommentIndex(id);
                                     }}>
                                     <span>
@@ -717,52 +732,80 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                                         수정하기
                                     </span>
                                 </UpdateReply>
+
                                 <DeleteReply
-                                    onClick={deleteReply}>
+                                    onClick={() => {
+                                        setReplyDeleteMode(!ReplyDeleteMode);
+                                        setModalReplyDeleteReplyer(replyer);
+                                        setModalReplyDeleteRegdate(regdate);
+                                        setModalReplyDeleteId(id);
+                                    }}>
                                     <span>
                                         <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
                                         삭제하기
                                     </span>
                                 </DeleteReply>
-                            </SettingReplyStatusBox>
-                        </SettingReplyStatusDiv>
-                    </div>
+
+                            </SettingReplyStatusDiv>
+                        </OptionBox>
+
+                    </CommentreplyLikeAllBox>
+
                 </CommentreplyBox>
-                <ReCommentSector>
-                    {onReplyBtn && (<ReCommentForm
-                        LoginMaintain={loginMaintain}
 
-                        UserInfo={userInfo} User={userInfo == null ?
-                            null : userInfo.loginState}
+                {onReplyBtn && (<ReCommentForm
+                    LoginMaintain={loginMaintain}
 
-                        UserCheck={user.login_state}
+                    UserInfo={userInfo} User={userInfo == null ?
+                        null : userInfo.loginState}
 
-                        UserNicknameCheck={user.nickname}
+                    UserCheck={user.login_state}
 
-                        UserNickname={userInfo == null ?
-                            null : userInfo.nickName}
+                    UserNicknameCheck={user.nickname}
 
-                        onSubmit={registerReComment}>
-                        <ReCommentArea>
-                            <ReCommentProfile>
-                                <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath: localStorage.getItem("profileImageDir") + user.profile_img_path} />
-                            </ReCommentProfile>
-                            <ReCommentInputBox>
-                                <Editer2
-                                    placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
-                                    value={reCommentChangeValue}
-                                    onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
-                                    modules={modules}
-                                    formats={formats}>
-                                </Editer2>
-                            </ReCommentInputBox>
-                        </ReCommentArea>
-                        <ReCommentBtnBox>
-                            <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
-                            <ReCommentBtn>댓글 쓰기</ReCommentBtn>
-                        </ReCommentBtnBox>
-                    </ReCommentForm>
-                    )}
+                    UserNickname={userInfo == null ?
+                        null : userInfo.nickName}
+
+                    onSubmit={registerReComment}>
+                    <ReCommentArea>
+                        <ReCommentProfile>
+                            <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                        </ReCommentProfile>
+                        <ReCommentInputBox>
+                            <Editer2
+                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
+                                value={reCommentChangeValue}
+                                onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                                modules={modules}
+                                formats={formats}>
+                            </Editer2>
+                        </ReCommentInputBox>
+                    </ReCommentArea>
+                    <ReCommentBtnBox>
+                        <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
+                        <ReCommentBtn>댓글 쓰기</ReCommentBtn>
+                    </ReCommentBtnBox>
+                </ReCommentForm>
+                )}
+
+                <ReCommentDeleteModal
+                    setDeleteMode={setModalReCommenterdeleteMode}
+                    deleteMode={ModalReCommenterdeleteMode}
+                    userInfo={userInfo}
+                    user={user}
+                    loginMaintain={loginMaintain}
+                    deleteReComment={deleteReComment}
+                    Commentid={ModalreCommentId}
+                    reCommenter={ModalreCommenter}
+
+                    regdate={ModalreRegdate}
+                    setToggleState2={setModalToggleState2}
+                    toggleState2={ModalToggleState2}
+                    setToggleState={setModalToggleState}
+                    toggleState={ModalToggleState}
+                />
+
+                <ReCommentSector View={ReComments.length}>
                     <ReCommentBox reCommentHide={reCommentHide}>
                         {ReComments.length > 0 &&
                             ReComments.map(ReComment => {
@@ -778,14 +821,29 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                                         addReComment={addReComment}
                                         editReComment={editReComment}
                                         deleteReComment={deleteReComment}
+
+                                        setReDeleteMode={setModalReCommenterdeleteMode}
+                                        RedeleteMode={ModalReCommenterdeleteMode}
+                                        setModalreCommenter={setModalreCommenter}
+                                        setModalreCommentId={setModalreCommentId}
+                                        setModalreRegdate={setModalreRegdate}
+                                        setModalToggleState2={setModalToggleState2}
+                                        setModalToggleState={setModalToggleState}
                                     />
                                 );
                             })
                         }
                     </ReCommentBox>
                 </ReCommentSector>
+
             </div>
             <div style={{ display: isEditing === false ? "none" : "block" }}>
+
+                { ModalReplyUpdateCommentOnOff ? <ReplyUpdateCommentModal
+                    setModalReplyUpdateCommentOnOff={setModalReplyUpdateCommentOnOff}
+                    ModalReplyUpdateCommentOnOff={ModalReplyUpdateCommentOnOff}
+                 /> : <></> }
+
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -799,14 +857,15 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                     UserNickname={userInfo == null ?
                         null : userInfo.nickName}
 
-                    onSubmit={updateReply}>
+                    onSubmit={updateReply}
+                >
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath: localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                            <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
-                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
+                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해주세요!"
                                 value={updateReplyText}
                                 onChange={(content, delta, source, editor) => setUpdateReplyText(editor.getHTML())}
                                 modules={modules}
@@ -815,7 +874,7 @@ const SingleReply = ({ Comment, reCommentCount, setReCommentCount, setSelectedCo
                         </ReCommentInputBox>
                     </ReCommentArea>
                     <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => { setSelectedCommentIndex(0) }}>취소</CancelBtn>
+                        <CancelBtn type="button" onClick={() => setSelectedCommentIndex(0)}>취소</CancelBtn>
                         <ReCommentBtn>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>
@@ -840,8 +899,14 @@ const Editer2 = styled(ReactQuill)
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
-        min-height: 110px;
+        min-height: 120px;
         font-size: 20px;
+    }
+
+    .ql-tooltip.ql-editing.ql-flip
+    {
+        left: 0% !important;
+        top: 65% !important;
     }
 
     .ql-editor::-webkit-scrollbar 
@@ -866,6 +931,15 @@ const Editer2 = styled(ReactQuill)
         border: 5px solid transparent;
     }
 
+    .ql-snow .ql-picker.ql-expanded .ql-picker-options
+    {
+        display: block;
+        margin-top: -133px;
+        top: 100%;
+        z-index: 1;
+        margin: -108px 0px 0px 30px;
+    }
+
     .ql-container::-webkit-scrollbar-track
     {
         border-top-right-radius: 10px;
@@ -883,6 +957,13 @@ const Editer2 = styled(ReactQuill)
         order: 2;
     }
 
+    .ql-snow .ql-picker.ql-expanded .ql-picker-options {
+        display: block;
+        margin-top: -135px;
+        top: 100%;
+        z-index: 1;
+    }
+
     .ql-snow .ql-tooltip {
         background-color: #fff;
         border: 1px solid #ccc;
@@ -890,7 +971,7 @@ const Editer2 = styled(ReactQuill)
         color: #444;
         padding: 5px 12px;
         white-space: nowrap;
-        margin: 100px 0px 0px 150px;
+        margin: 110px 0px 0px 150px;
     }
 
 `
@@ -910,7 +991,7 @@ const CommentreplyAllBox = styled.div
 const CommentreplyLikeAllBox = styled.div
     `
     display: flex;
-    margin: 0px 0px 0px 60px;
+    margin: 0px 0px 0px 77px;
 `
 
 const CommentreplyCount = styled.span
@@ -1082,32 +1163,29 @@ const ReCommentBox = styled.div
 
 const SettingReplyStatusDiv = styled.div
     `
-    display: ${props => props.ReplyStatusDivHide === true ? "none" : "flex"};
-    justify-content: end;
+    display: ${props => props.ReplyStatusDivHide ? "flex" : "none"};
     position: absolute;
+    flex-direction: column;
+    border-radius: 6px;
+    padding: 10px;
+    border: solid 1px ${props => props.theme.textColor};
     z-index: 2;
     background: ${props => props.theme.backgroundColor};
-`
-
-const SettingReplyStatusBox = styled.div
-    `
-    border-radius: 6px;
-    border: solid 1px ${props => props.theme.textColor};
+    margin: 5px 0px 0px -97px;
 `
 
 const UpdateReply = styled.div
     `
-    margin: 9px 20px 12px 18px;
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Replyer ? "flex" : "none") : "none")) :
         (props.User === "allok" ? (props.UserInfoNickname == props.Replyer ? "flex" : "none") : "none")};
     cursor: pointer;
     align-items: center;
     font-size: 18px;
+    margin: 0px 0px 10px 0px;
 `
 
 const DeleteReply = styled.div
     `
-    margin: 9px 20px 10px 18px;
     disply: flex;
     cursor: pointer;
     align-items: center;
@@ -1117,6 +1195,7 @@ const DeleteReply = styled.div
 
 const ReCommentSector = styled.div
     `
+    display: ${props => props.View === 0 ? "none" : "block"};
     margin: 0px 12px 40px 12px;
     padding: 0px 6px 0px 30px;
     border-left: solid 3px ${props => props.theme.textColor};
