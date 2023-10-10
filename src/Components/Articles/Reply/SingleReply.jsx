@@ -52,6 +52,7 @@ const SingleReply = ({
     setReplyDeleteMode,
     ReplyDeleteMode,
 }) => {
+    const [ModalReplyUpdateCommentOnOff, setModalReplyUpdateCommentOnOff] = useState(false);
     const [id, setId] = useState(Comment.id);
     const [replyer, setReplyer] = useState(Comment.replyer);
     const [content, setContent] = useState(Comment.content);
@@ -64,7 +65,7 @@ const SingleReply = ({
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [reCommentHide, setReCommentHide] = useState(false);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(false);
-    const [updateReplyText, setUpdateReplyText] = useState(Comment.content);
+    const [updateReplyText, setUpdateReplyText] = useState("");
     const [selectedReCommentIndex, setSelectedReCommentIndex] = useState(0);
     const [ModalReCommenterdeleteMode, setModalReCommenterdeleteMode] = useState(false);
     const [ModalreCommenter, setModalreCommenter] = useState("");
@@ -72,8 +73,6 @@ const SingleReply = ({
     const [ModalreRegdate, setModalreRegdate] = useState("");
     const [ModalToggleState2, setModalToggleState2] = useState("");
     const [ModalToggleState, setModalToggleState] = useState("");
-    const [ModalReplyUpdateComment, setModalReplyUpdateComment] = useState("");
-    const [ModalReplyUpdateCommentOnOff, setModalReplyUpdateCommentOnOff] = useState(false);
     const SettingRef = useRef(null);
 
 
@@ -97,6 +96,8 @@ const SingleReply = ({
     const quillRef = useRef(null);
 
     const [ReComments, setReComments] = useState([]);
+
+    console.log(ModalReplyUpdateCommentOnOff);
 
     useEffect(() => {
         const getReplyerProfileImagePath = (replyer) => {
@@ -196,12 +197,6 @@ const SingleReply = ({
                     setReComments(data);
                 })
         }
-
-        console.log("SingleReply useEffect");
-        console.log("----------------------------------");
-        console.log("Comment: " + Comment);
-        console.log("----------------------------------");
-
 
         /* 
             axios.get(`${ip}/Board/article/reply?replyer=${Comment.replyer}&regdate=${Comment.regdate}`,
@@ -432,7 +427,7 @@ const SingleReply = ({
     const updateReply = async (e) => {
         e.preventDefault();
 
-        if (updateReplyText.length > 0) {
+        if (updateReplyText !== '<p><br></p>') {
             await axios.patch(`${ip}/Board/article/reply?replyer=${replyer}&regdate=${regdate}`,
                 {
                     content: updateReplyText,
@@ -449,19 +444,11 @@ const SingleReply = ({
                     setToggleState(!toggleState);
                     editComment(id, updateReplyText);
                     setSelectedCommentIndex(0);
-                    return;
                 })
         }
 
-        else if (updateReplyText.length == 0) {
+        else if (updateReplyText === '<p><br></p>' && updateReplyText.length === 11) {
             setModalReplyUpdateCommentOnOff(true);
-            setModalReplyUpdateComment(
-                <ReplyUpdateCommentModal
-                    setModalReplyUpdateCommentOnOff={setModalReplyUpdateCommentOnOff}
-                    ModalReplyUpdateCommentOnOff={ModalReplyUpdateCommentOnOff}
-                 />
-            );
-            return;
         }
     }
 
@@ -686,7 +673,7 @@ const SingleReply = ({
                             UserNicknameCheck={user.nickname}
                             UserNickname={userInfo == null ?
                                 null : userInfo.nickName}
-                            onClick={() => setOnReplyBtn(!onReplyBtn)}>
+                            onClick={() => {setOnReplyBtn(!onReplyBtn)}}>
                             {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
                         </CommentreplyBtn>
                     </CommentreplyAllBox>
@@ -852,7 +839,10 @@ const SingleReply = ({
             </div>
             <div style={{ display: isEditing === false ? "none" : "block" }}>
 
-                { ModalReplyUpdateCommentOnOff ? ModalReplyUpdateComment : <></> }
+                { ModalReplyUpdateCommentOnOff ? <ReplyUpdateCommentModal
+                    setModalReplyUpdateCommentOnOff={setModalReplyUpdateCommentOnOff}
+                    ModalReplyUpdateCommentOnOff={ModalReplyUpdateCommentOnOff}
+                 /> : <></> }
 
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
@@ -875,7 +865,7 @@ const SingleReply = ({
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
-                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해"
+                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해주세요!"
                                 value={updateReplyText}
                                 onChange={(content, delta, source, editor) => setUpdateReplyText(editor.getHTML())}
                                 modules={modules}
@@ -885,7 +875,7 @@ const SingleReply = ({
                     </ReCommentArea>
                     <ReCommentBtnBox>
                         <CancelBtn type="button" onClick={() => setSelectedCommentIndex(0)}>취소</CancelBtn>
-                        <ReCommentBtn onClick={() => setModalReplyUpdateCommentOnOff(!ModalReplyUpdateCommentOnOff)}>댓글 수정</ReCommentBtn>
+                        <ReCommentBtn>댓글 수정</ReCommentBtn>
                     </ReCommentBtnBox>
                 </ReCommentForm>
             </div>

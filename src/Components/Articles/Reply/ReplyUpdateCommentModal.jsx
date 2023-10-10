@@ -6,8 +6,6 @@ const ReplyCommentModal = ({
     ModalReplyUpdateCommentOnOff, 
 }) => {
 
-    const ip = localStorage.getItem("ip");
-
     return (
         <DeleteModalBackground OnOff={ModalReplyUpdateCommentOnOff}>
             <ReportModalAllBox>
@@ -23,7 +21,9 @@ const ReplyCommentModal = ({
                     <DeleleFormBtnBox
 
                     >
-                        <DeleleFormBtn>
+                        <DeleleFormBtn
+                            onClick={() => setModalReplyUpdateCommentOnOff(!ModalReplyUpdateCommentOnOff)}
+                        >
                             <DeleleFormText>확인</DeleleFormText>
                         </DeleleFormBtn>
                     </DeleleFormBtnBox>
