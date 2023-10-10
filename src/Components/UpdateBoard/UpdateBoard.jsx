@@ -464,11 +464,22 @@ const Editer = styled(ReactQuill)
     display: flex;
     flex-direction: column;
     
+    .ql-editor.ql-blank::before
+    {
+        color:${props=>props.theme.textColor};
+    }
+
+    .ql-editor p
+    {
+        color:${props=>props.theme.textColor};
+    }
+
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
         min-height: 600px;
         font-size: 20px;
+        background: ${props => props.theme.backgroundColor};
     }
 
     .ql-editor::-webkit-scrollbar 
@@ -481,6 +492,12 @@ const Editer = styled(ReactQuill)
         background: gray;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
+    }
+
+    .ql-snow .ql-tooltip
+    {
+        left: 1% !important;
+        top: -1% !important;
     }
 
     .ql-container::-webkit-scrollbar-thumb
@@ -647,6 +664,10 @@ const FileUploadLabel = styled.label
 const FileUploadText = styled.div
     `
     color: ${props => props.checkFile ? "#55aaff" : "black"};
+    svg
+    {
+        color: ${props => props.checkFile ? "#55aaff" : props => props.theme.textColor};
+    }
 `
 
 const WriterInputBox = styled.div
@@ -666,7 +687,7 @@ const FileUploadBox = styled.div
     border-radius: 20px;
     justify-content: center;
     padding: 19px 0px 0px 0px;
-    background: ${props => props.checkFile ? "rgb(0,0,0,0.04)" : "white"};
+    background: ${props => props.checkFile ? "rgb(0,0,0,0.04)" : props.theme.backgroundColor};
     min-height: 135px;
     @media (hover: hover)
     {
@@ -689,6 +710,11 @@ const WriterInput = styled.input
     margin: 0px 20px 30px 20px;
     height: 70px;
     font-size: 23px;
+    color : ${props => props.theme.textColor}; 
+    background: ${props => props.theme.backgroundColor};   
+    &::placeholder{
+        color:${props=>props.theme.textColor};
+    }
 `
 
 const FileUpload = styled.input
