@@ -85,7 +85,7 @@ const Button = styled.button`
   border-radius: 8px;
   padding: 8px;
   margin: 0;
-  background: ${props => props.off ? "grey" : props.theme.textColor};
+  background: ${props => props.off ? "grey" : props.theme.PaginationOff};
   color: white;
   font-size: 1rem;
   cursor: ${props => props.off ? "revert" : "pointer"};

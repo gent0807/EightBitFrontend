@@ -16,7 +16,7 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
-import SingleReply from "./SingleReply";
+import SingleReply from "./Reply/SingleReply";
 import { FiShare } from "react-icons/fi";
 import { FcOpenedFolder } from "react-icons/fc";
 import { AiOutlineEye } from "react-icons/ai";
@@ -27,8 +27,9 @@ import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
 import { clearLoginState, accessToken, point } from "../Redux/User";
 import FreeReportModal from "./FreeReportModal";
-import ReplyPagination from "./ReplyPagination";
+import ReplyPagination from "./Reply/ReplyPagination";
 import DeleteModal from "./DeleteModal";
+import ReplyDeleteModal from "../Articles/Reply/ReplyDeleteModal"
 import NotPage from "./NotPage";
 
 
@@ -47,6 +48,7 @@ const FreeArticle = () => {
     const [writerRole, setWriterRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
     const [deleteMode, setDeleteMode] = useState(false);
+    const [ReplyDeleteMode, setReplyDeleteMode] = useState(false);
     const [shareMode, setShareMode] = useState(false);
     const [fileDownloadMode, setFileDownloadMode] = useState(false);
     const [replyChangeValue, setReplyChangeValue] = useState("");
@@ -54,6 +56,12 @@ const FreeArticle = () => {
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [reCommentCount, setReCommentCount] = useState(0);
     const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
+    const [ModalReplyDeleteRegdate, setModalReplyDeleteRegdate ] = useState("");
+    const [ModalReplyDeleteReplyer, setModalReplyDeleteReplyer ] = useState("");
+    const [ModalReplyDeleteSetToggleState, setModalReplyDeleteSetToggleState ] = useState("");
+    const [ModalReplyDeleteToggleState, setModalReplyDeleteToggleState ] = useState("");
+    const [ModalReplyDeleteId, setModalReplyDeleteId ] = useState("");
+
     const FolderRef = useRef(null);
     const ShareRef = useRef(null);
 
@@ -787,12 +795,12 @@ const FreeArticle = () => {
 
                                 <ShareMenu ShareMode={shareMode}>
                                     <Shareli>
-                                        <RiKakaoTalkFill/>
+                                        <RiKakaoTalkFill />
                                         <ShareText>kakao</ShareText>
                                     </Shareli>
 
                                     <Shareli>
-                                        <RiInstagramFill/>
+                                        <RiInstagramFill />
                                         <ShareText>instagram</ShareText>
                                     </Shareli>
                                 </ShareMenu>
@@ -884,7 +892,7 @@ const FreeArticle = () => {
                     수정
                 </Link>
 
-                <DeleteModal 
+                <DeleteModal
                     setDeleteMode={setDeleteMode}
                     deleteMode={deleteMode}
                     regdate={regdate}
@@ -918,6 +926,20 @@ const FreeArticle = () => {
 
             <CommentLine></CommentLine>
 
+            <ReplyDeleteModal
+                setReplyDeleteMode={setReplyDeleteMode}
+                ReplyDeleteMode={ReplyDeleteMode}
+                loginMaintain={loginMaintain}
+                userInfo={userInfo}
+                user={user}
+                deleteComment={deleteComment}
+                regdate={ModalReplyDeleteRegdate}
+                replyer={ModalReplyDeleteReplyer}
+                setToggleState={setModalReplyDeleteSetToggleState}
+                toggleState={ModalReplyDeleteToggleState}
+                id={ModalReplyDeleteId}
+            />
+
             <CommentBox>
                 {Comments.length === 0 && <NotPage />}
                 {Comments.length > 0 &&
@@ -934,6 +956,13 @@ const FreeArticle = () => {
                                 addComment={addComment}
                                 editComment={editComment}
                                 deleteComment={deleteComment}
+                                setModalReplyDeleteRegdate={setModalReplyDeleteRegdate}
+                                setModalReplyDeleteReplyer={setModalReplyDeleteReplyer}
+                                setModalReplyDeleteSetToggleState={setModalReplyDeleteSetToggleState}
+                                setModalReplyDeleteToggleState={setModalReplyDeleteToggleState}
+                                setModalReplyDeleteId={setModalReplyDeleteId}
+                                setReplyDeleteMode={setReplyDeleteMode}
+                                ReplyDeleteMode={ReplyDeleteMode}
                             />
                         );
                     })
@@ -985,13 +1014,13 @@ const FreeArticle = () => {
 
 export default FreeArticle;
 
-const FloderText = styled.div
-`
+const FloderText = styled.span
+    `
     font-weight: bold;
 `
 
 const ShareText = styled.span
-`
+    `
     margin: 2px 0px 0px 9px;
     font-weight: bold;
 `
@@ -1193,14 +1222,10 @@ const Editer = styled(ReactQuill)
         z-index: 1;
     }
 
-    .ql-snow .ql-tooltip {
-        background-color: #fff;
-        border: 1px solid #ccc;
-        box-shadow: 0px 0px 5px #ddd;
-        color: #444;
-        padding: 5px 12px;
-        white-space: nowrap;
-        margin: 190px 0px 0px 150px;
+    .ql-tooltip.ql-editing.ql-flip
+    {
+        left: 0% !important;
+        top: 86% !important;
     }
 
 `
@@ -1271,14 +1296,10 @@ const Editer2 = styled(ReactQuill)
         z-index: 1;
     }
 
-    .ql-snow .ql-tooltip {
-        background-color: #fff;
-        border: 1px solid #ccc;
-        box-shadow: 0px 0px 5px #ddd;
-        color: #444;
-        padding: 5px 12px;
-        white-space: nowrap;
-        margin: 130px 0px 0px 150px;
+    .ql-tooltip.ql-editing.ql-flip
+    {
+        left: 0% !important;
+        top: 80% !important;
     }
 `
 

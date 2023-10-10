@@ -2,8 +2,8 @@ import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState } from "recoil";
-import { toggle } from "./Toggle";
-import { toggle2 } from "./Toggle";
+import { toggle } from "../Toggle";
+import { toggle2 } from "../Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -21,18 +21,34 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
-import Siren from "../../img/Siren/Siren.png";
+import Siren from "../../../img/Siren/Siren.png";
 import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { clearLoginState, accessToken, point } from "../Redux/User";
+import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReCommentReportModal from "./ReCommentReportModal";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSelectedReCommentIndex, isEditing, addReComment, editReComment, deleteReComment }) => {
+const SingleReComment = ({
+    ReComment,
+    reCommentCount,
+    setReCommentCount,
+    setSelectedReCommentIndex,
+    isEditing,
+    addReComment,
+    editReComment,
+    deleteReComment,
+    setReDeleteMode,
+    RedeleteMode,
+    setModalreCommenter,
+    setModalreCommentId,
+    setModalreRegdate,
+    setModalToggleState2,
+    setModalToggleState
+}) => {
     const [id, setId] = useState(ReComment.id);
     const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_replyer);
     const [originalRegdate, setOriginalRegdate] = useState(ReComment.original_regdate);
@@ -46,8 +62,10 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
     const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("");
     const [timecount, setTimecount] = useState("1시간");
-    const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(true);
+    const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(false);
     const [updateReCommentText, setUpdateReCommentText] = useState(ReComment.content);
+    const [deleteMode, setDeleteMode] = useState(false);
+    const SettingRef = useRef(null);
 
     const navigate = useNavigate();
 
@@ -284,6 +302,11 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                });  */
 
         setId(ReComment.id);
+        setModalreCommentId(ReComment.id)
+        setModalreRegdate(regdate);
+        setModalToggleState2(toggleState2);
+        setModalToggleState(toggleState);
+        setModalreCommenter(ReComment.reCommenter);
         setOriginalReplyer(ReComment.original_replyer);
         setOriginalRegdate(ReComment.original_regdate);
         setReCommenter(ReComment.reCommenter);
@@ -298,7 +321,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
         getLikers(ReComment.reCommenter, ReComment.regdate);
         getReComments(ReComment.original_replyer, ReComment.original_regdate);
 
-        setReCommentStatusDivHide(true);
+        setReCommentStatusDivHide(false);
 
 
     }, [addReComment, editReComment, deleteReComment]);
@@ -432,31 +455,6 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
 
     };
 
-
-
-
-    const deleteReCommentInServer = async () => {
-        const check = window.confirm("정말 삭제하시겠습니까?");
-        if (check == true) {
-            await axios.delete(`${ip}/Board/article/reply/reComment/${reCommenter}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
-
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                })
-                .then((res) => {
-                    /* regenerateAccessTokenOrLogout(res, deleteReComment, e); */
-                    return res.data;
-                })
-                .then((data) => {
-                    setToggleState2(!toggleState2);
-                    setToggleState(!toggleState);
-                    deleteReComment(id);
-                    return;
-                })
-        }
-        else return;
-    }
-
     const regenerateAccessTokenOrLogout = (res, f, e) => {
         if (res.status == 403) {
             axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`, {
@@ -540,6 +538,20 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
 
+    useEffect(() => {
+        function handleOuside(e) {
+            if (SettingRef.current && !SettingRef.current.contains(e.target)) {
+                setReCommentStatusDivHide(false)
+            }
+        };
+
+        if (!reCommentStatusDivHide) {
+            document.addEventListener("click", handleOuside);
+        }
+        return () => {
+            document.removeEventListener("click", handleOuside);
+        };
+    }, [SettingRef]);
 
     return (
         <UserReCommentBox id={id}>
@@ -581,13 +593,14 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                             신고
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
-                        
+
                         <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
                 </ReCommentUserProfileBox>
                 <ReCommentInformationBox>
                     <ReCommentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
                 </ReCommentInformationBox>
+
                 <ReCommentreplyBox>
                     <ReCommentreplyAllBox>
                         <ReCommentreplyBtn
@@ -602,37 +615,39 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                             {onReplyBtn == false ? "댓글 쓰기" : "댓글 취소"}
                         </ReCommentreplyBtn>
                     </ReCommentreplyAllBox>
-                    <div>
-                        <ReCommentreplyLikeAllBox>
-                            <ReCommentreplyLikeBtn
-                                LoginMaintain={loginMaintain}
-                                UserInfo={userInfo} User={userInfo == null ?
-                                    null : userInfo.loginState}
-                                UserCheck={user.login_state}
-                                UserNicknameCheck={user.nickname}
-                                UserNickname={userInfo == null ?
-                                    null : userInfo.nickName}
-                                onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
-                                {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
-                            </ReCommentreplyLikeBtn>
-                            <OptionBox
-                                LoginMaintain={loginMaintain}
-                                User={user.login_state}
-                                UserInfo={userInfo}
-                                UserInfoState={userInfo == null ?
-                                    null : userInfo.loginState}
-                                UserInfoNickname={userInfo == null ?
-                                    (user.login_state === "allok" ?
-                                        user.nickname : null) : userInfo.nickName}
-                                UserInfoRole={userInfo == null ?
-                                    (user.login_state === "allok" ?
-                                        user.role : null) : userInfo.role}
-                                ReCommenter={reCommenter}
-                                onClick={() => { setReCommentStatusDivHide(!reCommentStatusDivHide) }}><SlOptions />
-                            </OptionBox>
-                        </ReCommentreplyLikeAllBox>
-                        <SettingReplyStatusDiv ReCommentStatusDivHide={reCommentStatusDivHide}>
-                            <SettingReplyStatusBox>
+
+                    <ReCommentreplyLikeAllBox>
+                        <ReCommentreplyLikeBtn
+                            LoginMaintain={loginMaintain}
+                            UserInfo={userInfo} User={userInfo == null ?
+                                null : userInfo.loginState}
+                            UserCheck={user.login_state}
+                            UserNicknameCheck={user.nickname}
+                            UserNickname={userInfo == null ?
+                                null : userInfo.nickName}
+                            onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
+                            {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
+                        </ReCommentreplyLikeBtn>
+
+                        <OptionBox
+                            LoginMaintain={loginMaintain}
+                            User={user.login_state}
+                            UserInfo={userInfo}
+                            UserInfoState={userInfo == null ?
+                                null : userInfo.loginState}
+                            UserInfoNickname={userInfo == null ?
+                                (user.login_state === "allok" ?
+                                    user.nickname : null) : userInfo.nickName}
+                            UserInfoRole={userInfo == null ?
+                                (user.login_state === "allok" ?
+                                    user.role : null) : userInfo.role}
+                            ReCommenter={reCommenter}
+                            onClick={() => { setReCommentStatusDivHide(!reCommentStatusDivHide) }}
+                            ref={SettingRef}
+                        >
+                            <SlOptions />
+
+                            <SettingReplyStatusDiv ReCommentStatusDivHide={reCommentStatusDivHide}>
                                 <UpdateReply
                                     LoginMaintain={loginMaintain}
                                     User={user.login_state}
@@ -647,7 +662,7 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                                             user.role : null) : userInfo.role}
                                     ReCommenter={reCommenter}
                                     onClick={() => {
-                                        setReCommentStatusDivHide(true);
+                                        setReCommentStatusDivHide(false);
                                         setSelectedReCommentIndex(id);
                                     }}>
                                     <span>
@@ -655,17 +670,21 @@ const SingleReComment = ({ ReComment, reCommentCount, setReCommentCount, setSele
                                         수정하기
                                     </span>
                                 </UpdateReply>
+
                                 <DeleteReply
-                                    onClick={deleteReCommentInServer}
+                                    onClick={() => setReDeleteMode(!RedeleteMode)}
                                 >
                                     <span>
                                         <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
                                         삭제하기
                                     </span>
                                 </DeleteReply>
-                            </SettingReplyStatusBox>
-                        </SettingReplyStatusDiv>
-                    </div>
+
+                            </SettingReplyStatusDiv>
+
+                        </OptionBox>
+
+                    </ReCommentreplyLikeAllBox>
                 </ReCommentreplyBox>
 
                 {onReplyBtn && (<ReCommentForm
@@ -845,32 +864,29 @@ const ReCommentreplyBox = styled.div
 
 const SettingReplyStatusDiv = styled.div
     `
-    display: ${props => props.ReCommentStatusDivHide === true ? "none" : "flex"};
-    justify-content: end;
+    display: ${props => props.ReCommentStatusDivHide? "flex" : "none"};
+    flex-direction: column;
     position: absolute;
+    border-radius: 6px;
+    padding: 10px;
+    border: solid 1px ${props => props.theme.textColor};
     z-index: 2;
     background: ${props => props.theme.backgroundColor};
-`
-
-const SettingReplyStatusBox = styled.div
-    `
-    border-radius: 6px;
-    border: solid 1px ${props => props.theme.textColor};
+    margin: 5px 0px 0px -97px;
 `
 
 const UpdateReply = styled.div
     `
-    margin: 9px 20px 12px 18px;
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.ReCommenter ? "flex" : "none") : "none")) :
         (props.User === "allok" ? (props.UserInfoNickname == props.ReCommenter ? "flex" : "none") : "none")};
     cursor: pointer;
     align-items: center;
     font-size: 18px;
+    margin: 0px 0px 10px 0px;
 `
 
 const DeleteReply = styled.div
     `
-    margin: 9px 20px 10px 18px;
     disply: flex;
     cursor: pointer;
     align-items: center;
@@ -970,7 +986,7 @@ const Editer2 = styled(ReactQuill)
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
-        min-height: 120px;
+        min-height: 100px;
         font-size: 20px;
     }
 
@@ -1013,21 +1029,10 @@ const Editer2 = styled(ReactQuill)
         order: 2;
     }
 
-    .ql-snow .ql-picker.ql-expanded .ql-picker-options {
-        display: block;
-        margin-top: -135px;
-        top: 100%;
-        z-index: 1;
-    }
-
-    .ql-snow .ql-tooltip {
-        background-color: #fff;
-        border: 1px solid #ccc;
-        box-shadow: 0px 0px 5px #ddd;
-        color: #444;
-        padding: 5px 12px;
-        white-space: nowrap;
-        margin: 115px 0px 0px 86px;
+    .ql-tooltip.ql-editing.ql-flip
+    {
+        left: 0% !important;
+        top: 61% !important;
     }
 
 `

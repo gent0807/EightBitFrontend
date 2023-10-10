@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState, useRef, useEffect } from "react";
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { firstReset } from "../Darkmode/Darkmode";
+import { firstReset } from "../../Darkmode/Darkmode";
 
 function ReplyPagination({ total, limit, page, setPage }) {
   const numPages = total > 0 && limit > 0 ? Math.ceil(total / limit) : 1;
@@ -82,7 +82,7 @@ const Button = styled.button`
   border-radius: 8px;
   padding: 8px;
   margin: 0;
-  background: ${props => props.off ? "grey" : props.theme.textColor};
+  background: ${props => props.off ? "grey" : props.theme.PaginationOff};
   color: white;
   font-size: 1rem;
   cursor: ${props => props.off ? "revert" : "pointer"};
