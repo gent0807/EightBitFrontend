@@ -466,6 +466,7 @@ const FreeArticle = () => {
                 .then((data) => {
                     setToggleState(!toggleState);
                     addComment(data, Comments);
+                    setReplyChangeValue("");
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -496,6 +497,8 @@ const FreeArticle = () => {
             return;
         }
     }
+
+    console.log(replyChangeValue, replyChangeValue.length)
 
     const registerReply2 = async (e) => {
         e.preventDefault();
