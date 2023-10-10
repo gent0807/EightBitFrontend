@@ -34,7 +34,7 @@ const UpdateBoard = () => {
     const [EditerValue, setEditerValue] = useState(content);
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
-    
+
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let userInfo = localStorage.getItem("userInfo");
@@ -240,35 +240,29 @@ const UpdateBoard = () => {
 
 
 
-    
+
     const OncheckSubmit = (e) => {
-        /*  const registFile = (writer, regdate) => {
-             const fd = new FormData();
- 
-             Object.values(files).forEach((file) => fd.append("file", file));
- 
-             axios({
-                 method: "post",
-                 url: `${ip}/Board/article/file/images`,
-                 data: fd,
-                 headers: {
-                     Authorization: {Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}`: `Bearer ${user.access_token}`},
-                     'Content-Type': 'multipart/form-data'
-                 }
-             })
-             .then((res) => {
-                 return res.data
-             }
-             )
-             .then((data) =>{
-                 console.log(data);
-                 console.log(userInfo.accessToken);
-                 console.log(user.access_token);
-                 navigate('/FreeArticle/'+writer+'/'+regdate);
-             }
-                 
-             )
-         } */
+        const registFile = (writer, regdate) => {
+            const fd = new FormData();
+
+            fd.append("writer", writer);
+            fd.append("regdate", regdate);
+            Object.values(files).forEach((file) => fd.append("file", file));
+
+            axios.post(`${ip}/Board/article/shareFiles`, fd,
+                {
+                    headers:
+                    {
+                        Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                        "Content-Type": `multipart/form-data;   `
+                    }
+                })
+                .then((res) => {
+                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    return;
+                })
+
+        }
 
         e.preventDefault();
 
@@ -290,7 +284,7 @@ const UpdateBoard = () => {
         axios.patch(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
             title: WriterChangeValue,
             content: EditerValue,
-            },
+        },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
             })
@@ -302,108 +296,92 @@ const UpdateBoard = () => {
                 }
                 else if (files.length > 0) {
 
-                    const fd = new FormData();
-
-                    Object.values(files).forEach((file) => fd.append("file", file));
-
-                    axios.patch(`${ip}/Board/article/shareFiles?writer=${writer}&regdate=${regdate}`, fd, 
-                    {
-                        headers: 
-                        {
-                            Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                            "Content-Type": `multipart/form-data;   `
-                        }
-                    })
-                    .then((res) => {
-                        navigate('/FreeArticle/' + writer + '/' + regdate);
-                        return;
-                    })
-
+                    registFile(writer, regdate);
 
                 }
             })
-           
+
 
     }
 
 
-    const regenerateAccessTokenOrLogout = (res, f , e) => {
-        if(res.status==403){
-            axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`,{
+    const regenerateAccessTokenOrLogout = (res, f, e) => {
+        if (res.status == 403) {
+            axios.patch(`${ip}/Users/token/${loginMaintain == "true" ? userInfo.nickName : user.nickname}`, {
 
             },
-            {
-                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-            })
-            .then((res) =>{
-                return res.data
-            }
-            )
-            .then((data)=>{
-                if(data=="invalid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then((res) => {
+                    return res.data
                 }
-                else if(data=="accesstoken valid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="accesstoken not matched user"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken invalid"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken expired"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("로그인이 만료되었습니다.");
-                    navigate('/Login');
-                }
-                else if(data=="refreshtoken not matched user"){
-                    localStorage.removeItem("userInfo");
-                    localStorage.removeItem("loginMaintain");
-                    dispatch(clearLoginState());
-                    deleteRefreshToken("refreshToken");
-                    window.alert("인증되지 않은 접근입니다.");
-                    navigate('/Login');
-                }
-                else{
-                    const object={
-                        accessToken: data,
-                    };
-                    if(loginMaintain=="true"){
-                        userInfo.accessToken=data;
+                )
+                .then((data) => {
+                    if (data == "invalid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
                     }
-                    dispatch(accessToken(object));
-                    f(e);
-                }
-            })
+                    else if (data == "accesstoken valid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "accesstoken not matched user") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken invalid") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken expired") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("로그인이 만료되었습니다.");
+                        navigate('/Login');
+                    }
+                    else if (data == "refreshtoken not matched user") {
+                        localStorage.removeItem("userInfo");
+                        localStorage.removeItem("loginMaintain");
+                        dispatch(clearLoginState());
+                        deleteRefreshToken("refreshToken");
+                        window.alert("인증되지 않은 접근입니다.");
+                        navigate('/Login');
+                    }
+                    else {
+                        const object = {
+                            accessToken: data,
+                        };
+                        if (loginMaintain == "true") {
+                            userInfo.accessToken = data;
+                        }
+                        dispatch(accessToken(object));
+                        f(e);
+                    }
+                })
             return;
         }
-        else if(res.status==200){
+        else if (res.status == 200) {
             return res.data
-        } 
+        }
     }
 
     const deleteRefreshToken = (name) => {
