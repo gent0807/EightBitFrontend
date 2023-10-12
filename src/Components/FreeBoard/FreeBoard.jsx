@@ -11,6 +11,7 @@ import NotPage from "./NotPage";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import dayjs from "dayjs";
+import WriterProfile from "./WriterProfile";    
 
 const FreeBoard = () => {
     const [posts, setPosts] = useState([]);
@@ -151,6 +152,7 @@ const FreeBoard = () => {
                     {posts.length === 0 && <NotPage />}
                     {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt, reply_count, likecount}) => (
                         <BoardContentBox key={id}>
+                            <WriterProfile writer={writer} />
                             <BoardContentNumber>{id}</BoardContentNumber>
                             <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>
                             <BoardContentWriter>{writer}</BoardContentWriter>
