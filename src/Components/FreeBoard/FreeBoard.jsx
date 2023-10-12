@@ -28,6 +28,7 @@ const FreeBoard = () => {
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
+    const PostsSize = posts.slice(offset, offset + limit);
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     console.log("loginMaintain", loginMaintain);
@@ -99,9 +100,11 @@ const FreeBoard = () => {
         setFirstReset(false);
     }
 
-    const ScrollBottom = () => {
-        window.scrollTo({ top: 1, behavior: "smooth" });
-    }
+    useEffect(() => {
+        if (posts.length > 0 && PostsSize.length === 0) {
+            setPage(page - 1);
+        }
+    }, [PostsSize.length, posts.length]);
 
     return (
         <FreeBoardBox>
@@ -157,15 +160,19 @@ const FreeBoard = () => {
                     ))}
                 </BoardContentAllBox>
             </BoardBox>
-            <PageNationBox>
-                <Pagination
-                    total={posts.length}
-                    limit={limit}
-                    page={page}
-                    setPage={setPage}
-                    offset={offset}
-                />
-            </PageNationBox>
+
+            {posts.length > 0 &&
+                <PageNationBox>
+                    <Pagination
+                        total={posts.length}
+                        limit={limit}
+                        page={page}
+                        setPage={setPage}
+                        offset={offset}
+                    />
+                </PageNationBox>
+            }
+
         </FreeBoardBox>
     );
 }

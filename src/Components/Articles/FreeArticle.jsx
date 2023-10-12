@@ -56,11 +56,11 @@ const FreeArticle = () => {
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [reCommentCount, setReCommentCount] = useState(0);
     const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
-    const [ModalReplyDeleteRegdate, setModalReplyDeleteRegdate ] = useState("");
-    const [ModalReplyDeleteReplyer, setModalReplyDeleteReplyer ] = useState("");
-    const [ModalReplyDeleteSetToggleState, setModalReplyDeleteSetToggleState ] = useState("");
-    const [ModalReplyDeleteToggleState, setModalReplyDeleteToggleState ] = useState("");
-    const [ModalReplyDeleteId, setModalReplyDeleteId ] = useState("");
+    const [ModalReplyDeleteRegdate, setModalReplyDeleteRegdate] = useState("");
+    const [ModalReplyDeleteReplyer, setModalReplyDeleteReplyer] = useState("");
+    const [ModalReplyDeleteSetToggleState, setModalReplyDeleteSetToggleState] = useState("");
+    const [ModalReplyDeleteToggleState, setModalReplyDeleteToggleState] = useState("");
+    const [ModalReplyDeleteId, setModalReplyDeleteId] = useState("");
 
     const FolderRef = useRef(null);
     const ShareRef = useRef(null);
@@ -80,6 +80,8 @@ const FreeArticle = () => {
 
     const [Comments, setComments] = useState([]);
 
+    console.log(Comments.length);
+
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
@@ -90,7 +92,10 @@ const FreeArticle = () => {
     const [limit, setLimit] = useState(5);
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
+    const CommentSize = Comments.slice(offset, offset + limit);
 
+
+    console.log(CommentSize);
 
     let likeMode = useRef(false);
     const quillRef = useRef(null);
@@ -217,7 +222,6 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
-                    console.log(data);
                     setWriterRole(data);
                 })
 
@@ -434,9 +438,6 @@ const FreeArticle = () => {
             }
             return item;
         });
-        console.log("-----------------------------");
-        console.log(newComments);
-        console.log("-----------------------------");
 
         setComments(newComments);
     };
@@ -497,8 +498,6 @@ const FreeArticle = () => {
             return;
         }
     }
-
-    console.log(replyChangeValue, replyChangeValue.length)
 
     const registerReply2 = async (e) => {
         e.preventDefault();
@@ -685,7 +684,11 @@ const FreeArticle = () => {
         };
     }, [ShareRef]);
 
-    console.log( "삭제되는 reply, regdate",ModalReplyDeleteReplyer,ModalReplyDeleteRegdate);
+    useEffect(() => {
+        if (Comments.length > 0 && CommentSize.length === 0) {
+            setPage(page - 1);
+        }
+    }, [CommentSize.length, Comments.length]);
 
     return (
         <FreeArticleBox>
@@ -947,6 +950,7 @@ const FreeArticle = () => {
 
             <CommentBox>
                 {Comments.length === 0 && <NotPage />}
+                {() => CommentSize === 0 ? setPage(page - 1) : setPage(page)}
                 {Comments.length > 0 &&
                     Comments.slice(offset, offset + limit).map(Comment => {
                         const commentId = Comment.id;
@@ -969,7 +973,7 @@ const FreeArticle = () => {
                                 setModalReplyDeleteToggleState={setModalReplyDeleteToggleState}
 
                                 setModalReplyDeleteId={setModalReplyDeleteId}
-                                
+
                                 setReplyDeleteMode={setReplyDeleteMode}
                                 ReplyDeleteMode={ReplyDeleteMode}
                             />
@@ -977,13 +981,15 @@ const FreeArticle = () => {
                     })
                 }
 
-                <ReplyPagination
-                    total={Comments.length}
-                    limit={limit}
-                    page={page}
-                    setPage={setPage}
-                    offset={offset}
-                />
+                {Comments.length > 0 &&
+                    <ReplyPagination
+                        total={Comments.length}
+                        limit={limit}
+                        page={page}
+                        setPage={setPage}
+                        offset={offset}
+                    />
+                }
 
                 <CommentForm
                     LoginMaintain={loginMaintain}
