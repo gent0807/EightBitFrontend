@@ -97,8 +97,6 @@ const SingleReply = ({
 
     const [ReComments, setReComments] = useState([]);
 
-    console.log(ModalReplyUpdateCommentOnOff);
-
     useEffect(() => {
         const getReplyerProfileImagePath = (replyer) => {
             axios.get(`${ip}/Users/profileImgPath?nickname=${replyer}`, {
@@ -440,7 +438,6 @@ const SingleReply = ({
                     return res.data;
                 })
                 .then((data) => {
-                    console.log("updateReplyText: " + updateReplyText);
                     setToggleState(!toggleState);
                     editComment(id, updateReplyText);
                     setSelectedCommentIndex(0);
@@ -451,8 +448,6 @@ const SingleReply = ({
             setModalReplyUpdateCommentOnOff(true);
         }
     }
-
-    console.log(updateReplyText.length, updateReplyText);
 
     const registerReComment = async (e) => {
         e.preventDefault();
@@ -741,7 +736,10 @@ const SingleReply = ({
                                         setModalReplyDeleteId(id);
                                     }}>
                                     <span>
-                                        <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
+                                        <RiDeleteBin5Line
+                                            size={20}
+                                            style={{ margin: "0px 10px -5px 0px" }} 
+                                        />
                                         삭제하기
                                     </span>
                                 </DeleteReply>
