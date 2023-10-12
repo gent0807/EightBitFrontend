@@ -4,7 +4,7 @@ import axios from "axios";
 
 const WriterProfile = ({ writer }) => {
     const [profileImagePath, setProfileImagePath] = useState("");
-    const ip=localStorage.getItem("ip");
+    const ip = localStorage.getItem("ip");
 
     useEffect(() => {
         const getUserProfileImagePath = (writer) => {
@@ -27,11 +27,11 @@ const WriterProfile = ({ writer }) => {
     });
 
     return (
-        <div className="writer-profile">
-            <div className="writer-profile__img">
-                <img style={{width:"45px", height:"45px", borderRadius:"32px", cursor:"pointer"}} src={localStorage.getItem("profileImageDir") + profileImagePath}/>
-            </div>
-        </div>
+
+
+        <img style={{ width: "45px", height: "45px", borderRadius: "32px", cursor: "pointer" }} src={localStorage.getItem("profileImageDir") + profileImagePath} />
+
+
     );
 }
 
