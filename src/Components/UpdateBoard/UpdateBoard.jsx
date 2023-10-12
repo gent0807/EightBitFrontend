@@ -18,6 +18,7 @@ import TXT from "../../img/FileList/txt.png";
 import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
 import { accessToken, clearLoginState, point } from '../Redux/User';
+import UpdateBoardModal from "./UpdateBoardModal";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -34,6 +35,7 @@ const UpdateBoard = () => {
     const [EditerValue, setEditerValue] = useState(content);
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
+    const [UpdateBoardModalOnOff, setUpdateBoardModalOnOff] = useState(false);
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -268,15 +270,15 @@ const UpdateBoard = () => {
 
         console.log(files.map(file => file.object));
         if (WriterChangeValue.length < 5 && EditerValue.length > 20) {
-            window.alert("제목을 5자 이상 입력해주세요!");
+            setUpdateBoardModalOnOff(true);
             return;
         }
         else if (WriterChangeValue.length > 5 && EditerValue.length < 20) {
-            window.alert("내용을 20자 이상 입력해주세요!");
+            setUpdateBoardModalOnOff(true);
             return;
         }
         else if (WriterChangeValue.length < 5 && EditerValue.length < 20) {
-            window.alert("제목 5자 이상, 내용 20자 이상 입력해주세요!");
+            setUpdateBoardModalOnOff(true);
             return;
         }
 
@@ -393,6 +395,14 @@ const UpdateBoard = () => {
 
     return (
         <WriterInputBox>
+
+            {UpdateBoardModalOnOff ? <UpdateBoardModal
+                setUpdateBoardModalOnOff={setUpdateBoardModalOnOff}
+                UpdateBoardModalOnOff={UpdateBoardModalOnOff}
+                EditerValue={EditerValue}
+                WriterChangeValue={WriterChangeValue}
+            /> : <></>}
+
             <WriterInformationTextAllBox>
                 <WriterInformation><WriterInformationText>여러분의 생각을 펼쳐 보세요!</WriterInformationText></WriterInformation>
             </WriterInformationTextAllBox>
@@ -466,12 +476,12 @@ const Editer = styled(ReactQuill)
     
     .ql-editor.ql-blank::before
     {
-        color:${props=>props.theme.textColor};
+        color:${props => props.theme.textColor};
     }
 
     .ql-editor p
     {
-        color:${props=>props.theme.textColor};
+        color:${props => props.theme.textColor};
     }
 
     .ql-editor
@@ -713,7 +723,7 @@ const WriterInput = styled.input
     color : ${props => props.theme.textColor}; 
     background: ${props => props.theme.backgroundColor};   
     &::placeholder{
-        color:${props=>props.theme.textColor};
+        color:${props => props.theme.textColor};
     }
 `
 

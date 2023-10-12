@@ -27,7 +27,7 @@ import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReCommentReportModal from "./ReCommentReportModal";
-
+import ReplyUpdateReCommentModal from "./ReplyUpdateReCommentModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -65,6 +65,7 @@ const SingleReComment = ({
     const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(false);
     const [updateReCommentText, setUpdateReCommentText] = useState(ReComment.content);
     const [deleteMode, setDeleteMode] = useState(false);
+    const [ModalReplyUpdateReCommentOnOff, setModalReplyUpdateReCommentOnOff] = useState(false);
     const SettingRef = useRef(null);
 
     const navigate = useNavigate();
@@ -424,7 +425,7 @@ const SingleReComment = ({
 
     const updateReComment = async (e) => {
         e.preventDefault();
-        if (updateReCommentText.length > 0) {
+        if (updateReCommentText !== '<p><br></p>') {
             await axios.patch(`${ip}/Board/article/reply/reComment?reCommenter=${reCommenter}&regdate=${regdate}`,
                 {
                     content: updateReCommentText,
@@ -445,12 +446,14 @@ const SingleReComment = ({
                 });
         }
 
-        else if (updateReCommentText.length == 0) {
-            alert("댓글을 입력해주세요.");
+        else if (updateReCommentText === '<p><br></p>' && updateReCommentText.length === 11) {
+            setModalReplyUpdateReCommentOnOff(!ModalReplyUpdateReCommentOnOff);
             return;
         }
 
     };
+
+    console.log(ModalReplyUpdateReCommentOnOff, updateReCommentText);
 
     const regenerateAccessTokenOrLogout = (res, f, e) => {
         if (res.status == 403) {
@@ -669,7 +672,7 @@ const SingleReComment = ({
                                 </UpdateReply>
 
                                 <DeleteReply
-                                    onClick={() => {setReDeleteMode(!RedeleteMode); setModalreCommentId(id); setModalreCommenter(reCommenter); setModalreRegdate(regdate)}}
+                                    onClick={() => { setReDeleteMode(!RedeleteMode); setModalreCommentId(id); setModalreCommenter(reCommenter); setModalreRegdate(regdate) }}
                                 >
                                     <span>
                                         <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
@@ -721,6 +724,12 @@ const SingleReComment = ({
                 )}
             </div>
             <div style={{ display: isEditing === false ? "none" : "block", margin: "40px 0px 0px 0px" }}>
+
+                {ModalReplyUpdateReCommentOnOff ? <ReplyUpdateReCommentModal
+                    setModalReplyUpdateReCommentOnOff={setModalReplyUpdateReCommentOnOff}
+                    ModalReplyUpdateReCommentOnOff={ModalReplyUpdateReCommentOnOff}
+                /> : <></>}
+
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -861,7 +870,7 @@ const ReCommentreplyBox = styled.div
 
 const SettingReplyStatusDiv = styled.div
     `
-    display: ${props => props.ReCommentStatusDivHide? "flex" : "none"};
+    display: ${props => props.ReCommentStatusDivHide ? "flex" : "none"};
     flex-direction: column;
     position: absolute;
     border-radius: 6px;
