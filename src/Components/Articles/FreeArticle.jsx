@@ -29,8 +29,9 @@ import { clearLoginState, accessToken, point } from "../Redux/User";
 import FreeReportModal from "./FreeReportModal";
 import ReplyPagination from "./Reply/ReplyPagination";
 import DeleteModal from "./DeleteModal";
-import ReplyDeleteModal from "../Articles/Reply/ReplyDeleteModal"
+import ReplyDeleteModal from "../Articles/Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
+import FreeArticleReplyModal from "./FreeArticleReplyModal";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -51,8 +52,8 @@ const FreeArticle = () => {
     const [ReplyDeleteMode, setReplyDeleteMode] = useState(false);
     const [shareMode, setShareMode] = useState(false);
     const [fileDownloadMode, setFileDownloadMode] = useState(false);
-    const [replyChangeValue, setReplyChangeValue] = useState("");
-    const [replyChangeValue2, setReplyChangeValue2] = useState("");
+    const [replyChangeValue, setReplyChangeValue] = useState('<p><br></p>');
+    const [replyChangeValue2, setReplyChangeValue2] = useState('<p><br></p>');
     const [onReplyBtn, setOnReplyBtn] = useState(false);
     const [reCommentCount, setReCommentCount] = useState(0);
     const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
@@ -61,11 +62,11 @@ const FreeArticle = () => {
     const [ModalReplyDeleteSetToggleState, setModalReplyDeleteSetToggleState] = useState("");
     const [ModalReplyDeleteToggleState, setModalReplyDeleteToggleState] = useState("");
     const [ModalReplyDeleteId, setModalReplyDeleteId] = useState("");
+    const [ModalFreeArticleReplyCommentOnOff, setModalFreeArticleReplyCommentOnOff] = useState(false);
 
     const FolderRef = useRef(null);
     const ShareRef = useRef(null);
 
-    const inputRef = useRef();
     const ip = localStorage.getItem("ip");
 
     const navigate = useNavigate();
@@ -80,8 +81,6 @@ const FreeArticle = () => {
 
     const [Comments, setComments] = useState([]);
 
-    console.log(Comments.length);
-
     const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
@@ -93,9 +92,6 @@ const FreeArticle = () => {
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
     const CommentSize = Comments.slice(offset, offset + limit);
-
-
-    console.log(CommentSize);
 
     let likeMode = useRef(false);
     const quillRef = useRef(null);
@@ -380,7 +376,7 @@ const FreeArticle = () => {
                 updatedate: data.updatedate,
             };
             setComments([...Comments, newComment]);
-            setReplyChangeValue('');
+            setReplyChangeValue("<p><br></p>");
         }
         else if (Comments.length === 0) {
             const addedCmtId = 1;
@@ -394,7 +390,7 @@ const FreeArticle = () => {
                 updatedate: data.updatedate,
             };
             setComments([...Comments, newComment]);
-            setReplyChangeValue('');
+            setReplyChangeValue("<p><br></p>");
         }
 
     };
@@ -413,7 +409,7 @@ const FreeArticle = () => {
                 updatedate: data.updatedate,
             };
             setComments([...Comments, newComment]);
-            setReplyChangeValue2('');
+            setReplyChangeValue2('<p><br></p>');
         }
         else if (Comments.length === 0) {
             const addedCmtId = 1;
@@ -427,7 +423,7 @@ const FreeArticle = () => {
                 updatedate: data.updatedate,
             };
             setComments([...Comments, newComment]);
-            setReplyChangeValue2('');
+            setReplyChangeValue2('<p><br></p>');
         }
     }
 
@@ -450,7 +446,7 @@ const FreeArticle = () => {
 
     const registerReply = async (e) => {
         e.preventDefault();
-        if (replyChangeValue.length > 0) {
+        if (replyChangeValue !== '<p><br></p>') {
             await axios.post(`${ip}/Board/article/reply`, {
                 original_writer: writer,
                 original_regdate: regdate,
@@ -467,7 +463,7 @@ const FreeArticle = () => {
                 .then((data) => {
                     setToggleState(!toggleState);
                     addComment(data, Comments);
-                    setReplyChangeValue("");
+                    setReplyChangeValue("<p><br></p>");
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -492,15 +488,17 @@ const FreeArticle = () => {
 
                 });
         }
-        else if (replyChangeValue.length == 0) {
-            alert("댓글 내용을 입력해주세요.");
+        else if (replyChangeValue === '<p><br></p>' && replyChangeValue.length === 11) {
+            setModalFreeArticleReplyCommentOnOff(!ModalFreeArticleReplyCommentOnOff);
             return;
         }
     }
 
+    console.log(replyChangeValue.length);
+
     const registerReply2 = async (e) => {
         e.preventDefault();
-        if (replyChangeValue2.length > 0) {
+        if (replyChangeValue2 !== '<p><br></p>') {
             await axios.post(`${ip}/Board/article/reply`, {
                 original_writer: writer,
                 original_regdate: regdate,
@@ -542,8 +540,8 @@ const FreeArticle = () => {
 
                 });
         }
-        else if (replyChangeValue2.length == 0) {
-            alert("댓글 내용을 입력해주세요.");
+        else if (replyChangeValue2 === '<p><br></p>' && replyChangeValue2.length === 11) {
+            setModalFreeArticleReplyCommentOnOff(!ModalFreeArticleReplyCommentOnOff);
             return;
         }
     }
@@ -990,6 +988,11 @@ const FreeArticle = () => {
                     />
                 }
 
+                {ModalFreeArticleReplyCommentOnOff ? <FreeArticleReplyModal
+                    setModalFreeArticleReplyCommentOnOff={setModalFreeArticleReplyCommentOnOff}
+                    ModalFreeArticleReplyCommentOnOff={ModalFreeArticleReplyCommentOnOff}
+                /> : <></>}
+
                 <CommentForm
                     LoginMaintain={loginMaintain}
                     UserInfo={userInfo} User={userInfo == null ?
@@ -1006,7 +1009,6 @@ const FreeArticle = () => {
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer
-                                ref={inputRef}
                                 placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
                                 value={replyChangeValue}
                                 onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}

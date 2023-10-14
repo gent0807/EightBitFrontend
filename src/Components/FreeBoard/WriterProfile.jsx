@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
 
 const WriterProfile = ({ writer }) => {
     const [profileImagePath, setProfileImagePath] = useState("");
@@ -27,12 +28,16 @@ const WriterProfile = ({ writer }) => {
     });
 
     return (
-
-
-        <img style={{ width: "45px", height: "45px", borderRadius: "32px", cursor: "pointer" }} src={localStorage.getItem("profileImageDir") + profileImagePath} />
-
-
+        <Profile src={localStorage.getItem("profileImageDir") + profileImagePath} />
     );
 }
 
 export default WriterProfile;
+
+const Profile = styled.img
+`
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    cursor: pointer;
+`

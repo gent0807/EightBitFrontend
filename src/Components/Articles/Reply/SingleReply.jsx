@@ -62,7 +62,7 @@ const SingleReply = ({
     const [profileImagePath, setProfileImagePath] = useState("");
     const [replyerRole, setReplyerRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
-    const [reCommentChangeValue, setReCommentChangeValue] = useState("");
+    const [reCommentChangeValue, setReCommentChangeValue] = useState("<p><br></p>");
     const [reCommentHide, setReCommentHide] = useState(false);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(false);
     const [updateReplyText, setUpdateReplyText] = useState("");
@@ -385,7 +385,7 @@ const SingleReply = ({
                 updatedate: data.updatedate,
             };
             setReComments([...ReComments, newReComment]);
-            setReCommentChangeValue("");
+            setReCommentChangeValue('<p><br></p>');
         }
         else if (ReComments.length === 0) {
             const addedCmtId = 1;
@@ -399,7 +399,7 @@ const SingleReply = ({
                 updatedate: data.updatedate,
             };
             setReComments([...ReComments, newReComment]);
-            setReCommentChangeValue("");
+            setReCommentChangeValue('<p><br></p>');
         }
     };
 
@@ -446,13 +446,14 @@ const SingleReply = ({
 
         else if (updateReplyText === '<p><br></p>' && updateReplyText.length === 11) {
             setModalReplyUpdateCommentOnOff(true);
+            return;
         }
     }
 
     const registerReComment = async (e) => {
         e.preventDefault();
 
-        if (reCommentChangeValue.length > 0) {
+        if (reCommentChangeValue !== '<p><br></p>') {
             await axios.post(`${ip}/Board/article/reply/reComment`, {
                 original_replyer: replyer,
                 original_regdate: regdate,
@@ -496,13 +497,14 @@ const SingleReply = ({
                 })
 
         }
-        else if (reCommentChangeValue.length == 0) {
-            alert("댓글 내용을 입력해주세요!");
+        else if (reCommentChangeValue === '<p><br></p>' && reCommentChangeValue.length === 11) {
+            setModalReplyUpdateCommentOnOff(true);
             return;
         }
 
     }
 
+    console.log(reCommentChangeValue, reCommentChangeValue.length, ModalReplyUpdateCommentOnOff)
 
     const regenerateAccessTokenOrLogout = (res, f, e) => {
         if (res.status == 403) {
@@ -751,6 +753,11 @@ const SingleReply = ({
 
                 </CommentreplyBox>
 
+                { ModalReplyUpdateCommentOnOff ? <ReplyUpdateCommentModal
+                    setModalReplyUpdateCommentOnOff={setModalReplyUpdateCommentOnOff}
+                    ModalReplyUpdateCommentOnOff={ModalReplyUpdateCommentOnOff}
+                 /> : <></> }
+
                 {onReplyBtn && (<ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -765,6 +772,7 @@ const SingleReply = ({
                         null : userInfo.nickName}
 
                     onSubmit={registerReComment}>
+
                     <ReCommentArea>
                         <ReCommentProfile>
                             <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />

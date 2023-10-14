@@ -45,7 +45,8 @@ const darkTheme =
   BoardInformaiton: "Orange",
   PaginationSelect: "Orange",
   PaginationOff: "#007aff",
-  WriterBorder: "#55aaff"
+  WriterBorder: "#55aaff",
+  BoardTextView: "white"
 };
 
 const lightTheme =
@@ -64,7 +65,8 @@ const lightTheme =
   BoardInformaiton: "black",
   PaginationSelect: "#6a9dda",
   PaginationOff: "black",
-  WriterBorder: "white"
+  WriterBorder: "white",
+  BoardTextView: "#6B7280"
 };
 
 const GlobalStyle = createGlobalStyle

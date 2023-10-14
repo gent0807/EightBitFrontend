@@ -29,7 +29,7 @@ function PaginationNav({ total, limit, page, setPage }) {
   }
 
   useEffect(() => {
-    if(PaginationArray === 1)
+    if(PaginationArray > 0)
     {
         setViewArrow(true);
     }else{

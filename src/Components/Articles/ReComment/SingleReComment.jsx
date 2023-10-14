@@ -60,7 +60,7 @@ const SingleReComment = ({
     const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommenterRole, setReCommenterRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
-    const [reCommentChangeValue, setReCommentChangeValue] = useState("");
+    const [reCommentChangeValue, setReCommentChangeValue] = useState('<p><br></p>');
     const [timecount, setTimecount] = useState("1시간");
     const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(false);
     const [updateReCommentText, setUpdateReCommentText] = useState(ReComment.content);
@@ -372,7 +372,7 @@ const SingleReComment = ({
     const registerReComment = async (e) => {
         e.preventDefault();
 
-        if (reCommentChangeValue.length > 0) {
+        if (reCommentChangeValue !== '<p><br></p>') {
             await axios.post(`${ip}/Board/article/reply/reComment`, {
                 original_replyer: originalReplyer,
                 original_regdate: originalRegdate,
@@ -392,7 +392,7 @@ const SingleReComment = ({
                     addReComment(data, ReComments);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
-                    setReCommentChangeValue("");
+                    setReCommentChangeValue('<p><br></p>');
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -415,8 +415,8 @@ const SingleReComment = ({
                 })
 
         }
-        else if (reCommentChangeValue.length == 0) {
-            alert("댓글 내용을 입력해주세요.");
+        else if (reCommentChangeValue === '<p><br></p>' && reCommentChangeValue.length === 11) {
+            setModalReplyUpdateReCommentOnOff(true)
             return;
         }
 
@@ -452,8 +452,6 @@ const SingleReComment = ({
         }
 
     };
-
-    console.log(ModalReplyUpdateReCommentOnOff, updateReCommentText);
 
     const regenerateAccessTokenOrLogout = (res, f, e) => {
         if (res.status == 403) {
@@ -686,6 +684,11 @@ const SingleReComment = ({
 
                     </ReCommentreplyLikeAllBox>
                 </ReCommentreplyBox>
+
+                {ModalReplyUpdateReCommentOnOff ? <ReplyUpdateReCommentModal
+                    setModalReplyUpdateReCommentOnOff={setModalReplyUpdateReCommentOnOff}
+                    ModalReplyUpdateReCommentOnOff={ModalReplyUpdateReCommentOnOff}
+                /> : <></>}
 
                 {onReplyBtn && (<ReCommentForm
                     LoginMaintain={loginMaintain}
