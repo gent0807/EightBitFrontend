@@ -472,6 +472,10 @@ const BoardContentBox = styled.div
         padding: 20px 10px 20px 10px;
         color: ${(props) => props.theme.BoardTitle};
         font-weight: bold;
+        &:not(:last-child)
+        {
+            border-bottom: solid 2px black;
+        }
 `
 
 const BoardTitleNumber = styled.div
