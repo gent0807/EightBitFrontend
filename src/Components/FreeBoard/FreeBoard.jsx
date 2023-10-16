@@ -11,6 +11,10 @@ import NotPage from "./NotPage";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import dayjs from "dayjs";
+import WriterProfile from "./WriterProfile";
+import { AiOutlineEye } from "react-icons/ai";
+import { BsHandThumbsUp } from "react-icons/bs";
+import DOMPurify from "dompurify";
 
 const FreeBoard = () => {
     const [posts, setPosts] = useState([]);
@@ -28,27 +32,14 @@ const FreeBoard = () => {
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
+    const PostsSize = posts.slice(offset, offset + limit);
+    const [SearchList, setSearchList] = useState([])
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     console.log("loginMaintain", loginMaintain);
     console.log("userInfo", userInfo);
     console.log("user", user);
 
-    useEffect(() => {
-        axios.get(`${ip}/Board/articles`, {
-
-        },
-            {
-
-            })
-            .then(res => res.data
-            )
-            .then(data => {
-                console.log(data);
-                setPosts(data);
-            })
-
-    }, [])
 
     useEffect(() => {
         function handleOuside(e) {
@@ -85,7 +76,27 @@ const FreeBoard = () => {
         setSearch(currentSearch);
     }
 
-    const setFitterValue = (e) => {
+    const setCurrentValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+    }
+
+    const setPastValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+    }
+
+    const setLikeValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+    }
+
+    const setViewValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+    }
+
+    const setReplyValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
     }
@@ -99,8 +110,50 @@ const FreeBoard = () => {
         setFirstReset(false);
     }
 
-    const ScrollBottom = () => {
-        window.scrollTo({ top: 1, behavior: "smooth" });
+    useEffect(() => {
+        if (posts.length > 0 && PostsSize.length === 0) {
+            setPage(page - 1);
+        }
+    }, [PostsSize.length, posts.length]);
+
+    useEffect(() => {
+        axios.get(`${ip}/Board/articles`, {
+
+        },
+            {
+
+            })
+            .then(res => res.data
+            )
+            .then(data => {
+                console.log(data);
+                setPosts(data);
+                setSearchList(data);
+            })
+    }, [])
+
+    const SearchSubmit = (e) => {
+        e.preventDefault();
+
+        if (Search === "") {
+            axios.get(`${ip}/Board/articles`, {
+
+            },
+                {
+
+                })
+                .then(res => res.data
+                )
+                .then(data => {
+                    console.log(data);
+                    setPosts(data);
+                    setSearchList(posts);
+                })
+        } else {
+            const SearchResult = posts.filter((board) => board.title.toUpperCase().includes(Search.toUpperCase()));
+            setSearchList(SearchResult);
+            setSearch("");
+        }
     }
 
     return (
@@ -112,20 +165,23 @@ const FreeBoard = () => {
             </InformationAllBox>
             <SearchBox>
                 <SearchAllBox>
-                    <FreeBoardSearchInputBox>
-                        <FreeBoardSearchInput placeholder="제목 검색하기" value={Search} onChange={OnSearch} />
-                        <FreeBoardSearchIconBox>
-                            <FreeBoardSearchBtn><HiOutlineSearch /></FreeBoardSearchBtn>
-                        </FreeBoardSearchIconBox>
-                    </FreeBoardSearchInputBox>
+                    <SearchForm onSubmit={(e) => SearchSubmit(e)}>
+                        <FreeBoardSearchInputBox>
+                            <FreeBoardSearchInput placeholder="제목 검색하기" value={Search} onChange={OnSearch} />
+                            <FreeBoardSearchIconBox>
+                                <FreeBoardSearchBtn><HiOutlineSearch /></FreeBoardSearchBtn>
+                            </FreeBoardSearchIconBox>
+                        </FreeBoardSearchInputBox>
+                    </SearchForm>
                 </SearchAllBox>
                 <FitterBox>
                     <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                         <FitterSelectBox show={FitterDropdown}>
-                            <FitterSelectList onClick={setFitterValue}>댓글순</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>조회순</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>추천순</FitterSelectList>
-                            <FitterSelectList onClick={setFitterValue}>과거순</FitterSelectList>
+                            <FitterSelectList onClick={() => setCurrentValue()}>최신순</FitterSelectList>
+                            <FitterSelectList onClick={() => setPastValue()}>과거순</FitterSelectList>
+                            <FitterSelectList onClick={() => setCurrentValue()}>댓글순</FitterSelectList>
+                            <FitterSelectList onClick={() => setReplyValue()}>조회순</FitterSelectList>
+                            <FitterSelectList onClick={() => setLikeValue()}>추천순</FitterSelectList>
                         </FitterSelectBox>
                         <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
                         <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
@@ -145,32 +201,117 @@ const FreeBoard = () => {
             </SearchBox>
             <BoardBox>
                 <BoardContentAllBox>
-                    {posts.length === 0 && <NotPage />}
-                    {posts.length !== 0 && posts.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt, reply_count,}) => (
+                    {SearchList.length === 0 && <NotPage />}
+                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt, reply_count, likecount, content }) => (
                         <BoardContentBox key={id}>
-                            <BoardContentNumber>{id}</BoardContentNumber>
-                            <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>
-                            <BoardContentWriter>{writer}</BoardContentWriter>
-                            <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
-                            <BoardContentCounter>{visitcnt}</BoardContentCounter>
+                            <ReplyCountAllBox>
+                                <ReplyCountBox>
+                                    <ReplyCountText>답변</ReplyCountText>
+                                    {reply_count}
+                                </ReplyCountBox>
+                            </ReplyCountAllBox>
+
+                            <FreeBoardViewAllBox>
+                                <ProfileAllBox>
+                                    <WriterProfile writer={writer} />
+                                    <BoardContentWriter>{writer}</BoardContentWriter>
+                                    <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
+                                </ProfileAllBox>
+
+                                <BoardTitleContentAllBox>
+                                    <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>
+                                    <BoardCotent>
+                                        <Link to={`/FreeArticle/${writer}/${regdate}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}/></Link>
+                                    </BoardCotent>
+                                </BoardTitleContentAllBox>
+                                <ViewlikeAllBox>
+                                    <ViewIcon><AiOutlineEye /></ViewIcon>
+                                    <BoardContentCounter>{visitcnt}</BoardContentCounter>
+                                    <LikeIcon><BsHandThumbsUp /></LikeIcon>
+                                    <BoardlikeContentCounter>{likecount}</BoardlikeContentCounter>
+                                </ViewlikeAllBox>
+
+                            </FreeBoardViewAllBox>
+
                         </BoardContentBox>
                     ))}
                 </BoardContentAllBox>
             </BoardBox>
-            <PageNationBox>
-                <Pagination
-                    total={posts.length}
-                    limit={limit}
-                    page={page}
-                    setPage={setPage}
-                    offset={offset}
-                />
-            </PageNationBox>
+
+            {posts.length > 0 &&
+                <PageNationBox>
+                    <Pagination
+                        total={posts.length}
+                        limit={limit}
+                        page={page}
+                        setPage={setPage}
+                        offset={offset}
+                    />
+                </PageNationBox>
+            }
+
         </FreeBoardBox>
     );
 }
 
 export default FreeBoard;
+
+const BoardTitleContentAllBox = styled.div
+    `
+
+`
+
+const ViewIcon = styled.i
+    `
+    font-size: 22px;
+    display: flex;
+`
+
+const LikeIcon = styled(ViewIcon)
+    `
+    font-size: 18px;
+    margin: 0px 0px 0px 6px;
+`
+
+const ViewlikeAllBox = styled.div
+    `
+    display: flex;
+    justify-content: end;
+    margin: 30px 0px 0px 0px;
+`
+
+const ProfileAllBox = styled.div
+    `
+    display: flex;
+`
+
+const FreeBoardViewAllBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+`
+
+const ReplyCountAllBox = styled.div
+    `
+
+`
+
+const ReplyCountText = styled.span
+    `
+    margin: 0px 0px 7px 0px;
+`
+
+const ReplyCountBox = styled.div
+    `
+    width: 64px;
+    height: 64px;
+    border: solid 2px ${props => props.theme.borderColor};
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 6px;
+`
 
 const WriteBtnText = styled.span
     `
@@ -222,22 +363,69 @@ const SearchAllBox = styled.div
     }
 `
 
+const SearchForm = styled.form
+    `
+
+`
+
 const BoardContentNumber = styled.div
     `
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
+    margin: 0px 10px 0px 10px;
     
 `
+
+const BoardCotent = styled(BoardContentNumber)
+    `
+    font-size: 14px;
+    a{
+        text-decoration: none;
+    }
+`
+
+const BoardCotentText = styled.div
+    `
+    text-align: start;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    cursor: pointer;
+    p, span{
+        color: ${props => props.theme.BoardTextView} !important;
+        background-color: ${props => props.theme.backgroundColor} !important;
+        transition: background-color 0.5s;
+    }
+
+    &:hover{
+        p,span{
+            color: #0090F9 !important;
+        }
+    }
+
+`
+
 const BoardContentTitle = styled(BoardContentNumber)
     `
+    margin: 15px 0px 6px 0px;
+
     a{
-        width: 400px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         text-decoration: none;
+        font-size: 20px;
         color: ${props => props.theme.textColor};
+
+        &:hover
+        {
+            color: #0090F9;
+        }
     }
 `
 const BoardContentViewtime = styled(BoardContentNumber)
@@ -248,6 +436,13 @@ const BoardContentWriter = styled(BoardContentNumber)
 `
 const BoardContentCounter = styled(BoardContentNumber)
     `
+    margin: 0px 0px 0px 5px;
+}
+`
+
+const BoardlikeContentCounter = styled(BoardContentNumber)
+    `
+    margin: 0px 0px 0px 5px;
 `
 
 const BoardTitle = styled.div
@@ -271,10 +466,10 @@ const BoardContentAllBox = styled.div
 
 const BoardContentBox = styled.div
     `
-        display: grid;
-        grid-template-columns: minmax(50px, 100px) minmax(50px, 950px) minmax(50px, 100px) minmax(50px, 100px) minmax(50px, 100px);
+        display: flex;
+        column-gap: 20px;
         text-align: center;
-        padding: 20px 0px 20px 0px;
+        padding: 20px 10px 20px 10px;
         color: ${(props) => props.theme.BoardTitle};
         font-weight: bold;
 `
@@ -469,7 +664,7 @@ const FreeBoardBox = styled.div
 const BoardBox = styled.div
     `
     display: flex;
-    margin: 20px 0px 0px 0px;
+    margin: 10px 0px 10px 0px;
     flex-direction: column;
     border-bottom: solid 2px ${(props) => props.theme.BoardTitle};
 

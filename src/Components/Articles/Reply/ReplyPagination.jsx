@@ -7,7 +7,10 @@ function ReplyPagination({ total, limit, page, setPage }) {
   const numPages = total > 0 && limit > 0 ? Math.ceil(total / limit) : 1;
   const [currPage, setCurrPage] = useState(page);
   const [WindowLength, setWindowLength] = useState(window.innerWidth);
+  const [ViewArrow, setViewArrow] = useState(false);
   let firstNum = currPage - (currPage % 5) + 1 ;
+  const PaginationArray = numPages - firstNum;
+
 
   const handleResize = () => {
     setWindowLength(window.innerWidth);
@@ -24,24 +27,40 @@ function ReplyPagination({ total, limit, page, setPage }) {
     window.scrollTo({ top: 1264, behavior: "smooth" });
   }
 
+  useEffect(() => {
+    if(PaginationArray > 0)
+    {
+        setViewArrow(true);
+    }else{
+        setViewArrow(false);
+    }
+  },[PaginationArray])
+
   return (
     <>
       <Nav>
-        <Button onClick={() => { setPage(1); setCurrPage(1); ScrollTop(); }} off={page === 1}>
+        <PprevArrow
+            ViewArrow={ViewArrow}
+            onClick={() => { setPage(1); setCurrPage(1); ScrollTop(); }} 
+            off={page === 1}
+        >
           &lt;
           &lt;
-        </Button>
-        <Button
+        </PprevArrow>
+        <PrevArrow
           onClick={() => { setPage(page - 1); setCurrPage(page - 2); ScrollTop(); }}
-          off={page === 1}>
+          off={page === 1}
+          ViewArrow={ViewArrow}
+        >
           &lt;
-        </Button>
+        </PrevArrow>
+
         <Button
           onClick={() => { setPage(firstNum); ScrollTop(); }}
           aria-current={page === firstNum ? "page" : null}>
           {firstNum}
         </Button>
-        {Array(numPages - firstNum).fill().map((_, i) => {
+        {Array(PaginationArray).fill().map((_, i) => {
           if (i <= Math.round(3)) {
             return (
               <Button
@@ -53,15 +72,22 @@ function ReplyPagination({ total, limit, page, setPage }) {
             )
           }
         })}
-        <Button
+
+        <NextArrow
           onClick={() => { setPage(page + 1); setCurrPage(page); ScrollTop(); }}
-          off={page === numPages}>
+          off={page === numPages}
+          ViewArrow={ViewArrow}
+        >
           &gt;
-        </Button>
-        <Button onClick={() => { setPage(numPages); setCurrPage(numPages); ScrollTop(); }} off={page === numPages}>
+        </NextArrow>
+        <NnextArrow
+            onClick={() => { setPage(numPages); setCurrPage(numPages); ScrollTop(); }} 
+            off={page === numPages}
+            ViewArrow={ViewArrow}
+        >
           &gt;
           &gt;
-        </Button>
+        </NnextArrow>
       </Nav>
     </>
   );
@@ -104,5 +130,26 @@ g  &:hover {
     cursor: revert;
     transform: revert;
   } 
-`;
+`
+
+const PrevArrow = styled(Button)
+`
+  display: ${props => props.ViewArrow ? "block" : "none"};
+`
+
+const PprevArrow = styled(Button)
+`
+  display: ${props => props.ViewArrow ? "block" : "none"};
+`
+
+const NextArrow = styled(Button)
+`
+  display: ${props => props.ViewArrow ? "block" : "none"};
+`
+
+const NnextArrow = styled(Button)
+`
+  display: ${props => props.ViewArrow ? "block" : "none"};
+`
+;
 

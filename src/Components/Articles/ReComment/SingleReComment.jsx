@@ -27,7 +27,7 @@ import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReCommentReportModal from "./ReCommentReportModal";
-
+import ReplyUpdateReCommentModal from "./ReplyUpdateReCommentModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -60,11 +60,12 @@ const SingleReComment = ({
     const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommenterRole, setReCommenterRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
-    const [reCommentChangeValue, setReCommentChangeValue] = useState("");
+    const [reCommentChangeValue, setReCommentChangeValue] = useState('<p><br></p>');
     const [timecount, setTimecount] = useState("1시간");
     const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(false);
     const [updateReCommentText, setUpdateReCommentText] = useState(ReComment.content);
     const [deleteMode, setDeleteMode] = useState(false);
+    const [ModalReplyUpdateReCommentOnOff, setModalReplyUpdateReCommentOnOff] = useState(false);
     const SettingRef = useRef(null);
 
     const navigate = useNavigate();
@@ -371,7 +372,7 @@ const SingleReComment = ({
     const registerReComment = async (e) => {
         e.preventDefault();
 
-        if (reCommentChangeValue.length > 0) {
+        if (reCommentChangeValue !== '<p><br></p>') {
             await axios.post(`${ip}/Board/article/reply/reComment`, {
                 original_replyer: originalReplyer,
                 original_regdate: originalRegdate,
@@ -391,7 +392,7 @@ const SingleReComment = ({
                     addReComment(data, ReComments);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
-                    setReCommentChangeValue("");
+                    setReCommentChangeValue('<p><br></p>');
                     const pointUp = (/* f */) => {
                         axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
                             {
@@ -414,8 +415,8 @@ const SingleReComment = ({
                 })
 
         }
-        else if (reCommentChangeValue.length == 0) {
-            alert("댓글 내용을 입력해주세요.");
+        else if (reCommentChangeValue === '<p><br></p>' && reCommentChangeValue.length === 11) {
+            setModalReplyUpdateReCommentOnOff(true)
             return;
         }
 
@@ -424,7 +425,7 @@ const SingleReComment = ({
 
     const updateReComment = async (e) => {
         e.preventDefault();
-        if (updateReCommentText.length > 0) {
+        if (updateReCommentText !== '<p><br></p>') {
             await axios.patch(`${ip}/Board/article/reply/reComment?reCommenter=${reCommenter}&regdate=${regdate}`,
                 {
                     content: updateReCommentText,
@@ -445,8 +446,8 @@ const SingleReComment = ({
                 });
         }
 
-        else if (updateReCommentText.length == 0) {
-            alert("댓글을 입력해주세요.");
+        else if (updateReCommentText === '<p><br></p>' && updateReCommentText.length === 11) {
+            setModalReplyUpdateReCommentOnOff(!ModalReplyUpdateReCommentOnOff);
             return;
         }
 
@@ -669,7 +670,7 @@ const SingleReComment = ({
                                 </UpdateReply>
 
                                 <DeleteReply
-                                    onClick={() => {setReDeleteMode(!RedeleteMode); setModalreCommentId(id); setModalreCommenter(reCommenter); setModalreRegdate(regdate)}}
+                                    onClick={() => { setReDeleteMode(!RedeleteMode); setModalreCommentId(id); setModalreCommenter(reCommenter); setModalreRegdate(regdate) }}
                                 >
                                     <span>
                                         <RiDeleteBin5Line size={20} style={{ margin: "0px 10px -5px 0px" }} />
@@ -683,6 +684,11 @@ const SingleReComment = ({
 
                     </ReCommentreplyLikeAllBox>
                 </ReCommentreplyBox>
+
+                {ModalReplyUpdateReCommentOnOff ? <ReplyUpdateReCommentModal
+                    setModalReplyUpdateReCommentOnOff={setModalReplyUpdateReCommentOnOff}
+                    ModalReplyUpdateReCommentOnOff={ModalReplyUpdateReCommentOnOff}
+                /> : <></>}
 
                 {onReplyBtn && (<ReCommentForm
                     LoginMaintain={loginMaintain}
@@ -721,6 +727,12 @@ const SingleReComment = ({
                 )}
             </div>
             <div style={{ display: isEditing === false ? "none" : "block", margin: "40px 0px 0px 0px" }}>
+
+                {ModalReplyUpdateReCommentOnOff ? <ReplyUpdateReCommentModal
+                    setModalReplyUpdateReCommentOnOff={setModalReplyUpdateReCommentOnOff}
+                    ModalReplyUpdateReCommentOnOff={ModalReplyUpdateReCommentOnOff}
+                /> : <></>}
+
                 <ReCommentForm
                     LoginMaintain={loginMaintain}
 
@@ -861,7 +873,7 @@ const ReCommentreplyBox = styled.div
 
 const SettingReplyStatusDiv = styled.div
     `
-    display: ${props => props.ReCommentStatusDivHide? "flex" : "none"};
+    display: ${props => props.ReCommentStatusDivHide ? "flex" : "none"};
     flex-direction: column;
     position: absolute;
     border-radius: 6px;

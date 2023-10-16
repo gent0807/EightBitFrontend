@@ -141,8 +141,6 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
         }
     }
 
-    console.log(checkList);
-
     return (
         <ReportModalBackground OnOff={ReportMode}>
             <ReportModalAllBox ModalChange={ismodalchange}>
