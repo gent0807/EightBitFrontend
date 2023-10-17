@@ -20,7 +20,7 @@ const FreeBoard = () => {
     const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
     const [Fitter, setFitter] = useState("최신순");
-    const [LimtText, setLimtText] = useState("20개씩");
+    const [LimtText, setLimtText] = useState("20개");
     const [limit, setLimit] = useState(20);
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
@@ -32,8 +32,8 @@ const FreeBoard = () => {
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
+    const [SearchList, setSearchList] = useState([]);
     const PostsSize = posts.slice(offset, offset + limit);
-    const [SearchList, setSearchList] = useState([])
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
     console.log("loginMaintain", loginMaintain);
@@ -79,26 +79,36 @@ const FreeBoard = () => {
     const setCurrentValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        const FillerState = SearchList.sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
+        setSearchList(FillerState);
     }
 
     const setPastValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        const FillerState = SearchList.sort((a, b) => new Date(a.regdate) - new Date(b.regdate));
+        setSearchList(FillerState);
     }
 
     const setLikeValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        const FillerState = SearchList.sort((a, b) => b.likecount - a.likecount);
+        setSearchList(FillerState);
     }
 
     const setViewValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        const FillerState = SearchList.sort((a, b) => b.visitcnt - a.visitcnt);
+        setSearchList(FillerState);
     }
 
     const setReplyValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        const FillerState = SearchList.sort((a, b) => b.reply_count - a.reply_count);
+        setSearchList(FillerState);
     }
 
     const setLimitValue = (e) => {
@@ -177,24 +187,26 @@ const FreeBoard = () => {
                 <FitterBox>
                     <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                         <FitterSelectBox show={FitterDropdown}>
-                            <FitterSelectList onClick={() => setCurrentValue()}>최신순</FitterSelectList>
-                            <FitterSelectList onClick={() => setPastValue()}>과거순</FitterSelectList>
-                            <FitterSelectList onClick={() => setCurrentValue()}>댓글순</FitterSelectList>
-                            <FitterSelectList onClick={() => setReplyValue()}>조회순</FitterSelectList>
-                            <FitterSelectList onClick={() => setLikeValue()}>추천순</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setPastValue(e)}>과거순</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setReplyValue(e)}>댓글순</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setViewValue(e)}>조회순</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
                         </FitterSelectBox>
                         <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
                         <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
                     </FitterSelectAllBox>
+
                     <LimitSelectAllBox ref={LimitRef} onClick={() => setLimitDropdown(!LimitDropdown)}>
                         <LimmitSelectBox show={LimitDropdown}>
-                            <LimitSelectList value={10} onClick={setLimitValue}>10개씩</LimitSelectList>
-                            <LimitSelectList value={20} onClick={setLimitValue}>20개씩</LimitSelectList>
-                            <LimitSelectList value={50} onClick={setLimitValue}>50개씩</LimitSelectList>
+                            <LimitSelectList value={10} onClick={setLimitValue}>10개</LimitSelectList>
+                            <LimitSelectList value={20} onClick={setLimitValue}>20개</LimitSelectList>
+                            <LimitSelectList value={50} onClick={setLimitValue}>50개</LimitSelectList>
                         </LimmitSelectBox>
                         <LimitSelectValue><FitterSelectText>{LimtText}</FitterSelectText></LimitSelectValue>
                         <LimitArrowBox direction={LimitDropdown}>{LimitDropdown ? "▲" : "▼"}</LimitArrowBox>
                     </LimitSelectAllBox>
+
                     <WriteBtn>{loginMaintain == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> : loginMaintain == "true" ? userInfo == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> :
                         (userInfo.loginState === "allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}</WriteBtn>
                 </FitterBox>
@@ -511,7 +523,7 @@ const BoardTitleWriter = styled(BoardTitleNumber)
 
 const FitterSelectAllBox = styled.div
     `
-    width: 127px;
+    width: 100px;
     height: 21px;
     border: solid 2px ${(props) => props.theme.borderColor};
     cursor: pointer;
@@ -533,14 +545,12 @@ const LimitSelectAllBox = styled(FitterSelectAllBox)
 
 const FitterArrowBox = styled(ArrowBox)
     `
-    margin: 11px 0px 11px 104px;
-    margin: ${props => props.direction ? "9px 0px 11px 104px" : "11px 0px 11px 104px"};
+    margin: ${props => props.direction ? "9px 0px 11px 75px" : "11px 0px 11px 75px"};
 `
 
 const LimitArrowBox = styled(ArrowBox)
     `
-    margin: 11px 0px 11px 104px;
-    margin: ${props => props.direction ? "9px 0px 11px 104px" : "11px 0px 11px 104px"};
+    margin: ${props => props.direction ? "9px 0px 11px 75px" : "11px 0px 11px 75px"};
 `
 
 const FillterSlideDown = keyframes
@@ -549,7 +559,7 @@ const FillterSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 107px;
+        height: 130px;
     }
 `
 
@@ -559,7 +569,7 @@ const LimitSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 82px;
+        height: 78px;
     }
 `
 
@@ -571,9 +581,8 @@ const FitterSelectBox = styled.ul
     margin: 44px 0px 0px -2px;
     border: solid 2px ${props => props.theme.borderColor};
     background: #dee2e6;
-    width: 127px;
+    width: 100px;
     padding: 0px;
-    height: 107px;
     overflow: hidden;
     text-align: center;
     border-radius: 5px;
@@ -582,25 +591,26 @@ const FitterSelectBox = styled.ul
 
 const LimmitSelectBox = styled(FitterSelectBox)
     `
-    height: 82px;
+    height: 78px;
     animation: ${LimitSlideDown} 0.5s;
 `
 
 const FitterSelectText = styled.span
     `
     color: black;
+    font-weight: bold;
 `
 
 const FitterSelectValue = styled.div
     `
     position: absolute;
-    margin: 11px 0px 11px 45px;
+    margin: 11px 0px 11px 20px;
     white-space: nowrap;
 `
 
 const LimitSelectValue = styled(FitterSelectValue)
     `
-    margin: 11px 0px 11px 36px;
+    margin: 11px 0px 11px 25px;
 `
 
 const FitterSelectList = styled.li
