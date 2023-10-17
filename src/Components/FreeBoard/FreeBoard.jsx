@@ -214,14 +214,16 @@ const FreeBoard = () => {
                             <FreeBoardViewAllBox>
                                 <ProfileAllBox>
                                     <WriterProfile writer={writer} />
-                                    <BoardContentWriter>{writer}</BoardContentWriter>
-                                    <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
+                                    <ProfileBox>
+                                        <BoardContentWriter>{writer}</BoardContentWriter>
+                                        <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
+                                    </ProfileBox>
                                 </ProfileAllBox>
 
                                 <BoardTitleContentAllBox>
                                     <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>
                                     <BoardCotent>
-                                        <Link to={`/FreeArticle/${writer}/${regdate}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}/></Link>
+                                        <Link to={`/FreeArticle/${writer}/${regdate}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} /></Link>
                                     </BoardCotent>
                                 </BoardTitleContentAllBox>
                                 <ViewlikeAllBox>
@@ -257,6 +259,11 @@ const FreeBoard = () => {
 export default FreeBoard;
 
 const BoardTitleContentAllBox = styled.div
+    `
+
+`
+
+const ProfileBox = styled.div
     `
 
 `
@@ -305,8 +312,8 @@ const ReplyCountText = styled.span
 const ReplyCountBox = styled.div
     `
     width: 64px;
-    height: 64px;
-    border: solid 2px ${props => props.theme.borderColor};
+    height: 73px;
+    border: solid 2px ${props => props.theme.textColor};
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -318,7 +325,6 @@ const WriteBtnText = styled.span
     white-space: nowrap;
     -webkit-tap-highlight-color:transparent;
     -webkit-user-select: none;
-    background: ${props => props.theme.PaginationSelect};
 `
 
 const WriteBtn = styled.div
@@ -329,7 +335,7 @@ const WriteBtn = styled.div
     border: none;
     cursor: pointer;
     border-radius: 10px;
-    background: ${props => props.theme.PaginationSelect};
+    background: #6A9DDA;
     color: white;
     overflow: hidden;
     padding: 13px 7px 7px 7px;
@@ -347,7 +353,7 @@ const WriteBtn = styled.div
     a
     {
             text-decoration: none;
-            color: ${props => props.theme.textColor};
+            color: black;
     }
 `
 
@@ -379,6 +385,7 @@ const BoardContentNumber = styled.div
 
 const BoardCotent = styled(BoardContentNumber)
     `
+    margin: 0px 0px 0px 0px;
     font-size: 14px;
     a{
         text-decoration: none;
@@ -430,9 +437,12 @@ const BoardContentTitle = styled(BoardContentNumber)
 `
 const BoardContentViewtime = styled(BoardContentNumber)
     `
+    font-size: 15px;
 `
 const BoardContentWriter = styled(BoardContentNumber)
     `
+    font-size: 20px;
+    margin: 0px 10px 6px 10px;
 `
 const BoardContentCounter = styled(BoardContentNumber)
     `
@@ -643,7 +653,7 @@ const FreeBoardInformation = styled.div
     padding: 10px;
     text-align: center;
     border-radius: 20px;
-    border: solid 2px ${props => props.theme.BoardInformaiton};
+    border: solid 2px ${props => props.theme.textColor};
     margin: 0px 0px 20px 0px;
 `
 
@@ -656,7 +666,8 @@ const InformationAllBox = styled.div
 const FreeBoardInformationText = styled.span
     `
     font-weight: bold;
-    color: ${props => props.theme.BoardInformaiton};
+    font-size: 20px;
+    color: ${props => props.theme.textColor};
 `
 
 const FreeBoardBox = styled.div
