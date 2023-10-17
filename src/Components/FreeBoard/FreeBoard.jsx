@@ -455,6 +455,7 @@ const BoardContentWriter = styled(BoardContentNumber)
     `
     font-size: 20px;
     margin: 0px 10px 6px 10px;
+    cursor: pointer;
 `
 const BoardContentCounter = styled(BoardContentNumber)
     `
@@ -676,6 +677,7 @@ const InformationAllBox = styled.div
 const FreeBoardInformationText = styled.span
     `
     font-weight: bold;
+    font-size: 20px;
     color: ${props => props.theme.textColor};
 `
 
