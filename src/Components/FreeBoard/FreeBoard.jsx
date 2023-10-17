@@ -305,7 +305,7 @@ const ReplyCountText = styled.span
 const ReplyCountBox = styled.div
     `
     width: 64px;
-    height: 64px;
+    height: 73px;
     border: solid 2px ${props => props.theme.borderColor};
     display: flex;
     flex-direction: column;
@@ -656,6 +656,7 @@ const InformationAllBox = styled.div
 const FreeBoardInformationText = styled.span
     `
     font-weight: bold;
+    font-size: 20px;
     color: ${props => props.theme.BoardInformaiton};
 `
 
