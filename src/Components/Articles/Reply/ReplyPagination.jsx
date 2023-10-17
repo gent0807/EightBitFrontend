@@ -125,7 +125,7 @@ g  &:hover {
   }
 
   &[aria-current] {
-    background: ${props => props.theme.PaginationSelect};
+    background: #6A9DDA;
     font-weight: bold;
     cursor: revert;
     transform: revert;
