@@ -484,7 +484,7 @@ const BoardContentBox = styled.div
         font-weight: bold;
         &:not(:last-child)
         {
-            border-bottom: solid 2px black;
+            border-bottom: solid 2px ${(props) => props.theme.textColor};
         }
 `
 
@@ -666,7 +666,7 @@ const InformationAllBox = styled.div
 const FreeBoardInformationText = styled.span
     `
     font-weight: bold;
-    color: ${props => props.theme.BoardInformaiton};
+    color: ${props => props.theme.textColor};
 `
 
 const FreeBoardBox = styled.div
