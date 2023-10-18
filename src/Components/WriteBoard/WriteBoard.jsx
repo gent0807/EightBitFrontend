@@ -232,7 +232,6 @@ const WriteBoard = () => {
 
 
 
-
     const OncheckSubmit = (e) => {
         const registFile = async (writer, regdate) => {
             const fd = new FormData();
@@ -274,7 +273,6 @@ const WriteBoard = () => {
             setWriteBoardModalOnOff(true);
             return;
         }
-
 
         axios.post(`${ip}/Board/article`, {
             title: WriterChangeValue,
@@ -402,7 +400,6 @@ const WriteBoard = () => {
     }
 
     console.log(EditerValue);
-
 
     return (
         <WriterInputBox>
@@ -806,3 +803,5 @@ const WriterInformationTextAllBox = styled.div
         justify-content: center;
     }
 `
+
+
