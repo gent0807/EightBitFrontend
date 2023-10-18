@@ -297,6 +297,24 @@ const FreeArticle = () => {
                 })
         }
 
+        const updateUserFreeArticleView= async (nickname, writer, regdate) => {
+            await axios.post(`${ip}/Board/article/view`, {
+                viewer: nickname,
+                writer: writer,
+                regdate: regdate,
+            },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                })
+                .then(res => {
+                    /* regenerateAccessTokenOrLogout(res, registerReply, e); */
+                    return res.data;
+                })
+                .then(data => {
+                    return;
+                })
+        }
+
 
 
         axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
@@ -308,6 +326,16 @@ const FreeArticle = () => {
             .then(res => res.data
             )
             .then(data => {
+                if(loginMaintain == "true"){
+                    if(userInfo != null){
+                        updateUserFreeArticleView(userInfo.nickName, writer, regdate);
+                    }
+                }
+                else if(loginMaintain == "false"){
+                    if(user.nickname != null){
+                        updateUserFreeArticleView(user.nickname, writer, regdate);
+                    }
+                }
                 setTitle(data.title);
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
