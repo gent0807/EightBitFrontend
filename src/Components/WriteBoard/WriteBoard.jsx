@@ -27,6 +27,8 @@ const WriteBoard = () => {
     const [EditerValue, setEditerValue] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
+    const [fileName, setFileName] = useState("")
+    const [fileExtent, setFileExtent] = useState("lnk")
     const [WriteBoardModalOnOff, setWriteBoardModalOnOff] = useState(false);
 
     const user = useSelector(state => state.user);
@@ -136,40 +138,63 @@ const WriteBoard = () => {
     const onChangeFiles = useCallback((e) => {
         let selectFiles = [];
         let tempFiles = files;
+        const ExtensionList = ["lnk","exe"];
 
         if (e.type === "drop") {
             selectFiles = e.dataTransfer.files;
+            setFileExtent(selectFiles[0].name);
         } else {
             selectFiles = e.target.files;
+            setFileExtent(selectFiles[0].name);
         }
-
-        if (files.length < 5) {
-            for (const file of selectFiles) {
-                tempFiles = [
-                    ...tempFiles,
-                    {
-                        id: fileId.current++,
-                        object: file
-                    }
-                ];
-            }
-        } else {
-            window.alert("업로드는 5개까지만 가능합니다!");
+        
+        
+        //const extention = ExtensionName(fileExtent);
+        
+        console.log(fileExtent, selectFiles);
+        
+        if (files.length >= 5) {
+            window.alert("업로드는 5개까지만 가능합니다!")
+            return;
         }
-
+        
+       /*if(extention.indexOf(ExtensionList) > -1 || extention === ""){
+            window.alert("업로드 불가능");
+            return;
+        }*/
+        
+        for (const file of selectFiles) {
+            tempFiles = [
+                ...tempFiles,
+                {
+                    id: fileId.current++,
+                    object: file
+                }
+            ];
+        }
+        
         setFiles(tempFiles);
-
+        
     }, [files]);
+    
+    /*const ExtensionName = ({FilesName}) => {
+        const lastIndex = FilesName.lastIndexOf(".");
 
-    console.log(files);
+        if(lastIndex < 0) {
 
+            return "";
+        }
+
+        return FilesName.substring(lastIndex+1).toLowerCase();
+    }*/
+    
     const handleFilterFile = useCallback(
         (id) => {
             setFiles(files.filter(file => file.id !== id));
         }, [files]
-    );
-
-    const handleDragIn = useCallback(e => {
+        );
+        
+        const handleDragIn = useCallback(e => {
         e.preventDefault();
         e.stopPropagation();
     }, []);
@@ -199,7 +224,6 @@ const WriteBoard = () => {
     }, [onChangeFiles]
     )
 
-    console.log(WriterChangeValue);
     const WriterChange = (e) => {
         const currentWriter = e.target.value;
         setWriterChangeValue(currentWriter);
@@ -229,9 +253,6 @@ const WriteBoard = () => {
 
         return () => resetDragEvents();
     }, [initDragEvents, resetDragEvents]);
-
-
-
 
     const OncheckSubmit = (e) => {
         const registFile = async (writer, regdate) => {
@@ -401,9 +422,6 @@ const WriteBoard = () => {
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
 
-    console.log(EditerValue);
-
-
     return (
         <WriterInputBox>
 
@@ -434,7 +452,12 @@ const WriteBoard = () => {
                 <FileUploadBox ref={dragRef} checkFile={isDragging}>
                     <FileBtnBox>
                         <FileUploadLabel checkFile={isDragging} htmlFor='fileUpload'>
-                            <FileUpload id='fileUpload' type="file" multiple={true} onChange={(e) => { onChangeFiles(e); e.target.value = ''; }} />
+                            <FileUpload 
+                                id='fileUpload' 
+                                type="file" 
+                                multiple={true} 
+                                onChange={(e) => { onChangeFiles(e);}}
+                            />
                             <FileUploadText checkFile={isDragging}><AiFillFileAdd /></FileUploadText>
                         </FileUploadLabel>
                     </FileBtnBox>

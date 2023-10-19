@@ -865,7 +865,6 @@ const SlideBox = styled.div
     `
     border-radius: 10px;
     overflow: hidden;
-    border: solid 1px ${props => props.theme.CenterBorderColor};
     transition: border 0.5s;
     height: 285px;
 `
