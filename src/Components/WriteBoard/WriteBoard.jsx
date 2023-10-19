@@ -18,6 +18,7 @@ import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
 import { accessToken, clearLoginState, point } from '../Redux/User';
 import WriteBoardModal from "./WriteBoardModal";
+import WirteFileModal from "./WirteFileModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -28,6 +29,13 @@ const WriteBoard = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     const [WriteBoardModalOnOff, setWriteBoardModalOnOff] = useState(false);
+    const [WriteFileModalOnOff, setWriteFileModalOnOff] = useState(false);
+    const [FileSize, setFileSize] = useState("");
+    const [ExtensionCheck, setExtensionCheck] = useState("");
+    const [IconCheck, setIconCheck] = useState("");
+    const [IconOnOff, setIconOnOff] = useState(false);
+    const FileMaxSize = 2 * 1024 * 1024 * 1024;
+    const ExtensionAllList = "lnk,url";
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -133,9 +141,20 @@ const WriteBoard = () => {
         "width",
     ];
 
+    const ExtensionName = ({ Extension }) => {
+        const lastIndex = Extension.lastIndexOf(".");
+
+        if (lastIndex < 0) {
+            return "";
+        }
+
+        return Extension.substring(lastIndex + 1).toLowerCase();
+    }
+
     const onChangeFiles = useCallback((e) => {
         let selectFiles = [];
         let tempFiles = files;
+        const ExtensionList = ExtensionAllList;
 
         if (e.type === "drop") {
             selectFiles = e.dataTransfer.files;
@@ -143,18 +162,37 @@ const WriteBoard = () => {
             selectFiles = e.target.files;
         }
 
-        if (files.length < 5) {
-            for (const file of selectFiles) {
-                tempFiles = [
-                    ...tempFiles,
-                    {
-                        id: fileId.current++,
-                        object: file
-                    }
-                ];
-            }
-        } else {
-            window.alert("업로드는 5개까지만 가능합니다!");
+        const Extension = selectFiles[0].name;
+        const ExtensionCheck = ExtensionName({ Extension });
+        const FileSize = selectFiles[0].size;
+        setFileSize(FileSize);
+        setExtensionCheck(ExtensionCheck);
+        const MaxSize = FileMaxSize;
+
+        if (ExtensionList.indexOf(ExtensionCheck) > -1 || ExtensionCheck === "") {
+            setWriteFileModalOnOff(true);
+            return;
+        }
+
+        if (FileSize > MaxSize) {
+            setWriteFileModalOnOff(true);
+            return;
+        }
+
+        if (files.length >= 5) {
+            setWriteFileModalOnOff(true);
+            return;
+        }
+
+
+        for (const file of selectFiles) {
+            tempFiles = [
+                ...tempFiles,
+                {
+                    id: fileId.current++,
+                    object: file
+                }
+            ];
         }
 
         setFiles(tempFiles);
@@ -199,7 +237,6 @@ const WriteBoard = () => {
     }, [onChangeFiles]
     )
 
-    console.log(WriterChangeValue);
     const WriterChange = (e) => {
         const currentWriter = e.target.value;
         setWriterChangeValue(currentWriter);
@@ -229,9 +266,6 @@ const WriteBoard = () => {
 
         return () => resetDragEvents();
     }, [initDragEvents, resetDragEvents]);
-
-
-
 
     const OncheckSubmit = (e) => {
         const registFile = async (writer, regdate) => {
@@ -399,11 +433,18 @@ const WriteBoard = () => {
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
 
-    console.log(EditerValue);
-
-
     return (
         <WriterInputBox>
+
+            {WriteFileModalOnOff ? <WirteFileModal
+                setWriteFileModalOnOff={setWriteFileModalOnOff}
+                WriteFileModalOnOff={WriteFileModalOnOff}
+                ExtensionCheck={ExtensionCheck}
+                ExtensionList={ExtensionAllList}
+                FileSize={FileSize}
+                MaxSize={FileMaxSize}
+                files={files}
+            /> : <></>}
 
             {WriteBoardModalOnOff ? <WriteBoardModal
                 setWriteBoardModalOnOff={setWriteBoardModalOnOff}
@@ -432,7 +473,12 @@ const WriteBoard = () => {
                 <FileUploadBox ref={dragRef} checkFile={isDragging}>
                     <FileBtnBox>
                         <FileUploadLabel checkFile={isDragging} htmlFor='fileUpload'>
-                            <FileUpload id='fileUpload' type="file" multiple={true} onChange={(e) => { onChangeFiles(e); e.target.value = ''; }} />
+                            <FileUpload
+                                id='fileUpload'
+                                type="file"
+                                multiple={true}
+                                onChange={(e) => { onChangeFiles(e); e.target.value = ""; }}
+                            />
                             <FileUploadText checkFile={isDragging}><AiFillFileAdd /></FileUploadText>
                         </FileUploadLabel>
                     </FileBtnBox>
@@ -446,15 +492,17 @@ const WriteBoard = () => {
                                 return (
                                     <FileNumber key={id}>
                                         <>
-                                            <Icon src={[
-                                                (name.includes("pptx") ? PPTX :
-                                                    (name.includes("txt") ? TXT :
-                                                        (name.includes("pdf") ? PDF :
-                                                            (name.includes("jpg") ? JPG :
-                                                                (name.includes("png") ? PNG :
-                                                                    (name.includes("zip") ? ZIP :
-                                                                        Default))))))
-                                            ]} />
+                                            <Icon
+                                                onError={(e) => e.target.style.display = 'none'}
+                                                src={[
+                                                    (name.includes("pptx") ? PPTX :
+                                                        (name.includes("txt") ? TXT :
+                                                            (name.includes("pdf") ? PDF :
+                                                                (name.includes("jpg") ? JPG :
+                                                                    (name.includes("png") ? PNG :
+                                                                        (name.includes("zip") ? ZIP :
+                                                                            ""))))))
+                                                ]} />
                                         </>
                                         <FileName>{name}</FileName>
                                         <FileDelete onClick={() => handleFilterFile(id)}>
@@ -551,6 +599,7 @@ const Icon = styled.img
     width : 30px;
     height : 30px;
     margin: -6px 0px 0px 0px;
+    background: ${props => props.theme.backgroundColor};
 `
 
 const FileBtnBox = styled.div
@@ -641,6 +690,8 @@ const FileNumber = styled.div
 const FileName = styled.div
     `
     width: 200px;
+    height: 25px;
+    margin: -2px 0px 0px 0px;
     box-sizing: border-box;
     overflow:hidden;
     text-overflow:ellipsis;
@@ -649,6 +700,7 @@ const FileName = styled.div
 
 const FileDelete = styled.div
     `
+    margin: -1px 0px 0px 0px;
     cursor: pointer;
 `
 

@@ -19,6 +19,7 @@ import DOMPurify from "dompurify";
 const FreeBoard = () => {
     const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
+    const [SearchFillText, setSearchFillText] = useState("제목");
     const [Fitter, setFitter] = useState("최신순");
     const [LimtText, setLimtText] = useState("20개");
     const [limit, setLimit] = useState(20);
@@ -26,20 +27,35 @@ const FreeBoard = () => {
     const offset = (page - 1) * limit;
     const [FitterDropdown, setFitterDropdown] = useState(false);
     const [LimitDropdown, setLimitDropdown] = useState(false);
+    const [SearchFillDropdown, setSearchFillDropdown] = useState(false);
     const [FirstReset, setFirstReset] = useRecoilState(firstReset);
     const FillterRef = useRef("");
     const LimitRef = useRef("");
+    const SearchFillRef = useRef("");
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
     const [SearchList, setSearchList] = useState([]);
     const PostsSize = posts.slice(offset, offset + limit);
+    const [FillterState, setFillerState] = useState("title");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
-    console.log("loginMaintain", loginMaintain);
-    console.log("userInfo", userInfo);
-    console.log("user", user);
 
+
+    useEffect(() => {
+        function handleOuside(e) {
+            if (SearchFillRef.current && !SearchFillRef.current.contains(e.target)) {
+                setSearchFillDropdown(false);
+            };
+        };
+
+        if (!SearchFillDropdown) {
+            document.addEventListener("mousedown", handleOuside);
+        };
+        return () => {
+            document.removeEventListener("mousedown", handleOuside);
+        };
+    }, [SearchFillRef]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -55,6 +71,7 @@ const FreeBoard = () => {
             document.removeEventListener("mousedown", handleOuside);
         };
     }, [FillterRef]);
+
 
     useEffect(() => {
         function handleOuside(e) {
@@ -111,6 +128,22 @@ const FreeBoard = () => {
         setSearchList(FillerState);
     }
 
+    
+    const setTitleValue = (e) => {
+        const { innerText } = e.target;
+        setSearchFillText(innerText);
+    }
+    
+    const setWriterValue = (e) => {
+        const { innerText } = e.target;
+        setSearchFillText(innerText);
+    }
+    
+    const setContentValue = (e) => {
+        const { innerText } = e.target;
+        setSearchFillText(innerText);
+    }
+    
     const setLimitValue = (e) => {
         const { innerText } = e.target;
         const Limit = e.target.value;
@@ -160,7 +193,16 @@ const FreeBoard = () => {
                     setSearchList(posts);
                 })
         } else {
-            const SearchResult = posts.filter((board) => board.title.toUpperCase().includes(Search.toUpperCase()));
+            const SearchResult = posts.filter((board) =>
+            SearchFillText === "제목" ? 
+            board.title.toUpperCase().includes(Search.toUpperCase()) : 
+            SearchFillText === "작성자" ?
+            board.writer.toUpperCase().includes(Search.toUpperCase()) :
+            SearchFillText === "내용" ?
+            board.content.toUpperCase().includes(Search.toUpperCase()) :
+            board.title.toUpperCase().includes(Search.toUpperCase())
+            );
+
             setSearchList(SearchResult);
             setSearch("");
         }
@@ -185,6 +227,17 @@ const FreeBoard = () => {
                     </SearchForm>
                 </SearchAllBox>
                 <FitterBox>
+
+                    <SearchFillSelectAllBox ref={SearchFillRef} onClick={() => setSearchFillDropdown(!SearchFillDropdown)}>
+                        <SearchFillSelectBox show={SearchFillDropdown}>
+                            <FitterSelectList onClick={(e) => setTitleValue(e)}>제목</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setWriterValue(e)}>작성자</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setContentValue(e)}>내용</FitterSelectList>
+                        </SearchFillSelectBox>
+                        <SearchFillValue writerText={SearchFillText}><FitterSelectText>{SearchFillText}</FitterSelectText></SearchFillValue>
+                        <SearchFillArrowBox direction={SearchFillDropdown}>{SearchFillDropdown ? "▲" : "▼"}</SearchFillArrowBox>
+                    </SearchFillSelectAllBox>
+
                     <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                         <FitterSelectBox show={FitterDropdown}>
                             <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
@@ -468,20 +521,6 @@ const BoardlikeContentCounter = styled(BoardContentNumber)
     margin: 0px 0px 0px 5px;
 `
 
-const BoardTitle = styled.div
-    `
-    display: grid;
-    grid-template-columns: minmax(50px, 100px) minmax(50px, 950px) minmax(50px, 100px) minmax(50px, 100px) minmax(50px, 100px);
-    text-align: center;
-    padding: 0px 0px 20px 0px;
-    border-bottom: solid 2px ${(props) => props.theme.BoardTitle};
-    font-weight: bold;
-`
-
-const BoardTitleText = styled.span
-    `
-`
-
 const BoardContentAllBox = styled.div
     `
 
@@ -501,27 +540,6 @@ const BoardContentBox = styled.div
         }
 `
 
-const BoardTitleNumber = styled.div
-    `
-    color: ${(props) => props.theme.BoardTitle};
-`
-
-const BoardTitleTitle = styled(BoardTitleNumber)
-    `
-`
-
-const BoardTitleViewCounter = styled(BoardTitleNumber)
-    `
-`
-
-const BoardTitleViewTime = styled(BoardTitleNumber)
-    `
-`
-
-const BoardTitleWriter = styled(BoardTitleNumber)
-    `
-`
-
 const FitterSelectAllBox = styled.div
     `
     width: 100px;
@@ -530,13 +548,19 @@ const FitterSelectAllBox = styled.div
     cursor: pointer;
     background: #dee2e6;
     border-radius: 10px;
-    margin: 0px 9px 0px 9px;
+    margin: 0px 9px 0px 0px;
     height: 39px;
     -webkit-tap-highlight-color:transparent;
     @media (min-width:250px) and (max-width:607px)
     {
         margin: 0px 7px -12px 7px;
     }
+`
+
+const SearchFillSelectAllBox = styled(FitterSelectAllBox)
+`
+    width: 83px;
+    margin: 0px 9px 0px 0px;
 `
 
 const LimitSelectAllBox = styled(FitterSelectAllBox)
@@ -547,6 +571,11 @@ const LimitSelectAllBox = styled(FitterSelectAllBox)
 const FitterArrowBox = styled(ArrowBox)
     `
     margin: ${props => props.direction ? "9px 0px 11px 75px" : "11px 0px 11px 75px"};
+`
+
+const SearchFillArrowBox = styled(ArrowBox)
+`
+    margin: ${props => props.direction ? "9px 0px 11px 63px" : "11px 0px 11px 63px"};
 `
 
 const LimitArrowBox = styled(ArrowBox)
@@ -561,6 +590,16 @@ const FillterSlideDown = keyframes
     }
     100%{
         height: 130px;
+    }
+`
+
+const SearchFillSlideDown = keyframes
+    `
+    0%{
+        height: 0px;
+    }
+    100%{
+        height: 78px;
     }
 `
 
@@ -590,6 +629,13 @@ const FitterSelectBox = styled.ul
     animation: ${FillterSlideDown} 0.5s;
 `
 
+const SearchFillSelectBox = styled(FitterSelectBox)
+`
+    width: 83px;
+    height: 78px;
+    animation: ${SearchFillSlideDown} 0.5s;
+`
+
 const LimmitSelectBox = styled(FitterSelectBox)
     `
     height: 78px;
@@ -607,6 +653,11 @@ const FitterSelectValue = styled.div
     position: absolute;
     margin: 11px 0px 11px 20px;
     white-space: nowrap;
+`
+
+const SearchFillValue = styled(FitterSelectValue)
+`
+    margin: ${props => props.writerText === "작성자" ? "11px 0px 11px 14px" : "11px 0px 11px 20px"};
 `
 
 const LimitSelectValue = styled(FitterSelectValue)
