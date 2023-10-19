@@ -181,7 +181,7 @@ const ReportModalAllBox = styled.div
     display: ${props => props.ModalChange ? "block" : "none"};
     width: 560px;
     height: 240px;
-    background: ${props => props.theme.backgroundColor};
+    background: white;
     border-radius: 10px;
 `
 

@@ -18,6 +18,7 @@ import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
 import { accessToken, clearLoginState, point } from '../Redux/User';
 import WriteBoardModal from "./WriteBoardModal";
+import WirteFileModal from "./WirteFileModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -27,9 +28,14 @@ const WriteBoard = () => {
     const [EditerValue, setEditerValue] = useState("");
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
-    const [fileName, setFileName] = useState("")
-    const [fileExtent, setFileExtent] = useState("lnk")
     const [WriteBoardModalOnOff, setWriteBoardModalOnOff] = useState(false);
+    const [WriteFileModalOnOff, setWriteFileModalOnOff] = useState(false);
+    const [FileSize, setFileSize] = useState("");
+    const [ExtensionCheck, setExtensionCheck] = useState("");
+    const [IconCheck, setIconCheck] = useState("");
+    const [IconOnOff, setIconOnOff] = useState(false);
+    const FileMaxSize = 2 * 1024 * 1024 * 1024;
+    const ExtensionAllList = "lnk,url";
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -135,34 +141,50 @@ const WriteBoard = () => {
         "width",
     ];
 
+    const ExtensionName = ({ Extension }) => {
+        const lastIndex = Extension.lastIndexOf(".");
+
+        if (lastIndex < 0) {
+            return "";
+        }
+
+        return Extension.substring(lastIndex + 1).toLowerCase();
+    }
+
     const onChangeFiles = useCallback((e) => {
         let selectFiles = [];
         let tempFiles = files;
-        const ExtensionList = ["lnk","exe"];
+        const ExtensionList = ExtensionAllList;
 
         if (e.type === "drop") {
             selectFiles = e.dataTransfer.files;
-            setFileExtent(selectFiles[0].name);
         } else {
             selectFiles = e.target.files;
-            setFileExtent(selectFiles[0].name);
         }
-        
-        
-        //const extention = ExtensionName(fileExtent);
-        
-        console.log(fileExtent, selectFiles);
-        
+
+        const Extension = selectFiles[0].name;
+        const ExtensionCheck = ExtensionName({ Extension });
+        const FileSize = selectFiles[0].size;
+        setFileSize(FileSize);
+        setExtensionCheck(ExtensionCheck);
+        const MaxSize = FileMaxSize;
+
+        if (ExtensionList.indexOf(ExtensionCheck) > -1 || ExtensionCheck === "") {
+            setWriteFileModalOnOff(true);
+            return;
+        }
+
+        if (FileSize > MaxSize) {
+            setWriteFileModalOnOff(true);
+            return;
+        }
+
         if (files.length >= 5) {
-            window.alert("업로드는 5개까지만 가능합니다!")
+            setWriteFileModalOnOff(true);
             return;
         }
-        
-       /*if(extention.indexOf(ExtensionList) > -1 || extention === ""){
-            window.alert("업로드 불가능");
-            return;
-        }*/
-        
+
+
         for (const file of selectFiles) {
             tempFiles = [
                 ...tempFiles,
@@ -172,29 +194,20 @@ const WriteBoard = () => {
                 }
             ];
         }
-        
+
         setFiles(tempFiles);
-        
+
     }, [files]);
-    
-    /*const ExtensionName = ({FilesName}) => {
-        const lastIndex = FilesName.lastIndexOf(".");
 
-        if(lastIndex < 0) {
+    console.log(files);
 
-            return "";
-        }
-
-        return FilesName.substring(lastIndex+1).toLowerCase();
-    }*/
-    
     const handleFilterFile = useCallback(
         (id) => {
             setFiles(files.filter(file => file.id !== id));
         }, [files]
-        );
-        
-        const handleDragIn = useCallback(e => {
+    );
+
+    const handleDragIn = useCallback(e => {
         e.preventDefault();
         e.stopPropagation();
     }, []);
@@ -425,6 +438,16 @@ const WriteBoard = () => {
     return (
         <WriterInputBox>
 
+            {WriteFileModalOnOff ? <WirteFileModal
+                setWriteFileModalOnOff={setWriteFileModalOnOff}
+                WriteFileModalOnOff={WriteFileModalOnOff}
+                ExtensionCheck={ExtensionCheck}
+                ExtensionList={ExtensionAllList}
+                FileSize={FileSize}
+                MaxSize={FileMaxSize}
+                files={files}
+            /> : <></>}
+
             {WriteBoardModalOnOff ? <WriteBoardModal
                 setWriteBoardModalOnOff={setWriteBoardModalOnOff}
                 WriteBoardModalOnOff={WriteBoardModalOnOff}
@@ -452,11 +475,11 @@ const WriteBoard = () => {
                 <FileUploadBox ref={dragRef} checkFile={isDragging}>
                     <FileBtnBox>
                         <FileUploadLabel checkFile={isDragging} htmlFor='fileUpload'>
-                            <FileUpload 
-                                id='fileUpload' 
-                                type="file" 
-                                multiple={true} 
-                                onChange={(e) => { onChangeFiles(e);}}
+                            <FileUpload
+                                id='fileUpload'
+                                type="file"
+                                multiple={true}
+                                onChange={(e) => { onChangeFiles(e); e.target.value = ""; }}
                             />
                             <FileUploadText checkFile={isDragging}><AiFillFileAdd /></FileUploadText>
                         </FileUploadLabel>
@@ -471,15 +494,17 @@ const WriteBoard = () => {
                                 return (
                                     <FileNumber key={id}>
                                         <>
-                                            <Icon src={[
-                                                (name.includes("pptx") ? PPTX :
-                                                    (name.includes("txt") ? TXT :
-                                                        (name.includes("pdf") ? PDF :
-                                                            (name.includes("jpg") ? JPG :
-                                                                (name.includes("png") ? PNG :
-                                                                    (name.includes("zip") ? ZIP :
-                                                                        Default))))))
-                                            ]} />
+                                            <Icon
+                                                onError={(e) => e.target.style.display = 'none'}
+                                                src={[
+                                                    (name.includes("pptx") ? PPTX :
+                                                        (name.includes("txt") ? TXT :
+                                                            (name.includes("pdf") ? PDF :
+                                                                (name.includes("jpg") ? JPG :
+                                                                    (name.includes("png") ? PNG :
+                                                                        (name.includes("zip") ? ZIP :
+                                                                            ""))))))
+                                                ]} />
                                         </>
                                         <FileName>{name}</FileName>
                                         <FileDelete onClick={() => handleFilterFile(id)}>
@@ -576,6 +601,7 @@ const Icon = styled.img
     width : 30px;
     height : 30px;
     margin: -6px 0px 0px 0px;
+    background: ${props => props.theme.backgroundColor};
 `
 
 const FileBtnBox = styled.div
@@ -666,6 +692,8 @@ const FileNumber = styled.div
 const FileName = styled.div
     `
     width: 200px;
+    height: 25px;
+    margin: -2px 0px 0px 0px;
     box-sizing: border-box;
     overflow:hidden;
     text-overflow:ellipsis;
@@ -674,6 +702,7 @@ const FileName = styled.div
 
 const FileDelete = styled.div
     `
+    margin: -1px 0px 0px 0px;
     cursor: pointer;
 `
 

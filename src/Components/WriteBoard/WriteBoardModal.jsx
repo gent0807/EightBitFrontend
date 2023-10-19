@@ -108,7 +108,7 @@ const ReportModalAllBox = styled.div
     display: block;
     min-width: 579px;
     min-height: 260px;
-    background: ${props => props.theme.backgroundColor};
+    background: white;
     border-radius: 10px;
 `
 

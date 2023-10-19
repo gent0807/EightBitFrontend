@@ -244,7 +244,7 @@ const CompleteModalBox = styled.div
     display: block;
     width: 560px;
     height: 240px;
-    background: ${props => props.theme.backgroundColor};
+    background: white;
     border-radius: 10px;
 `
 
