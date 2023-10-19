@@ -293,9 +293,7 @@ const WriteBoard = () => {
                 const regdate = data.regdate;
 
                 if (files.length > 0) {
-
                     registFile(writer, regdate);
-
                 }
 
                 axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=10`,

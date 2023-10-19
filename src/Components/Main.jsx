@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
 const ip = `http://localhost:8033/EightBitBackend`;
+//'http://localhost:8035'
 
 const profileImageDir = `${ip}/resources/Users/`;
 

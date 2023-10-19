@@ -85,6 +85,7 @@ const FreeArticle = () => {
         {
             id: 1,
             src: `${ip}/resources/board/article/nomalfiles/image.png`,
+            //src:`${ip}/src/main/resources/static/board/article/nomalfiles/image.png`,
         }
     ]);
 
