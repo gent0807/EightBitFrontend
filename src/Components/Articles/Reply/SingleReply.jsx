@@ -59,7 +59,6 @@ const SingleReply = ({
     const [regdate, setRegdate] = useState(Comment.regdate);
     const [updatedate, setUpdatedate] = useState(Comment.updatedate);
     const [likecount, setLikecount] = useState(0);
-    const [profileImagePath, setProfileImagePath] = useState("");
     const [replyerRole, setReplyerRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("<p><br></p>");
@@ -98,20 +97,7 @@ const SingleReply = ({
     const [ReComments, setReComments] = useState([]);
 
     useEffect(() => {
-        const getReplyerProfileImagePath = (replyer) => {
-            axios.get(`${ip}/Users/profileImgPath?nickname=${replyer}`, {
-
-            },
-                {
-
-                })
-                .then((res) => {
-                    return res.data;
-                })
-                .then(data => {
-                    setProfileImagePath(data.profileImgPath);
-                })
-        }
+        
 
         const getReplyerRole = (replyer) => {
             axios.get(`${ip}/Users/role?nickname=${replyer}`, {
@@ -227,7 +213,6 @@ const SingleReply = ({
         setRegdate(Comment.regdate);
         setUpdatedate(Comment.updatedate);
         setUpdateReplyText(Comment.content);
-        getReplyerProfileImagePath(Comment.replyer);
         getReplyerRole(Comment.replyer);
         getLikers(Comment.replyer, Comment.regdate);
         getReComments(Comment.replyer, Comment.regdate);
@@ -618,7 +603,7 @@ const SingleReply = ({
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <CommentUserProfileBox>
                     <CommentUserBox>
-                        <CommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                        <CommentUserProfile src={`${ip}/Users/profileImg/${replyer}`} />
                         <CommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{replyer}</UserNicknameText>
@@ -775,7 +760,7 @@ const SingleReply = ({
 
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                            <CommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
@@ -867,7 +852,7 @@ const SingleReply = ({
                 >
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <CommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                            <CommentUserProfile2 src={`${ip}/Users/profileImg/${replyer}`} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
