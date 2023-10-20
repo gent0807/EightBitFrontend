@@ -810,7 +810,7 @@ const HeaderBox = () => {
                                                     onClick={() => [setProfileMenuShow(!ProfileMenuShow),
                                                     setProfileClickCheck(!ProfileClickCheck)]}
                                                 >
-                                                    <DropdownImg src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`}/>
+                                                    <DropdownImg src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`}/>
                                                     <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
                                                 </Profileli>
                                             </Link>

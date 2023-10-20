@@ -219,15 +219,12 @@ const FreeBoard = () => {
                 <SearchAllBox>
                     <SearchForm onSubmit={(e) => SearchSubmit(e)}>
                         <FreeBoardSearchInputBox>
-                            <FreeBoardSearchInput placeholder="제목 검색하기" value={Search} onChange={OnSearch} />
+                            <FreeBoardSearchInput placeholder="" value={Search} onChange={OnSearch} />
                             <FreeBoardSearchIconBox>
                                 <FreeBoardSearchBtn><HiOutlineSearch /></FreeBoardSearchBtn>
                             </FreeBoardSearchIconBox>
                         </FreeBoardSearchInputBox>
                     </SearchForm>
-                </SearchAllBox>
-                <FitterBox>
-
                     <SearchFillSelectAllBox ref={SearchFillRef} onClick={() => setSearchFillDropdown(!SearchFillDropdown)}>
                         <SearchFillSelectBox show={SearchFillDropdown}>
                             <FitterSelectList onClick={(e) => setTitleValue(e)}>제목</FitterSelectList>
@@ -237,7 +234,10 @@ const FreeBoard = () => {
                         <SearchFillValue writerText={SearchFillText}><FitterSelectText>{SearchFillText}</FitterSelectText></SearchFillValue>
                         <SearchFillArrowBox direction={SearchFillDropdown}>{SearchFillDropdown ? "▲" : "▼"}</SearchFillArrowBox>
                     </SearchFillSelectAllBox>
+                </SearchAllBox>
+                <FitterBox>
 
+                    
                     <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                         <FitterSelectBox show={FitterDropdown}>
                             <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
@@ -424,6 +424,7 @@ const WriteBtn = styled.div
 
 const SearchAllBox = styled.div
     `
+    display: flex;
     margin: 0px 0px 0px 0px;
 
     @media (min-width:250px) and (max-width:607px)
@@ -436,7 +437,7 @@ const SearchAllBox = styled.div
 
 const SearchForm = styled.form
     `
-
+    margin: 0px 10px 0px 0px;
 `
 
 const BoardContentNumber = styled.div
