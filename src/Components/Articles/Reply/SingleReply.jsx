@@ -760,7 +760,7 @@ const SingleReply = ({
 
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <CommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                            <CommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2

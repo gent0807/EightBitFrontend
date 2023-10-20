@@ -689,7 +689,7 @@ const SingleReComment = ({
                     onSubmit={registerReComment}>
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <ReCommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                            <ReCommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2

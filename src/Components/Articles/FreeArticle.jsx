@@ -863,7 +863,7 @@ const FreeArticle = () => {
                         onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
-                                <CommentUserProfile src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                                <CommentUserProfile src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
@@ -1017,7 +1017,7 @@ const FreeArticle = () => {
                     onSubmit={registerReply}>
                     <CommentArea>
                         <CommentProfile>
-                            <CommentUserProfile src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                            <CommentUserProfile src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer
