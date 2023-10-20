@@ -937,7 +937,7 @@ const HeaderBox = () => {
                             <GameSubNav display={isGameTabCheck} TopBack={scrollPosition}>
                                 <Link to='/'><SubNavText>홈</SubNavText></Link>
                                 <Link to='/'><SubNavText>전체게임</SubNavText></Link>
-                                <Link to='/'><SubNavText>공식게임</SubNavText></Link>
+                                <Link to='/OfficialGame'><SubNavText>공식게임</SubNavText></Link>
                                 <Link to='/'><SubNavText>인디게임</SubNavText></Link>
                                 <Link to='/'><SubNavText>추천게임</SubNavText></Link>
                             </GameSubNav>

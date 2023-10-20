@@ -12,6 +12,7 @@ import WriteBoard from "./WriteBoard/WriteBoardContainer";
 import FreeArticle from "./Articles/FreeArticleContainer";
 import UpdateBoard from "./UpdateBoard/UpdateBoardContainer";
 import Center from "./Center/CenterContainer";
+import OfficialGame from "./OfficialGame/OfficialGameContainer"
 
 const Router = () => {
 
@@ -24,6 +25,7 @@ const Router = () => {
                     <Route path="/" element={<Center />} />
                     <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
                 </Route>
+                    <Route path="/OfficialGame" element={<OfficialGame />} />
                     <Route path="/WriteBoard" element={<WriteBoard />} />
                     <Route path="/UpdateBoard" element={<UpdateBoard />} />
                     <Route path="/Login" element={<Login />} />
