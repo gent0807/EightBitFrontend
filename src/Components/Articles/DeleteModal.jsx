@@ -84,6 +84,7 @@ const ModalDeleteBtn = styled.div
     display: flex;
     justify-content: end;
     padding: 9px 15px 0px 0px;
+    color: black;
 `
 
 const DeleleFormText = styled.span
@@ -167,6 +168,7 @@ const DeleteTextBox = styled(CompleteTextBox)
 
 const DeleteText = styled(CompleteText)
     `
+    color: black;
 
 `
 

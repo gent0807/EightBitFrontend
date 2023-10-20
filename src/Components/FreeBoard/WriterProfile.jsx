@@ -4,10 +4,9 @@ import axios from "axios";
 import styled from "styled-components";
 
 const WriterProfile = ({ writer }) => {
-    const [profileImagePath, setProfileImagePath] = useState("");
     const ip = localStorage.getItem("ip");
 
-    useEffect(() => {
+    /* useEffect(() => {
         const getUserProfileImagePath = (writer) => {
             axios.get(`${ip}/Users/profileImgPath?nickname=${writer}`, {
 
@@ -25,10 +24,10 @@ const WriterProfile = ({ writer }) => {
         }
 
         getUserProfileImagePath(writer);
-    });
+    }); */
 
     return (
-        <Profile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+        <Profile src={`${ip}/Users/profileImg/${writer}`} />
     );
 }
 

@@ -45,7 +45,6 @@ const FreeArticle = () => {
     const [updatedate, setUpdatedate] = useState("");
     const [visitcnt, setVisitcnt] = useState(0);
     const [likecount, setLikecount] = useState(0);
-    const [profileImagePath, setProfileImagePath] = useState("");
     const [writerRole, setWriterRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
     const [deleteMode, setDeleteMode] = useState(false);
@@ -191,21 +190,6 @@ const FreeArticle = () => {
 
     useEffect(() => {
 
-        const getUserProfileImagePath = (writer) => {
-            axios.get(`${ip}/Users/profileImgPath?nickname=${writer}`, {
-
-            },
-                {
-
-                })
-                .then((res) => {
-                    return res.data;
-                })
-                .then(data => {
-                    setProfileImagePath(data.profileImgPath);
-                })
-
-        }
 
 
         const getWriterRole = (writer) => {
@@ -341,7 +325,6 @@ const FreeArticle = () => {
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
                 setVisitcnt(data.visitcnt);
-                getUserProfileImagePath(data.writer);
                 getWriterRole(data.writer);
                 getComments(data.writer, data.regdate);
                 getLikers(data.writer, data.regdate);
@@ -727,7 +710,7 @@ const FreeArticle = () => {
             <UserBox>
                 <UserinformationBox>
                     <UserProfileBox>
-                        <UserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                        <UserProfile src={`${ip}/Users/profileImg/${writer}`} />
                         <WriteViewBox>
 
                             <Correction>
@@ -880,7 +863,7 @@ const FreeArticle = () => {
                         onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
-                                <CommentUserProfile src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                <CommentUserProfile src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
@@ -1034,7 +1017,7 @@ const FreeArticle = () => {
                     onSubmit={registerReply}>
                     <CommentArea>
                         <CommentProfile>
-                            <CommentUserProfile src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                            <CommentUserProfile src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`} />
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer

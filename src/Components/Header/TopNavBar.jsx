@@ -446,7 +446,7 @@ const HeaderBox = () => {
                                                         ref={ProfileRef}
                                                         onClick={() => ProfileMenuCheck()}
                                                     >
-                                                        <Profileimg src={localStorage.getItem("profileImageDir") + userInfo.profileImgPath} />
+                                                        <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
                                                     </Profile>,
                                                     ] :
 
@@ -484,7 +484,7 @@ const HeaderBox = () => {
                                                     ref={ProfileRef}
                                                     onClick={() => ProfileMenuCheck()}
                                                 >
-                                                    <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                                    <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
                                                 </Profile>,
                                                 ] :
 
@@ -662,7 +662,7 @@ const HeaderBox = () => {
                                                             ref={ProfileRef}
                                                             onClick={() => ProfileMenuCheck()}
                                                         >
-                                                            <Profileimg src={localStorage.getItem("profileImageDir") + userInfo.profileImgPath} />
+                                                            <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
                                                         </Profile>,
 
                                                         <WriteBox
@@ -699,7 +699,7 @@ const HeaderBox = () => {
                                                         ref={ProfileRef}
                                                         onClick={() => ProfileMenuCheck()}
                                                     >
-                                                        <Profileimg src={localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                                                        <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
                                                     </Profile>,
 
                                                     <WriteBox
@@ -810,7 +810,7 @@ const HeaderBox = () => {
                                                     onClick={() => [setProfileMenuShow(!ProfileMenuShow),
                                                     setProfileClickCheck(!ProfileClickCheck)]}
                                                 >
-                                                    <DropdownImg src={User} />
+                                                    <DropdownImg src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`}/>
                                                     <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
                                                 </Profileli>
                                             </Link>
@@ -1557,8 +1557,9 @@ const Profileimg = styled.img
 `
 const DropdownImg = styled.img
     `
-    width: 33px;
-    height: 33px;
+    width: 34px;
+    height: 34px;
+    border-radius: 22px;
 `
 
 const ProFileSlideDown = keyframes

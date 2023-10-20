@@ -366,11 +366,11 @@ const Signinput = (props) => {
         return res.data;
       })
       .then(data => {
-        if (data == "OK") {
+        if (data === "OK") {
           navigate("/Login");
         }
-        else {
-
+        else if(data === "NO"){
+          alert("회원가입에 실패하였습니다. 다시 시도해주세요.");
         }
       });
   }

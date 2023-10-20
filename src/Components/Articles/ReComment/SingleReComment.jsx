@@ -57,14 +57,12 @@ const SingleReComment = ({
     const [regdate, setRegdate] = useState(ReComment.regdate);
     const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
     const [likecount, setLikecount] = useState(0);
-    const [profileImagePath, setProfileImagePath] = useState("");
     const [reCommenterRole, setReCommenterRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState('<p><br></p>');
     const [timecount, setTimecount] = useState("1시간");
     const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(false);
     const [updateReCommentText, setUpdateReCommentText] = useState(ReComment.content);
-    const [deleteMode, setDeleteMode] = useState(false);
     const [ModalReplyUpdateReCommentOnOff, setModalReplyUpdateReCommentOnOff] = useState(false);
     const SettingRef = useRef(null);
 
@@ -184,22 +182,7 @@ const SingleReComment = ({
 
 
     useEffect(() => {
-        const getReCommenterProfileImagePath = (reCommenter) => {
-            axios.get(`${ip}/Users/profileImgPath?nickname=${reCommenter}`, {
-
-            },
-                {
-
-                })
-                .then((res) => {
-                    return res.data;
-                })
-                .then(data => {
-                    setProfileImagePath(data.profileImgPath);
-                })
-
-        }
-
+        
         const getReCommenterRole = (reCommenter) => {
             axios.get(`${ip}/Users/role?nickname=${reCommenter}`, {
 
@@ -314,7 +297,6 @@ const SingleReComment = ({
         setUpdateReCommentText(ReComment.content);
         setReCommentChangeValue("@" + ReComment.reCommenter + "\n");
 
-        getReCommenterProfileImagePath(ReComment.reCommenter);
         getReCommenterRole(ReComment.reCommenter);
         getLikers(ReComment.reCommenter, ReComment.regdate);
         getReComments(ReComment.original_replyer, ReComment.original_regdate);
@@ -564,7 +546,7 @@ const SingleReComment = ({
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <ReCommentUserProfileBox>
                     <ReCommentUserBox>
-                        <ReCommentUserProfile src={localStorage.getItem("profileImageDir") + profileImagePath} />
+                        <ReCommentUserProfile src={`${ip}/Users/profileImg/${reCommenter}`} />
                         <ReCommentInformationAllBox>
                             <div style={{ display: "flex" }}>
                                 <UserNicknameText>{reCommenter}</UserNicknameText>
@@ -707,7 +689,7 @@ const SingleReComment = ({
                     onSubmit={registerReComment}>
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <ReCommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                            <ReCommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickname}`:`${ip}/Users/profileImg/${user.nickname}`} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
@@ -749,7 +731,7 @@ const SingleReComment = ({
                     onSubmit={updateReComment}>
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <ReCommentUserProfile2 src={loginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_pathloginMaintain == "true" ? localStorage.getItem("profileImageDir") + userInfo.profileImgPath : localStorage.getItem("profileImageDir") + user.profile_img_path} />
+                            <ReCommentUserProfile2 src={`${ip}/Users/profileImg/${reCommenter}`} />
                         </ReCommentProfile>
                         <ReCommentInputBox>
                             <Editer2
