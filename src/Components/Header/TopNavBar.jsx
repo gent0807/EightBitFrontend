@@ -3,7 +3,6 @@ import styled, { keyframes } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineSearch } from "react-icons/hi";
 import { CgMenuGridR } from "react-icons/cg";
-import { MdLanguage } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
@@ -50,15 +49,12 @@ const HeaderBox = () => {
     const [isSupprotIconCheck, setIsSupprotIconCheck] = useState(false);
     const [isProfileLogoutCheck, setIsProfileLogoutCheck] = useState(false);
     const [isDefaultProfileScene, setIsDefaultProfileScene] = useState(false);
-    const [isDefaultLanguageScene, setIsDefaultLanguageScene] = useState(false);
     const [isDefaultFastScene, setIsDefaultFastScene] = useState(false);
     const [isDefaultWriteScene, setDefaultWriteScene] = useState(false);
-    const [LanguageMenuShow, setIsLanguageMenuShow] = useState(false);
     const [FastMenuShow, setIsFastMenuShow] = useState(false);
     const [WriteMenuShow, setIsWriteMenuShow] = useState(false);
     const [WriteMenuClickCheck, setIsWriteMenuClickCheck] = useState(false);
     const [WriteClickCheck, setWriteClickCheck] = useState(false);
-    const [LanguageClickCheck, setLanguageClickCheck] = useState(false);
     const [FastClickCheck, setFastClickCheck] = useState(false);
     const [BackgroundLine, setBackgroundLine] = useState(false)
     const [modalOnOffBtn, setModalOnOffBtn] = useState(false);
@@ -75,12 +71,10 @@ const HeaderBox = () => {
     const ip = localStorage.getItem("ip");
 
 
-    let languageTopZIndex = useRef(false);
     let fastMenuTopZIndex = useRef(false);
     let profileMenuTopZIndex = useRef(false);
     let writeMemuTopZIndex = useRef(false);
     let ProfileRef = useRef(null);
-    let LanguageRef = useRef(null);
     let FastRef = useRef(null);
     let WriteRef = useRef(null);
     let BtnLeaveRef = useRef(null);
@@ -120,28 +114,6 @@ const HeaderBox = () => {
             document.removeEventListener("mouseover", handleOuside);
         };
     }, [BtnLeaveRef]);
-
-    useEffect(() => {
-        function handleOuside(e) {
-            if (LanguageRef.current && !LanguageRef.current.contains(e.target)) {
-                setLanguageClickCheck(false);
-                setIsLanguageMenuShow(false);
-            }
-
-        };
-
-        if (WindowLength <= 1342) {
-            setLanguageClickCheck(false);
-            setIsLanguageMenuShow(false);
-        }
-
-        if (!LanguageMenuShow) {
-            document.addEventListener("click", handleOuside);
-        }
-        return () => {
-            document.removeEventListener("click", handleOuside);
-        };
-    }, [LanguageRef, WindowLength]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -273,31 +245,7 @@ const HeaderBox = () => {
         setBackgroundLine(true);
     }
 
-
-    const LanguageMenuCheck = () => {
-        languageTopZIndex.current = true;
-        fastMenuTopZIndex.current = false;
-        profileMenuTopZIndex.current = false;
-        writeMemuTopZIndex.current = false;
-        setIsLanguageMenuShow(!LanguageMenuShow);
-        setLanguageClickCheck(!LanguageClickCheck);
-        setIsDefaultLanguageScene(true);
-        setProfileMenuShow(false);
-        setProfileClickCheck(false);
-        setIsFastMenuShow(false);
-        setFastClickCheck(false);
-        setWriteClickCheck(false);
-        setIsWriteMenuShow(false);
-        setIsWriteMenuClickCheck(false);
-    }
-
-    const LanguageMenuNotCheck = () => {
-        setLanguageClickCheck(false);
-        setIsLanguageMenuShow(false);
-    }
-
     const FastMenuCheck = () => {
-        languageTopZIndex.current = false;
         fastMenuTopZIndex.current = true;
         profileMenuTopZIndex.current = false;
         writeMemuTopZIndex.current = false;
@@ -306,15 +254,12 @@ const HeaderBox = () => {
         setIsDefaultFastScene(true);
         setProfileMenuShow(false);
         setProfileClickCheck(false);
-        setIsLanguageMenuShow(false);
-        setLanguageClickCheck(false);
         setWriteClickCheck(false);
         setIsWriteMenuShow(false);
         setIsWriteMenuClickCheck(false);
     }
 
     const ProfileMenuCheck = () => {
-        languageTopZIndex.current = false;
         fastMenuTopZIndex.current = false;
         profileMenuTopZIndex.current = true;
         writeMemuTopZIndex.current = false;
@@ -322,8 +267,6 @@ const HeaderBox = () => {
         setProfileMenuShow(!ProfileMenuShow);
         setProfileClickCheck(!ProfileClickCheck);
         setIsDefaultProfileScene(true);
-        setIsLanguageMenuShow(false);
-        setLanguageClickCheck(false);
         setIsFastMenuShow(false);
         setFastClickCheck(false);
         setWriteClickCheck(false);
@@ -332,7 +275,6 @@ const HeaderBox = () => {
     }
 
     const WriteMenuCheck = () => {
-        languageTopZIndex.current = false;
         fastMenuTopZIndex.current = false;
         profileMenuTopZIndex.current = false;
         writeMemuTopZIndex.current = true;
@@ -342,8 +284,6 @@ const HeaderBox = () => {
         setDefaultWriteScene(true);
         setProfileMenuShow(false);
         setProfileClickCheck(false);
-        setIsLanguageMenuShow(false);
-        setLanguageClickCheck(false);
         setIsFastMenuShow(false);
         setFastClickCheck(false);
     }
@@ -587,18 +527,6 @@ const HeaderBox = () => {
                                                 <AiOutlineShopping />
                                             </MenuBox>] : [])}
 
-                                    <MenuBox
-                                        click={LanguageClickCheck}
-                                        left={"19px"}
-                                        top={"10px"}
-                                        size={"30px"}
-                                        ref={LanguageRef}
-                                        padding={"6px 0px 0px 0px"}
-                                        onClick={() => LanguageMenuCheck()} onBlur={() => LanguageMenuNotCheck()}
-                                    >
-                                        <MdLanguage />
-                                    </MenuBox>
-
                                     <Darkmode />
 
                                     <MenuBox
@@ -730,66 +658,6 @@ const HeaderBox = () => {
                                                     </MenuBox>])}
                                     </>
 
-                                    <LanguageListBox
-                                        margin={loginMaintain == null ? false : loginMaintain == "true" ?
-                                            ((userInfo != null) ? (userInfo.loginState === "allok" ?
-                                                true : false) : false) :
-                                            (user.login_state === "allok" ? true : false)}
-                                        zindex={languageTopZIndex.current}
-                                        default={isDefaultLanguageScene}
-                                        show={LanguageMenuShow}>
-                                        <ProfileUl>
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                                setLanguageClickCheck(!LanguageClickCheck)]}
-                                            >
-                                                <DropdownImg src={Korean} />
-                                                <ProfileliText MediaLeft={"17px"}>Korean</ProfileliText>
-                                            </Profileli>
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                                setLanguageClickCheck(!LanguageClickCheck)]}
-                                            >
-                                                <DropdownImg src={UK} />
-                                                <ProfileliText MediaLeft={"17px"}>English</ProfileliText>
-                                            </Profileli>
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                                setLanguageClickCheck(!LanguageClickCheck)]}
-                                            >
-                                                <DropdownImg src={Germany} />
-                                                <ProfileliText MediaLeft={"17px"}>Deutsch</ProfileliText>
-                                            </Profileli>
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                                setLanguageClickCheck(!LanguageClickCheck)]}
-                                            >
-                                                <DropdownImg src={Spain} />
-                                                <ProfileliText MediaLeft={"17px"}>Espanol</ProfileliText>
-                                            </Profileli>
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                                setLanguageClickCheck(!LanguageClickCheck)]}
-                                            >
-                                                <DropdownImg src={Japan} />
-                                                <ProfileliText MediaLeft={"17px"}>Japanese</ProfileliText>
-                                            </Profileli>
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => [setIsLanguageMenuShow(!LanguageMenuShow),
-                                                setLanguageClickCheck(!LanguageClickCheck)]}
-                                            >
-                                                <DropdownImg src={China} />
-                                                <ProfileliText MediaLeft={"17px"}>Chinese</ProfileliText>
-                                            </Profileli>
-                                        </ProfileUl>
-                                    </LanguageListBox>
-
                                     <FastListBox zindex={fastMenuTopZIndex.current} default={isDefaultFastScene} show={FastMenuShow}>
                                         <ProfileUl>
 
@@ -889,14 +757,6 @@ const HeaderBox = () => {
                                                 padding="15px 0px 15px 13px"
                                                 onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
                                             >
-                                                <DropdownImg src={Discussion} />
-                                                <ProfileliText MediaLeft={"17px"}>토론게시판</ProfileliText>
-                                            </Profileli>
-
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
                                                 <DropdownImg src={Strategy} />
                                                 <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
                                             </Profileli>
@@ -917,14 +777,6 @@ const HeaderBox = () => {
                                                 <ProfileliText MediaLeft={"17px"}>게임 리뷰</ProfileliText>
                                             </Profileli>
 
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Digital} />
-                                                <ProfileliText MediaLeft={"17px"}>아트워크</ProfileliText>
-                                            </Profileli>
-
                                         </ProfileUl>
                                     </WriteListBox>
                                 </ButtonBox>
@@ -939,20 +791,17 @@ const HeaderBox = () => {
                                 <Link to='/'><SubNavText>전체게임</SubNavText></Link>
                                 <Link to='/OfficialGame'><SubNavText>공식게임</SubNavText></Link>
                                 <Link to='/'><SubNavText>인디게임</SubNavText></Link>
-                                <Link to='/'><SubNavText>추천게임</SubNavText></Link>
                             </GameSubNav>
                             <ShopSubNav display={isShopTabCheck} TopBack={scrollPosition}>
                                 <Link to='/'><SubNavText>홈</SubNavText></Link>
                                 <Link to='/'><SubNavText>쿠폰샵</SubNavText></Link>
                                 <Link to='/'><SubNavText>굿즈샵</SubNavText></Link>
                                 <Link to='/'><SubNavText>장바구니</SubNavText></Link>
-                                <Link to='/'><SubNavText>위시리스트</SubNavText></Link>
                             </ShopSubNav>
                             <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
                                 <Link to='/FreeBoard'><SubNavText>공지사항</SubNavText></Link>
                                 <Link to='/'><SubNavText>이벤트</SubNavText></Link>
                                 <Link to='/FreeBoard'><SubNavText>공략게시판</SubNavText></Link>
-                                <Link to='/FreeBoard'><SubNavText>토론게시판</SubNavText></Link>
                                 <Link to='/FreeBoard'><SubNavText>자유게시판</SubNavText></Link>
                             </ComunitySubNav>
                             <SupportSubNav display={isSupprotTabCheck} TopBack={scrollPosition}>
@@ -1573,11 +1422,21 @@ const ProFileSlideDown = keyframes
     }
 `
 
+const WriterSlideDown = keyframes
+    `
+    0%{
+        height: 0px;
+    }
+    100%{
+        height: 253px;
+    }
+`
+
 const ProfileListBox = styled.div
     `
     display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 158.5px;
+    margin: 59px 0px 0px 108.5px;
     box-shadow: 0px 0px 0px ${props => props.show ? "3px" : "0px"} ${props => props.theme.borderColor};
     background: white;  
     height: ${props => props.show ? "378px" : "0px"};
@@ -1586,21 +1445,6 @@ const ProfileListBox = styled.div
     animation: ${props => props.show ? ProFileSlideDown : "none"} 0.25s;
     overflow: hidden;
     z-index: ${props => props.zindex ? 2 : 1};
-`
-
-const LanguageListBox = styled(ProfileListBox)
-    `
-    display: ${props => props.default ? "block" : "none"};
-    width: 217px;
-    margin: ${props => props.margin ? "59px 0px 0px -21.4px" : "59px 0px 0px -74px"};
-    height: ${props => props.show ? "378px" : "0px"};
-    z-index: ${props => props.zindex ? 2 : 1};
-
-    @media (min-width:666px) and (max-width:1342px)
-    {
-        display: none;
-        height: 0px;
-    }
 `
 
 const FastListBox = styled(ProfileListBox)
@@ -1616,8 +1460,10 @@ const WriteListBox = styled(ProfileListBox)
     `
     display: ${props => props.default ? "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 244.9px;
-    height: ${props => props.show ? "378px" : "0px"};
+    margin: 59px 0px 0px 194.9px;
+    height: 253px;
+    height: ${props => props.show ? "253px" : "0px"};
+    animation: ${props => props.show ? WriterSlideDown : "none"} 0.25s;
     z-index: ${props => props.zindex ? 2 : 1};
 `
 
