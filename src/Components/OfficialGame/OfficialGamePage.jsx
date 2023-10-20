@@ -53,7 +53,7 @@ const OfficialGame1 = styled.div
     &:hover
     {
         width: 120%;
-        transition: width 0.5s;
+        transition: width 0.25s;
     }
 `
 
@@ -76,7 +76,7 @@ const OfficialGame2 = styled.div
     &:hover
     {
         width: 120%;
-        transition: width 0.5s;
+        transition: width 0.25s;
     }
 `
 
@@ -99,7 +99,7 @@ const OfficialGame3 = styled.div
     &:hover
     {
         width: 120%;
-        transition: width 0.5s;
+        transition: width 0.25s;
     }
 `
 
