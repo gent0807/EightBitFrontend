@@ -11,7 +11,6 @@ const ip = `http://59.14.217.233:8033/EightBitBackend`;
 const Main = () => {
 
   localStorage.setItem("ip", ip);
-  localStorage.setItem("profileImageDir", profileImageDir);
 
 
   const isDarkmode = useRecoilValue(isDark);
