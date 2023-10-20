@@ -8,8 +8,6 @@ import { Provider } from 'react-redux';
 const ip = `http://59.14.217.233:8033/EightBitBackend`;
 //'http://localhost:8035'
 
-const profileImageDir = `${ip}/resources/Users/`;
-
 const Main = () => {
 
   localStorage.setItem("ip", ip);
