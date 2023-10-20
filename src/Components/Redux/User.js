@@ -8,7 +8,6 @@ export const userSlice = createSlice({
         access_token: null,
         refresh_token: null,
         nickname: null,
-        profile_img_path: null,
         point: 0,
     },
     reducers: {
@@ -19,7 +18,6 @@ export const userSlice = createSlice({
             state.refresh_token = null;
             state.temp_token = null;
             state.nickname = null;
-            state.profile_img_path = null;
             state.point = 0;
             return state;
         },
@@ -33,7 +31,6 @@ export const userSlice = createSlice({
             state.access_token = action.payload.accessToken;
             state.refresh_token = action.payload.refreshToken;
             state.nickname = action.payload.nickName;
-            state.profile_img_path = action.payload.profileImgPath;
             state.point = action.payload.point;
             return state;
         },
