@@ -275,7 +275,8 @@ const WriteBoard = () => {
             fd.append("regdate", regdate);
             //files.forEach((file) => fd.append("files", file));
 
-            await axios.post(`${ip}/Board/article/shareFiles`, fd, {
+            await axios.post(`${ip}/Board/article/shareFiles`, fd, 
+                {
                 headers: {
                             Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
                             "Content-Type": "multipart/form-data;",
@@ -284,7 +285,7 @@ const WriteBoard = () => {
                 .then((res) => {
                     console.log(res.status);
                     if(res.status == 403){
-                        console.log("not attach uploaded----------------");
+                        console.log("not attach uploaded----------------")  ;
                         return "not attach uploaded";
                     }
                     else if(res.status == 200){
