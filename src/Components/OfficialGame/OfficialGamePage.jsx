@@ -77,9 +77,23 @@ const OfficialGameAllBox = styled.div
 const OfficialGameBox = styled.div
 `
     display: flex;
-`
+` 
 
 const OfficialGame1 = styled.div
+`
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+`
+
+const OfficialGame2 = styled.div
+`
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+`
+
+const OfficialGame3 = styled.div
 `
     width: 100%;
     height: 100vh;
@@ -90,75 +104,51 @@ const OfficialGame1imgBox = styled.div
 `
 `
 
-const OfficialGame1img = styled.img
-`
-    height: 100vh;
-    width: 57vw;
-    position: absolute;
-    left: ${props => props.left ? "-12%" : "0%"};
-    clip: rect(0px, 33.3vw, 100vh, 0vw);
-    transition: clip 0.5s, left 0.5s;
-    z-index: 0;
-    &:hover
-    {
-        clip: rect(0px, 57.5vw, 100vh, 0vw);
-        transition: clip 0.5s, left 0.5s;
-        z-index: 1;
-    }
-`
-
-const OfficialGame2 = styled.div
-`
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-`
-
 const OfficialGame2imgBox = styled.div
 `
-`
-
-const OfficialGame2img = styled.img
-`
-    position: absolute;
-    height: 100vh;
-    width: 57vw;
-    left: ${props => props.left ? "2%" : props.left2 ? "38%" : "24%"};
-    clip: rect(0px, 42.7vw, 100vh, 9.3vw);
-    transition: clip 0.5s, left 0.5s;
-    z-index: ${props => props.left ? "-1" : "0"};
-    &:hover
-    {
-        clip: rect(0px, 56.3vw, 100vh, 0vw);
-        transition: clip 0.5s, left 0.5s;
-        z-index: 1;
-    }
-`
-
-const OfficialGame3img = styled.img
-`
-    position: absolute;
-    height: 100vh;
-    width: ${props => props.left ? "44vw" : "57vw"};
-    left: ${props => props.left ? "56%" : "43%"};
-    clip: rect(0px, 57.4vw, 100vh, 23.7vw);
-    transition: clip 0.5s;
-    z-index: 0;
-    &:hover
-    {
-        clip: rect(0px, 57.4vw, 100vh, 0vw);
-        transition: clip 0.5s, left 0.5s;
-        z-index: 1;
-    }
-`
-
-const OfficialGame3 = styled.div
-`
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
 `
 
 const OfficialGame3imgBox = styled.div
 `
 `
+
+const OfficialGame1img = styled.img
+`
+    width: 100%;
+    height: 100vh;
+    transform: scale(1);
+    transition: transform 0.5s;
+    &:hover
+    {
+        transform: scale(1.2);
+        transition: transform 0.5s;
+    }
+`
+
+const OfficialGame2img = styled.img
+`
+    width: 100%;
+    height: 100vh;
+    transform: scale(1);
+    transition: transform 0.5s;
+    &:hover
+    {
+        transform: scale(1.2);
+        transition: transform 0.5s;
+    }
+`
+
+const OfficialGame3img = styled.img
+`
+    width: 100%;
+    height: 100vh;
+    transform: scale(1);
+    transition: transform 0.5s;
+    &:hover
+    {
+        transform: scale(1.2);
+        transition: transform 0.5s;
+    }
+`
+
+
