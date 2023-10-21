@@ -525,11 +525,11 @@ const AllBox = styled.div
     flex-direction: column;
     justify-content: end;
     background: rgba(0,0,0,0.3);
-    top: 0.2%;
+    top: 0%;
     height: 74.7%;
-    left: 0.4%;
+    left: 0%;
     border-radius: 8px;
-    width: 99.163%;
+    width: 100%;
     overflow: hidden;
      @media (min-width:250px) and (max-width:560px)
     {
