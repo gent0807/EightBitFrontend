@@ -121,7 +121,7 @@ const OfficialGamePage = () => {
 
                                 <OfficialIntroduceBox>
                                     <OfficialIntroduceText>
-                                        {Slide[0].title}
+                                        {Slide[1].title}
                                     </OfficialIntroduceText>
                                 </OfficialIntroduceBox>
 
@@ -170,7 +170,7 @@ const OfficialGamePage = () => {
 
                                 <OfficialIntroduceBox>
                                     <OfficialIntroduceText>
-                                        {Slide[0].title}
+                                        {Slide[2].title}
                                     </OfficialIntroduceText>
                                 </OfficialIntroduceBox>
 
@@ -290,7 +290,7 @@ const VideoDownloadBtnText = styled.span
 
 const OfficialGame1InformaitonBox = styled.div
     `
-    position: absolute;
+    position: fixed;
     width: 33.4vw;
     height:100%;
     top: 0;
@@ -356,7 +356,7 @@ const OfficialGame3Inforimg = styled.img
 
 const OfficialGame2InformaitonBox = styled.div
     `
-    position: absolute;
+    position: fixed;
     width: 33.4vw;
     height:100%;
     top: 0;
@@ -368,7 +368,7 @@ const OfficialGame2InformaitonBox = styled.div
 
 const OfficialGame3InformaitonBox = styled.div
     `
-    position: absolute;
+    position: fixed;
     width: 33.4vw;
     height:100%;
     top: 0;
@@ -412,12 +412,12 @@ const OfficialGame1 = styled.div
     overflow: hidden;
     &:hover{
         ${OfficialGame1InformaitonBox}{
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s 0.3s ease;
             opacity: 1;
         }
         ${OfficialGame1img}{
             transform: scale(1.2);
-            transition: transform 0.5s;
+            transition: transform 0.5s 0.3s;
         }
     }
     `
@@ -429,12 +429,12 @@ const OfficialGame2 = styled.div
     overflow: hidden;
     &:hover{
         ${OfficialGame2InformaitonBox}{
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s 0.3s ease;
             opacity: 1;
         }
         ${OfficialGame2img}{
             transform: scale(1.2);
-            transition: transform 0.5s;
+            transition: transform 0.5s 0.3s;
     }
     `
 
@@ -445,12 +445,12 @@ const OfficialGame3 = styled.div
     overflow: hidden;
     &:hover{
         ${OfficialGame3InformaitonBox}{
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s 0.3s ease;
             opacity: 1;
         }
         ${OfficialGame3img}{
             transform: scale(1.2);
-            transition: transform 0.5s;
+            transition: transform 0.5s 0.3s;
     }
     `
 
