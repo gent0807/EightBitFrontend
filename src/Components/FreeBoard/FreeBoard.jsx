@@ -3,11 +3,13 @@ import { useState, useRef, useEffect } from "react";
 import { SearchInputBox, SearchInput, SearchInputIconBox, SearchButton } from "../Header/TopNavBar";
 import { ArrowBox } from "../Sign/Signinput";
 import { HiOutlineSearch } from "react-icons/hi";
+import { AiFillCheckCircle } from "react-icons/ai";
 import Pagination from "./Pagination";
 import { useRecoilState } from "recoil";
 import { firstReset } from "../Darkmode/Darkmode";
 import { Link, useNavigate } from "react-router-dom";
 import NotPage from "./NotPage";
+import { BiLogoDevTo } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -173,7 +175,9 @@ const FreeBoard = () => {
                 setPosts(data);
                 setSearchList(data);
             })
-    }, [])
+    }, []);
+
+   
 
     const SearchSubmit = (e) => {
         e.preventDefault();
@@ -267,7 +271,7 @@ const FreeBoard = () => {
             <BoardBox>
                 <BoardContentAllBox>
                     {SearchList.length === 0 && <NotPage />}
-                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, writer, regdate, visitcnt, reply_count, likecount, content }) => (
+                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, writer, role, regdate, updatedate, visitcnt, reply_count, likecount, content }) => (
                         <BoardContentBox key={id}>
                             <ReplyCountAllBox>
                                 <ReplyCountBox>
@@ -280,7 +284,22 @@ const FreeBoard = () => {
                                 <ProfileAllBox>
                                     <WriterProfile writer={writer} />
                                     <ProfileBox>
-                                        <BoardContentWriter>{writer}</BoardContentWriter>
+                                        <div style={{display:"flex"}}>
+                                            <BoardContentWriter>{writer}</BoardContentWriter>
+                                            <CorrectionIcon writerRole={role}>
+                                                <BiLogoDevTo />
+                                            </CorrectionIcon>
+
+                                            {regdate == updatedate ? "" :
+                                            <CorrectionTextBox>
+                                                <CorrectionTextBoxIcon>
+                                                    <AiFillCheckCircle />
+                                                </CorrectionTextBoxIcon>
+                                                <CorrectionText>
+                                                    수정됨
+                                                </CorrectionText>
+                                            </CorrectionTextBox>}
+                                        </div>
                                         <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
                                     </ProfileBox>
                                 </ProfileAllBox>
@@ -508,9 +527,37 @@ const BoardContentViewtime = styled(BoardContentNumber)
 const BoardContentWriter = styled(BoardContentNumber)
     `
     font-size: 20px;
-    margin: 0px 10px 6px 10px;
+    margin: 0px 0px 6px 10px;
     cursor: pointer;
 `
+
+const CorrectionIcon = styled.i
+    `
+    display: ${props => props.writerRole === "DEVELOPER" ? "block" : "none"};
+    svg
+    {
+        font-size: 25px;
+        margin: 0px 0px 1px 0px;
+    }
+`
+
+const CorrectionTextBox = styled.div
+    `
+    display: flex;
+    margin: 7.2px 0px 0px 0px;
+`
+const CorrectionTextBoxIcon = styled.i
+    `
+    svg
+    {
+        margin: 0px 1px 0px -1px;
+    }
+`
+const CorrectionText = styled.span
+    `
+    font-size: 13.5px;
+`
+
 const BoardContentCounter = styled(BoardContentNumber)
     `
     margin: 0px 0px 0px 5px;

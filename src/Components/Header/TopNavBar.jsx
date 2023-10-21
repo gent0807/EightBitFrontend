@@ -673,12 +673,12 @@ const HeaderBox = () => {
                                     >
                                         <ProfileUl>
                                             <Link to='/'>
-                                                <Profileli
+                                            <Profileli
                                                     padding="15px 0px 15px 13px"
                                                     onClick={() => [setProfileMenuShow(!ProfileMenuShow),
                                                     setProfileClickCheck(!ProfileClickCheck)]}
                                                 >
-                                                    <DropdownImg src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`}/>
+                                                    <DropdownImg src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`: user.login_state === null ? User :`${ip}/Users/profileImg/${user.nickname}`}/>
                                                     <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
                                                 </Profileli>
                                             </Link>

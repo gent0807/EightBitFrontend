@@ -273,23 +273,56 @@ const WriteBoard = () => {
 
             fd.append("writer", writer);
             fd.append("regdate", regdate);
-            Object.values(files).forEach((file) => fd.append("file", file));
+            //files.forEach((file) => fd.append("files", file));
 
             await axios.post(`${ip}/Board/article/shareFiles`, fd, {
                 headers: {
-                    Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                    "Content-Type": `multipart/form-data;`
-                }
-            })
+                            Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
+                            "Content-Type": "multipart/form-data;",
+                        },
+                })
                 .then((res) => {
-                    return res.data
+                    console.log(res.status);
+                    if(res.status == 403){
+                        console.log("not attach uploaded----------------");
+                        return "not attach uploaded";
+                    }
+                    else if(res.status == 200){
+                        return "attach uploaded";
+                    }
                 }
                 )
                 .then((data) => {
-                    navigate('/FreeArticle/' + writer + '/' + regdate);
-                    return;
+                    if(data == "not attach uploaded"){
+                        alert("파일 첨부에 실패하였습니다.");
+                        return;
+                    }
+                    else if(data == "attach uploaded"){
+                        navigate('/FreeArticle/' + writer + '/' + regdate);
+                        return;
+                    }
+                    
                 }
                 )
+        }
+
+        const pointUp = async (writer,regdate) => {
+            await axios.patch(`${ip}/Users/point/up?writer=${writer}&point=10`,
+                    {
+
+                    },
+                    {
+                        headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                    })
+                    .then((res) => {
+                        return res.data;
+                    }
+                    )
+                    .then((data) => {
+                        dispatch(point(data));
+                        navigate('/FreeArticle/' + writer + '/' + regdate);
+                        return;
+                    });
         }
 
         e.preventDefault();
@@ -330,22 +363,8 @@ const WriteBoard = () => {
                     registFile(writer, regdate);
                 }
 
-                axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=10`,
-                    {
+                pointUp(writer,regdate);
 
-                    },
-                    {
-                        headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                    })
-                    .then((res) => {
-                        return res.data;
-                    }
-                    )
-                    .then((data) => {
-                        dispatch(point(data));
-                        navigate('/FreeArticle/' + writer + '/' + regdate);
-                        return;
-                    });
             })
 
     }
@@ -515,8 +534,8 @@ const WriteBoard = () => {
                     </FileList>
                 </FileUploadBox>
                 <SubmitBtnBox>
-                    <Link to="/FreeBoard"><CancelBtn>취소</CancelBtn></Link>
-                    <SubmitBtn>등록</SubmitBtn>
+                    <Link to="/FreeBoard"><CancelBtn type="button">취소</CancelBtn></Link>
+                    <SubmitBtn type='submit'>등록</SubmitBtn>
                 </SubmitBtnBox>
             </WriteBoardSubmit>
         </WriterInputBox>
