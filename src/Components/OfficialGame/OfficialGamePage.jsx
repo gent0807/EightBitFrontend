@@ -6,24 +6,60 @@ import test3 from "../../img/MainSlide/test3.png"
 
 const OfficialGamePage = () =>
 {
+
+    const [hoverImg1,setHoverImg1] = useState(false);
+    const [hoverImg2for3,sethoverImg2for3] = useState(false);
+    const [hoverImg2for1,setHoverImg2for1] = useState(false);
+    const [hoverImg3,setHoverImg3] = useState(false);
+
+    const hoverImg1Inhandler = () => {
+        setHoverImg2for1(true);
+        setHoverImg3(true);
+    }
+
+    const hoverImg1Outhandler = () => {
+        setHoverImg2for1(false);
+        setHoverImg3(false);
+    }
+
+    const hoverImg3Inhandler = () => {
+        setHoverImg1(true);
+        sethoverImg2for3(true);
+    }
+
+    const hoverImg3Outhandler = () => {
+        setHoverImg1(false);
+        sethoverImg2for3(false);
+    }
+
     return(
         <OfficialGameAllBox>
             <OfficialGameBox>
                 <OfficialGame1>
                     <OfficialGame1imgBox>
-                        <OfficialGame1img src={test2} />
+                        <OfficialGame1img 
+                            src={test2} 
+                            left={hoverImg1} 
+                            onMouseOver={() => hoverImg1Inhandler()}
+                            onMouseOut={() => hoverImg1Outhandler()} 
+                        />
                     </OfficialGame1imgBox>
                 </OfficialGame1>
 
                 <OfficialGame2>
                     <OfficialGame2imgBox>
-                        <OfficialGame2img src={test1} />
+                        <OfficialGame2img src={test1} left={hoverImg2for3} left2={hoverImg2for1} />
                     </OfficialGame2imgBox>
                 </OfficialGame2>
 
                 <OfficialGame3>
                     <OfficialGame3imgBox>
-                        <OfficialGame3img src={test3} />
+                        <OfficialGame3img 
+                            src={test3} 
+                            left={hoverImg3}
+                            onMouseOver={() => hoverImg3Inhandler()}
+                            onMouseOut={() => hoverImg3Outhandler()}
+                        />
                     </OfficialGame3imgBox>
                 </OfficialGame3>
             </OfficialGameBox>
@@ -40,7 +76,6 @@ const OfficialGameAllBox = styled.div
 
 const OfficialGameBox = styled.div
 `
-    width: 100%;
     display: flex;
 `
 
@@ -48,67 +83,82 @@ const OfficialGame1 = styled.div
 `
     width: 100%;
     height: 100vh;
-    background: red;
     overflow: hidden;
-    &:hover
-    {
-        width: 120%;
-        transition: width 0.25s;
-    }
 `
 
 const OfficialGame1imgBox = styled.div
 `
-    width: 100%;
 `
 
 const OfficialGame1img = styled.img
 `
-    width: 100%;
+    height: 100vh;
+    width: 57vw;
+    position: absolute;
+    left: ${props => props.left ? "-12%" : "0%"};
+    clip: rect(0px, 33.3vw, 100vh, 0vw);
+    transition: clip 0.5s, left 0.5s;
+    z-index: 0;
+    &:hover
+    {
+        clip: rect(0px, 57.5vw, 100vh, 0vw);
+        transition: clip 0.5s, left 0.5s;
+        z-index: 1;
+    }
 `
 
 const OfficialGame2 = styled.div
 `
     width: 100%;
     height: 100vh;
-    background: yellow;
     overflow: hidden;
-    &:hover
-    {
-        width: 120%;
-        transition: width 0.25s;
-    }
 `
 
 const OfficialGame2imgBox = styled.div
 `
-    width: 100%;
 `
 
 const OfficialGame2img = styled.img
 `
-    width: 100%;
+    position: absolute;
+    height: 100vh;
+    width: 57vw;
+    left: ${props => props.left ? "2%" : props.left2 ? "38%" : "24%"};
+    clip: rect(0px, 42.7vw, 100vh, 9.3vw);
+    transition: clip 0.5s, left 0.5s;
+    z-index: ${props => props.left ? "-1" : "0"};
+    &:hover
+    {
+        clip: rect(0px, 56.3vw, 100vh, 0vw);
+        transition: clip 0.5s, left 0.5s;
+        z-index: 1;
+    }
+`
+
+const OfficialGame3img = styled.img
+`
+    position: absolute;
+    height: 100vh;
+    width: ${props => props.left ? "44vw" : "57vw"};
+    left: ${props => props.left ? "56%" : "43%"};
+    clip: rect(0px, 57.4vw, 100vh, 23.7vw);
+    transition: clip 0.5s;
+    z-index: 0;
+    &:hover
+    {
+        clip: rect(0px, 57.4vw, 100vh, 0vw);
+        transition: clip 0.5s, left 0.5s;
+        z-index: 1;
+    }
 `
 
 const OfficialGame3 = styled.div
 `
     width: 100%;
     height: 100vh;
-    background: blue;
     overflow: hidden;
-    &:hover
-    {
-        width: 120%;
-        transition: width 0.25s;
-    }
 `
 
 const OfficialGame3imgBox = styled.div
 `
-    width: 100%;
-`
-
-const OfficialGame3img = styled.img
-`
-    width: 100%;
 `
