@@ -805,6 +805,7 @@ const FreeArticle = () => {
 
                 </UserinformationBox>
             </UserBox>
+
             <InformationBox>
                 <InformationAllBox>
                     <TitleBox>
@@ -1159,7 +1160,7 @@ const FloderMenu1 = styled.ul
     position: absolute;
     padding: 10px;
     list-style: none;
-    margin: 0px 0px -44px -40px;
+    margin: 0px 0px -45px -45px;
     border: solid 1px ${props => props.theme.borderColor};
     border-radius: 10px;
     background: ${props => props.theme.backgroundColor};
@@ -1171,7 +1172,18 @@ const FloderMenu2 = styled.ul
     position: absolute;
     padding: 10px;
     list-style: none;
-    margin: 0px 0px -75px -30px;
+    margin: ${props => props.attachmentLength === 1 ? 
+        "0px 0px -45px -45px" : 
+        props.attachmentLength === 2 ? 
+        "0px 0px -72.2px -45px" : 
+        props.attachmentLength === 3 ?
+        "0px 0px -96.4px -45px" :
+        props.attachmentLength === 4 ?
+        "0px 0px -119.8px -45px" :
+        props.attachmentLength === 5 ?
+        "0px 0px -145.7px -45px" :
+        "0px 0px -45px -45px"
+    };
     border: solid 1px ${props => props.theme.borderColor};
     border-radius: 10px;
     background: ${props => props.theme.backgroundColor};
@@ -1181,7 +1193,15 @@ const FloderMenu2 = styled.ul
 const Floderli = styled.li
     `
     cursor: pointer;
-    margin: 2px 0px 4px 0px;
+    width: 101px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    &:not(:last-child)
+    {
+        margin: 0px 0px 7px 0px;
+    }
 `
 
 const FloderBoxIcon = styled.i
