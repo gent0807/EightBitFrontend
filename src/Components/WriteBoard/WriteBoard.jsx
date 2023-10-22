@@ -120,6 +120,7 @@ const WriteBoard = () => {
        }
    }, []); */
 
+
     const formats = [
         "header",
         "font",
@@ -293,7 +294,7 @@ const WriteBoard = () => {
                 })
 
 
-            
+
         }
 
         const pointUp = async (writer, regdate) => {
@@ -349,11 +350,18 @@ const WriteBoard = () => {
                 const writer = data.writer;
                 const regdate = data.regdate;
 
-                if (files.length > 0) {
-                    registFile(writer, regdate);
+                if (files.length == 0) {
+                    pointUp(writer, regdate);
+                    return;
                 }
 
-                
+                else if (files.length > 0) {
+                    registFile(writer, regdate);
+                    return;
+                }
+
+
+
 
             })
 

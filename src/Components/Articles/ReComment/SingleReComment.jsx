@@ -561,8 +561,8 @@ const SingleReComment = ({
                             <div style={{ display: "flex" }}>
                                 <BsHandThumbsUp size={17} style={{ margin: "3px 0px 0px 0px" }} />
                                 <ReCommentreplyLikeCount>{likecount}</ReCommentreplyLikeCount>
-                                <BsDot style={{ margin: "3px -1px 0px -2px" }}></BsDot>
-                                <ReCommentreplyIcon>약 {timecount} 전</ReCommentreplyIcon>
+                                {/* <BsDot style={{ margin: "3px -1px 0px -2px" }}></BsDot> */}
+                                {/* <ReCommentreplyIcon>약 {timecount} 전</ReCommentreplyIcon> */}
                             </div>
 
                         </ReCommentInformationAllBox>
