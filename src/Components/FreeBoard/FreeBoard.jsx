@@ -23,8 +23,8 @@ const FreeBoard = () => {
     const [Search, setSearch] = useState("");
     const [SearchFillText, setSearchFillText] = useState("제목");
     const [Fitter, setFitter] = useState("최신순");
-    const [LimtText, setLimtText] = useState("20개");
-    const [limit, setLimit] = useState(20);
+    const [LimtText, setLimtText] = useState("10개");
+    const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
     const [FitterDropdown, setFitterDropdown] = useState(false);

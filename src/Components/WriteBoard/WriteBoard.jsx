@@ -273,57 +273,46 @@ const WriteBoard = () => {
 
             fd.append("writer", writer);
             fd.append("regdate", regdate);
-            //files.forEach((file) => fd.append("files", file));
 
-            await axios.post(`${ip}/Board/article/shareFiles`, fd, 
-                {
+            for (let i = 0; i < files.length; i++) {
+                fd.append("files", files[i].object);
+            }
+
+            await axios.post(`${ip}/Board/article/shareFiles`, fd, {
                 headers: {
-                            Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                            "Content-Type": "multipart/form-data;",
-                        },
+                    'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
+                    pointUp(writer, regdate);
+                    return;
+                })
+
+
+            
+        }
+
+        const pointUp = async (writer, regdate) => {
+            await axios.patch(`${ip}/Users/point/up?writer=${writer}&point=10`,
+                {
+
+                },
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
                 .then((res) => {
-                    console.log(res.status);
-                    if(res.status == 403){
-                        console.log("not attach uploaded----------------")  ;
-                        return "not attach uploaded";
-                    }
-                    else if(res.status == 200){
-                        return "attach uploaded";
-                    }
+                    return res.data;
                 }
                 )
                 .then((data) => {
-                    if(data == "not attach uploaded"){
-                        alert("파일 첨부에 실패하였습니다.");
-                        return;
-                    }
-                    else if(data == "attach uploaded"){
-                        navigate('/FreeArticle/' + writer + '/' + regdate);
-                        return;
-                    }
-                    
-                }
-                )
-        }
-
-        const pointUp = async (writer,regdate) => {
-            await axios.patch(`${ip}/Users/point/up?writer=${writer}&point=10`,
-                    {
-
-                    },
-                    {
-                        headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                    })
-                    .then((res) => {
-                        return res.data;
-                    }
-                    )
-                    .then((data) => {
-                        dispatch(point(data));
-                        navigate('/FreeArticle/' + writer + '/' + regdate);
-                        return;
-                    });
+                    dispatch(point(data));
+                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    return;
+                });
         }
 
         e.preventDefault();
@@ -364,7 +353,7 @@ const WriteBoard = () => {
                     registFile(writer, regdate);
                 }
 
-                pointUp(writer,regdate);
+                
 
             })
 
@@ -496,7 +485,7 @@ const WriteBoard = () => {
                             <FileUpload
                                 id='fileUpload'
                                 type="file"
-                                multiple={true}
+                                multiple="multiple"
                                 onChange={(e) => { onChangeFiles(e); e.target.value = ""; }}
                             />
                             <FileUploadText checkFile={isDragging}><AiFillFileAdd /></FileUploadText>

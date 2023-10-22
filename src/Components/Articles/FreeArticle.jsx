@@ -312,6 +312,7 @@ const FreeArticle = () => {
                     return res.data
                 })
                 .then(data => {
+                    console.log("첨부파일 개수 1개 이상");
                     console.log(data);
                     setAttachmentes(data);
                 })
@@ -349,6 +350,9 @@ const FreeArticle = () => {
                 getReCommentCount(data.writer, data.regdate);
                 if (data.attach_count > 0) {
                     getAttachList(data.writer, data.regdate);
+                }
+                else if(data.attach_count==0){
+                    console.log("첨부파일 개수 0개");
                 }
             })
 
