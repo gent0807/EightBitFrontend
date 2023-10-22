@@ -46,6 +46,8 @@ const FreeArticle = () => {
     const [visitcnt, setVisitcnt] = useState(0);
     const [likecount, setLikecount] = useState(0);
     const [writerRole, setWriterRole] = useState("");
+    const [attachCount, setAttachCount] = useState(0);
+    const [attachmentes, setAttachmentes] = useState([]);
     const [reportMode, setReportMode] = useState(false);
     const [deleteMode, setDeleteMode] = useState(false);
     const [ReplyDeleteMode, setReplyDeleteMode] = useState(false);
@@ -80,13 +82,13 @@ const FreeArticle = () => {
 
     const [Comments, setComments] = useState([]);
 
-    const [InformationImage, setInformationImage] = useState([
+    /* const [InformationImage, setInformationImage] = useState([
         {
             id: 1,
             src: `${ip}/resources/board/article/nomalfiles/image.png`,
             //src:`${ip}/src/main/resources/static/board/article/nomalfiles/image.png`,
         }
-    ]);
+    ]); */
 
     const [limit, setLimit] = useState(5);
     const [page, setPage] = useState(1);
@@ -282,7 +284,7 @@ const FreeArticle = () => {
                 })
         }
 
-        const updateUserFreeArticleView= async (nickname, writer, regdate) => {
+        const updateUserFreeArticleView = async (nickname, writer, regdate) => {
             await axios.post(`${ip}/Board/article/view`, {
                 viewer: nickname,
                 writer: writer,
@@ -300,6 +302,22 @@ const FreeArticle = () => {
                 })
         }
 
+        const getAttachList = async (writer, regdate) => {
+            await axios.get(`${ip}/Board/article/attaches/${writer}/${regdate}`, {
+
+            }, {
+
+            })
+                .then(res => {
+                    return res.data
+                })
+                .then(data => {
+                    console.log("첨부파일 개수 1개 이상");
+                    console.log(data);
+                    setAttachmentes(data);
+                })
+        }
+
 
 
         axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
@@ -311,13 +329,13 @@ const FreeArticle = () => {
             .then(res => res.data
             )
             .then(data => {
-                if(loginMaintain == "true"){
-                    if(userInfo != null){
+                if (loginMaintain == "true") {
+                    if (userInfo != null) {
                         updateUserFreeArticleView(userInfo.nickName, writer, regdate);
                     }
                 }
-                else if(loginMaintain == "false"){
-                    if(user.nickname != null){
+                else if (loginMaintain == "false") {
+                    if (user.nickname != null) {
                         updateUserFreeArticleView(user.nickname, writer, regdate);
                     }
                 }
@@ -325,10 +343,17 @@ const FreeArticle = () => {
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
                 setVisitcnt(data.visitcnt);
+                setAttachCount(data.attach_count);
                 getWriterRole(data.writer);
                 getComments(data.writer, data.regdate);
                 getLikers(data.writer, data.regdate);
                 getReCommentCount(data.writer, data.regdate);
+                if (data.attach_count > 0) {
+                    getAttachList(data.writer, data.regdate);
+                }
+                else if(data.attach_count==0){
+                    console.log("첨부파일 개수 0개");
+                }
             })
 
     }, [toggleState]);
@@ -796,9 +821,34 @@ const FreeArticle = () => {
                                         } />
                                 </FloderBoxIcon>
 
-                                <FloderMenu fileDownloadMode={fileDownloadMode}>
-                                    <Floderli><FloderText>첨부파일</FloderText></Floderli>
-                                </FloderMenu>
+                                    
+                                    {attachmentes.length == 0 && <FloderMenu1 fileDownloadMode={fileDownloadMode}><Floderli><FloderText>no downloads</FloderText></Floderli></FloderMenu1>}
+                                    
+                                    <FloderMenu2 fileDownloadMode={fileDownloadMode} attachmentLength={attachmentes.length}>
+                                    {attachmentes.length > 0 &&
+                                            
+                                            attachmentes.slice(offset,offset+limit).map(attachment => {
+                                                
+                                                const id=attachment.id;
+                                                const uploader=attachment.uploader;
+                                                const regdate=attachment.regdate;
+                                                const uploadFilename=attachment.uploadFilename;
+
+                                                console.log(id,uploader,regdate,uploadFilename);        
+                                                return(
+                                                    <Floderli>
+                                                        <FloderText>
+                                                            <DownloadLink href={`${ip}/Board/article/attach/${id}/${uploader}/${regdate}`}>{uploadFilename}</DownloadLink>
+                                                        </FloderText>
+                                                    </Floderli>
+                                                );
+                                            })
+                                            
+                                    }
+                                   </FloderMenu2>
+                                
+
+                               
                             </FloderBox>
 
                             <ShareBox ref={ShareRef}>
@@ -829,7 +879,7 @@ const FreeArticle = () => {
                     <TitleLine></TitleLine>
                     <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
 
-                    {InformationImage.length > 0 &&
+                    {/*   {InformationImage.length > 0 &&
                         InformationImage.map(Image => {
                             return (
                                 <InformaionImageBox
@@ -838,7 +888,7 @@ const FreeArticle = () => {
                                     style={{ width: "400px", height: "400px", borderRadius: "10px" }} />
                             );
                         })
-                    }
+                    } */}
                     <div style={{ height: "250px" }}>
                     </div>
                     <div style={{ display: "flex" }}>
@@ -863,7 +913,7 @@ const FreeArticle = () => {
                         onSubmit={registerReply2}>
                         <CommentArea2>
                             <CommentProfile>
-                                <CommentUserProfile src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                                <CommentUserProfile src={loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : `${ip}/Users/profileImg/${user.nickname}`} />
                             </CommentProfile>
                             <CommentInputBox>
                                 <Editer2
@@ -1017,7 +1067,7 @@ const FreeArticle = () => {
                     onSubmit={registerReply}>
                     <CommentArea>
                         <CommentProfile>
-                            <CommentUserProfile src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                            <CommentUserProfile src={loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : `${ip}/Users/profileImg/${user.nickname}`} />
                         </CommentProfile>
                         <CommentInputBox>
                             <Editer
@@ -1045,6 +1095,12 @@ export default FreeArticle;
 const FloderText = styled.span
     `
     font-weight: bold;
+`
+
+const DownloadLink = styled.a
+    `
+    text-decoration: none;
+    color: ${props => props.theme.textColor};
 `
 
 const ShareText = styled.span
@@ -1097,21 +1153,35 @@ const Shareli = styled.li
     }
 `
 
-const FloderMenu = styled.ul
+const FloderMenu1 = styled.ul
     `
     display: ${props => props.fileDownloadMode ? "block" : "none"};
     position: absolute;
     padding: 10px;
     list-style: none;
-    margin: 0px 0px -44px -24px;
+    margin: 0px 0px -44px -40px;
     border: solid 1px ${props => props.theme.borderColor};
     border-radius: 10px;
     background: ${props => props.theme.backgroundColor};
 `
 
+const FloderMenu2 = styled.ul
+    `
+    display: ${props => props.fileDownloadMode && props.attachmentLength > 0 ? "block" : "none"};
+    position: absolute;
+    padding: 10px;
+    list-style: none;
+    margin: 0px 0px -75px -30px;
+    border: solid 1px ${props => props.theme.borderColor};
+    border-radius: 10px;
+    background: ${props => props.theme.backgroundColor};
+`
+
+
 const Floderli = styled.li
     `
     cursor: pointer;
+    margin: 2px 0px 4px 0px;
 `
 
 const FloderBoxIcon = styled.i
