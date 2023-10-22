@@ -5,7 +5,7 @@ import { isDark } from './Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-const ip = `http://59.14.217.233:8033/EightBitBackend`;
+const ip = `http://59.14.217.233:8035`;
 //'http://localhost:8035'
 
 const Main = () => {
