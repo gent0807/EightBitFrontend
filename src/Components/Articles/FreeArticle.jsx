@@ -303,8 +303,7 @@ const FreeArticle = () => {
                 })
                 .then(data => {
                     totalCommentCount.current=data.length;
-                    setComments(data);
-                    console.log(data);
+                    setComments(data.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)));
                 })
         }
 
@@ -751,33 +750,45 @@ const FreeArticle = () => {
     const setLikeValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        if(innerText === "추천순")
+        {
         const FillerState = Comments.sort((a, b) => b.likecount - a.likecount);
         setComments(FillerState);
         setPage(1);
+        }
     }
 
     const setReplyValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        if(innerText === "댓글순")
+        {
         const FillerState = Comments.sort((a, b) => b.recomment_count - a.recomment_count);
         setComments(FillerState);
         setPage(1);
+        }
     }
 
     const setCurrentValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        if(innerText === "최신순")
+        {
         const FillerState = Comments.sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
         setComments(FillerState);
         setPage(1);
+        }
     }
 
     const setPastValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
+        if(innerText === "과거순")
+        {
         const FillerState = Comments.sort((a, b) => new Date(a.regdate) - new Date(b.regdate));
         setComments(FillerState);
         setPage(1);
+        }
     }
 
     return (
