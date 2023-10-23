@@ -1,5 +1,5 @@
 import { styled, keyframes } from "styled-components";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { SearchInputBox, SearchInput, SearchInputIconBox, SearchButton } from "../Header/TopNavBar";
 import { ArrowBox } from "../Sign/Signinput";
 import { HiOutlineSearch } from "react-icons/hi";
@@ -47,7 +47,7 @@ const AllGamePage = () => {
             id: 3,
             img: test3,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-20 13:45:35",
             likecount: 1234
         },
@@ -55,7 +55,7 @@ const AllGamePage = () => {
             id: 4,
             img: test4,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-19 13:45:35",
             likecount: 2422
         },
@@ -63,7 +63,7 @@ const AllGamePage = () => {
             id: 5,
             img: test,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-23 13:45:35",
             likecount: 345,
         },
@@ -79,7 +79,7 @@ const AllGamePage = () => {
             id: 7,
             img: test2,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-21 13:45:35",
             likecount: 431
         },
@@ -95,7 +95,7 @@ const AllGamePage = () => {
             id: 9,
             img: test4,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-19 13:45:35",
             likecount: 2422
         },
@@ -103,7 +103,7 @@ const AllGamePage = () => {
             id: 10,
             img: test,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-23 13:45:35",
             likecount: 345,
         },
@@ -111,7 +111,7 @@ const AllGamePage = () => {
             id: 11,
             img: test1,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-22 13:45:35",
             likecount: 432,
         },
@@ -119,7 +119,7 @@ const AllGamePage = () => {
             id: 12,
             img: test2,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-21 13:45:35",
             likecount: 431
         },
@@ -127,7 +127,7 @@ const AllGamePage = () => {
             id: 13,
             img: test3,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-20 13:45:35",
             likecount: 1234
         },
@@ -135,7 +135,7 @@ const AllGamePage = () => {
             id: 14,
             img: test4,
             content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
+            title: "토파즈",
             regdate: "2023-10-19 13:45:35",
             likecount: 2422
         },
@@ -157,7 +157,7 @@ const AllGamePage = () => {
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
-    const [SearchList, setSearchList] = useState(Slide);
+    const [SearchList, setSearchList] = useState([]);
     const SlideSize = Slide.slice(offset, offset + limit);
     const [FillterState, setFillerState] = useState("title");
     let userInfo = localStorage.getItem("userInfo");
@@ -261,12 +261,17 @@ const AllGamePage = () => {
         }
     }, [SlideSize.length, Slide.length]);
 
+    useEffect(() => {
+        setSearchList(Slide);
+    }, []);
+
     const SearchSubmit = (e) => {
         e.preventDefault();
-
         if (Search === "") {
             setSearchList(Slide);
+            setPage(1);
         } else {
+
             const SearchResult = Slide.filter((board) =>
                 SearchFillText === "제목" ?
                 board.title.toUpperCase().includes(Search.toUpperCase()) :
@@ -277,6 +282,7 @@ const AllGamePage = () => {
 
             setSearchList(SearchResult);
             setSearch("");
+            setPage(1);
         }
     }
 
@@ -334,23 +340,23 @@ const AllGamePage = () => {
                 {SearchList.length === 0 && <NotPage />}
                 <BoardContentAllBox View={SearchList.length}>
                     {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, title, content, img }) => (
-                        <BoardContentBox key={id}>
-                            <Link to='/'>
-                                <SlideAllBox>
-                                    <SlideBox>
-                                        <ImgBox src={img} />
-                                    </SlideBox>
+                       <BoardContentBox key={id}>
+                           <Link to='/'>
+                               <SlideAllBox>
+                                   <SlideBox>
+                                       <ImgBox src={img} />
+                                   </SlideBox>
 
-                                    <AllBox>
-                                        <InformaionBoxTextBox>
-                                            <TitleBox>{title}</TitleBox>
-                                            <InformaionBox>{content}</InformaionBox>
-                                        </InformaionBoxTextBox>
-                                    </AllBox>
-                                </SlideAllBox>
-                            </Link>
-                        </BoardContentBox>
-                    ))}
+                                   <AllBox>
+                                       <InformaionBoxTextBox>
+                                           <TitleBox>{title}</TitleBox>
+                                           <InformaionBox>{content}</InformaionBox>
+                                       </InformaionBoxTextBox>
+                                   </AllBox>
+                               </SlideAllBox>
+                           </Link>
+                       </BoardContentBox>
+                   ))}
                 </BoardContentAllBox>
             </BoardBox>
 

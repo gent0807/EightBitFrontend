@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { toggle } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import styled, { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider, keyframes } from "styled-components";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
@@ -32,6 +32,7 @@ import DeleteModal from "./DeleteModal";
 import ReplyDeleteModal from "../Articles/Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
 import FreeArticleReplyModal from "./FreeArticleReplyModal";
+import { ArrowBox } from "../Sign/Signinput";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -46,6 +47,7 @@ const FreeArticle = () => {
     const [visitcnt, setVisitcnt] = useState(0);
     const [likecount, setLikecount] = useState(0);
     const [writerRole, setWriterRole] = useState("");
+    const [Fitter, setFitter] = useState("추천순");
     const [attachCount, setAttachCount] = useState(0);
     const [attachmentes, setAttachmentes] = useState([]);
     const [reportMode, setReportMode] = useState(false);
@@ -63,10 +65,28 @@ const FreeArticle = () => {
     const [ModalReplyDeleteSetToggleState, setModalReplyDeleteSetToggleState] = useState("");
     const [ModalReplyDeleteToggleState, setModalReplyDeleteToggleState] = useState("");
     const [ModalReplyDeleteId, setModalReplyDeleteId] = useState("");
+    const [FitterDropdown, setFitterDropdown] = useState(false);
+
     const [ModalFreeArticleReplyCommentOnOff, setModalFreeArticleReplyCommentOnOff] = useState(false);
 
     const FolderRef = useRef(null);
     const ShareRef = useRef(null);
+    const FillterRef = useRef("");
+
+    useEffect(() => {
+        function handleOuside(e) {
+            if (FillterRef.current && !FillterRef.current.contains(e.target)) {
+                setFitterDropdown(false);
+            };
+        };
+
+        if (!FitterDropdown) {
+            document.addEventListener("mousedown", handleOuside);
+        };
+        return () => {
+            document.removeEventListener("mousedown", handleOuside);
+        };
+    }, [FillterRef]);
 
     const ip = localStorage.getItem("ip");
 
@@ -281,6 +301,7 @@ const FreeArticle = () => {
                 })
                 .then(data => {
                     setComments(data);
+                    console.log(data);
                 })
         }
 
@@ -351,7 +372,7 @@ const FreeArticle = () => {
                 if (data.attach_count > 0) {
                     getAttachList(data.writer, data.regdate);
                 }
-                else if(data.attach_count==0){
+                else if (data.attach_count == 0) {
                     console.log("첨부파일 개수 0개");
                 }
             })
@@ -724,6 +745,22 @@ const FreeArticle = () => {
         }
     }, [CommentSize.length, Comments.length]);
 
+    const setLikeValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+        const FillerState = Comments.sort((a, b) => b.likecount - a.likecount);
+        setComments(FillerState);
+        setPage(1);
+    }
+
+    const setReplyValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+        const FillerState = Comments.sort((a, b) => b.reply_count - a.reply_count);
+        setComments(FillerState);
+        setPage(1);
+    }
+
     return (
         <FreeArticleBox>
 
@@ -822,34 +859,34 @@ const FreeArticle = () => {
                                         } />
                                 </FloderBoxIcon>
 
-                                    
-                                    {attachmentes.length == 0 && <FloderMenu1 fileDownloadMode={fileDownloadMode}><Floderli><FloderText>no downloads</FloderText></Floderli></FloderMenu1>}
-                                    
-                                    <FloderMenu2 fileDownloadMode={fileDownloadMode} attachmentLength={attachmentes.length}>
+
+                                {attachmentes.length == 0 && <FloderMenu1 fileDownloadMode={fileDownloadMode}><Floderli><FloderText>no downloads</FloderText></Floderli></FloderMenu1>}
+
+                                <FloderMenu2 fileDownloadMode={fileDownloadMode} attachmentLength={attachmentes.length}>
                                     {attachmentes.length > 0 &&
-                                            
-                                            attachmentes.slice(offset,offset+limit).map(attachment => {
-                                                
-                                                const id=attachment.id;
-                                                const uploader=attachment.uploader;
-                                                const regdate=attachment.regdate;
-                                                const uploadFilename=attachment.uploadFilename;
 
-                                                console.log(id,uploader,regdate,uploadFilename);        
-                                                return(
-                                                    <Floderli>
-                                                        <FloderText>
-                                                            <DownloadLink href={`${ip}/Board/article/attach/${id}/${uploader}/${regdate}`}>{uploadFilename}</DownloadLink>
-                                                        </FloderText>
-                                                    </Floderli>
-                                                );
-                                            })
-                                            
+                                        attachmentes.slice(offset, offset + limit).map(attachment => {
+
+                                            const id = attachment.id;
+                                            const uploader = attachment.uploader;
+                                            const regdate = attachment.regdate;
+                                            const uploadFilename = attachment.uploadFilename;
+
+                                            console.log(id, uploader, regdate, uploadFilename);
+                                            return (
+                                                <Floderli>
+                                                    <FloderText>
+                                                        <DownloadLink href={`${ip}/Board/article/attach/${id}/${uploader}/${regdate}`}>{uploadFilename}</DownloadLink>
+                                                    </FloderText>
+                                                </Floderli>
+                                            );
+                                        })
+
                                     }
-                                   </FloderMenu2>
-                                
+                                </FloderMenu2>
 
-                               
+
+
                             </FloderBox>
 
                             <ShareBox ref={ShareRef}>
@@ -933,10 +970,24 @@ const FreeArticle = () => {
                     </CommentForm2>
                 </InformationAllBox>
             </InformationBox>
-            {Comments.length > 0 ?
-                <div style={{ display: "flex", fontSize: "20px", justifyContent: "start", margin: "0px 0px -22.5px 0px" }}>
-                    {reCommentCount + Comments.length}개 댓글
-                </div> : ""}
+
+            <ReplyFillAllBox>
+                {Comments.length > 0 ?
+                    <ReplyCountBox>
+                        {reCommentCount + Comments.length}개 댓글
+                    </ReplyCountBox> : ""}
+
+                <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
+                    <FitterSelectBox show={FitterDropdown}>
+                        <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
+                        <FitterSelectList onClick={(e) => setReplyValue(e)}>댓글순</FitterSelectList>
+                    </FitterSelectBox>
+                    <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
+                    <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
+                </FitterSelectAllBox>
+
+            </ReplyFillAllBox>
+
             <EditAllBox>
                 <LikeBtn
                     LoginMaintain={loginMaintain}
@@ -1093,6 +1144,91 @@ const FreeArticle = () => {
 
 export default FreeArticle;
 
+const FillterSlideDown = keyframes
+    `
+    0%{
+        height: 0px;
+    }
+    100%{
+        height: 52px;
+    }
+`
+
+const FitterSelectAllBox = styled.div
+    `
+    width: 100px;
+    height: 21px;
+    border: solid 2px ${(props) => props.theme.borderColor};
+    cursor: pointer;
+    background: #dee2e6;
+    border-radius: 10px;
+    margin: -11px 9px 0px 11px;
+    height: 39px;
+    -webkit-tap-highlight-color:transparent;
+    @media (min-width:250px) and (max-width:607px)
+    {
+        margin: 0px 7px -12px 7px;
+    }
+`
+
+const FitterSelectBox = styled.ul
+    `
+    position: absolute;
+    display: ${props => props.show ? "block" : "none"};
+    list-style: none; 
+    margin: 44px 0px 0px -2px;
+    border: solid 2px ${props => props.theme.borderColor};
+    background: #dee2e6;
+    width: 100px;
+    height: 52px;
+    padding: 0px;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 5px;
+    animation: ${FillterSlideDown} 0.5s;
+`
+
+const FitterSelectValue = styled.div
+    `
+    position: absolute;
+    margin: 11px 0px 11px 20px;
+    white-space: nowrap;
+`
+
+const FitterSelectList = styled.li
+    `
+    color: black;
+    padding: 4px 0px 4px 0px;
+    &:hover
+    {
+        background-color: ${(props) => props.theme.DropDownListColor};
+    }
+`
+
+const FitterSelectText = styled.span
+    `
+    color: black;
+    font-weight: bold;
+`
+
+const FitterArrowBox = styled(ArrowBox)
+    `
+    margin: ${props => props.direction ? "9px 0px 11px 75px" : "11px 0px 11px 75px"};
+`
+
+const ReplyCountBox = styled.div
+    `
+    display: flex;
+    font-size: 20px;
+`
+
+const ReplyFillAllBox = styled.div
+    `
+    display: flex;
+    justify-content: start;
+    margin: 0px 0px -22.5px 0px;
+`
+
 const FloderText = styled.span
     `
     font-weight: bold;
@@ -1172,17 +1308,17 @@ const FloderMenu2 = styled.ul
     position: absolute;
     padding: 10px;
     list-style: none;
-    margin: ${props => props.attachmentLength === 1 ? 
-        "0px 0px -45px -45px" : 
-        props.attachmentLength === 2 ? 
-        "0px 0px -72.2px -45px" : 
-        props.attachmentLength === 3 ?
-        "0px 0px -96.4px -45px" :
-        props.attachmentLength === 4 ?
-        "0px 0px -119.8px -45px" :
-        props.attachmentLength === 5 ?
-        "0px 0px -145.7px -45px" :
-        "0px 0px -45px -45px"
+    margin: ${props => props.attachmentLength === 1 ?
+        "0px 0px -45px -45px" :
+        props.attachmentLength === 2 ?
+            "0px 0px -72.2px -45px" :
+            props.attachmentLength === 3 ?
+                "0px 0px -96.4px -45px" :
+                props.attachmentLength === 4 ?
+                    "0px 0px -119.8px -45px" :
+                    props.attachmentLength === 5 ?
+                        "0px 0px -145.7px -45px" :
+                        "0px 0px -45px -45px"
     };
     border: solid 1px ${props => props.theme.borderColor};
     border-radius: 10px;

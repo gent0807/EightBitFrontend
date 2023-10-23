@@ -100,6 +100,7 @@ const FreeBoard = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
         setSearchList(FillerState);
+        setPage(1);
     }
 
     const setPastValue = (e) => {
@@ -107,6 +108,7 @@ const FreeBoard = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => new Date(a.regdate) - new Date(b.regdate));
         setSearchList(FillerState);
+        setPage(1);
     }
 
     const setLikeValue = (e) => {
@@ -114,6 +116,7 @@ const FreeBoard = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => b.likecount - a.likecount);
         setSearchList(FillerState);
+        setPage(1);
     }
 
     const setViewValue = (e) => {
@@ -121,6 +124,7 @@ const FreeBoard = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => b.visitcnt - a.visitcnt);
         setSearchList(FillerState);
+        setPage(1);
     }
 
     const setReplyValue = (e) => {
@@ -128,24 +132,25 @@ const FreeBoard = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => b.reply_count - a.reply_count);
         setSearchList(FillerState);
+        setPage(1);
     }
 
-    
+
     const setTitleValue = (e) => {
         const { innerText } = e.target;
         setSearchFillText(innerText);
     }
-    
+
     const setWriterValue = (e) => {
         const { innerText } = e.target;
         setSearchFillText(innerText);
     }
-    
+
     const setContentValue = (e) => {
         const { innerText } = e.target;
         setSearchFillText(innerText);
     }
-    
+
     const setLimitValue = (e) => {
         const { innerText } = e.target;
         const Limit = e.target.value;
@@ -177,7 +182,7 @@ const FreeBoard = () => {
             })
     }, []);
 
-   
+
 
     const SearchSubmit = (e) => {
         e.preventDefault();
@@ -195,20 +200,22 @@ const FreeBoard = () => {
                     console.log(data);
                     setPosts(data);
                     setSearchList(posts);
+                    setPage(1);
                 })
         } else {
             const SearchResult = posts.filter((board) =>
-            SearchFillText === "제목" ? 
-            board.title.toUpperCase().includes(Search.toUpperCase()) : 
-            SearchFillText === "작성자" ?
-            board.writer.toUpperCase().includes(Search.toUpperCase()) :
-            SearchFillText === "내용" ?
-            board.content.toUpperCase().includes(Search.toUpperCase()) :
-            board.title.toUpperCase().includes(Search.toUpperCase())
+                SearchFillText === "제목" ?
+                    board.title.toUpperCase().includes(Search.toUpperCase()) :
+                    SearchFillText === "작성자" ?
+                        board.writer.toUpperCase().includes(Search.toUpperCase()) :
+                        SearchFillText === "내용" ?
+                            board.content.toUpperCase().includes(Search.toUpperCase()) :
+                            board.title.toUpperCase().includes(Search.toUpperCase())
             );
 
             setSearchList(SearchResult);
             setSearch("");
+            setPage(1);
         }
     }
 
@@ -241,7 +248,7 @@ const FreeBoard = () => {
                 </SearchAllBox>
                 <FitterBox>
 
-                    
+
                     <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                         <FitterSelectBox show={FitterDropdown}>
                             <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
@@ -268,6 +275,7 @@ const FreeBoard = () => {
                         (userInfo.loginState === "allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}</WriteBtn>
                 </FitterBox>
             </SearchBox>
+
             <BoardBox>
                 {SearchList.length === 0 && <NotPage />}
                 <BoardContentAllBox>
@@ -284,21 +292,21 @@ const FreeBoard = () => {
                                 <ProfileAllBox>
                                     <WriterProfile writer={writer} />
                                     <ProfileBox>
-                                        <div style={{display:"flex"}}>
+                                        <div style={{ display: "flex" }}>
                                             <BoardContentWriter>{writer}</BoardContentWriter>
                                             <CorrectionIcon writerRole={role}>
                                                 <BiLogoDevTo />
                                             </CorrectionIcon>
 
                                             {regdate == updatedate ? "" :
-                                            <CorrectionTextBox>
-                                                <CorrectionTextBoxIcon>
-                                                    <AiFillCheckCircle />
-                                                </CorrectionTextBoxIcon>
-                                                <CorrectionText>
-                                                    수정됨
-                                                </CorrectionText>
-                                            </CorrectionTextBox>}
+                                                <CorrectionTextBox>
+                                                    <CorrectionTextBoxIcon>
+                                                        <AiFillCheckCircle />
+                                                    </CorrectionTextBoxIcon>
+                                                    <CorrectionText>
+                                                        수정됨
+                                                    </CorrectionText>
+                                                </CorrectionTextBox>}
                                         </div>
                                         <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
                                     </ProfileBox>
@@ -319,8 +327,7 @@ const FreeBoard = () => {
 
                             </FreeBoardViewAllBox>
 
-                        </BoardContentBox>
-                    ))}
+                        </BoardContentBox>))}
                 </BoardContentAllBox>
             </BoardBox>
 
@@ -606,7 +613,7 @@ const FitterSelectAllBox = styled.div
 `
 
 const SearchFillSelectAllBox = styled(FitterSelectAllBox)
-`
+    `
     width: 83px;
     margin: 0px 9px 0px 0px;
 `
@@ -622,7 +629,7 @@ const FitterArrowBox = styled(ArrowBox)
 `
 
 const SearchFillArrowBox = styled(ArrowBox)
-`
+    `
     margin: ${props => props.direction ? "9px 0px 11px 63px" : "11px 0px 11px 63px"};
 `
 
@@ -678,7 +685,7 @@ const FitterSelectBox = styled.ul
 `
 
 const SearchFillSelectBox = styled(FitterSelectBox)
-`
+    `
     width: 83px;
     height: 78px;
     animation: ${SearchFillSlideDown} 0.5s;
@@ -704,7 +711,7 @@ const FitterSelectValue = styled.div
 `
 
 const SearchFillValue = styled(FitterSelectValue)
-`
+    `
     margin: ${props => props.writerText === "작성자" ? "11px 0px 11px 14px" : "11px 0px 11px 20px"};
 `
 
