@@ -761,6 +761,22 @@ const FreeArticle = () => {
         setPage(1);
     }
 
+    const setCurrentValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+        const FillerState = Comments.sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
+        setComments(FillerState);
+        setPage(1);
+    }
+
+    const setPastValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+        const FillerState = Comments.sort((a, b) => new Date(a.regdate) - new Date(b.regdate));
+        setComments(FillerState);
+        setPage(1);
+    }
+
     return (
         <FreeArticleBox>
 
@@ -979,6 +995,8 @@ const FreeArticle = () => {
 
                 <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
                     <FitterSelectBox show={FitterDropdown}>
+                        <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
+                        <FitterSelectList onClick={(e) => setPastValue(e)}>과거순</FitterSelectList>
                         <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
                         <FitterSelectList onClick={(e) => setReplyValue(e)}>댓글순</FitterSelectList>
                     </FitterSelectBox>
@@ -1150,7 +1168,7 @@ const FillterSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 52px;
+        height: 104px;
     }
 `
 
@@ -1180,7 +1198,7 @@ const FitterSelectBox = styled.ul
     border: solid 2px ${props => props.theme.borderColor};
     background: #dee2e6;
     width: 100px;
-    height: 52px;
+    height: 104px;
     padding: 0px;
     overflow: hidden;
     text-align: center;
