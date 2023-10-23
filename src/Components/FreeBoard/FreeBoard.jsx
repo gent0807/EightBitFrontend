@@ -550,7 +550,7 @@ const CorrectionTextBoxIcon = styled.i
     `
     svg
     {
-        margin: 0px 1px 0px -1px;
+        margin: 0px 1px 0px 3px;
     }
 `
 const CorrectionText = styled.span

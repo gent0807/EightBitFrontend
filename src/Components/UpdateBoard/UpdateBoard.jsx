@@ -489,7 +489,6 @@ const UpdateBoard = () => {
                         placeholder="내용을 입력해 주세요!"
                         value={EditerValue}
                         onChange={(content, delta, source, editor) => setEditerValue(editor.getHTML())}
-                        theme="snow"
                         modules={modules}
                         formats={formats}
                     ></Editer>
@@ -505,9 +504,10 @@ const UpdateBoard = () => {
                             return (
                                 
                                 <div style={{ display: deleteIdList.includes(id) ?  "none" : "flex", margin: "0px 0px 0px 0px" }}>
-                                    <li style={{ margin: "0px 10px 10px 0px" }}>
+                                    <AttachmentLi>
                                         {uploadFilename}
-                                    </li>
+                                    </AttachmentLi>
+                                    
 
                                     <button type='button' style={{margin:"-3px 0px 0px 0px", height:"25px"}} onClick={()=>{choiceDeleteAttachmentId(id)}}>
                                         삭제
@@ -679,6 +679,13 @@ const AttachmentList = styled.ul
     list-style: none;
     padding-left: 21px;
     margin: 0px 0px 5px 0px;
+
+`
+
+const AttachmentLi = styled.li
+`
+    margin: 0px 10px 10px 0px;
+    color : ${props => props.theme.textColor};  
 `
 
 const EditerBox = styled.div
