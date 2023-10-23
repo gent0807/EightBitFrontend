@@ -47,7 +47,7 @@ const FreeArticle = () => {
     const [visitcnt, setVisitcnt] = useState(0);
     const [likecount, setLikecount] = useState(0);
     const [writerRole, setWriterRole] = useState("");
-    const [Fitter, setFitter] = useState("추천순");
+    const [Fitter, setFitter] = useState("최신순");
     const [attachCount, setAttachCount] = useState(0);
     const [attachmentes, setAttachmentes] = useState([]);
     const [reportMode, setReportMode] = useState(false);
