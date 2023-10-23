@@ -30,12 +30,15 @@ const UpdateBoard = () => {
     const regdate = location.state.regdate;
     const title = location.state.title;
     const content = location.state.content;
+    const attachmentes = location.state.attachmentes;
+
 
     const [WriterChangeValue, setWriterChangeValue] = useState(title);
     const [EditerValue, setEditerValue] = useState(content);
     const [isDragging, setIsDragging] = useState(false);
     const [files, setFiles] = useState([]);
     const [UpdateBoardModalOnOff, setUpdateBoardModalOnOff] = useState(false);
+    const [deleteIdList, setDeleteIdList] = useState([]);
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -44,6 +47,9 @@ const UpdateBoard = () => {
     const loginMaintain = localStorage.getItem("loginMaintain");
     const ip = localStorage.getItem("ip");
     const navigate = useNavigate();
+
+    const [limit, setLimit] = useState(5);
+    const [offset, setOffset] = useState(0);
 
     const dragRef = useRef(null);
     const fileId = useRef(0);
@@ -141,6 +147,14 @@ const UpdateBoard = () => {
         "video",
         "width",
     ];
+
+    const choiceDeleteAttachmentId = (id) => {
+        console.log("삭제할 id:"+id);
+        setDeleteIdList([...deleteIdList, id]);
+       
+    }
+    console.log("삭제할 id 목록:"+deleteIdList);
+
 
     const onChangeFiles = useCallback((e) => {
         let selectFiles = [];
@@ -244,27 +258,70 @@ const UpdateBoard = () => {
 
 
     const OncheckSubmit = (e) => {
-        const registFile = (writer, regdate) => {
+
+        // const deleteFile = async (deleteFile) => {
+            
+        //         await axios.delete(`${ip}/Board/article/shareFiles/${deleteFile.id}/${deleteFile.uploader}/${deleteFile.regdate}`, 
+        //         {
+        //             headers:{ 
+        //                 Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` 
+        //         },
+        //         })
+        //         .then((res) => {
+        //             return res.data;
+        //         })
+        //         .then((data) => {
+        //             return;
+        //         })
+        
+        // }
+
+        const deleteFile = async (deleteFileList) => {
+            
+            await axios.delete(`${ip}/Board/article/shareFiles`, 
+            {
+                data:  deleteFileList,
+                headers:{ 
+                    Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` 
+            },
+            })
+            .then((res) => {
+                return res.data;
+            })
+            .then((data) => {
+                return;
+            })
+        
+
+    
+    }
+
+        const registFile = async (writer, regdate) => {
+
             const fd = new FormData();
 
             fd.append("writer", writer);
             fd.append("regdate", regdate);
-            Object.values(files).forEach((file) => fd.append("file", file));
 
-            axios.post(`${ip}/Board/article/shareFiles`, fd,
-                {
-                    headers:
-                    {
-                        Authorization: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                        "Content-Type": `multipart/form-data;   `
-                    }
-                })
+            for (let i = 0; i < files.length; i++) {
+                fd.append("files", files[i].object);
+            }
+
+            await axios.post(`${ip}/Board/article/shareFiles`, fd, {
+                headers: {
+                    'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
                 .then((res) => {
-                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    return res.data;
+                })
+                .then((data) => {
                     return;
                 })
 
         }
+
 
         e.preventDefault();
 
@@ -292,14 +349,31 @@ const UpdateBoard = () => {
             })
             .then((res) => {
                 /* regenerateAccessTokenOrLogout(res, OncheckSubmit, e) */
+                return res.data
+            })
+            .then((data) => {
+
+                if (deleteIdList.length > 0) {
+                    let deleteFileList=attachmentes.filter((attachment) => {
+                        return deleteIdList.includes(attachment.id);
+                    });
+
+                    // for(let i=0; i<deleteFileList.length; i++){
+                    //     deleteFile(deleteFileList[i]);
+                    // }
+
+                    deleteFile(deleteFileList);
+                    
+                }
+
                 if (files.length == 0) {
                     navigate('/FreeArticle/' + writer + '/' + regdate);
                     return;
                 }
                 else if (files.length > 0) {
-
                     registFile(writer, regdate);
-
+                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    return;
                 }
             })
 
@@ -420,7 +494,39 @@ const UpdateBoard = () => {
                         formats={formats}
                     ></Editer>
                 </EditerBox>
-                <TagTextBox><TagText>파일첨부</TagText></TagTextBox>
+
+
+                <DeleteAttachment Attachmentes={attachmentes.length}><TagText>첨부파일 삭제</TagText></DeleteAttachment>
+                <AttachmentList Attachmentes={attachmentes.length}>
+                    {
+                        attachmentes.slice(offset, offset + limit).map(attachment => {
+                            const id = attachment.id;
+                            const uploadFilename = attachment.uploadFilename;
+                            return (
+                                
+                                <div style={{ display: deleteIdList.includes(id) ?  "none" : "flex", margin: "0px 0px 0px 0px" }}>
+                                    <li style={{ margin: "0px 10px 10px 0px" }}>
+                                        {uploadFilename}
+                                    </li>
+
+                                    <button type='button' style={{margin:"-3px 0px 0px 0px", height:"25px"}} onClick={()=>{choiceDeleteAttachmentId(id)}}>
+                                        삭제
+                                    </button>
+
+
+                                </div>
+
+
+                            );
+
+                        })
+
+                    }
+                </AttachmentList>
+
+
+
+                <TagTextBox><TagText>첨부파일 추가</TagText></TagTextBox>
                 <FileUploadBox ref={dragRef} checkFile={isDragging}>
                     <FileBtnBox>
                         <FileUploadLabel checkFile={isDragging} htmlFor='fileUpload'>
@@ -558,13 +664,21 @@ const TagText = styled.span
 
 const TagTextBox = styled.div
     `
-    display: flex;
+    display: "flex"
     text-align: center;
     justify-content: start;
     align-items: start;
     margin: 0px 20px 13px 20px;
     font-size: 30px;
     color : ${props => props.theme.textColor};
+`
+
+const AttachmentList = styled.ul
+    `
+    display:${props => props.Attachmentes > 0 ? "block" : "none"};
+    list-style: none;
+    padding-left: 21px;
+    margin: 0px 0px 5px 0px;
 `
 
 const EditerBox = styled.div
@@ -575,6 +689,16 @@ const EditerBox = styled.div
     border-radius: 20px;
     overflow: hidden;
     background: white;
+`
+const DeleteAttachment = styled.div
+`
+    display: ${props => props.Attachmentes > 0 ? "flex" : "none"};
+    text-align: center;
+    justify-content: start;
+    align-items: start;
+    margin: 0px 20px 13px 20px;
+    font-size: 30px;
+    color : ${props => props.theme.textColor};
 `
 
 const WriteBoardSubmit = styled.form

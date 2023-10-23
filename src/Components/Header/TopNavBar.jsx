@@ -590,7 +590,7 @@ const HeaderBox = () => {
                                                             ref={ProfileRef}
                                                             onClick={() => ProfileMenuCheck()}
                                                         >
-                                                            <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
+                                                        <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
                                                         </Profile>,
 
                                                         <WriteBox
@@ -673,14 +673,14 @@ const HeaderBox = () => {
                                     >
                                         <ProfileUl>
                                             <Link to='/'>
-                                            <Profileli
+                                                <Profileli
                                                     padding="15px 0px 15px 13px"
                                                     onClick={() => [setProfileMenuShow(!ProfileMenuShow),
                                                     setProfileClickCheck(!ProfileClickCheck)]}
                                                 >
                                                     <DropdownImg src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`: user.login_state === null ? User :`${ip}/Users/profileImg/${user.nickname}`}/>
                                                     <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
-                                                </Profileli>
+                                                </Profileli>    
                                             </Link>
 
                                             <Profileli
