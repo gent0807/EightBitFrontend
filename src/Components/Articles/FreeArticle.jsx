@@ -759,7 +759,7 @@ const FreeArticle = () => {
     const setReplyValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
-        const FillerState = Comments.sort((a, b) => b.reply_count - a.reply_count);
+        const FillerState = Comments.sort((a, b) => b.recomment_count - a.recomment_count);
         setComments(FillerState);
         setPage(1);
     }
