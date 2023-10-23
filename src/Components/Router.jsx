@@ -12,7 +12,8 @@ import WriteBoard from "./WriteBoard/WriteBoardContainer";
 import FreeArticle from "./Articles/FreeArticleContainer";
 import UpdateBoard from "./UpdateBoard/UpdateBoardContainer";
 import Center from "./Center/CenterContainer";
-import OfficialGame from "./OfficialGame/OfficialGameContainer"
+import OfficialGame from "./OfficialGame/OfficialGameContainer";
+import AllGamePage from "./AllGame/AllGamePageContainer";
 
 const Router = () => {
 
@@ -26,6 +27,7 @@ const Router = () => {
                     <Route path="/FreeArticle/:writer/:regdate" element={<FreeArticle />} />
                 </Route>
                     <Route path="/OfficialGame" element={<OfficialGame />} />
+                    <Route path="/AllGamePage" element={<AllGamePage />} />
                     <Route path="/WriteBoard" element={<WriteBoard />} />
                     <Route path="/UpdateBoard" element={<UpdateBoard />} />
                     <Route path="/Login" element={<Login />} />

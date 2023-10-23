@@ -427,6 +427,7 @@ const OfficialGame2 = styled.div
     width: 100%;
     height: 100vh;
     overflow: hidden;
+    position: relative;
     &:hover{
         ${OfficialGame2InformaitonBox}{
             transition: opacity 0.5s 0.3s ease;
