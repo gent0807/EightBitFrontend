@@ -72,6 +72,7 @@ const FreeArticle = () => {
     const FolderRef = useRef(null);
     const ShareRef = useRef(null);
     const FillterRef = useRef("");
+    const totalCommentCount = useRef(0);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -285,6 +286,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
+                    totalCommentCount.current=totalCommentCount.current+data;
                     setReCommentCount(data);
                 })
         }
@@ -300,6 +302,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
+                    totalCommentCount.current=data.length;
                     setComments(data);
                     console.log(data);
                 })
@@ -990,7 +993,7 @@ const FreeArticle = () => {
             <ReplyFillAllBox>
                 {Comments.length > 0 ?
                     <ReplyCountBox>
-                        {reCommentCount + Comments.length}개 댓글
+                        {totalCommentCount.current}개 댓글
                     </ReplyCountBox> : ""}
 
                 <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
