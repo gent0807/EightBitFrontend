@@ -179,6 +179,7 @@ const SingleReply = ({
                     //console.log("ReComment"+data.id);
                     //console.log("----------------------------------");
                     setReComments(data);
+                    setReCommentCount(data.length);
                 })
         }
 

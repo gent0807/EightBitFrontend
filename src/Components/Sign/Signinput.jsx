@@ -18,6 +18,7 @@ const Signinput = (props) => {
   const [PwConfirm, setPwConfirm] = useState("");
   const [Nickname, setNickname] = useState("");
   const [SelectValue, setSelectValue] = useState("naver.com");
+  const [MenuText, setMenuText] = useState("naver.com")
   const [InputDirect, setInputDirect] = useState("naver.com");
 
   const [PwMessage, setPwMessage] = useState("");
@@ -84,13 +85,17 @@ const Signinput = (props) => {
     const { innerText } = e.target;
     console.log(innerText);
     setSelectValue(innerText);
+    setMenuText(innerText)
     setInputDirect(innerText);
+    setIsInputDirect(false);
   }
 
-  const readyToWirteInputDirect = () => {
+  const readyToWirteInputDirect = (e) => {
+    const { innerText } = e.target;
     setInputDirect("");
     setIsInputDirect(true);
-    setSelectValue("직접입력");
+    setSelectValue(InputDirect);
+    setMenuText(innerText)
     return inputFocus.current.focus();
   }
 
@@ -415,6 +420,7 @@ const Signinput = (props) => {
                   onChange={checkAndSetInputDirect}
                 />
               </EmailInputBox>
+
               <SelectBox
                 ref={textRef}
                 ON={isInputDirect}
@@ -424,7 +430,7 @@ const Signinput = (props) => {
               >
 
                 <SelectTextBox>
-                  <SelectValueText>{SelectValue}</SelectValueText>
+                  <SelectValueText>{MenuText}</SelectValueText>
                   <ArrowBox direction={isSelectBtnCheck}>{isSelectBtnCheck ? "▼" : "▲"}</ ArrowBox>
                 </SelectTextBox>
 
@@ -435,7 +441,7 @@ const Signinput = (props) => {
                   <SelectOptionLI value="nate.com" onClick={setEmailDomain}>nate.com</SelectOptionLI>
                   <SelectOptionLI value="daum.net" onClick={setEmailDomain}>daum.net</SelectOptionLI>
                   <SelectOptionLI value="outlook.com" onClick={setEmailDomain}>outlook.com</SelectOptionLI>
-                  <SelectOptionLI onClick={readyToWirteInputDirect}><span>직접입력</span></SelectOptionLI>
+                  <SelectOptionLI value="직접입력" onClick={readyToWirteInputDirect}>직접입력</SelectOptionLI>
                 </SelectOption>
               </SelectBox>
             </EmailBox>

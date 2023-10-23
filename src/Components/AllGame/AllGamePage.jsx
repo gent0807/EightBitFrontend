@@ -1,25 +1,145 @@
 import { styled, keyframes } from "styled-components";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { SearchInputBox, SearchInput, SearchInputIconBox, SearchButton } from "../Header/TopNavBar";
 import { ArrowBox } from "../Sign/Signinput";
 import { HiOutlineSearch } from "react-icons/hi";
-import { AiFillCheckCircle } from "react-icons/ai";
 import Pagination from "./Pagination";
 import { useRecoilState } from "recoil";
 import { firstReset } from "../Darkmode/Darkmode";
 import { Link, useNavigate } from "react-router-dom";
 import NotPage from "./NotPage";
-import { BiLogoDevTo } from "react-icons/bi";
 import { useSelector } from "react-redux";
+import test from "../../img/MainSlide/test.png";
+import test1 from "../../img/MainSlide/test1.png";
+import test2 from "../../img/MainSlide/test2.png";
+import test3 from "../../img/MainSlide/test3.png";
+import test4 from "../../img/MainSlide/test4.png";
+import test5 from "../../img/MainSlide/test5.png";
 import axios from "axios";
-import dayjs from "dayjs";
-import WriterProfile from "./WriterProfile";
-import { AiOutlineEye } from "react-icons/ai";
-import { BsHandThumbsUp } from "react-icons/bs";
-import DOMPurify from "dompurify";
 
-const FreeBoard = () => {
-    const [posts, setPosts] = useState([]);
+const AllGamePage = () => {
+    const [Slide, setSlide] = useState([
+        {
+            id: 0,
+            img: test,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "모험가키우기",
+            regdate: "2023-10-23 13:45:35",
+            likecount: 345,
+        },
+        {
+            id: 1,
+            img: test1,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-22 13:45:35",
+            likecount: 432,
+        },
+        {
+            id: 2,
+            img: test2,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "모험가키우기",
+            regdate: "2023-10-21 13:45:35",
+            likecount: 431
+        },
+        {
+            id: 3,
+            img: test3,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-20 13:45:35",
+            likecount: 1234
+        },
+        {
+            id: 4,
+            img: test4,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-19 13:45:35",
+            likecount: 2422
+        },
+        {
+            id: 5,
+            img: test,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-23 13:45:35",
+            likecount: 345,
+        },
+        {
+            id: 6,
+            img: test1,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "모험가키우기",
+            regdate: "2023-10-22 13:45:35",
+            likecount: 432,
+        },
+        {
+            id: 7,
+            img: test2,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-21 13:45:35",
+            likecount: 431
+        },
+        {
+            id: 8,
+            img: test3,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "모험가키우기",
+            regdate: "2023-10-20 13:45:35",
+            likecount: 1234
+        },
+        {
+            id: 9,
+            img: test4,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-19 13:45:35",
+            likecount: 2422
+        },
+        {
+            id: 10,
+            img: test,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-23 13:45:35",
+            likecount: 345,
+        },
+        {
+            id: 11,
+            img: test1,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-22 13:45:35",
+            likecount: 432,
+        },
+        {
+            id: 12,
+            img: test2,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-21 13:45:35",
+            likecount: 431
+        },
+        {
+            id: 13,
+            img: test3,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-20 13:45:35",
+            likecount: 1234
+        },
+        {
+            id: 14,
+            img: test4,
+            content: "질리지 않는 8비트 공식게임!",
+            title: "토파즈",
+            regdate: "2023-10-19 13:45:35",
+            likecount: 2422
+        },
+    ]);
     const [Search, setSearch] = useState("");
     const [SearchFillText, setSearchFillText] = useState("제목");
     const [Fitter, setFitter] = useState("최신순");
@@ -38,7 +158,7 @@ const FreeBoard = () => {
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
     const [SearchList, setSearchList] = useState([]);
-    const PostsSize = posts.slice(offset, offset + limit);
+    const SlideSize = Slide.slice(offset, offset + limit);
     const [FillterState, setFillerState] = useState("title");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
@@ -100,7 +220,6 @@ const FreeBoard = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
         setSearchList(FillerState);
-        setPage(1);
     }
 
     const setPastValue = (e) => {
@@ -108,7 +227,6 @@ const FreeBoard = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => new Date(a.regdate) - new Date(b.regdate));
         setSearchList(FillerState);
-        setPage(1);
     }
 
     const setLikeValue = (e) => {
@@ -116,32 +234,9 @@ const FreeBoard = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => b.likecount - a.likecount);
         setSearchList(FillerState);
-        setPage(1);
     }
-
-    const setViewValue = (e) => {
-        const { innerText } = e.target;
-        setFitter(innerText);
-        const FillerState = SearchList.sort((a, b) => b.visitcnt - a.visitcnt);
-        setSearchList(FillerState);
-        setPage(1);
-    }
-
-    const setReplyValue = (e) => {
-        const { innerText } = e.target;
-        setFitter(innerText);
-        const FillerState = SearchList.sort((a, b) => b.reply_count - a.reply_count);
-        setSearchList(FillerState);
-        setPage(1);
-    }
-
 
     const setTitleValue = (e) => {
-        const { innerText } = e.target;
-        setSearchFillText(innerText);
-    }
-
-    const setWriterValue = (e) => {
         const { innerText } = e.target;
         setSearchFillText(innerText);
     }
@@ -161,56 +256,28 @@ const FreeBoard = () => {
     }
 
     useEffect(() => {
-        if (posts.length > 0 && PostsSize.length === 0) {
+        if (Slide.length > 0 && SlideSize.length === 0) {
             setPage(page - 1);
         }
-    }, [PostsSize.length, posts.length]);
+    }, [SlideSize.length, Slide.length]);
 
     useEffect(() => {
-        axios.get(`${ip}/Board/articles`, {
-
-        },
-            {
-
-            })
-            .then(res => res.data
-            )
-            .then(data => {
-                console.log(data);
-                setPosts(data);
-                setSearchList(data);
-            })
+        setSearchList(Slide);
     }, []);
-
-
 
     const SearchSubmit = (e) => {
         e.preventDefault();
-
         if (Search === "") {
-            axios.get(`${ip}/Board/articles`, {
-
-            },
-                {
-
-                })
-                .then(res => res.data
-                )
-                .then(data => {
-                    console.log(data);
-                    setPosts(data);
-                    setSearchList(posts);
-                    setPage(1);
-                })
+            setSearchList(Slide);
+            setPage(1);
         } else {
-            const SearchResult = posts.filter((board) =>
+
+            const SearchResult = Slide.filter((board) =>
                 SearchFillText === "제목" ?
-                    board.title.toUpperCase().includes(Search.toUpperCase()) :
-                    SearchFillText === "작성자" ?
-                        board.writer.toUpperCase().includes(Search.toUpperCase()) :
-                        SearchFillText === "내용" ?
-                            board.content.toUpperCase().includes(Search.toUpperCase()) :
-                            board.title.toUpperCase().includes(Search.toUpperCase())
+                board.title.toUpperCase().includes(Search.toUpperCase()) :
+                SearchFillText === "내용" ?
+                board.content.toUpperCase().includes(Search.toUpperCase()) :
+                board.title.toUpperCase().includes(Search.toUpperCase())
             );
 
             setSearchList(SearchResult);
@@ -223,7 +290,7 @@ const FreeBoard = () => {
         <FreeBoardBox>
             <InformationAllBox>
                 <FreeBoardInformation>
-                    <FreeBoardInformationText>자유게시판</FreeBoardInformationText>
+                    <FreeBoardInformationText>전체게임</FreeBoardInformationText>
                 </FreeBoardInformation>
             </InformationAllBox>
             <SearchBox>
@@ -239,7 +306,6 @@ const FreeBoard = () => {
                     <SearchFillSelectAllBox ref={SearchFillRef} onClick={() => setSearchFillDropdown(!SearchFillDropdown)}>
                         <SearchFillSelectBox show={SearchFillDropdown}>
                             <FitterSelectList onClick={(e) => setTitleValue(e)}>제목</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setWriterValue(e)}>작성자</FitterSelectList>
                             <FitterSelectList onClick={(e) => setContentValue(e)}>내용</FitterSelectList>
                         </SearchFillSelectBox>
                         <SearchFillValue writerText={SearchFillText}><FitterSelectText>{SearchFillText}</FitterSelectText></SearchFillValue>
@@ -253,8 +319,6 @@ const FreeBoard = () => {
                         <FitterSelectBox show={FitterDropdown}>
                             <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
                             <FitterSelectList onClick={(e) => setPastValue(e)}>과거순</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setReplyValue(e)}>댓글순</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setViewValue(e)}>조회순</FitterSelectList>
                             <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
                         </FitterSelectBox>
                         <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
@@ -270,64 +334,29 @@ const FreeBoard = () => {
                         <LimitSelectValue><FitterSelectText>{LimtText}</FitterSelectText></LimitSelectValue>
                         <LimitArrowBox direction={LimitDropdown}>{LimitDropdown ? "▲" : "▼"}</LimitArrowBox>
                     </LimitSelectAllBox>
-
-                    <WriteBtn>{loginMaintain == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> : loginMaintain == "true" ? userInfo == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> :
-                        (userInfo.loginState === "allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}</WriteBtn>
                 </FitterBox>
             </SearchBox>
-
             <BoardBox>
                 {SearchList.length === 0 && <NotPage />}
-                <BoardContentAllBox>
-                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, writer, role, regdate, updatedate, visitcnt, reply_count, likecount, content }) => (
-                        <BoardContentBox key={id}>
-                            <ReplyCountAllBox>
-                                <ReplyCountBox>
-                                    <ReplyCountText>답변</ReplyCountText>
-                                    {reply_count}
-                                </ReplyCountBox>
-                            </ReplyCountAllBox>
+                <BoardContentAllBox View={SearchList.length}>
+                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, title, content, img }) => (
+                       <BoardContentBox key={id}>
+                           <Link to='/'>
+                               <SlideAllBox>
+                                   <SlideBox>
+                                       <ImgBox src={img} />
+                                   </SlideBox>
 
-                            <FreeBoardViewAllBox>
-                                <ProfileAllBox>
-                                    <WriterProfile writer={writer} />
-                                    <ProfileBox>
-                                        <div style={{ display: "flex" }}>
-                                            <BoardContentWriter>{writer}</BoardContentWriter>
-                                            <CorrectionIcon writerRole={role}>
-                                                <BiLogoDevTo />
-                                            </CorrectionIcon>
-
-                                            {regdate == updatedate ? "" :
-                                                <CorrectionTextBox>
-                                                    <CorrectionTextBoxIcon>
-                                                        <AiFillCheckCircle />
-                                                    </CorrectionTextBoxIcon>
-                                                    <CorrectionText>
-                                                        수정됨
-                                                    </CorrectionText>
-                                                </CorrectionTextBox>}
-                                        </div>
-                                        <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
-                                    </ProfileBox>
-                                </ProfileAllBox>
-
-                                <BoardTitleContentAllBox>
-                                    <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>
-                                    <BoardCotent>
-                                        <Link to={`/FreeArticle/${writer}/${regdate}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} /></Link>
-                                    </BoardCotent>
-                                </BoardTitleContentAllBox>
-                                <ViewlikeAllBox>
-                                    <ViewIcon><AiOutlineEye /></ViewIcon>
-                                    <BoardContentCounter>{visitcnt}</BoardContentCounter>
-                                    <LikeIcon><BsHandThumbsUp /></LikeIcon>
-                                    <BoardlikeContentCounter>{likecount}</BoardlikeContentCounter>
-                                </ViewlikeAllBox>
-
-                            </FreeBoardViewAllBox>
-
-                        </BoardContentBox>))}
+                                   <AllBox>
+                                       <InformaionBoxTextBox>
+                                           <TitleBox>{title}</TitleBox>
+                                           <InformaionBox>{content}</InformaionBox>
+                                       </InformaionBoxTextBox>
+                                   </AllBox>
+                               </SlideAllBox>
+                           </Link>
+                       </BoardContentBox>
+                   ))}
                 </BoardContentAllBox>
             </BoardBox>
 
@@ -347,105 +376,77 @@ const FreeBoard = () => {
     );
 }
 
-export default FreeBoard;
+export default AllGamePage;
 
-const BoardTitleContentAllBox = styled.div
+const AllBox = styled.div
     `
-
-`
-
-const ProfileBox = styled.div
-    `
-
-`
-
-const ViewIcon = styled.i
-    `
-    font-size: 22px;
-    display: flex;
-`
-
-const LikeIcon = styled(ViewIcon)
-    `
-    font-size: 18px;
-    margin: 0px 0px 0px 6px;
-`
-
-const ViewlikeAllBox = styled.div
-    `
-    display: flex;
+    position: absolute;
+    display: none;
+    flex-direction: column;
     justify-content: end;
-    margin: 30px 0px 0px 0px;
-`
-
-const ProfileAllBox = styled.div
-    `
-    display: flex;
-`
-
-const FreeBoardViewAllBox = styled.div
-    `
-    display: flex;
-    flex-direction: column;
+    background: rgba(0,0,0,0.3);
+    top: 0%;
+    height: 100%;
+    left: 0%;
+    border-radius: 8px;
     width: 100%;
-`
-
-const ReplyCountAllBox = styled.div
-    `
-
-`
-
-const ReplyCountText = styled.span
-    `
-    margin: 0px 0px 7px 0px;
-`
-
-const ReplyCountBox = styled.div
-    `
-    width: 64px;
-    height: 73px;
-    border: solid 2px ${props => props.theme.textColor};
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 6px;
-`
-
-const WriteBtnText = styled.span
-    `
-    white-space: nowrap;
-    -webkit-tap-highlight-color:transparent;
-    -webkit-user-select: none;
-`
-
-const WriteBtn = styled.div
-    `   
-    text-align: center;
-    width: 70px;
-    height: 23px;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    background: #6A9DDA;
-    color: white;
     overflow: hidden;
-    padding: 13px 7px 7px 7px;
-    font-weight:bold;
-    -webkit-tap-highlight-color:transparent;
+     @media (min-width:250px) and (max-width:560px)
+    {
+        width: 100%;
+    }
+`
+
+const SlideAllBox = styled.div
+    `
+    position: relative;
     &:hover
     {
-        ${WriteBtnText}{
-            background-color: rgba( 0, 0, 0, 0.2 );
-            padding: 13px 24.2px 12px 24.2px;
-            margin: 0px 0px 0px -11px;
+        ${AllBox}
+        {
+            display: flex;
         }
     }
+    `
 
-    a
-    {
-            text-decoration: none;
-            color: black;
-    }
+const SlideBox = styled.div
+    `
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border 0.5s;
+    height: 285px;
+`
+
+const ImgBox = styled.img
+    `
+    width: 100%;
+    height: 285px;
+`
+
+const InformaionBoxTextBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: rgba(41,41,41,0.8);
+`
+
+const TitleBox = styled.div
+    `
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size: 30px;
+    color: white;
+    margin: 0px 0px 10px 0px;
+`
+
+const InformaionBox = styled.div
+    `
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color: white;
 `
 
 const SearchAllBox = styled.div
@@ -475,123 +476,17 @@ const BoardContentNumber = styled.div
     
 `
 
-const BoardCotent = styled(BoardContentNumber)
-    `
-    margin: 0px 0px 0px 0px;
-    font-size: 14px;
-    a{
-        text-decoration: none;
-    }
-`
-
-const BoardCotentText = styled.div
-    `
-    text-align: start;
-    display: -webkit-box;
-    word-break: break-all;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    cursor: pointer;
-    p, span{
-        color: ${props => props.theme.BoardTextView} !important;
-        background-color: ${props => props.theme.backgroundColor} !important;
-        transition: background-color 0.5s;
-    }
-
-    &:hover{
-        p,span{
-            color: #0090F9 !important;
-        }
-    }
-
-`
-
-const BoardContentTitle = styled(BoardContentNumber)
-    `
-    margin: 15px 0px 6px 0px;
-
-    a{
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        text-decoration: none;
-        font-size: 20px;
-        color: ${props => props.theme.textColor};
-
-        &:hover
-        {
-            color: #0090F9;
-        }
-    }
-`
-const BoardContentViewtime = styled(BoardContentNumber)
-    `
-    font-size: 15px;
-`
-const BoardContentWriter = styled(BoardContentNumber)
-    `
-    font-size: 20px;
-    margin: 0px 0px 6px 10px;
-    cursor: pointer;
-`
-
-const CorrectionIcon = styled.i
-    `
-    display: ${props => props.writerRole === "DEVELOPER" ? "block" : "none"};
-    svg
-    {
-        font-size: 25px;
-        margin: 0px 0px 1px 0px;
-    }
-`
-
-const CorrectionTextBox = styled.div
-    `
-    display: flex;
-    margin: 7.2px 0px 0px 0px;
-`
-const CorrectionTextBoxIcon = styled.i
-    `
-    svg
-    {
-        margin: 0px 1px 0px 3px;
-    }
-`
-const CorrectionText = styled.span
-    `
-    font-size: 13.5px;
-`
-
-const BoardContentCounter = styled(BoardContentNumber)
-    `
-    margin: 0px 0px 0px 5px;
-}
-`
-
-const BoardlikeContentCounter = styled(BoardContentNumber)
-    `
-    margin: 0px 0px 0px 5px;
-`
-
 const BoardContentAllBox = styled.div
     `
-
+    display: ${ props => props.View === 0 ? "none" : "grid"};
+    grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
+    grid-gap: 30px;
 `
 
 const BoardContentBox = styled.div
     `
-        display: flex;
-        column-gap: 20px;
-        text-align: center;
-        padding: 20px 10px 20px 10px;
-        color: ${(props) => props.theme.BoardTitle};
-        font-weight: bold;
-        &:not(:last-child)
-        {
-            border-bottom: solid 2px ${(props) => props.theme.textColor};
+        a{
+            text-decoration: none;
         }
 `
 
@@ -644,7 +539,7 @@ const FillterSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 130px;
+        height: 78px;
     }
 `
 
@@ -654,7 +549,7 @@ const SearchFillSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 52px;
     }
 `
 
@@ -677,6 +572,7 @@ const FitterSelectBox = styled.ul
     border: solid 2px ${props => props.theme.borderColor};
     background: #dee2e6;
     width: 100px;
+    height: 78px;
     padding: 0px;
     overflow: hidden;
     text-align: center;
@@ -687,7 +583,7 @@ const FitterSelectBox = styled.ul
 const SearchFillSelectBox = styled(FitterSelectBox)
     `
     width: 83px;
-    height: 78px;
+    height: 52px;
     animation: ${SearchFillSlideDown} 0.5s;
 `
 
@@ -795,11 +691,8 @@ const FreeBoardBox = styled.div
 
 const BoardBox = styled.div
     `
-    display: flex;
-    margin: 10px 0px 10px 0px;
-    flex-direction: column;
+    padding: 30px 30px 30px 30px;
     border-bottom: solid 2px ${(props) => props.theme.BoardTitle};
-
 `
 
 const FitterBox = styled.div
@@ -816,9 +709,11 @@ const FitterBox = styled.div
 const SearchBox = styled.div
     `
     display: flex;
+    position: relative;
     justify-content: space-between;
     border-bottom: solid 2px ${(props) => props.theme.BoardTitle};
     padding: 20px 15px 20px 15px;
+    z-index:1;
 
     @media (min-width:250px) and (max-width:607px)
     {
