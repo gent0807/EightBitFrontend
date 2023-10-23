@@ -286,7 +286,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
-                    totalCommentCount.current=totalCommentCount.current+data;
+                    totalCommentCount.current = totalCommentCount.current + data;
                     setReCommentCount(data);
                 })
         }
@@ -302,7 +302,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
-                    totalCommentCount.current=data.length;
+                    totalCommentCount.current = data.length;
                     setComments(data.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)));
                 })
         }
@@ -750,46 +750,46 @@ const FreeArticle = () => {
     const setLikeValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
-        if(innerText === "추천순")
-        {
-        const FillerState = Comments.sort((a, b) => b.likecount - a.likecount);
-        setComments(FillerState);
-        setPage(1);
+        if (innerText === "추천순") {
+            const FillerState = Comments.sort((a, b) => b.likecount - a.likecount);
+            setComments(FillerState);
+            setPage(1);
         }
     }
 
     const setReplyValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
-        if(innerText === "댓글순")
-        {
-        const FillerState = Comments.sort((a, b) => b.recomment_count - a.recomment_count);
-        setComments(FillerState);
-        setPage(1);
+        if (innerText === "댓글순") {
+            const FillerState = Comments.sort((a, b) => b.recomment_count - a.recomment_count);
+            setComments(FillerState);
+            setPage(1);
         }
     }
 
     const setCurrentValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
-        if(innerText === "최신순")
-        {
-        const FillerState = Comments.sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
-        setComments(FillerState);
-        setPage(1);
+        if (innerText === "최신순") {
+            const FillerState = Comments.sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
+            setComments(FillerState);
+            setPage(1);
         }
     }
 
     const setPastValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
-        if(innerText === "과거순")
-        {
-        const FillerState = Comments.sort((a, b) => new Date(a.regdate) - new Date(b.regdate));
-        setComments(FillerState);
-        setPage(1);
+        if (innerText === "과거순") {
+            const FillerState = Comments.sort((a, b) => new Date(a.regdate) - new Date(b.regdate));
+            setComments(FillerState);
+            setPage(1);
         }
     }
+
+    const ScrollTop = () => {
+        window.scrollTo({ top: 835, behavior: "smooth" });
+      }
 
     return (
         <FreeArticleBox>
@@ -995,7 +995,7 @@ const FreeArticle = () => {
                         </CommentArea2>
                         <CommentBtnBox>
                             <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
-                            <CommentBtn>댓글 쓰기</CommentBtn>
+                            <CommentBtn onClick={() => ScrollTop()}>댓글 쓰기</CommentBtn>
                         </CommentBtnBox>
                     </CommentForm2>
                 </InformationAllBox>
@@ -1164,7 +1164,7 @@ const FreeArticle = () => {
                         </CommentInputBox>
                     </CommentArea>
 
-                    <CommentBtnBox>
+                    <CommentBtnBox onClick={() => ScrollTop()}>
                         <CommentBtn>댓글 쓰기</CommentBtn>
                     </CommentBtnBox>
                 </CommentForm>
