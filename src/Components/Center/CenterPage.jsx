@@ -14,8 +14,8 @@ import test1 from "../../img/MainSlide/test1.png";
 import test2 from "../../img/MainSlide/test2.png";
 import test3 from "../../img/MainSlide/test3.png";
 import test4 from "../../img/MainSlide/test4.png";
-import test5 from "../../img/MainSlide/test5.png";
 import test6 from "../../img/MainSlide/test6.png";
+import test7 from "../../img/MainSlide/test7.png";
 
 SwiperCore.use([Navigation, Pagination, EffectCoverflow]);
 
@@ -74,13 +74,13 @@ const CenterPage = () => {
     const [AdSlide2, setAdSlide2] = useState([
         {
             id: 1,
-            img: test5,
+            img: test6,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
         },
         {
             id: 2,
-            img: test6,
+            img: test7,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
         },
@@ -265,11 +265,6 @@ const CenterPage = () => {
                                     <AdSlideCenterBox>
                                         <AdSlideAllBox>
 
-                                            <AdAllBox>
-                                                <AdTitleBox>{title}</AdTitleBox>
-                                                <AdInformaionBox>{informaion}</AdInformaionBox>
-                                            </AdAllBox>
-
                                         </AdSlideAllBox>
                                     </AdSlideCenterBox>
 
@@ -405,7 +400,7 @@ const GradiRight = styled.div
     height: 100%;
     position: absolute;
     top: 0;
-    margin-left: 140rem;
+    margin-left: 139.3rem;
 `
 
 const ImgAllBox = styled.div

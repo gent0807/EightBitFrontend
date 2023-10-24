@@ -370,13 +370,11 @@ const UpdateBoard = () => {
 
                 if (files.length == 0) {
                     navigate('/FreeArticle/' + writer + '/' + regdate);
-                    window.location.replace('/FreeArticle/' + writer + '/' + regdate);
                     return;
                 }
                 else if (files.length > 0) {
                     registFile(writer, regdate);
                     navigate('/FreeArticle/' + writer + '/' + regdate);
-                    window.location.replace('/FreeArticle/' + writer + '/' + regdate);
                     return;
                 }
             })
