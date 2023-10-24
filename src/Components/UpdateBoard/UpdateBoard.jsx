@@ -32,6 +32,7 @@ const UpdateBoard = () => {
     const content = location.state.content;
     const attachmentes = location.state.attachmentes;
 
+    console.log(attachmentes);
 
     const [WriterChangeValue, setWriterChangeValue] = useState(title);
     const [EditerValue, setEditerValue] = useState(content);
@@ -39,6 +40,7 @@ const UpdateBoard = () => {
     const [files, setFiles] = useState([]);
     const [UpdateBoardModalOnOff, setUpdateBoardModalOnOff] = useState(false);
     const [deleteIdList, setDeleteIdList] = useState([]);
+    const [FrontDeleteIdList, setFrontDeleteIdList] = useState(attachmentes);
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -149,11 +151,12 @@ const UpdateBoard = () => {
     ];
 
     const choiceDeleteAttachmentId = (id) => {
-        console.log("삭제할 id:"+id);
+        console.log("삭제할 id:" + id);
         setDeleteIdList([...deleteIdList, id]);
-       
+        setFrontDeleteIdList(FrontDeleteIdList.filter(Deletefile => Deletefile.id !== id))
     }
-    console.log("삭제할 id 목록:"+deleteIdList);
+
+    console.log("삭제할 id 목록:" + deleteIdList);
 
 
     const onChangeFiles = useCallback((e) => {
@@ -258,9 +261,8 @@ const UpdateBoard = () => {
 
 
     const OncheckSubmit = (e) => {
-
         // const deleteFile = async (deleteFile) => {
-            
+
         //         await axios.delete(`${ip}/Board/article/shareFiles/${deleteFile.id}/${deleteFile.uploader}/${deleteFile.regdate}`, 
         //         {
         //             headers:{ 
@@ -273,28 +275,28 @@ const UpdateBoard = () => {
         //         .then((data) => {
         //             return;
         //         })
-        
+
         // }
 
         const deleteFile = async (deleteFileList) => {
-            
-            await axios.delete(`${ip}/Board/article/shareFiles`, 
-            {
-                data:  deleteFileList,
-                headers:{ 
-                    Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` 
-            },
-            })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                return;
-            })
-        
 
-    
-    }
+            await axios.delete(`${ip}/Board/article/shareFiles`,
+                {
+                    data: deleteFileList,
+                    headers: {
+                        Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
+                    },
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
+                    return;
+                })
+
+
+
+        }
 
         const registFile = async (writer, regdate) => {
 
@@ -354,7 +356,7 @@ const UpdateBoard = () => {
             .then((data) => {
 
                 if (deleteIdList.length > 0) {
-                    let deleteFileList=attachmentes.filter((attachment) => {
+                    let deleteFileList = attachmentes.filter((attachment) => {
                         return deleteIdList.includes(attachment.id);
                     });
 
@@ -363,16 +365,18 @@ const UpdateBoard = () => {
                     // }
 
                     deleteFile(deleteFileList);
-                    
+
                 }
 
                 if (files.length == 0) {
                     navigate('/FreeArticle/' + writer + '/' + regdate);
+                    window.location.replace('/FreeArticle/' + writer + '/' + regdate);
                     return;
                 }
                 else if (files.length > 0) {
                     registFile(writer, regdate);
                     navigate('/FreeArticle/' + writer + '/' + regdate);
+                    window.location.replace('/FreeArticle/' + writer + '/' + regdate);
                     return;
                 }
             })
@@ -495,33 +499,39 @@ const UpdateBoard = () => {
                 </EditerBox>
 
 
-                <DeleteAttachment Attachmentes={attachmentes.length}><TagText>첨부파일 삭제</TagText></DeleteAttachment>
-                <AttachmentList Attachmentes={attachmentes.length}>
-                    {
-                        attachmentes.slice(offset, offset + limit).map(attachment => {
+                <DeleteAttachment Attachmentes={FrontDeleteIdList.length}><TagText>첨부파일 삭제</TagText></DeleteAttachment>
+                <AttachmentList Attachmentes={FrontDeleteIdList.length}>
+                {FrontDeleteIdList.length !== 0 &&
+                        FrontDeleteIdList.map(attachment => {
                             const id = attachment.id;
                             const uploadFilename = attachment.uploadFilename;
                             return (
-                                
-                                <div style={{ display: deleteIdList.includes(id) ?  "none" : "flex", margin: "0px 0px 0px 0px" }}>
-                                    <AttachmentLi>
-                                        {uploadFilename}
-                                    </AttachmentLi>
-                                    
 
-                                    <button type='button' style={{margin:"-3px 0px 0px 0px", height:"25px"}} onClick={()=>{choiceDeleteAttachmentId(id)}}>
-                                        삭제
-                                    </button>
+                                <DeleteNumber id={id}>
+                                    <>
+                                        <Icon src={[
+                                            (uploadFilename.includes("pptx") ? PPTX :
+                                                (uploadFilename.includes("txt") ? TXT :
+                                                    (uploadFilename.includes("pdf") ? PDF :
+                                                        (uploadFilename.includes("jpg") ? JPG :
+                                                            (uploadFilename.includes("png") ? PNG :
+                                                                (uploadFilename.includes("zip") ? ZIP :
+                                                                    Default))))))
+                                        ]} />
+                                    </>
+                                    <DeleteName>{uploadFilename}</DeleteName>
+                                    <Delete onClick={() => { choiceDeleteAttachmentId(id) }}>
+                                        X
+                                    </Delete>
 
-
-                                </div>
+                                </DeleteNumber>
 
 
                             );
 
                         })
-
                     }
+                    
                 </AttachmentList>
 
 
@@ -673,19 +683,19 @@ const TagTextBox = styled.div
     color : ${props => props.theme.textColor};
 `
 
-const AttachmentList = styled.ul
+const AttachmentList = styled.div
     `
-    display:${props => props.Attachmentes > 0 ? "block" : "none"};
-    list-style: none;
-    padding-left: 21px;
-    margin: 0px 0px 5px 0px;
-
-`
-
-const AttachmentLi = styled.li
-`
-    margin: 0px 10px 10px 0px;
-    color : ${props => props.theme.textColor};  
+    display:${props => props.Attachmentes > 0 ? "flex" : "none"};
+    align-items: center;
+    box-sizing: border-box;
+    flex-direction: column;
+    border: solid 3px ${props => props.theme.borderColor};
+    margin: 0px 20px 30px 20px;
+    padding: 20px 0px 20px 0px;
+    border-radius: 20px;
+    justify-content: center;
+    background: ${props => props.checkFile ? "rgb(0,0,0,0.04)" : props.theme.backgroundColor};
+    min-height: 135px;
 `
 
 const EditerBox = styled.div
@@ -698,7 +708,7 @@ const EditerBox = styled.div
     background: white;
 `
 const DeleteAttachment = styled.div
-`
+    `
     display: ${props => props.Attachmentes > 0 ? "flex" : "none"};
     text-align: center;
     justify-content: start;
@@ -755,11 +765,18 @@ const FileNumber = styled.div
     display: flex;
     padding: 10px;
     border: 3px solid ${props => props.theme.borderColor};
-    margin: 0px 0px 10px 0px;
     color : ${props => props.theme.textColor};
     font-weight : bold;
     justify-content: space-between;
     height: 44px;
+    &:not(:last-child){
+        margin: 0px 0px 10px 0px;
+    }
+`
+
+const DeleteNumber = styled(FileNumber)
+    `
+    display: flex;
 `
 
 const FileName = styled.div
@@ -771,7 +788,16 @@ const FileName = styled.div
     white-space:nowrap;
 `
 
+const DeleteName = styled(FileName)
+    `
+
+`
+
 const FileDelete = styled.div
+    `
+    cursor: pointer;
+`
+const Delete = styled.div
     `
     cursor: pointer;
 `
@@ -780,7 +806,6 @@ const FileList = styled.div
     `
     padding: 8px;
     margin-bottom: 10px;
-    font-size: 20px;
     display: ${props => props.Files.length === 0 ? "none" : "flex"};
     justify-content: space-between;
     flex-direction: column;

@@ -37,7 +37,7 @@ const SelectSign = () => {
                 </Link>
             </EmailBtnBox>
             <LOGINAPI>
-                <Line><span>또는</span></Line>
+                <Line><LineText>또는</LineText></Line>
                 <APIList>
                     <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
                     <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></APIListA></APIListLI>
@@ -50,6 +50,11 @@ const SelectSign = () => {
 }
 
 export default SelectSign;
+
+const LineText = styled.span
+`
+    margin: 0px 5px 0px 5px;
+`
 
 const LogoBox = styled.div
     `

@@ -15,6 +15,7 @@ import test2 from "../../img/MainSlide/test2.png";
 import test3 from "../../img/MainSlide/test3.png";
 import test4 from "../../img/MainSlide/test4.png";
 import test5 from "../../img/MainSlide/test5.png";
+import test6 from "../../img/MainSlide/test6.png";
 
 SwiperCore.use([Navigation, Pagination, EffectCoverflow]);
 
@@ -24,23 +25,14 @@ const CenterPage = () => {
     const navNextRef = useRef(null);
     const navPrevRef2 = useRef(null);
     const navNextRef2 = useRef(null);
-    const navPrevRef3 = useRef(null);
-    const navNextRef3 = useRef(null);
     const navPrevRef4 = useRef(null);
     const navNextRef4 = useRef(null);
-    const navPrevRef5 = useRef(null);
-    const navNextRef5 = useRef(null);
-    const navPrevRef6 = useRef(null);
-    const navNextRef6 = useRef(null);
     const navPrevRef7 = useRef(null);
     const navNextRef7 = useRef(null);
 
     const PaginatonRef = useRef(null);
     const PaginatonRef2 = useRef(null);
-    const PaginatonRef3 = useRef(null);
     const PaginatonRef4 = useRef(null);
-    const PaginatonRef5 = useRef(null);
-    const PaginatonRef6 = useRef(null);
     const PaginatonRef7 = useRef(null);
 
     const [swiper, setSwiper] = useState(null);
@@ -79,68 +71,16 @@ const CenterPage = () => {
         },
     ]);
 
-    const [AdSlide, setAdSlide] = useState([
-        {
-            id: 1,
-            lank: 1,
-            img: test5,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 2,
-            img: test1,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 3,
-            img: test2,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 4,
-            img: test3,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 5,
-            img: test4,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-    ]);
     const [AdSlide2, setAdSlide2] = useState([
         {
             id: 1,
-            lank: 1,
             img: test5,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
         },
         {
             id: 2,
-            img: test1,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 3,
-            img: test2,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 4,
-            img: test3,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 5,
-            img: test4,
+            img: test6,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
         },
@@ -298,6 +238,7 @@ const CenterPage = () => {
         slidesPerView: 1,
         loop: true,
         loopAdditionalSlides: 1,
+        centeredSlides: true,
     }
 
     return (
@@ -307,29 +248,42 @@ const CenterPage = () => {
 
             <AllContentBox>
 
-            <AdContainerBox>
-                <AdSlideBox>
+                <AdContainerBox>
+                    <AdSlideBox>
 
-                    <AdSlider {...AdSwiper2} ref={setSwiper}>
-                        {AdSlide2.length !== 0 && AdSlide.map(({ id, img, informaion, title }) => (
-                            <SwiperSlide key={id}>
-                                <ImgAdBox src={img} />
-                                <AdAllBox>
-                                    <AdTitleBox>{title}</AdTitleBox>
-                                    <AdInformaionBox>{informaion}</AdInformaionBox>
-                                </AdAllBox>
-                            </SwiperSlide>
-                        ))}
-                    </AdSlider>
+                        <AdSlider {...AdSwiper2} ref={setSwiper}>
+                            {AdSlide2.length !== 0 && AdSlide2.map(({ id, img, informaion, title }) => (
+                                <SwiperSlide key={id}>
+                                    <ImgAllBox>
+                                        <GradiBox>
+                                            <GradiLeft />
+                                            <ImgAdBox src={img} />
+                                            <GradiRight />
+                                        </GradiBox>
+                                    </ImgAllBox>
 
-                    <ButtonBox>
+                                    <AdSlideCenterBox>
+                                        <AdSlideAllBox>
+
+                                            <AdAllBox>
+                                                <AdTitleBox>{title}</AdTitleBox>
+                                                <AdInformaionBox>{informaion}</AdInformaionBox>
+                                            </AdAllBox>
+
+                                        </AdSlideAllBox>
+                                    </AdSlideCenterBox>
+
+                                </SwiperSlide>
+                            ))}
+                        </AdSlider>
+                    </AdSlideBox>
+
+                    <AdButtonBox>
                         <PrevBtn ref={navPrevRef7}><IoIosArrowBack /></PrevBtn>
                         <PaginationBtn ref={PaginatonRef7}></PaginationBtn>
                         <NextBtn ref={navNextRef7}><IoIosArrowForward /></NextBtn>
-                    </ButtonBox>
-
-                </AdSlideBox>
-            </AdContainerBox>
+                    </AdButtonBox>
+                </AdContainerBox>
 
                 <GameSlideBox>
 
@@ -430,6 +384,53 @@ const CenterPage = () => {
         </SwiperBox>
     );
 }
+
+const GradiBox = styled.div
+    `
+
+`
+const GradiLeft = styled.div
+    `
+    background-image: linear-gradient(90deg, rgba(25,25,25,1), transparent);
+    width: 30px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+`
+
+const GradiRight = styled.div
+    `
+    background-image: linear-gradient(270deg, rgba(25,25,25,1), transparent);
+    width: 30px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    margin-left: 140rem;
+`
+
+const ImgAllBox = styled.div
+    `
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+`
+
+const AdSlideAllBox = styled.div
+    `
+    position: absolute;
+    top: 13%;
+    z-index: 1;
+    margin: 0px 0px 0px 0px;
+}
+`
+
+const AdSlideCenterBox = styled.div
+    `
+    max-width: 1280px;
+    margin: 0 auto;
+`
 
 const AllContentBox = styled.div
     `
@@ -551,8 +552,7 @@ const SlideAllBox = styled.div
 
 const AdSlider = styled(Slider)
     `
-    height: 600px;
-
+    height: 360px;
 `
 
 
@@ -561,6 +561,11 @@ const ButtonBox = styled.div
     display: flex;
     justify-content: center;
     margin: -71px 0px 0px 0px;
+`
+
+const AdButtonBox = styled(ButtonBox)
+    `
+    margin: 0px 0px 0px 0px;
 `
 
 const PrevBtn = styled.div
@@ -587,8 +592,8 @@ const NextBtn = styled.div
 `
 const AdSlideBox = styled.div
     `
-    width: 100%
-
+    background: rgba(25,25,25,1);
+    width: 100%;
 `
 
 const GameSlideBox = styled.div
@@ -619,8 +624,7 @@ const ImgBox = styled.img
 
 const ImgAdBox = styled.img
     `
-    width: 100%;
-    height: 533px;
+    height: 100%;
 `
 
 const TitleBox = styled.div
@@ -662,14 +666,12 @@ const InformaionBox = styled.div
 
 const AdAllBox = styled.div
     `
-    position: absolute;
     display: flex;
+    width: 100%;
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 20px;
     padding: 20px;
-    top: 16%;
-    left: 12%;
 `
 
 const SlideBox = styled.div

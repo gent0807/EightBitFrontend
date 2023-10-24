@@ -290,14 +290,14 @@ const AllGamePage = () => {
         <FreeBoardBox>
             <InformationAllBox>
                 <FreeBoardInformation>
-                    <FreeBoardInformationText>전체게임</FreeBoardInformationText>
+                    <FreeBoardInformationText>인디게임</FreeBoardInformationText>
                 </FreeBoardInformation>
             </InformationAllBox>
             <SearchBox>
                 <SearchAllBox>
                     <SearchForm onSubmit={(e) => SearchSubmit(e)}>
                         <FreeBoardSearchInputBox>
-                            <FreeBoardSearchInput placeholder="" value={Search} onChange={OnSearch} />
+                            <FreeBoardSearchInput placeholder="게임을 검색해 주세요!" value={Search} onChange={OnSearch} />
                             <FreeBoardSearchIconBox>
                                 <FreeBoardSearchBtn><HiOutlineSearch /></FreeBoardSearchBtn>
                             </FreeBoardSearchIconBox>

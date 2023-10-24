@@ -151,11 +151,11 @@ const Logininput = () => {
         </InputT>
 
         <LOGINAPI>
-          <Line><span>또는</span></Line>
+          <Line><LineText>또는</LineText></Line>
           <APIList>
             <APIListLI>< APIListA border={"rgba(0,0,0,.15)"} background={"white"} API="#"><FcGoogle /></ APIListA></APIListLI>
             <APIListLI>< APIListA border={"#00c60c"} background={"#00c60c"} API="#"><SiNaver /></APIListA></APIListLI>
-            <APIListLI>< APIListA border={"#edf511"} background={"#edf511"} API="#"><RiKakaoTalkFill style={{color:"black"}}/></ APIListA></APIListLI>
+            <APIListLI>< APIListA border={"#edf511"} background={"#edf511"} API="#"><RiKakaoTalkFill/></ APIListA></APIListLI>
             <APIListLI>< APIListA border={"#0d0c0c"} background={"#0d0c0c"} API="#"><BsGithub /></ APIListA></APIListLI>
           </APIList>
         </LOGINAPI>
@@ -179,8 +179,6 @@ const LoginMaintainText = styled.div
 
 const LineText = styled.span
   `
-    padding-left: 1.6rem;
-    padding-right: 1.6rem;
 `
 
 const InputAllBox = styled.div
@@ -360,6 +358,11 @@ export const Line = styled.p
     }
 `
 
+const Text = styled.span
+`
+
+`
+
 const LOGINAPI = styled.div
   `
 `
@@ -377,12 +380,6 @@ export const EmailPwFoundList = styled.ul
     list-style: none;
     padding: 0px;
 `
-
-const APIList = styled(EmailPwFoundList)
-  `
-    margin:40px 0px 40px 0px;
-`
-
 export const APIListA = styled.a.attrs((props) => ({ href: props.API }))
   `
     display: inline-block;
@@ -402,6 +399,15 @@ export const APIListA = styled.a.attrs((props) => ({ href: props.API }))
       height: 24px;
     }
 `
+
+const APIList = styled(EmailPwFoundList)
+  `
+    margin:40px 0px 40px 0px;
+    li:nth-child(3){
+        svg{color: black;}
+    }
+`
+
 
 const APIListLI = styled.li
   `

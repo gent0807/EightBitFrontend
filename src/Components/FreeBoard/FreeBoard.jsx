@@ -230,7 +230,7 @@ const FreeBoard = () => {
                 <SearchAllBox>
                     <SearchForm onSubmit={(e) => SearchSubmit(e)}>
                         <FreeBoardSearchInputBox>
-                            <FreeBoardSearchInput placeholder="" value={Search} onChange={OnSearch} />
+                            <FreeBoardSearchInput placeholder="게시물을 검색해 주세요!" value={Search} onChange={OnSearch} />
                             <FreeBoardSearchIconBox>
                                 <FreeBoardSearchBtn><HiOutlineSearch /></FreeBoardSearchBtn>
                             </FreeBoardSearchIconBox>
@@ -292,7 +292,7 @@ const FreeBoard = () => {
                                 <ProfileAllBox>
                                     <WriterProfile writer={writer} />
                                     <ProfileBox>
-                                        <div style={{ display: "flex" }}>
+                                        <UpdateBox>
                                             <BoardContentWriter>{writer}</BoardContentWriter>
                                             <CorrectionIcon writerRole={role}>
                                                 <BiLogoDevTo />
@@ -307,7 +307,7 @@ const FreeBoard = () => {
                                                         수정됨
                                                     </CorrectionText>
                                                 </CorrectionTextBox>}
-                                        </div>
+                                        </UpdateBox>
                                         <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
                                     </ProfileBox>
                                 </ProfileAllBox>
@@ -356,7 +356,11 @@ const BoardTitleContentAllBox = styled.div
 
 const ProfileBox = styled.div
     `
+`
 
+const UpdateBox = styled.div
+    `
+    display: flex;
 `
 
 const ViewIcon = styled.i

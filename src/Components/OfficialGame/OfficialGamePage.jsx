@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef, useCallback, FC } from 'react';
 import styled from "styled-components";
-import test1 from "../../img/MainSlide/test1.png"
+import Official1 from "../../img/MainSlide/Official1.png"
+import Official2 from "../../img/MainSlide/Official2.png"
+import Official3 from "../../img/MainSlide/Official3.png"
 import test2 from "../../img/MainSlide/test2.png"
+import test1 from "../../img/MainSlide/test1.png"
 import test3 from "../../img/MainSlide/test3.png"
 import { RiInformationLine } from "react-icons/ri";
 import { AiOutlineDownload } from "react-icons/ai";
@@ -18,18 +21,21 @@ const OfficialGamePage = () => {
         {
             id: 1,
             img: test2,
+            imgBackground: Official1,
             informaion: "방치하면서 성장하는 8비트 공식 게임!",
             title: "방치모험가"
         },
         {
             id: 2,
             img: test1,
+            imgBackground: Official2,
             informaion: "뱀파이어소녀에 관한 8비트 공식 게임!",
             title: "로드 오브 토파즈"
         },
         {
             id: 3,
             img: test3,
+            imgBackground: Official3,
             informaion: "끝 없이 터치하라! 8비트 공식 게임!",
             title: "럭키웨폰"
         },
@@ -61,148 +67,27 @@ const OfficialGamePage = () => {
 
                 <OfficialGame1>
                     <OfficialGame1imgBox>
-                        <OfficialGame1img src={Slide[0].img} />
+                        <OfficialGame1img src={Slide[0].imgBackground} />
 
-                        <OfficialGame1InformaitonBox>
-
-                            <InformaionAllBox>
-                                <OfficialInforImgBox>
-                                    <OfficialGame1Inforimg src={Slide[0].img} />
-                                </OfficialInforImgBox>
-
-                                <OfficialIntroduceBox>
-                                    <OfficialIntroduceText>
-                                        {Slide[0].title}
-                                    </OfficialIntroduceText>
-                                </OfficialIntroduceBox>
-
-                                <OfficialInforTextBox>
-                                    <OfficialInforText>{Slide[0].informaion}</OfficialInforText>
-                                </OfficialInforTextBox>
-
-                                <OfficialBtnBox>
-                                    <VideoDownloadBtn>
-                                        <VideoDownloadBtnIcon>
-                                            <AiOutlineDownload />
-                                        </VideoDownloadBtnIcon>
-                                        <VideoDownloadBtnText>
-                                            다운로드
-                                        </VideoDownloadBtnText>
-                                    </VideoDownloadBtn>
-
-                                    <Link to="/">
-                                        <VideoInformationBtn>
-                                            <VideoInformationBtnIcon>
-                                                <RiInformationLine />
-                                            </VideoInformationBtnIcon>
-                                            <VideoInformationBtnText>
-                                                상세정보
-                                            </VideoInformationBtnText>
-                                        </VideoInformationBtn>
-                                    </Link>
-                                </OfficialBtnBox>
-                            </InformaionAllBox>
-
-                        </OfficialGame1InformaitonBox>
+                        <OfficialGame1InformaitonBox />
 
                     </OfficialGame1imgBox>
                 </OfficialGame1>
 
                 <OfficialGame2>
                     <OfficialGame2imgBox>
-                        <OfficialGame2img src={Slide[1].img} />
+                        <OfficialGame2img src={Slide[1].imgBackground} />
 
-                        <OfficialGame2InformaitonBox>
-
-                            <InformaionAllBox>
-                                <OfficialInforImgBox>
-                                    <OfficialGame2Inforimg src={Slide[1].img} />
-                                </OfficialInforImgBox>
-
-                                <OfficialIntroduceBox>
-                                    <OfficialIntroduceText>
-                                        {Slide[1].title}
-                                    </OfficialIntroduceText>
-                                </OfficialIntroduceBox>
-
-                                <OfficialInforTextBox>
-                                    <OfficialInforText>{Slide[1].informaion}</OfficialInforText>
-                                </OfficialInforTextBox>
-
-                                <OfficialBtnBox>
-                                    <VideoDownloadBtn>
-                                        <VideoDownloadBtnIcon>
-                                            <AiOutlineDownload />
-                                        </VideoDownloadBtnIcon>
-                                        <VideoDownloadBtnText>
-                                            다운로드
-                                </VideoDownloadBtnText>
-                                    </VideoDownloadBtn>
-
-                                    <Link to="/">
-                                        <VideoInformationBtn>
-                                            <VideoInformationBtnIcon>
-                                                <RiInformationLine />
-                                            </VideoInformationBtnIcon>
-                                            <VideoInformationBtnText>
-                                                상세정보
-                                </VideoInformationBtnText>
-                                        </VideoInformationBtn>
-                                    </Link>
-                                </OfficialBtnBox>
-                            </InformaionAllBox>
-
-                        </OfficialGame2InformaitonBox>
+                        <OfficialGame2InformaitonBox />
 
                     </OfficialGame2imgBox>
                 </OfficialGame2>
 
                 <OfficialGame3>
                     <OfficialGame3imgBox>
-                        <OfficialGame3img src={Slide[2].img} />
+                        <OfficialGame3img src={Slide[2].imgBackground} />
 
-                        <OfficialGame3InformaitonBox>
-
-                            <InformaionAllBox>
-                                <OfficialInforImgBox>
-                                    <OfficialGame3Inforimg src={Slide[2].img} />
-                                </OfficialInforImgBox>
-
-                                <OfficialIntroduceBox>
-                                    <OfficialIntroduceText>
-                                        {Slide[2].title}
-                                    </OfficialIntroduceText>
-                                </OfficialIntroduceBox>
-
-                                <OfficialInforTextBox>
-                                    <OfficialInforText>{Slide[2].informaion}</OfficialInforText>
-                                </OfficialInforTextBox>
-
-                                <OfficialBtnBox>
-                                    <VideoDownloadBtn>
-                                        <VideoDownloadBtnIcon>
-                                            <AiOutlineDownload />
-                                        </VideoDownloadBtnIcon>
-                                        <VideoDownloadBtnText>
-                                            다운로드
-                                </VideoDownloadBtnText>
-                                    </VideoDownloadBtn>
-
-                                    <Link to="/">
-                                        <VideoInformationBtn>
-                                            <VideoInformationBtnIcon>
-                                                <RiInformationLine />
-                                            </VideoInformationBtnIcon>
-                                            <VideoInformationBtnText>
-                                                상세정보
-                                </VideoInformationBtnText>
-                                        </VideoInformationBtn>
-                                    </Link>
-                                </OfficialBtnBox>
-
-                            </InformaionAllBox>
-
-                        </OfficialGame3InformaitonBox>
+                        <OfficialGame3InformaitonBox />
 
                     </OfficialGame3imgBox>
                 </OfficialGame3>
@@ -292,12 +177,12 @@ const OfficialGame1InformaitonBox = styled.div
     `
     position: fixed;
     width: 33.4vw;
-    height:100%;
+    height: 100%;
     top: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.5);
     transition: opacity 0.5s ease;
-    opacity: 0;
+    opacity: 1;
 `
 
 const OfficialInforTextBox = styled.div
@@ -361,9 +246,9 @@ const OfficialGame2InformaitonBox = styled.div
     height:100%;
     top: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.5);
     transition: opacity 0.5s ease;
-    opacity: 0;
+    opacity: 1;
 `
 
 const OfficialGame3InformaitonBox = styled.div
@@ -374,9 +259,9 @@ const OfficialGame3InformaitonBox = styled.div
     top: 0;
     bottom: 0;
     right: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.5);
     transition: opacity 0.5s ease;
-    opacity: 0;
+    opacity: 1;
 `
 const OfficialGame1img = styled.img
     `
@@ -412,12 +297,12 @@ const OfficialGame1 = styled.div
     overflow: hidden;
     &:hover{
         ${OfficialGame1InformaitonBox}{
-            transition: opacity 0.5s 0.3s ease;
-            opacity: 1;
+            transition: opacity 0.5s ease;
+            opacity: 0;
         }
         ${OfficialGame1img}{
-            transform: scale(1.2);
-            transition: transform 0.5s 0.3s;
+            transform: scale(1.1);
+            transition: transform 0.5s;
         }
     }
     `
@@ -430,12 +315,12 @@ const OfficialGame2 = styled.div
     position: relative;
     &:hover{
         ${OfficialGame2InformaitonBox}{
-            transition: opacity 0.5s 0.3s ease;
-            opacity: 1;
+            transition: opacity 0.5s ease;
+            opacity: 0;
         }
         ${OfficialGame2img}{
-            transform: scale(1.2);
-            transition: transform 0.5s 0.3s;
+            transform: scale(1.1);
+            transition: transform 0.5s;
     }
     `
 
@@ -446,12 +331,12 @@ const OfficialGame3 = styled.div
     overflow: hidden;
     &:hover{
         ${OfficialGame3InformaitonBox}{
-            transition: opacity 0.5s 0.3s ease;
-            opacity: 1;
+            transition: opacity 0.5s ease;
+            opacity: 0;
         }
         ${OfficialGame3img}{
-            transform: scale(1.2);
-            transition: transform 0.5s 0.3s;
+            transform: scale(1.1);
+            transition: transform 0.5s;
     }
     `
 

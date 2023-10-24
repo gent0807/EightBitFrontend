@@ -848,7 +848,7 @@ const FreeArticle = () => {
                                     <AiOutlineComment />
                                 </ReplyIcon>
 
-                                <ReplyText>{Comments.length + reCommentCount}</ReplyText>
+                                <ReplyText>{totalCommentCount.current}</ReplyText>
 
                             </LikeViewBox>
 

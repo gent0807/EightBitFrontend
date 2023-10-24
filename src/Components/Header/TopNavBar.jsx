@@ -788,9 +788,8 @@ const HeaderBox = () => {
                         <SubNavMenu LineCheck={BackgroundLine}>
                             <GameSubNav display={isGameTabCheck} TopBack={scrollPosition}>
                                 <Link to='/'><SubNavText>홈</SubNavText></Link>
-                                <Link to='/AllGamePage'><SubNavText>전체게임</SubNavText></Link>
+                                <Link to='/AllGamePage'><SubNavText>인디게임</SubNavText></Link>
                                 <Link to='/OfficialGame'><SubNavText>공식게임</SubNavText></Link>
-                                <Link to='/'><SubNavText>인디게임</SubNavText></Link>
                             </GameSubNav>
                             <ShopSubNav display={isShopTabCheck} TopBack={scrollPosition}>
                                 <Link to='/'><SubNavText>홈</SubNavText></Link>
@@ -1250,7 +1249,6 @@ const NavUl = styled.ul
         padding: 0px;
         justify-content: start;
     }
-
 `
 
 export const SearchInput = styled.input
@@ -1417,7 +1415,7 @@ const ProFileSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 378px;
+        height: 384px;
     }
     }
 `
@@ -1428,7 +1426,7 @@ const WriterSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 253px;
+        height: 255px;
     }
 `
 
@@ -1439,7 +1437,7 @@ const ProfileListBox = styled.div
     margin: 59px 0px 0px 108.5px;
     box-shadow: 0px 0px 0px ${props => props.show ? "3px" : "0px"} ${props => props.theme.borderColor};
     background: white;  
-    height: ${props => props.show ? "378px" : "0px"};
+    height: ${props => props.show ? "384px" : "0px"};
     border-radius: 10px;
     position: absolute;
     animation: ${props => props.show ? ProFileSlideDown : "none"} 0.25s;
@@ -1461,8 +1459,7 @@ const WriteListBox = styled(ProfileListBox)
     display: ${props => props.default ? "block" : "none"};
     width: 217px;
     margin: 59px 0px 0px 194.9px;
-    height: 253px;
-    height: ${props => props.show ? "253px" : "0px"};
+    height: ${props => props.show ? "255px" : "0px"};
     animation: ${props => props.show ? WriterSlideDown : "none"} 0.25s;
     z-index: ${props => props.zindex ? 2 : 1};
 `
@@ -1472,6 +1469,7 @@ const ProfileUl = styled.ul
     margin: 0px;
     padding: 0px;
     color: black;
+    overflow: hidden;
     a
     {
         color: black;
@@ -1484,7 +1482,6 @@ const ProfileUl = styled.ul
 const Profileli = styled.li
     `
     list-style: none;
-    border-radius: 5px;
     cursor:pointer;
     padding: ${props => props.padding};
     font-weight: bold;
@@ -1501,7 +1498,7 @@ const Profileli = styled.li
         clear: both;
         position: absolute;
         left: 50%;
-        width: calc(100% - -1px);
+        width: calc(100% - -4px);
         height: 1px;
         transform: translateX(-50%);
         background: black;
