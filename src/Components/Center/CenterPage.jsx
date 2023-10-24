@@ -250,24 +250,16 @@ const CenterPage = () => {
 
                 <AdContainerBox>
                     <AdSlideBox>
-
                         <AdSlider {...AdSwiper2} ref={setSwiper}>
                             {AdSlide2.length !== 0 && AdSlide2.map(({ id, img, informaion, title }) => (
                                 <SwiperSlide key={id}>
                                     <ImgAllBox>
                                         <GradiBox>
-                                            <GradiLeft />
-                                            <ImgAdBox src={img} />
-                                            <GradiRight />
+                                            <GradiLeft/>
+                                            <GradiRight/>
                                         </GradiBox>
+                                        <ImgAdBox src={img} />
                                     </ImgAllBox>
-
-                                    <AdSlideCenterBox>
-                                        <AdSlideAllBox>
-
-                                        </AdSlideAllBox>
-                                    </AdSlideCenterBox>
-
                                 </SwiperSlide>
                             ))}
                         </AdSlider>
@@ -382,49 +374,41 @@ const CenterPage = () => {
 
 const GradiBox = styled.div
     `
-
+    position: relative;
+    display: flex;
+    height: 100%;
+    background: rgba(25,25,25,1);
 `
 const GradiLeft = styled.div
     `
     background-image: linear-gradient(90deg, rgba(25,25,25,1), transparent);
-    width: 30px;
-    height: 100%;
+    pointer-events: none;
     position: absolute;
     top: 0;
+    left: 50%;
+    z-index: 1;
+    height: 100%;
+    width: 20rem;
+    margin-left: -50rem;
 `
 
 const GradiRight = styled.div
     `
     background-image: linear-gradient(270deg, rgba(25,25,25,1), transparent);
-    width: 30px;
     height: 100%;
+    width: 20rem;
+    pointer-events: none;
     position: absolute;
     top: 0;
-    margin-left: 139.3rem;
+    left: 50%;
+    z-index: 1;
+    margin-left: 30rem;
 `
 
 const ImgAllBox = styled.div
     `
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-`
-
-const AdSlideAllBox = styled.div
-    `
-    position: absolute;
-    top: 13%;
-    z-index: 1;
-    margin: 0px 0px 0px 0px;
-}
-`
-
-const AdSlideCenterBox = styled.div
-    `
-    max-width: 1280px;
-    margin: 0 auto;
+    height: 21.1rem;
+    padding-top: 2.8rem;
 `
 
 const AllContentBox = styled.div
@@ -463,6 +447,15 @@ const Slider = styled(Swiper)
     border: solid 3px #55AAFF;
     width: 30px;
     height: 30px;
+}
+
+.swiper-slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    transition-property: transform;
 }
 
 .swiper-button-prev.swiper-button-disabled,
@@ -547,7 +540,7 @@ const SlideAllBox = styled.div
 
 const AdSlider = styled(Slider)
     `
-    height: 360px;
+    
 `
 
 
@@ -587,8 +580,6 @@ const NextBtn = styled.div
 `
 const AdSlideBox = styled.div
     `
-    background: rgba(25,25,25,1);
-    width: 100%;
 `
 
 const GameSlideBox = styled.div
@@ -619,7 +610,12 @@ const ImgBox = styled.img
 
 const ImgAdBox = styled.img
     `
+    position: absolute;
+    top: 0;
+    left: 50%;
     height: 100%;
+    max-width: none;
+    transform: translate(-50%) scaleX(1) scaleY(1);
 `
 
 const TitleBox = styled.div
