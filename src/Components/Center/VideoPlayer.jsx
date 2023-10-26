@@ -16,11 +16,9 @@ import { VscMute } from "react-icons/vsc";
 import { VscUnmute } from "react-icons/vsc";
 import ReactPlayer from 'react-player'
 import { Link, useNavigate } from "react-router-dom";
-import test from "../../img/MainSlide/test.png";
 import test1 from "../../img/MainSlide/test1.png";
 import test2 from "../../img/MainSlide/test2.png";
 import test3 from "../../img/MainSlide/test3.png";
-import test4 from "../../img/MainSlide/test4.png";
 import test5 from "../../img/MainSlide/test5.png";
 
 SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
@@ -47,21 +45,21 @@ const VideoPlayler = () => {
         },
         {
             id: 2,
-            img: test,
+            img: test3,
             Logo: videoLogo,
-            informaion: "일단달려! 드릴에게 도망쳐라!",
+            informaion: "무기 강화로 당신의 운을 시험하라!",
             video: VideoSample,
             BackgroundImg: test5,
-            title: "도망런"
+            title: "럭키웨폰"
         },
         {
             id: 3,
-            img: test4,
+            img: test1,
             Logo: videoLogo,
-            informaion: "수학을 풀고 강해져라!",
+            informaion: "인간이 되고 싶은 뱀파이어...",
             video: VideoSample2,
             BackgroundImg: test5,
-            title: "매스리볼버"
+            title: "로드 오브 토파즈"
         },
         {
             id: 4,
@@ -132,26 +130,14 @@ const VideoPlayler = () => {
                 spaceBetween: 30,
                 slidesPerView: 3,
             },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
             1342: {
                 spaceBetween: 30,
-                slidesPerView: 5,
+                slidesPerView: 4,
             }
         },
 
-        coverflow: {
-            rotate: 0,
-            stretch: 100,
-            depth: 150,
-            modifier: 1.5,
-            slideShadows: false,
-        },
-
         spaceBetween: 30,
-        slidesPerView: 5,
+        slidesPerView: 4,
         centeredSlides: true,
         loopAdditionalSlides: 1,
         loop: true,

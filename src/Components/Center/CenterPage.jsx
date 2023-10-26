@@ -9,11 +9,9 @@ import SwiperCore, { Navigation, Pagination, EffectCoverflow } from "swiper";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import VideoPlayler from './VideoPlayer';
-import test from "../../img/MainSlide/test.png";
 import test1 from "../../img/MainSlide/test1.png";
 import test2 from "../../img/MainSlide/test2.png";
 import test3 from "../../img/MainSlide/test3.png";
-import test4 from "../../img/MainSlide/test4.png";
 import test6 from "../../img/MainSlide/test6.png";
 import test7 from "../../img/MainSlide/test7.png";
 
@@ -41,31 +39,31 @@ const CenterPage = () => {
     const [Slide, setSlide] = useState([
         {
             id: 1,
-            img: test,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 2,
             img: test1,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
         },
         {
-            id: 3,
+            id: 2,
             img: test2,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
         },
         {
-            id: 4,
+            id: 3,
             img: test3,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
         },
         {
+            id: 4,
+            img: test1,
+            informaion: "질리지 않는 8비트 공식게임!",
+            title: "모험가키우기"
+        },
+        {
             id: 5,
-            img: test4,
+            img: test2,
             informaion: "질리지 않는 8비트 공식게임!",
             title: "모험가키우기"
         },
