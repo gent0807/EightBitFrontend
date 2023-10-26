@@ -628,7 +628,9 @@ const SingleReply = ({
                     </CommentUserBox>
 
                     <div style={{ margin: "15px 0px 0px 0px" }}>
-                        <RedateBox>
+                        <RedateBox style={{display: loginMaintain == null? "none": loginMaintain =="true" ? 
+                                        (userInfo.loginState=="allok" ? "flex": user.login_state=="allok"? "flex":"none")
+                                         : user.login_state=="allok" ? "flex":"none"}}>
                             신고
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>

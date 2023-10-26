@@ -381,6 +381,9 @@ const FreeArticle = () => {
 
     }, [toggleState]);
 
+
+    
+
     const addLike = async (e) => {
 
         await axios.post(`${ip}/Board/article/like/`, {
@@ -857,7 +860,9 @@ const FreeArticle = () => {
                     </UserProfileBox>
 
                     <ReportAllBox>
-                        <RedateBox>
+                        <RedateBox style={{display: loginMaintain == null? "none": loginMaintain =="true" ? 
+                                        (userInfo.loginState=="allok" ? "flex": user.login_state=="allok"? "flex":"none")
+                                         : user.login_state=="allok" ? "flex":"none"}}>
                             <ReportAllBoxText>신고</ReportAllBoxText>
                             <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
                         </RedateBox>
