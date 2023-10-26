@@ -87,7 +87,7 @@ const Phone = () => {
             setPhoneMessage(<MessaageAllBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>올바른 휴대폰 번호을 입력해주세요!</ErrorMessageText></MessaageAllBox>);
         }
         else {
-            axios.post(`${ip}/Users/authkey/phone`, {
+            axios.post(`${ip}/Phone/authNum`, {
                 phoneNum: Phone
             })
                 .then(res => {
@@ -113,7 +113,7 @@ const Phone = () => {
 
     const PhoneAuthCheck = () => {
 
-        axios.post(`${ip}/Users/check/phonekey/`,
+        axios.post(`${ip}/Phone/check/authNum/`,
             {
                 phoneNum: realPhone.current,
                 authNum: PhoneAuth
@@ -136,7 +136,7 @@ const Phone = () => {
     }
 
     const deletePhoneNum = () => {
-        axios.delete(`${ip}/Users/phone/`, {
+        axios.delete(`${ip}/Phone/phone/`, {
             data: {
                 phoneNum: realPhone.current
             }

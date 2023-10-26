@@ -109,7 +109,7 @@ const Signinput = (props) => {
     setIsInputCheck(false)
 
 
-    axios.post(`${ip}/Users/check/authkey/`,
+    axios.post(`${ip}/Email/check/authNum`,
       {
         email: certEmail.current,
         authNum: EmailCert
@@ -209,8 +209,6 @@ const Signinput = (props) => {
           setIsPwConfirm(true);
           setIsPw(true);
         }
-
-
       }
     }
   };
@@ -257,44 +255,6 @@ const Signinput = (props) => {
 
   };
 
-  const checkAlreadyNickRegistered = (e) => {
-    const currentNickname = e.target.value;
-    setNickname(currentNickname);
-
-    if (currentNickname === "") {
-      setIsInputNicknameCheck(false);
-    }
-    else {
-      setIsInputNicknameCheck(true);
-    }
-
-    if (currentNickname.length > 6 || currentNickname.length < 2) {
-      setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
-      setIsNickname(false);
-    } else {
-      axios.post(`${ip}/Users/check/nick/already/`, {
-        nickname: currentNickname
-      }
-      )
-        .then(res => {
-          return res.data;
-        })
-        .then(data => {
-
-          if (data === "yes") {
-            setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>이미 사용 중인 닉네임입니다!</ErrorMessageText></ErrorMessageBox>])
-            setIsNickname(false);
-          }
-          else if (data === "no") {
-            setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>사용가능한 닉네임입니다.</ErrorMessageText></ErrorMessageBox>])
-            setIsNickname(true);
-          }
-
-
-        });
-    }
-
-  }
 
   const checkAlreadySigning = () => {
     const EmailTotal = Email + "@" + SelectValue;
@@ -315,10 +275,9 @@ const Signinput = (props) => {
 
       finalEmail.current = EmailTotal;
 
-      axios.post(`${ip}/Users/check/email/already/`, {
+      axios.post(`${ip}/Users/check/email/already`, {
         email: EmailTotal
-      }
-      )
+      })
         .then(res => {
           return res.data;
         })
@@ -331,7 +290,7 @@ const Signinput = (props) => {
             setVisibled(false);
           }
           else {
-            axios.post(`${ip}/Users/authkey/email/`, {
+            axios.post(`${ip}/Email/authNum`, {
               email: EmailTotal
             })
               .then(res => {
@@ -355,6 +314,46 @@ const Signinput = (props) => {
         });
     }
   }
+
+  const checkAlreadyNickRegistered = (e) => {
+    const currentNickname = e.target.value;
+    setNickname(currentNickname);
+
+    if (currentNickname === "") {
+      setIsInputNicknameCheck(false);
+    }
+    else {
+      setIsInputNicknameCheck(true);
+    }
+
+    if (currentNickname.length > 6 || currentNickname.length < 2) {
+      setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>닉네임은 2자리에서 5자리 내로 작성해주세요!</ErrorMessageText></ErrorMessageBox>]);
+      setIsNickname(false);
+    } else {
+      axios.post(`${ip}/Users/check/nick/already`, {
+        nickname: currentNickname
+      }
+      )
+        .then(res => {
+          return res.data;
+        })
+        .then(data => {
+
+          if (data === "yes") {
+            setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>이미 사용 중인 닉네임입니다!</ErrorMessageText></ErrorMessageBox>])
+            setIsNickname(false);
+          }
+          else if (data === "no") {
+            setNicknameMessage([<ErrorMessageBox><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>사용가능한 닉네임입니다.</ErrorMessageText></ErrorMessageBox>])
+            setIsNickname(true);
+          }
+
+
+        });
+    }
+
+  }
+
 
   const register = (e) => {
     e.preventDefault();
