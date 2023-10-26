@@ -1,13 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from "styled-components";
-import VideoSample from "../../Video/test10s.mp4"
-import VideoSample2 from "../../Video/youtube.mp4"
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination, EffectCoverflow, Autoplay } from "swiper";
 import "swiper/swiper.scss";
 import "swiper/components/navigation/navigation.scss";
 import "swiper/components/pagination/pagination.scss";
-import videoLogo from "../../Video/videoLogo.png"
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { RiInformationLine } from "react-icons/ri";
@@ -16,10 +13,8 @@ import { VscMute } from "react-icons/vsc";
 import { VscUnmute } from "react-icons/vsc";
 import ReactPlayer from 'react-player'
 import { Link, useNavigate } from "react-router-dom";
-import test1 from "../../img/MainSlide/test1.png";
-import test2 from "../../img/MainSlide/test2.png";
-import test3 from "../../img/MainSlide/test3.png";
-import test5 from "../../img/MainSlide/test5.png";
+import { Slide } from "../Game";
+
 
 SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
 
@@ -32,55 +27,8 @@ const VideoPlayler = () => {
     const [play, setPlay] = useState(true);
     const [mainImageIndex, setMainImageIndex] = useState(0);
     const [playtime, setPlaytime] = useState(0);
-
-    const [Slide, setSlide] = useState([
-        {
-            id: 1,
-            img: test2,
-            Logo: videoLogo,
-            informaion: "켜두기만 하면 캐릭터가 성장한다!",
-            video: VideoSample2,
-            BackgroundImg: test5,
-            title: "방치모험가"
-        },
-        {
-            id: 2,
-            img: test3,
-            Logo: videoLogo,
-            informaion: "무기 강화로 당신의 운을 시험하라!",
-            video: VideoSample,
-            BackgroundImg: test5,
-            title: "럭키웨폰"
-        },
-        {
-            id: 3,
-            img: test1,
-            Logo: videoLogo,
-            informaion: "인간이 되고 싶은 뱀파이어...",
-            video: VideoSample2,
-            BackgroundImg: test5,
-            title: "로드 오브 토파즈"
-        },
-        {
-            id: 4,
-            img: test3,
-            Logo: videoLogo,
-            informaion: "무기 강화로 당신의 운을 시험하라!",
-            video: VideoSample,
-            BackgroundImg: test5,
-            title: "럭키웨폰"
-        },
-        {
-            id: 5,
-            img: test1,
-            Logo: videoLogo,
-            informaion: "인간이 되고 싶은 뱀파이어...",
-            video: VideoSample2,
-            BackgroundImg: test5,
-            title: "로드 오브 토파즈"
-        },
-    ]);
-
+    const offset = 0;
+    const limit = 5;
 
     const swiperParams =
     {
@@ -175,7 +123,7 @@ const VideoPlayler = () => {
                             </VideoDownloadBtnText>
                         </VideoDownloadBtn>
 
-                        <Link to="/">
+                        <Link to={`GameInformationView/${Slide[mainImageIndex].id}`}>
                             <VideoInformationBtn>
                                 <VideoInformationBtnIcon>
                                     <RiInformationLine />
@@ -217,9 +165,9 @@ const VideoPlayler = () => {
             </VideoBox>
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                    {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
-                            <Link to='/'>
+                            <Link to={`GameInformationView/${id}`}>
                                 <SlideAllBox>
                                     <SlideBox>
                                         <ImgBox src={img} />

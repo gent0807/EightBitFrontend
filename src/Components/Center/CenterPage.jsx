@@ -9,9 +9,7 @@ import SwiperCore, { Navigation, Pagination, EffectCoverflow } from "swiper";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import VideoPlayler from './VideoPlayer';
-import test1 from "../../img/MainSlide/test1.png";
-import test2 from "../../img/MainSlide/test2.png";
-import test3 from "../../img/MainSlide/test3.png";
+import { Slide } from "../Game";
 import test6 from "../../img/MainSlide/test6.png";
 import test7 from "../../img/MainSlide/test7.png";
 
@@ -35,39 +33,8 @@ const CenterPage = () => {
 
     const [swiper, setSwiper] = useState(null);
     const [mainImageIndex, setMainImageIndex] = useState(0);
-
-    const [Slide, setSlide] = useState([
-        {
-            id: 1,
-            img: test1,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 2,
-            img: test2,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 3,
-            img: test3,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 4,
-            img: test1,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 5,
-            img: test2,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-    ]);
+    const offset = 0;
+    const limit = 5;
 
     const [AdSlide2, setAdSlide2] = useState([
         {
@@ -275,9 +242,9 @@ const CenterPage = () => {
                     <PopTitleBox>Best of 8bit</PopTitleBox>
 
                     <Slider {...swiperParams} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to='/'>
+                                <Link to={`GameInformationView/${id}`}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />
@@ -304,9 +271,9 @@ const CenterPage = () => {
                     <PopTitleBox>최신 인디게임</PopTitleBox>
 
                     <Slider {...swiperParams2} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to='/'>
+                                <Link to={`GameInformationView/${id}`}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />
@@ -337,9 +304,9 @@ const CenterPage = () => {
                     <PopTitleBox>인기판매 굿즈</PopTitleBox>
 
                     <Slider {...swiperParams3} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to='/'>
+                                <Link to={`GameInformationView/${id}`}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />

@@ -349,8 +349,7 @@ const FreeArticle = () => {
             {
 
             })
-            .then(res => res.data
-            )
+            .then(res => res.data)
             .then(data => {
                 if (loginMaintain == "true") {
                     if (userInfo != null) {
