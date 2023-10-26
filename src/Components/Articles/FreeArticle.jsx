@@ -117,7 +117,6 @@ const FreeArticle = () => {
     const CommentSize = Comments.slice(offset, offset + limit);
 
     let likeMode = useRef(false);
-    const quillRef = useRef(null);
 
     const toolbarOptions = [
         ["link", "image", "video"],
@@ -349,8 +348,7 @@ const FreeArticle = () => {
             {
 
             })
-            .then(res => res.data
-            )
+            .then(res => res.data)
             .then(data => {
                 if (loginMaintain == "true") {
                     if (userInfo != null) {
@@ -792,7 +790,7 @@ const FreeArticle = () => {
 
     const ScrollTop = () => {
         window.scrollTo({ top: 835, behavior: "smooth" });
-      }
+    }
 
     return (
         <FreeArticleBox>
@@ -967,8 +965,8 @@ const FreeArticle = () => {
                     <div style={{ display: "flex" }}>
                         <CommentreplyBtn2
                             LoginMaintain={loginMaintain}
-                            UserInfo={userInfo} User={userInfo == null ?
-                                null : userInfo.loginState}
+                            UserInfo={userInfo} 
+                            User={userInfo == null ? null : userInfo.loginState}
                             UserCheck={user.login_state}
                             UserNicknameCheck={user.nickname}
                             UserNickname={userInfo == null ?
@@ -1098,7 +1096,6 @@ const FreeArticle = () => {
 
             <CommentBox>
                 {Comments.length === 0 && <NotPage />}
-                {() => CommentSize === 0 ? setPage(page - 1) : setPage(page)}
                 {Comments.length > 0 &&
                     Comments.slice(offset, offset + limit).map(Comment => {
                         const commentId = Comment.id;
