@@ -206,6 +206,10 @@ const CenterPage = () => {
         centeredSlides: true,
     }
 
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     return (
         <SwiperBox>
 
@@ -244,7 +248,7 @@ const CenterPage = () => {
                     <Slider {...swiperParams} ref={setSwiper}>
                         {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`GameInformationView/${id}`}>
+                                <Link to={`/GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />
@@ -273,7 +277,7 @@ const CenterPage = () => {
                     <Slider {...swiperParams2} ref={setSwiper}>
                         {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`GameInformationView/${id}`}>
+                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />
@@ -306,7 +310,7 @@ const CenterPage = () => {
                     <Slider {...swiperParams3} ref={setSwiper}>
                         {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`GameInformationView/${id}`}>
+                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />

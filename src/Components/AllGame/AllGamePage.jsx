@@ -158,6 +158,10 @@ const AllGamePage = () => {
         }
     }
 
+    const ScrollTop = () => {
+        window.scrollTo({ top: 835, behavior: "smooth" });
+    }
+
     return (
         <FreeBoardBox>
             <InformationAllBox>
@@ -213,7 +217,7 @@ const AllGamePage = () => {
                 <BoardContentAllBox View={SearchList.length}>
                     {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, title, content, img }) => (
                        <BoardContentBox key={id}>
-                           <Link to={`/GameInformationView/${id}`}>
+                           <Link to={`/GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                <SlideAllBox>
                                    <SlideBox>
                                        <ImgBox src={img} />

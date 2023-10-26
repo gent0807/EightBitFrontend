@@ -97,6 +97,10 @@ const VideoPlayler = () => {
         setPlay(true);
     }
 
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     return (
         <VideoAllBox>
             <VideoBox>
@@ -167,7 +171,7 @@ const VideoPlayler = () => {
                 <Slider {...swiperParams} ref={setSwiper}>
                     {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                         <SwiperSlide key={id}>
-                            <Link to={`GameInformationView/${id}`}>
+                            <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                 <SlideAllBox>
                                     <SlideBox>
                                         <ImgBox src={img} />

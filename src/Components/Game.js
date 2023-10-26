@@ -2,6 +2,9 @@ import test1 from "../img/MainSlide/test1.png";
 import test2 from "../img/MainSlide/test2.png";
 import test3 from "../img/MainSlide/test3.png";
 import test5 from "../img/MainSlide/test5.png";
+import Official1 from "../img/MainSlide/Official1.png"
+import Official2 from "../img/MainSlide/Official2.png"
+import Official3 from "../img/MainSlide/Official3.png"
 import VideoSample from "../Video/test10s.mp4";
 import VideoSample2 from "../Video/youtube.mp4";
 import videoLogo from "../Video/videoLogo.png";
@@ -11,50 +14,63 @@ export const Slide = [
         id: 0,
         content: "질리지 않는 8비트 공식게임!",
         game: "공식게임",
+        genre: "공포",
         title: "토파즈",
         regdate: "2023-10-22 13:45:35",
         likecount: 432,
-        img: test2,
+        img: Official1,
         Logo: videoLogo,
         informaion: "켜두기만 하면 캐릭터가 성장한다!",
         video: VideoSample2,
-        InformaionImg: test2,
+        InformaionImg: Official1,
         BackgroundImg: test5,
+        developer: "란토",
+        distributor: "8bit",
+        email: "khs641010@naver.com"
     },
     {
         id: 1,
         content: "질리지 않는 8비트 공식게임!",
-        game: "인디게임",
+        game: "공식게임",
+        genre: "액션",
         title: "토파즈",
         regdate: "2023-10-22 13:45:35",
         likecount: 432,
-        img: test1,
+        img: Official2,
         Logo: videoLogo,
         informaion: "켜두기만 하면 캐릭터가 성장한다!",
         video: VideoSample,
         BackgroundImg: test5,
-        InformaionImg: test1
+        InformaionImg: Official2,
+        developer: "란토",
+        distributor: "8bit",
+        email: "khs641010@naver.com"
     },
     {
         id: 2,
         content: "질리지 않는 8비트 공식게임!",
         regdate: "2023-10-22 13:45:35",
+        genre: "로맨스",
         game: "공식게임",
         likecount: 432,
-        img: test3,
+        img: Official3,
         Logo: videoLogo,
         informaion: "켜두기만 하면 캐릭터가 성장한다!",
         video: VideoSample,
         BackgroundImg: test5,
         title: "방치모험가",
         BackgroundImg: test5,
-        InformaionImg: test3
+        InformaionImg: Official3,
+        developer: "란토",
+        distributor: "8bit",
+        email: "khs641010@naver.com"
     },
     {
         id: 3,
         content: "질리지 않는 8비트 공식게임!",
         regdate: "2023-10-22 13:45:35",
         game: "인디게임",
+        genre: "판타지",
         likecount: 432,
         img: test1,
         Logo: videoLogo,
@@ -63,28 +79,17 @@ export const Slide = [
         BackgroundImg: test5,
         title: "방치모험가",
         BackgroundImg: test5,
-        InformaionImg: test1
+        InformaionImg: test1,
+        developer: "란토",
+        distributor: "8bit",
+        email: "khs641010@naver.com"
     },
     {
         id: 4,
         content: "질리지 않는 8비트 공식게임!",
         title: "토파즈",
         regdate: "2023-10-22 13:45:35",
-        game: "공식게임",
-        likecount: 432,
-        img: test1,
-        Logo: videoLogo,
-        informaion: "켜두기만 하면 캐릭터가 성장한다!",
-        video: VideoSample,
-        BackgroundImg: test5,
-        title: "방치모험가",
-        BackgroundImg: test5,
-        InformaionImg: test1
-    },
-    {
-        id: 5,
-        content: "질리지 않는 8비트 공식게임!",
-        regdate: "2023-10-22 13:45:35",
+        genre: "좀비",
         game: "인디게임",
         likecount: 432,
         img: test1,
@@ -94,12 +99,35 @@ export const Slide = [
         BackgroundImg: test5,
         title: "방치모험가",
         BackgroundImg: test5,
-        InformaionImg: test1
+        InformaionImg: test1,
+        developer: "란토",
+        distributor: "8bit",
+        email: "khs641010@naver.com"
+    },
+    {
+        id: 5,
+        content: "질리지 않는 8비트 공식게임!",
+        regdate: "2023-10-22 13:45:35",
+        genre: "학원물",
+        game: "인디게임",
+        likecount: 432,
+        img: test1,
+        Logo: videoLogo,
+        informaion: "켜두기만 하면 캐릭터가 성장한다!",
+        video: VideoSample,
+        BackgroundImg: test5,
+        title: "방치모험가",
+        BackgroundImg: test5,
+        InformaionImg: test1,
+        developer: "란토",
+        distributor: "8bit",
+        email: "khs641010@naver.com"
     },
     {
         id: 6,
         content: "질리지 않는 8비트 공식게임!",
         regdate: "2023-10-19 13:45:35",
+        genre: "RPG",
         game: "인디게임",
         likecount: 32,
         img: test1,
@@ -109,6 +137,9 @@ export const Slide = [
         BackgroundImg: test5,
         title: "방치모험가",
         BackgroundImg: test5,
-        InformaionImg: test1
+        InformaionImg: test1,
+        developer: "란토",
+        distributor: "8bit",
+        email: "khs641010@naver.com"
     },
 ];
