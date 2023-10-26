@@ -181,7 +181,7 @@ function EmailPwFound() {
   const userPasswordAlreadyUsingCheck = (password) => {
 
 
-    axios.post(`${ip}/Users/check/password/already/`, {
+    axios.post(`${ip}/Users/check/password/already`, {
       email: Email,
       password: password
     })
@@ -218,7 +218,7 @@ function EmailPwFound() {
 
   const EmailCheck = () => {
 
-    axios.post(`${ip}/Users/check/email/already/`, {
+    axios.post(`${ip}/Users/check/email/already`, {
       email: Email
     })
       .then(res => {
@@ -234,7 +234,7 @@ function EmailPwFound() {
           setEmailFoundCheckMessage([<ErrorMessageBox margin={ErrorMsMargin}><ErrorMessageIcon><RiErrorWarningFill /></ErrorMessageIcon><ErrorMessageText>가입 정보가 확인되지 않습니다!</ErrorMessageText></ErrorMessageBox>]);
         }
         else if (data === "yes") {
-          axios.post(`${ip}/Users/authkey/email`, {
+          axios.post(`${ip}/Email/authNum`, {
             email: Email
           })
             .then(res => {
@@ -265,7 +265,7 @@ function EmailPwFound() {
     e.preventDefault();
 
 
-    axios.put(`${ip}/Users/password/`, {
+    axios.patch(`${ip}/Users/password`, {
       email: Email,
       password: PasswordChangeConfirmM,
     })
@@ -283,7 +283,7 @@ function EmailPwFound() {
 
   const EmailAuthCheck = () => {
 
-    axios.post(`${ip}/Users/check/authkey/`,
+    axios.post(`${ip}/Email/check/authNum/`,
       {
         email: Email,
         authNum: Emailauth
