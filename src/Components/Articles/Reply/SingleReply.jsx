@@ -62,7 +62,7 @@ const SingleReply = ({
     const [replyerRole, setReplyerRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("<p><br></p>");
-    const [reCommentHide, setReCommentHide] = useState(false);
+    const [reCommentHide, setReCommentHide] = useState(true);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(false);
     const [updateReplyText, setUpdateReplyText] = useState("");
     const [selectedReCommentIndex, setSelectedReCommentIndex] = useState(0);
@@ -118,7 +118,7 @@ const SingleReply = ({
             axios.get(`${ip}/Board/article/reply/likers?replyer=${replyer}&regdate=${regdate}`, {
 
             },
-                {
+                {       
 
                 })
                 .then((res) => {
@@ -169,12 +169,7 @@ const SingleReply = ({
                     return res.data;
                 })
                 .then((data) => {
-                    if (data.length == 0) {
-                        setReCommentHide(true);
-                    }
-                    else if (data.length > 0) {
-                        setReCommentHide(false);
-                    }
+                    
                     //console.log("----------------------------------");
                     //console.log("ReComment"+data.id);
                     //console.log("----------------------------------");
@@ -209,7 +204,7 @@ const SingleReply = ({
         */
         setId(Comment.id);
         setModalReplyDeleteToggleState(toggleState);
-        setReplyer(Comment.replyer);
+        setReplyer(Comment.replyer); 
         setContent(Comment.content);
         setRegdate(Comment.regdate);
         setUpdatedate(Comment.updatedate);
@@ -746,41 +741,7 @@ const SingleReply = ({
                     ModalReplyUpdateCommentOnOff={ModalReplyUpdateCommentOnOff}
                  /> : <></> }
 
-                {onReplyBtn && (<ReCommentForm
-                    LoginMaintain={loginMaintain}
-
-                    UserInfo={userInfo} User={userInfo == null ?
-                        null : userInfo.loginState}
-
-                    UserCheck={user.login_state}
-
-                    UserNicknameCheck={user.nickname}
-
-                    UserNickname={userInfo == null ?
-                        null : userInfo.nickName}
-
-                    onSubmit={registerReComment}>
-
-                    <ReCommentArea>
-                        <ReCommentProfile>
-                            <CommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
-                        </ReCommentProfile>
-                        <ReCommentInputBox>
-                            <Editer2
-                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
-                                value={reCommentChangeValue}
-                                onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
-                                modules={modules}
-                                formats={formats}>
-                            </Editer2>
-                        </ReCommentInputBox>
-                    </ReCommentArea>
-                    <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
-                        <ReCommentBtn>댓글 쓰기</ReCommentBtn>
-                    </ReCommentBtnBox>
-                </ReCommentForm>
-                )}
+                
 
                 <ReCommentDeleteModal
                     setDeleteMode={setModalReCommenterdeleteMode}
@@ -799,7 +760,42 @@ const SingleReply = ({
                     toggleState={ModalToggleState}
                 />
 
-                <ReCommentSector View={ReComments.length}>
+                <ReCommentSector>
+                    {onReplyBtn && (<ReCommentForm
+                        LoginMaintain={loginMaintain}
+
+                        UserInfo={userInfo} User={userInfo == null ?
+                            null : userInfo.loginState}
+
+                        UserCheck={user.login_state}
+
+                        UserNicknameCheck={user.nickname}
+
+                        UserNickname={userInfo == null ?
+                            null : userInfo.nickName}
+
+                        onSubmit={registerReComment}>
+
+                        <ReCommentArea>
+                            <ReCommentProfile>
+                                <CommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                            </ReCommentProfile>
+                            <ReCommentInputBox>
+                                <Editer2
+                                    placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
+                                    value={reCommentChangeValue}
+                                    onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                                    modules={modules}
+                                    formats={formats}>
+                                </Editer2>
+                            </ReCommentInputBox>
+                        </ReCommentArea>
+                        <ReCommentBtnBox>
+                            <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
+                            <ReCommentBtn>댓글 쓰기</ReCommentBtn>
+                        </ReCommentBtnBox>
+                    </ReCommentForm>
+                    )}
                     <ReCommentBox reCommentHide={reCommentHide}>
                         {ReComments.length > 0 &&
                             ReComments.map(ReComment => {
@@ -1189,7 +1185,7 @@ const DeleteReply = styled.div
 
 const ReCommentSector = styled.div
     `
-    display: ${props => props.View === 0 ? "none" : "block"};
+    
     margin: 0px 12px 40px 12px;
     padding: 0px 6px 0px 30px;
     border-left: solid 3px ${props => props.theme.textColor};

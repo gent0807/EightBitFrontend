@@ -47,7 +47,7 @@ const FreeArticle = () => {
     const [visitcnt, setVisitcnt] = useState(0);
     const [likecount, setLikecount] = useState(0);
     const [writerRole, setWriterRole] = useState("");
-    const [Fitter, setFitter] = useState("최신순");
+    const [Fitter, setFitter] = useState("과거순");
     const [attachCount, setAttachCount] = useState(0);
     const [attachmentes, setAttachmentes] = useState([]);
     const [reportMode, setReportMode] = useState(false);
@@ -212,8 +212,6 @@ const FreeArticle = () => {
 
     useEffect(() => {
 
-
-
         const getWriterRole = (writer) => {
             axios.get(`${ip}/Users/role?nickname=${writer}`, {
 
@@ -302,7 +300,7 @@ const FreeArticle = () => {
                 })
                 .then(data => {
                     totalCommentCount.current = data.length;
-                    setComments(data.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)));
+                    setComments(data);
                 })
         }
 
