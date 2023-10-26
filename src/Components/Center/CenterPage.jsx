@@ -9,11 +9,7 @@ import SwiperCore, { Navigation, Pagination, EffectCoverflow } from "swiper";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import VideoPlayler from './VideoPlayer';
-import test from "../../img/MainSlide/test.png";
-import test1 from "../../img/MainSlide/test1.png";
-import test2 from "../../img/MainSlide/test2.png";
-import test3 from "../../img/MainSlide/test3.png";
-import test4 from "../../img/MainSlide/test4.png";
+import { Slide } from "../Game";
 import test6 from "../../img/MainSlide/test6.png";
 import test7 from "../../img/MainSlide/test7.png";
 
@@ -37,39 +33,8 @@ const CenterPage = () => {
 
     const [swiper, setSwiper] = useState(null);
     const [mainImageIndex, setMainImageIndex] = useState(0);
-
-    const [Slide, setSlide] = useState([
-        {
-            id: 1,
-            img: test,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 2,
-            img: test1,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 3,
-            img: test2,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 4,
-            img: test3,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-        {
-            id: 5,
-            img: test4,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
-        },
-    ]);
+    const offset = 0;
+    const limit = 5;
 
     const [AdSlide2, setAdSlide2] = useState([
         {
@@ -241,6 +206,10 @@ const CenterPage = () => {
         centeredSlides: true,
     }
 
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     return (
         <SwiperBox>
 
@@ -250,24 +219,16 @@ const CenterPage = () => {
 
                 <AdContainerBox>
                     <AdSlideBox>
-
                         <AdSlider {...AdSwiper2} ref={setSwiper}>
                             {AdSlide2.length !== 0 && AdSlide2.map(({ id, img, informaion, title }) => (
                                 <SwiperSlide key={id}>
                                     <ImgAllBox>
                                         <GradiBox>
-                                            <GradiLeft />
-                                            <ImgAdBox src={img} />
-                                            <GradiRight />
+                                            <GradiLeft/>
+                                            <GradiRight/>
                                         </GradiBox>
+                                        <ImgAdBox src={img} />
                                     </ImgAllBox>
-
-                                    <AdSlideCenterBox>
-                                        <AdSlideAllBox>
-
-                                        </AdSlideAllBox>
-                                    </AdSlideCenterBox>
-
                                 </SwiperSlide>
                             ))}
                         </AdSlider>
@@ -285,9 +246,9 @@ const CenterPage = () => {
                     <PopTitleBox>Best of 8bit</PopTitleBox>
 
                     <Slider {...swiperParams} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to='/'>
+                                <Link to={`/GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />
@@ -314,9 +275,9 @@ const CenterPage = () => {
                     <PopTitleBox>최신 인디게임</PopTitleBox>
 
                     <Slider {...swiperParams2} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to='/'>
+                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />
@@ -347,9 +308,9 @@ const CenterPage = () => {
                     <PopTitleBox>인기판매 굿즈</PopTitleBox>
 
                     <Slider {...swiperParams3} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
                             <SwiperSlide key={id}>
-                                <Link to='/'>
+                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={img} />
@@ -382,49 +343,41 @@ const CenterPage = () => {
 
 const GradiBox = styled.div
     `
-
+    position: relative;
+    display: flex;
+    height: 100%;
+    background: rgba(25,25,25,1);
 `
 const GradiLeft = styled.div
     `
     background-image: linear-gradient(90deg, rgba(25,25,25,1), transparent);
-    width: 30px;
-    height: 100%;
+    pointer-events: none;
     position: absolute;
     top: 0;
+    left: 50%;
+    z-index: 1;
+    height: 100%;
+    width: 20rem;
+    margin-left: -50rem;
 `
 
 const GradiRight = styled.div
     `
     background-image: linear-gradient(270deg, rgba(25,25,25,1), transparent);
-    width: 30px;
     height: 100%;
+    width: 20rem;
+    pointer-events: none;
     position: absolute;
     top: 0;
-    margin-left: 139.3rem;
+    left: 50%;
+    z-index: 1;
+    margin-left: 30rem;
 `
 
 const ImgAllBox = styled.div
     `
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-`
-
-const AdSlideAllBox = styled.div
-    `
-    position: absolute;
-    top: 13%;
-    z-index: 1;
-    margin: 0px 0px 0px 0px;
-}
-`
-
-const AdSlideCenterBox = styled.div
-    `
-    max-width: 1280px;
-    margin: 0 auto;
+    height: 21.1rem;
+    padding-top: 2.8rem;
 `
 
 const AllContentBox = styled.div
@@ -463,6 +416,15 @@ const Slider = styled(Swiper)
     border: solid 3px #55AAFF;
     width: 30px;
     height: 30px;
+}
+
+.swiper-slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    transition-property: transform;
 }
 
 .swiper-button-prev.swiper-button-disabled,
@@ -547,7 +509,7 @@ const SlideAllBox = styled.div
 
 const AdSlider = styled(Slider)
     `
-    height: 360px;
+    
 `
 
 
@@ -587,8 +549,6 @@ const NextBtn = styled.div
 `
 const AdSlideBox = styled.div
     `
-    background: rgba(25,25,25,1);
-    width: 100%;
 `
 
 const GameSlideBox = styled.div
@@ -619,7 +579,12 @@ const ImgBox = styled.img
 
 const ImgAdBox = styled.img
     `
+    position: absolute;
+    top: 0;
+    left: 50%;
     height: 100%;
+    max-width: none;
+    transform: translate(-50%) scaleX(1) scaleY(1);
 `
 
 const TitleBox = styled.div

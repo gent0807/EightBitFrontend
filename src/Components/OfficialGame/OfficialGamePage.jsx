@@ -1,96 +1,58 @@
 import { useState, useEffect, useRef, useCallback, FC } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import styled from "styled-components";
-import Official1 from "../../img/MainSlide/Official1.png"
-import Official2 from "../../img/MainSlide/Official2.png"
-import Official3 from "../../img/MainSlide/Official3.png"
-import test2 from "../../img/MainSlide/test2.png"
-import test1 from "../../img/MainSlide/test1.png"
-import test3 from "../../img/MainSlide/test3.png"
-import { RiInformationLine } from "react-icons/ri";
-import { AiOutlineDownload } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Slide } from "../Game";
 
 const OfficialGamePage = () => {
 
-    const [hoverImg1, setHoverImg1] = useState(false);
-    const [hoverImg2for3, sethoverImg2for3] = useState(false);
-    const [hoverImg2for1, setHoverImg2for1] = useState(false);
-    const [hoverImg3, setHoverImg3] = useState(false);
 
-    const [Slide, setSlide] = useState([
-        {
-            id: 1,
-            img: test2,
-            imgBackground: Official1,
-            informaion: "방치하면서 성장하는 8비트 공식 게임!",
-            title: "방치모험가"
-        },
-        {
-            id: 2,
-            img: test1,
-            imgBackground: Official2,
-            informaion: "뱀파이어소녀에 관한 8비트 공식 게임!",
-            title: "로드 오브 토파즈"
-        },
-        {
-            id: 3,
-            img: test3,
-            imgBackground: Official3,
-            informaion: "끝 없이 터치하라! 8비트 공식 게임!",
-            title: "럭키웨폰"
-        },
-    ]);
+    const [GameInformaion, setGameInformation] = useState(Slide)
+    const { id } = useParams();
 
-    const hoverImg1Inhandler = () => {
-        setHoverImg2for1(true);
-        setHoverImg3(true);
-    }
+    useEffect(() => {
+        setGameInformation(Slide.filter((Game) => Game.game === "공식게임"))
+    }, [GameInformaion]);
 
-    const hoverImg1Outhandler = () => {
-        setHoverImg2for1(false);
-        setHoverImg3(false);
-    }
-
-    const hoverImg3Inhandler = () => {
-        setHoverImg1(true);
-        sethoverImg2for3(true);
-    }
-
-    const hoverImg3Outhandler = () => {
-        setHoverImg1(false);
-        sethoverImg2for3(false);
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     return (
         <OfficialGameAllBox>
             <OfficialGameBox>
 
+            <Link to={`/GameInformationView/${GameInformaion[0].id}`} onClick={() => ScrollTop()}>
                 <OfficialGame1>
                     <OfficialGame1imgBox>
-                        <OfficialGame1img src={Slide[0].imgBackground} />
+                        <OfficialGame1img src={GameInformaion[0].img} />
 
                         <OfficialGame1InformaitonBox />
 
                     </OfficialGame1imgBox>
                 </OfficialGame1>
+            </Link>
 
+            <Link to={`/GameInformationView/${GameInformaion[1].id}`} onClick={() => ScrollTop()}>
                 <OfficialGame2>
                     <OfficialGame2imgBox>
-                        <OfficialGame2img src={Slide[1].imgBackground} />
+                        <OfficialGame2img src={GameInformaion[1].img} />
 
                         <OfficialGame2InformaitonBox />
 
                     </OfficialGame2imgBox>
                 </OfficialGame2>
+            </Link>
 
+            <Link to={`/GameInformationView/${GameInformaion[2].id}`} onClick={() => ScrollTop()}>
                 <OfficialGame3>
                     <OfficialGame3imgBox>
-                        <OfficialGame3img src={Slide[2].imgBackground} />
+                        <OfficialGame3img src={GameInformaion[2].img} />
 
                         <OfficialGame3InformaitonBox />
 
                     </OfficialGame3imgBox>
                 </OfficialGame3>
+            </Link>
 
             </OfficialGameBox>
         </OfficialGameAllBox>
@@ -295,6 +257,7 @@ const OfficialGame1 = styled.div
     width: 100%;
     height: 100vh;
     overflow: hidden;
+    cursor: pointer;
     &:hover{
         ${OfficialGame1InformaitonBox}{
             transition: opacity 0.5s ease;
@@ -313,6 +276,7 @@ const OfficialGame2 = styled.div
     height: 100vh;
     overflow: hidden;
     position: relative;
+    cursor: pointer;
     &:hover{
         ${OfficialGame2InformaitonBox}{
             transition: opacity 0.5s ease;
@@ -329,6 +293,7 @@ const OfficialGame3 = styled.div
     width: 100%;
     height: 100vh;
     overflow: hidden;
+    cursor: pointer;
     &:hover{
         ${OfficialGame3InformaitonBox}{
             transition: opacity 0.5s ease;
@@ -348,6 +313,9 @@ const OfficialGameAllBox = styled.div
 const OfficialGameBox = styled.div
     `
         display: flex;
+        a{
+            text-decoration: none;
+        }
     `
 
 

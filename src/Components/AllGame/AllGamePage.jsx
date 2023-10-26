@@ -9,137 +9,10 @@ import { firstReset } from "../Darkmode/Darkmode";
 import { Link, useNavigate } from "react-router-dom";
 import NotPage from "./NotPage";
 import { useSelector } from "react-redux";
-import test from "../../img/MainSlide/test.png";
-import test1 from "../../img/MainSlide/test1.png";
-import test2 from "../../img/MainSlide/test2.png";
-import test3 from "../../img/MainSlide/test3.png";
-import test4 from "../../img/MainSlide/test4.png";
-import test5 from "../../img/MainSlide/test5.png";
+import { Slide } from "../Game";
 import axios from "axios";
 
 const AllGamePage = () => {
-    const [Slide, setSlide] = useState([
-        {
-            id: 0,
-            img: test,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
-            regdate: "2023-10-23 13:45:35",
-            likecount: 345,
-        },
-        {
-            id: 1,
-            img: test1,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-22 13:45:35",
-            likecount: 432,
-        },
-        {
-            id: 2,
-            img: test2,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
-            regdate: "2023-10-21 13:45:35",
-            likecount: 431
-        },
-        {
-            id: 3,
-            img: test3,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-20 13:45:35",
-            likecount: 1234
-        },
-        {
-            id: 4,
-            img: test4,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-19 13:45:35",
-            likecount: 2422
-        },
-        {
-            id: 5,
-            img: test,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-23 13:45:35",
-            likecount: 345,
-        },
-        {
-            id: 6,
-            img: test1,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
-            regdate: "2023-10-22 13:45:35",
-            likecount: 432,
-        },
-        {
-            id: 7,
-            img: test2,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-21 13:45:35",
-            likecount: 431
-        },
-        {
-            id: 8,
-            img: test3,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기",
-            regdate: "2023-10-20 13:45:35",
-            likecount: 1234
-        },
-        {
-            id: 9,
-            img: test4,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-19 13:45:35",
-            likecount: 2422
-        },
-        {
-            id: 10,
-            img: test,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-23 13:45:35",
-            likecount: 345,
-        },
-        {
-            id: 11,
-            img: test1,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-22 13:45:35",
-            likecount: 432,
-        },
-        {
-            id: 12,
-            img: test2,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-21 13:45:35",
-            likecount: 431
-        },
-        {
-            id: 13,
-            img: test3,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-20 13:45:35",
-            likecount: 1234
-        },
-        {
-            id: 14,
-            img: test4,
-            content: "질리지 않는 8비트 공식게임!",
-            title: "토파즈",
-            regdate: "2023-10-19 13:45:35",
-            likecount: 2422
-        },
-    ]);
     const [Search, setSearch] = useState("");
     const [SearchFillText, setSearchFillText] = useState("제목");
     const [Fitter, setFitter] = useState("최신순");
@@ -162,7 +35,6 @@ const AllGamePage = () => {
     const [FillterState, setFillerState] = useState("title");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
-
 
     useEffect(() => {
         function handleOuside(e) {
@@ -275,8 +147,8 @@ const AllGamePage = () => {
             const SearchResult = Slide.filter((board) =>
                 SearchFillText === "제목" ?
                 board.title.toUpperCase().includes(Search.toUpperCase()) :
-                SearchFillText === "내용" ?
-                board.content.toUpperCase().includes(Search.toUpperCase()) :
+                SearchFillText === "개발자" ?
+                board.developer.toUpperCase().includes(Search.toUpperCase()) :
                 board.title.toUpperCase().includes(Search.toUpperCase())
             );
 
@@ -284,6 +156,10 @@ const AllGamePage = () => {
             setSearch("");
             setPage(1);
         }
+    }
+
+    const ScrollTop = () => {
+        window.scrollTo({ top: 835, behavior: "smooth" });
     }
 
     return (
@@ -341,7 +217,7 @@ const AllGamePage = () => {
                 <BoardContentAllBox View={SearchList.length}>
                     {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, title, content, img }) => (
                        <BoardContentBox key={id}>
-                           <Link to='/'>
+                           <Link to={`/GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                <SlideAllBox>
                                    <SlideBox>
                                        <ImgBox src={img} />

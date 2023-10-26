@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 
@@ -13,13 +12,6 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
     const [ismodalchange, setIsmodalchange] = useState(true);
     const [CompleteModal, setCompleteModal] = useState("");
     const [checkList, setCheckList] = useState("욕설/비방 신고");
-
-    const user = useSelector((state) => state.user);
-    
-
-    const loginMaintain = localStorage.getItem("loginMaintain");
-    let userInfo = localStorage.getItem("userInfo");
-    userInfo = JSON.parse(userInfo);
 
     const RadioAbusehandle = (e) => {
 
@@ -74,27 +66,20 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
         e.preventDefault();
 
         if (checkList === "욕설/비방 신고") {
-            axios.post(`${ip}/Reports/reComment/free/report/count`,{
-                reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                reCommenter: reCommenter,
-                regdate: regdate,
-                report: "abuse"
-            },
-            {
-                headers: {
-                    Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
-                }
+            axios.patch(`${ip}/Board/report/reComment/abuse?reCommenter=${reCommenter}&regdate=${regdate}`, {
+
+            }, {
+
             })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                if(data==null){
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
                     setIsmodalchange(false);
                     setCompleteModal(
                         <CompleteModalBox>
                             <CompleteTextBox>
-                                <CompleteText>권한이 없습니다. 로그인 해주세요</CompleteText>
+                                <CompleteText>신고가 완료 되었습니다!</CompleteText>
                             </CompleteTextBox>
                             <CompleteBtnBox>
                                 <CompleteBtn onClick={() => Completehandle()}>
@@ -103,75 +88,22 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
                             </CompleteBtnBox>
                         </CompleteModalBox>
                     );
-                }
-                else if(data==0){
-                    axios.post(`${ip}/Reports/reComment/free/report/count`, {
-                        reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        reCommenter: reCommenter,
-                        regdate: regdate,
-                        report: "abuse"
-                    }, {
-                        headers: {
-                            Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
-                        }
-                    })
-                        .then((res) => {
-                            return res.data;
-                        })
-                        .then((data) => {
-                            setIsmodalchange(false);
-                            setCompleteModal(
-                                <CompleteModalBox>
-                                    <CompleteTextBox>
-                                        <CompleteText>신고가 완료 되었습니다!</CompleteText>
-                                    </CompleteTextBox>
-                                    <CompleteBtnBox>
-                                        <CompleteBtn onClick={() => Completehandle()}>
-                                            <CompleteBtnText>확인</CompleteBtnText>
-                                        </CompleteBtn>
-                                    </CompleteBtnBox>
-                                </CompleteModalBox>
-                            );
-                        })
-                }
-                else if(data>0){
-                    setIsmodalchange(false);
-                    setCompleteModal(
-                        <CompleteModalBox>
-                            <CompleteTextBox>
-                                <CompleteText>욕설/비방 신고 이미 접수</CompleteText>
-                            </CompleteTextBox>
-                            <CompleteBtnBox>
-                                <CompleteBtn onClick={() => Completehandle()}>
-                                    <CompleteBtnText>확인</CompleteBtnText>
-                                </CompleteBtn>
-                            </CompleteBtnBox>
-                        </CompleteModalBox>
-                    );
-                }
-            })
+                })
         } else if (checkList === "음란물 신고") {
-            axios.post(`${ip}/Reports/reComment/free/report/count`,{
-                reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                reCommenter: reCommenter,
-                regdate: regdate,
-                report: "lewd"
-            },
-            {
-                headers: {
-                    Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
-                }
+            axios.patch(`${ip}/Board/report/reComment/19?reCommenter=${reCommenter}&regdate=${regdate}`, {
+
+            }, {
+
             })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                if(data==null){
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
                     setIsmodalchange(false);
                     setCompleteModal(
                         <CompleteModalBox>
                             <CompleteTextBox>
-                                <CompleteText>권한이 없습니다. 로그인 해주세요</CompleteText>
+                                <CompleteText>신고가 완료 되었습니다!</CompleteText>
                             </CompleteTextBox>
                             <CompleteBtnBox>
                                 <CompleteBtn onClick={() => Completehandle()}>
@@ -180,76 +112,23 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
                             </CompleteBtnBox>
                         </CompleteModalBox>
                     );
-                }
-                else if(data==0){
-                    axios.post(`${ip}/Reports/reComment/free/report`, {
-                        reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        reCommenter: reCommenter,
-                        regdate: regdate,
-                        report: "lewd"
-                    }, {
-                        headers: {
-                            Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
-                        }
-                    })
-                        .then((res) => {
-                            return res.data;
-                        })
-                        .then((data) => {
-                            setIsmodalchange(false);
-                            setCompleteModal(
-                                <CompleteModalBox>
-                                    <CompleteTextBox>
-                                        <CompleteText>신고가 완료 되었습니다!</CompleteText>
-                                    </CompleteTextBox>
-                                    <CompleteBtnBox>
-                                        <CompleteBtn onClick={() => Completehandle()}>
-                                            <CompleteBtnText>확인</CompleteBtnText>
-                                        </CompleteBtn>
-                                    </CompleteBtnBox>
-                                </CompleteModalBox>
-                            );
-                        })
-                }
-                else if(data>0){
-                    setIsmodalchange(false);
-                    setCompleteModal(
-                        <CompleteModalBox>
-                            <CompleteTextBox>
-                                <CompleteText>음란물 신고 이미 접수</CompleteText>
-                            </CompleteTextBox>
-                            <CompleteBtnBox>
-                                <CompleteBtn onClick={() => Completehandle()}>
-                                    <CompleteBtnText>확인</CompleteBtnText>
-                                </CompleteBtn>
-                            </CompleteBtnBox>
-                        </CompleteModalBox>
-                    );
-                }
-            })
+                })
         } else if (checkList === "게시판 부적합 신고") {
 
-            axios.post(`${ip}/Reports/reComment/free/report/count`,{
-                reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                reCommenter: reCommenter,
-                regdate: regdate,
-                report: "incoporate"
-            },
-            {
-                headers: {
-                    Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
-                }
+            axios.patch(`${ip}/Board/report/reComment/incoporate?reCommenter=${reCommenter}&regdate=${regdate}`, {
+
+            }, {
+
             })
-            .then((res) => {
-                return res.data;
-            })
-            .then((data) => {
-                if(data==null){
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
                     setIsmodalchange(false);
                     setCompleteModal(
                         <CompleteModalBox>
                             <CompleteTextBox>
-                                <CompleteText>권한이 없습니다. 로그인 해주세요</CompleteText>
+                                <CompleteText>신고가 완료 되었습니다!</CompleteText>
                             </CompleteTextBox>
                             <CompleteBtnBox>
                                 <CompleteBtn onClick={() => Completehandle()}>
@@ -258,53 +137,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
                             </CompleteBtnBox>
                         </CompleteModalBox>
                     );
-                }
-                else if(data==0){
-                    axios.post(`${ip}/Reports/reComment/free/report`, {
-                        reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        reCommenter: reCommenter,
-                        regdate: regdate,
-                        report: "incoporate"
-                    }, {
-                        headers: {
-                            Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
-                        }
-                    })
-                        .then((res) => {
-                            return res.data;
-                        })
-                        .then((data) => {
-                            setIsmodalchange(false);
-                            setCompleteModal(
-                                <CompleteModalBox>
-                                    <CompleteTextBox>
-                                        <CompleteText>신고가 완료 되었습니다!</CompleteText>
-                                    </CompleteTextBox>
-                                    <CompleteBtnBox>
-                                        <CompleteBtn onClick={() => Completehandle()}>
-                                            <CompleteBtnText>확인</CompleteBtnText>
-                                        </CompleteBtn>
-                                    </CompleteBtnBox>
-                                </CompleteModalBox>
-                            );
-                        })
-                }
-                else if(data>0){
-                    setIsmodalchange(false);
-                    setCompleteModal(
-                        <CompleteModalBox>
-                            <CompleteTextBox>
-                                <CompleteText>게시판 부적합 신고 이미 접수</CompleteText>
-                            </CompleteTextBox>
-                            <CompleteBtnBox>
-                                <CompleteBtn onClick={() => Completehandle()}>
-                                    <CompleteBtnText>확인</CompleteBtnText>
-                                </CompleteBtn>
-                            </CompleteBtnBox>
-                        </CompleteModalBox>
-                    );
-                }
-            })
+                })
         }
     }
 
