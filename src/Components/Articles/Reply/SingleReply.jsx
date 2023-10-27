@@ -54,7 +54,7 @@ const SingleReply = ({
 }) => {
     const [ModalReplyUpdateCommentOnOff, setModalReplyUpdateCommentOnOff] = useState(false);
     const [id, setId] = useState(Comment.id);
-    const [replyer, setReplyer] = useState(Comment.replyer);
+    const [replyer, setReplyer] = useState(Comment.author);
     const [content, setContent] = useState(Comment.content);
     const [regdate, setRegdate] = useState(Comment.regdate);
     const [updatedate, setUpdatedate] = useState(Comment.updatedate);
@@ -97,6 +97,9 @@ const SingleReply = ({
     const [ReComments, setReComments] = useState([]);
 
     useEffect(() => {
+
+        console.log("------------------댓글 정보--------------------");
+        console.log(Comment);
         
 
         const getReplyerRole = (replyer) => {
@@ -159,7 +162,7 @@ const SingleReply = ({
         }
 
         const getReComments = (replyer, regdate) => {
-            axios.get(`${ip}/Board/article/reply/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
+            axios.get(`${ip}/ReComments/free/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
 
             },
                 {
@@ -178,40 +181,16 @@ const SingleReply = ({
                 })
         }
 
-        /* 
-            axios.get(`${ip}/Board/article/reply?replyer=${Comment.replyer}&regdate=${Comment.regdate}`,
-           {
-
-           },
-           {
-
-           })
-           .then((res) => {
-               return res.data;
-           })
-           .then((data) => {
-               setReplyer(data.replyer);
-               setContent(data.content);
-               setRegdate(data.regdate);
-               setUpdatedate(data.updatedate);
-               setUpdateReplyText(data.content);
-               setReportMode(false);
-               getReplyerProfileImagePath(data.replyer);
-               getReplyerRole(data.replyer);
-               getLikers(data.replyer, data.regdate);
-               getReComments(data.replyer, data.regdate);
-           }); 
-        */
         setId(Comment.id);
         setModalReplyDeleteToggleState(toggleState);
-        setReplyer(Comment.replyer); 
+        setReplyer(Comment.author); 
         setContent(Comment.content);
         setRegdate(Comment.regdate);
         setUpdatedate(Comment.updatedate);
         setUpdateReplyText(Comment.content);
-        getReplyerRole(Comment.replyer);
-        getLikers(Comment.replyer, Comment.regdate);
-        getReComments(Comment.replyer, Comment.regdate);
+        getReplyerRole(Comment.author);
+        getLikers(Comment.author, Comment.regdate);
+        getReComments(Comment.author, Comment.regdate);
 
         setReplyStatusDivHide(false);
 
@@ -358,9 +337,9 @@ const SingleReply = ({
             const addedCmtId = ReComments[lastCmtIndex].id + 1;
             const newReComment = {
                 id: addedCmtId,
-                original_replyer: replyer,
+                original_author: replyer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -372,9 +351,9 @@ const SingleReply = ({
             const addedCmtId = 1;
             const newReComment = {
                 id: addedCmtId,
-                original_replyer: replyer,
+                original_author: replyer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -407,7 +386,7 @@ const SingleReply = ({
         e.preventDefault();
 
         if (updateReplyText !== '<p><br></p>') {
-            await axios.patch(`${ip}/Board/article/reply?replyer=${replyer}&regdate=${regdate}`,
+            await axios.patch(`${ip}/Comments/free/comment?replyer=${replyer}&regdate=${regdate}`,
                 {
                     content: updateReplyText,
                 },
@@ -435,10 +414,10 @@ const SingleReply = ({
         e.preventDefault();
 
         if (reCommentChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply/reComment`, {
-                original_replyer: replyer,
+            await axios.post(`${ip}/ReComments/free/reComment`, {
+                original_author: replyer,
                 original_regdate: regdate,
-                reCommenter: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
             },
                 {
@@ -453,27 +432,7 @@ const SingleReply = ({
                     addReComment(data, ReComments);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            }
-                            )
-                            .then((data) => {
-                                dispatch(point(data));
-                                return;
-                            });
-                    }
-
-                    pointUp();
-
+                    dispatch(point(user.point + 5));
                     return;
                 })
 

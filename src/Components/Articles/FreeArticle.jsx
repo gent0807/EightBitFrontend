@@ -273,7 +273,7 @@ const FreeArticle = () => {
         }
 
         const getReCommentCount = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/totalcomment/count?writer=${writer}&regdate=${regdate}`, {
+            axios.get(`${ip}/ReComments/free/reComments/count?writer=${writer}&regdate=${regdate}`, {
 
             },
                 {
@@ -289,7 +289,7 @@ const FreeArticle = () => {
         }
 
         const getComments = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/replies?original_writer=${writer}&original_regdate=${regdate}`, {
+            axios.get(`${ip}/Comments/free/comments?original_writer=${writer}&original_regdate=${regdate}`, {
 
             },
                 {
@@ -301,26 +301,7 @@ const FreeArticle = () => {
                 .then(data => {
                     totalCommentCount.current = data.length;
                     setComments(data);
-                })
-        }
-
-        const updateUserFreeArticleView = async (nickname, writer, regdate) => {
-            await axios.post(`${ip}/Views/article/free/view`, {
-                viewer: nickname,
-                writer: writer,
-                regdate: regdate,
-                boardType: "free",
-            },
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                })
-                .then(res => {
-                    /* regenerateAccessTokenOrLogout(res, registerReply, e); */
-                    return res.data;
-                })
-                .then(data => {
-                    return;
-                })
+                });
         }
 
         const getAttachList = async (writer, regdate) => {
@@ -341,7 +322,7 @@ const FreeArticle = () => {
 
 
 
-        axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
+        axios.get(`${ip}/Board/article?viewer=${loginMaintain==null ? null : loginMaintain == "true" ? (userInfo.loginState=="allok" ? userInfo.nickName : (user==null ? null : (user.login_state =="allok" ? user.nickname: null))) :  (user==null ? null : (user.login_state =="allok" ? user.nickname: null))}&writer=${writer}&regdate=${regdate}&boardType=free`, {
 
         },
             {
@@ -349,16 +330,6 @@ const FreeArticle = () => {
             })
             .then(res => res.data)
             .then(data => {
-                if (loginMaintain == "true") {
-                    if (userInfo != null) {
-                        updateUserFreeArticleView(userInfo.nickName, writer, regdate);
-                    }
-                }
-                else if (loginMaintain == "false") {
-                    if (user.nickname != null) {
-                        updateUserFreeArticleView(user.nickname, writer, regdate);
-                    }
-                }
                 setTitle(data.title);
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
@@ -428,9 +399,9 @@ const FreeArticle = () => {
             const addedCmtId = Comments[lastCmtIndex].id + 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -442,9 +413,9 @@ const FreeArticle = () => {
             const addedCmtId = 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -461,9 +432,9 @@ const FreeArticle = () => {
             const addedCmtId = Comments[lastCmtIndex].id + 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue2,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -475,9 +446,9 @@ const FreeArticle = () => {
             const addedCmtId = 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue2,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -507,10 +478,10 @@ const FreeArticle = () => {
     const registerReply = async (e) => {
         e.preventDefault();
         if (replyChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply`, {
-                original_writer: writer,
+            await axios.post(`${ip}/Comments/free/comment`, {
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
             },
                 {
@@ -524,25 +495,7 @@ const FreeArticle = () => {
                     setToggleState(!toggleState);
                     addComment(data, Comments);
                     setReplyChangeValue("<p><br></p>");
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            })
-                            .then((data) => {
-                                dispatch(point(data));
-                                return;
-                            });
-                    }
-
-                    pointUp();
+                    dispatch(point(user.point + 5));
 
                     return;
 
@@ -559,10 +512,10 @@ const FreeArticle = () => {
     const registerReply2 = async (e) => {
         e.preventDefault();
         if (replyChangeValue2 !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply`, {
-                original_writer: writer,
+            await axios.post(`${ip}/Comments/free/comment`, {
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue2
             },
                 {
@@ -575,27 +528,7 @@ const FreeArticle = () => {
                 .then((data) => {
                     addComment2(data, Comments);
                     setOnReplyBtn(false);
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            }
-                            )
-                            .then((data) => {
-                                dispatch(point(data));
-                                return;
-                            });
-                    }
-
-                    pointUp();
-
+                    dispatch(point(user.point + 5));
                     return;
 
                 });

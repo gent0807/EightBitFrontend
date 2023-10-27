@@ -289,31 +289,13 @@ const WriteBoard = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    pointUp(writer, regdate);
+                    dispatch(point(user.point + 10));
+                    navigate('/FreeArticle/'+writer+'/'+regdate);
                     return;
                 })
 
 
 
-        }
-
-        const pointUp = async (writer, regdate) => {
-            await axios.patch(`${ip}/Users/point/up?writer=${writer}&point=10`,
-                {
-
-                },
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                })
-                .then((res) => {
-                    return res.data;
-                }
-                )
-                .then((data) => {
-                    dispatch(point(data));
-                    navigate('/FreeArticle/' + writer + '/' + regdate);
-                    return;
-                });
         }
 
         e.preventDefault();
@@ -351,7 +333,8 @@ const WriteBoard = () => {
                 const regdate = data.regdate;
 
                 if (files.length == 0) {
-                    pointUp(writer, regdate);
+                    dispatch(point(user.point + 10));
+                    navigate('/FreeArticle/'+writer+'/'+regdate)
                     return;
                 }
 

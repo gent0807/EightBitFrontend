@@ -270,7 +270,7 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
                         author: writer,
                         regdate: regdate,
-                        report: "lewd"
+                        report: "incoporate"
                     }, {
                         headers: {
                             Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`

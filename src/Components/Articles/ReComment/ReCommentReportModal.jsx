@@ -79,7 +79,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
                 author: reCommenter,
                 regdate: regdate,
                 report: "abuse"
-            },
+            },  
             {
                 headers: {
                     Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
@@ -105,7 +105,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
                     );
                 }
                 else if(data==0){
-                    axios.post(`${ip}/Reports/reComment/free/report/count`, {
+                    axios.post(`${ip}/Reports/reComment/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
                         author: reCommenter,
                         regdate: regdate,

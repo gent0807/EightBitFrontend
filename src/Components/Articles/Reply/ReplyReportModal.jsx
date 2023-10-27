@@ -184,7 +184,7 @@ const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id }) =
                 else if(data==0){
                     axios.post(`${ip}/Reports/comment/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        replyer: replyer,
+                        author: replyer,
                         regdate: regdate,
                         report: "lewd"
                     }, {

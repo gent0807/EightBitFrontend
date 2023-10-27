@@ -50,9 +50,9 @@ const SingleReComment = ({
     setModalToggleState
 }) => {
     const [id, setId] = useState(ReComment.id);
-    const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_replyer);
+    const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_author);
     const [originalRegdate, setOriginalRegdate] = useState(ReComment.original_regdate);
-    const [reCommenter, setReCommenter] = useState(ReComment.reCommenter);
+    const [reCommenter, setReCommenter] = useState(ReComment.author);
     const [content, setContent] = useState(ReComment.content);
     const [regdate, setRegdate] = useState(ReComment.regdate);
     const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
@@ -183,6 +183,9 @@ const SingleReComment = ({
 
     useEffect(() => {
         
+        console.log("------------------대댓글 정보--------------------");
+        console.log(ReComment);
+
         const getReCommenterRole = (reCommenter) => {
             axios.get(`${ip}/Users/role?nickname=${reCommenter}`, {
 
@@ -245,7 +248,7 @@ const SingleReComment = ({
 
 
         const getReComments = (replyer, regdate) => {
-            axios.get(`${ip}/Board/article/reply/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
+            axios.get(`${ip}/ReComments/free/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
 
             },
                 {
@@ -259,47 +262,22 @@ const SingleReComment = ({
                 })
         }
 
-        /*    axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
-               {
-   
-               },
-               {
-   
-               })
-               .then((res) => {
-                   return res.data;
-               })
-               .then((data) => {
-                   setOriginalReplyer(data.original_replyer);
-                   setOriginalRegdate(data.original_regdate);
-                   setReCommenter(data.reCommenter);
-                   setContent(data.content);
-                   setRegdate(data.regdate);
-                   setUpdatedate(data.updatedate);
-                   setReportMode(false);
-                   setUpdateReCommentText(data.content);
-                   setReCommentChangeValue("@" + data.reCommenter + "\n");
-   
-                   getReCommenterProfileImagePath(data.reCommenter);
-                   getReCommenterRole(data.reCommenter);
-                   getLikers(data.reCommenter, data.regdate);
-               });  */
 
         setId(ReComment.id);
         setModalToggleState2(toggleState2);
         setModalToggleState(toggleState);
-        setOriginalReplyer(ReComment.original_replyer);
+        setOriginalReplyer(ReComment.original_author);
         setOriginalRegdate(ReComment.original_regdate);
-        setReCommenter(ReComment.reCommenter);
+        setReCommenter(ReComment.author);
         setContent(ReComment.content);
         setRegdate(ReComment.regdate);
         setUpdatedate(ReComment.updatedate);
         setUpdateReCommentText(ReComment.content);
-        setReCommentChangeValue("@" + ReComment.reCommenter + "\n");
+        setReCommentChangeValue("@" + ReComment.author + "\n");
 
-        getReCommenterRole(ReComment.reCommenter);
-        getLikers(ReComment.reCommenter, ReComment.regdate);
-        getReComments(ReComment.original_replyer, ReComment.original_regdate);
+        getReCommenterRole(ReComment.author);
+        getLikers(ReComment.author, ReComment.regdate);
+        getReComments(ReComment.original_author, ReComment.original_regdate);
 
         setReCommentStatusDivHide(false);
 
@@ -355,10 +333,10 @@ const SingleReComment = ({
         e.preventDefault();
 
         if (reCommentChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply/reComment`, {
-                original_replyer: originalReplyer,
+            await axios.post(`${ip}/ReComments/free/reComment`, {
+                original_author: originalReplyer,
                 original_regdate: originalRegdate,
-                reCommenter: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
             },
                 {
@@ -375,25 +353,7 @@ const SingleReComment = ({
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
                     setReCommentChangeValue('<p><br></p>');
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            }
-                            )
-                            .then((data) => {
-                                dispatch(point(data));
-                            });
-                    }
-
-                    pointUp();
+                    dispatch(point(user.point + 5));
                 })
 
         }
@@ -408,7 +368,7 @@ const SingleReComment = ({
     const updateReComment = async (e) => {
         e.preventDefault();
         if (updateReCommentText !== '<p><br></p>') {
-            await axios.patch(`${ip}/Board/article/reply/reComment?reCommenter=${reCommenter}&regdate=${regdate}`,
+            await axios.patch(`${ip}/ReComments/free/reComment?reCommenter=${reCommenter}&regdate=${regdate}`,
                 {
                     content: updateReCommentText,
                 },
