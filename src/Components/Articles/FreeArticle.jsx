@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { toggle } from "./Toggle";
+import { toggle2 } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled, { ThemeProvider, keyframes } from "styled-components";
@@ -101,6 +102,7 @@ const FreeArticle = () => {
     let totalCommentCount = useRef(0);
 
     const [toggleState, setToggleState] = useRecoilState(toggle);
+    const [toggleState2, setToggleState2] = useRecoilState(toggle2);
 
     const [Comments, setComments] = useState([]);
 
@@ -348,7 +350,7 @@ const FreeArticle = () => {
                 }
             })
 
-    }, [toggleState]);
+    }, [toggleState, toggleState2]);
 
 
     
@@ -474,6 +476,7 @@ const FreeArticle = () => {
     const deleteComment = (commentId) => {
         let newComments = Comments.filter(item => item.id !== commentId);
         setComments(newComments);
+        setToggleState(!toggleState);
     }
 
 
@@ -941,7 +944,7 @@ const FreeArticle = () => {
             <ReplyFillAllBox>
                 {Comments.length > 0 ?
                     <ReplyCountBox>
-                        {totalCommentCount.current}개 댓글
+                        총 {totalCommentCount.current}개 댓글
                     </ReplyCountBox> : ""}
 
                 <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>

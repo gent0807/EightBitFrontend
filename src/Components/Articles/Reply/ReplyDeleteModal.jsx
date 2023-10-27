@@ -40,8 +40,8 @@ const ReplyDeleteModal = ({
                 return res.data;
             })
             .then((data) => {
-                setToggleState(!toggleState);
                 deleteComment(id);
+                setToggleState(!toggleState);
                 setIsmodalchange(false);
                 setCompleteModal(
                     <CompleteModalBox>

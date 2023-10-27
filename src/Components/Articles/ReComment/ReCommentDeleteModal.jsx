@@ -41,9 +41,9 @@ const ReCommentDeleteModal = ({
                 return res.data;
             })
             .then((data) => {
+                deleteReComment(Commentid);
                 setToggleState2(!toggleState2);
                 setToggleState(!toggleState);
-                deleteReComment(Commentid);
                 setIsmodalchange(false);
                 setCompleteModal(
                     <CompleteModalBox>

@@ -118,47 +118,50 @@ const SingleReply = ({
         }
 
         const getLikes = (replyer, regdate) => {
-            axios.get(`${ip}/Likes/comment/free/likes?replyer=${replyer}&regdate=${regdate}`, {
+        
+                axios.get(`${ip}/Likes/comment/free/likes?replyer=${replyer}&regdate=${regdate}`, {
 
-            },
-                {       
-
-                })
-                .then((res) => {
-                    return res.data;
-                })
-                .then((data) => {
-                    setLikecount(data.length);
-                    if (loginMaintain == "true") {
-                        if (userInfo != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == userInfo.nickName) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
+                },
+                    {       
+    
+                    })
+                    .then((res) => {
+                        return res.data;
+                    })
+                    .then((data) => {
+                        setLikecount(data.length);
+                        if (loginMaintain == "true") {
+                            if (userInfo != null) {
+                                for (let i = 0; i < data.length; i++) {
+                                    if (data[i] == userInfo.nickName) {
+                                        likeMode.current = true;
+                                        break;
+                                    }
+                                    else {
+                                        likeMode.current = false;
+                                    }
                                 }
                             }
                         }
-                    }
-                    else if (loginMaintain == "false") {
-                        if (user.nickname != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == user.nickname) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
+                        else if (loginMaintain == "false") {
+                            if (user.nickname != null) {
+                                for (let i = 0; i < data.length; i++) {
+                                    if (data[i] == user.nickname) {
+                                        likeMode.current = true;
+                                        break;
+                                    }
+                                    else {
+                                        likeMode.current = false;
+                                    }
                                 }
                             }
                         }
-                    }
-                    else if (loginMaintain == null) {
-                        likeMode.current = false;
-                    }
-                })
+                        else if (loginMaintain == null) {
+                            likeMode.current = false;
+                        }
+                    })
+            
+            
         }
 
         const getReComments = (replyer, regdate) => {
@@ -379,6 +382,8 @@ const SingleReply = ({
         setReComments(newReComments);
         setReCommentHide(true);
         setOnReplyBtn(false);
+        setToggleState(!toggleState);
+        setToggleState2(!toggleState2);
     }
 
 
