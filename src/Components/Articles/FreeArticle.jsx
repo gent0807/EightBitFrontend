@@ -229,7 +229,7 @@ const FreeArticle = () => {
         }
 
         const getLikers = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/likers?writer=${writer}&regdate=${regdate}`, {
+            axios.get(`${ip}/Likes/article/free/likes?writer=${writer}&regdate=${regdate}`, {
 
             },
                 {
@@ -305,10 +305,11 @@ const FreeArticle = () => {
         }
 
         const updateUserFreeArticleView = async (nickname, writer, regdate) => {
-            await axios.post(`${ip}/Board/article/view`, {
+            await axios.post(`${ip}/Views/article/free/view`, {
                 viewer: nickname,
                 writer: writer,
                 regdate: regdate,
+                boardType: "free",
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -382,9 +383,9 @@ const FreeArticle = () => {
 
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Board/article/like/`, {
+        await axios.post(`${ip}/Likes/article/free/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            writer: writer,
+            author: writer,
             regdate: regdate,
         },
             {
@@ -405,7 +406,7 @@ const FreeArticle = () => {
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`,
+            await axios.delete(`${ip}/Likes/article/free/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })

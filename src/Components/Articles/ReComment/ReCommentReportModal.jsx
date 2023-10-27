@@ -76,7 +76,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
         if (checkList === "욕설/비방 신고") {
             axios.post(`${ip}/Reports/reComment/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                reCommenter: reCommenter,
+                author: reCommenter,
                 regdate: regdate,
                 report: "abuse"
             },
@@ -107,7 +107,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
                 else if(data==0){
                     axios.post(`${ip}/Reports/reComment/free/report/count`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        reCommenter: reCommenter,
+                        author: reCommenter,
                         regdate: regdate,
                         report: "abuse"
                     }, {
@@ -153,7 +153,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
         } else if (checkList === "음란물 신고") {
             axios.post(`${ip}/Reports/reComment/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                reCommenter: reCommenter,
+                author: reCommenter,
                 regdate: regdate,
                 report: "lewd"
             },
@@ -184,7 +184,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
                 else if(data==0){
                     axios.post(`${ip}/Reports/reComment/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        reCommenter: reCommenter,
+                        author: reCommenter,
                         regdate: regdate,
                         report: "lewd"
                     }, {
@@ -231,7 +231,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
 
             axios.post(`${ip}/Reports/reComment/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                reCommenter: reCommenter,
+                author: reCommenter,
                 regdate: regdate,
                 report: "incoporate"
             },
@@ -262,7 +262,7 @@ const ReCommentReportModal = ({ setReportMode, ReportMode, regdate, reCommenter 
                 else if(data==0){
                     axios.post(`${ip}/Reports/reComment/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        reCommenter: reCommenter,
+                        author: reCommenter,
                         regdate: regdate,
                         report: "incoporate"
                     }, {
@@ -456,6 +456,7 @@ const ReportFormText = styled.span
 
 const SubmitBox = styled.form
     `
+    color: black;
 
 `
 

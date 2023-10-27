@@ -200,7 +200,7 @@ const SingleReComment = ({
         }
 
         const getLikers = (reCommenter, regdate) => {
-            axios.get(`${ip}/Board/article/reply/reComment/likers?reCommenter=${reCommenter}&regdate=${regdate}`, {
+            axios.get(`${ip}/Likes/reComment/free/likes?reCommenter=${reCommenter}&regdate=${regdate}`, {
 
             },
                 {
@@ -311,9 +311,9 @@ const SingleReComment = ({
 
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Board/article/reply/reComment/like/`, {
+        await axios.post(`${ip}/Likes/reComment/free/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            reCommenter: reCommenter,
+            author: reCommenter,
             regdate: regdate,
         },
             {
@@ -334,7 +334,7 @@ const SingleReComment = ({
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/reply/reComment/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}`,
+            await axios.delete(`${ip}/Likes/reComment/free/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
