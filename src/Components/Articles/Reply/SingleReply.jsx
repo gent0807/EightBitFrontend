@@ -117,7 +117,7 @@ const SingleReply = ({
                 })
         }
 
-        const getLikers = (replyer, regdate) => {
+        const getLikes = (replyer, regdate) => {
             axios.get(`${ip}/Likes/comment/free/likes?replyer=${replyer}&regdate=${regdate}`, {
 
             },
@@ -189,7 +189,7 @@ const SingleReply = ({
         setUpdatedate(Comment.updatedate);
         setUpdateReplyText(Comment.content);
         getReplyerRole(Comment.author);
-        getLikers(Comment.author, Comment.regdate);
+        getLikes(Comment.author, Comment.regdate);
         getReComments(Comment.author, Comment.regdate);
 
         setReplyStatusDivHide(false);
@@ -430,8 +430,8 @@ const SingleReply = ({
                     return res.data;
                 })
                 .then((data) => {
-                    setToggleState(!toggleState);
                     addReComment(data, ReComments);
+                    setToggleState(!toggleState);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
                     dispatch(point(user.point + 5));

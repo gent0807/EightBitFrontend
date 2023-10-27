@@ -72,7 +72,7 @@ const FreeArticle = () => {
     const FolderRef = useRef(null);
     const ShareRef = useRef(null);
     const FillterRef = useRef("");
-    const totalCommentCount = useRef(0);
+   
 
     useEffect(() => {
         function handleOuside(e) {
@@ -98,6 +98,7 @@ const FreeArticle = () => {
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
+    let totalCommentCount = useRef(0);
 
     const [toggleState, setToggleState] = useRecoilState(toggle);
 
@@ -272,8 +273,8 @@ const FreeArticle = () => {
                 })
         }
 
-        const getReCommentCount = (writer, regdate) => {
-            axios.get(`${ip}/ReComments/free/reComments/count?writer=${writer}&regdate=${regdate}`, {
+        const getReCommentCount = async (writer, regdate) => {
+            await axios.get(`${ip}/ReComments/free/reComments/count?writer=${writer}&regdate=${regdate}`, {
 
             },
                 {
@@ -288,8 +289,8 @@ const FreeArticle = () => {
                 })
         }
 
-        const getComments = (writer, regdate) => {
-            axios.get(`${ip}/Comments/free/comments?original_writer=${writer}&original_regdate=${regdate}`, {
+        const getComments = async (writer, regdate) => {
+            await axios.get(`${ip}/Comments/free/comments?original_writer=${writer}&original_regdate=${regdate}`, {
 
             },
                 {
@@ -301,6 +302,7 @@ const FreeArticle = () => {
                 .then(data => {
                     totalCommentCount.current = data.length;
                     setComments(data);
+                    getReCommentCount(writer, regdate);
                 });
         }
 
@@ -338,7 +340,6 @@ const FreeArticle = () => {
                 getWriterRole(data.writer);
                 getComments(data.writer, data.regdate);
                 getLikers(data.writer, data.regdate);
-                getReCommentCount(data.writer, data.regdate);
                 if (data.attach_count > 0) {
                     getAttachList(data.writer, data.regdate);
                 }
@@ -475,6 +476,7 @@ const FreeArticle = () => {
         setComments(newComments);
     }
 
+
     const registerReply = async (e) => {
         e.preventDefault();
         if (replyChangeValue !== '<p><br></p>') {
@@ -492,8 +494,8 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    setToggleState(!toggleState);
                     addComment(data, Comments);
+                    setToggleState(!toggleState);
                     setReplyChangeValue("<p><br></p>");
                     dispatch(point(user.point + 5));
 

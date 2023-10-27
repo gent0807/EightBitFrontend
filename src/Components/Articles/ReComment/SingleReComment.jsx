@@ -187,8 +187,8 @@ const SingleReComment = ({
         console.log("------------------대댓글 정보--------------------");
         console.log(ReComment);
 
-        const getReCommenterRole = (reCommenter) => {
-            axios.get(`${ip}/Users/role?nickname=${reCommenter}`, {
+        const getReCommenterRole = async (reCommenter) => {
+            await axios.get(`${ip}/Users/role?nickname=${reCommenter}`, {
 
             },
                 {
@@ -203,8 +203,8 @@ const SingleReComment = ({
 
         }
 
-        const getLikers = (reCommenter, regdate) => {
-            axios.get(`${ip}/Likes/reComment/free/likes?reCommenter=${reCommenter}&regdate=${regdate}`, {
+        const getLikes = async (reCommenter, regdate) => {
+            await axios.get(`${ip}/Likes/reComment/free/likes?reCommenter=${reCommenter}&regdate=${regdate}`, {
 
             },
                 {
@@ -248,8 +248,8 @@ const SingleReComment = ({
         }
 
 
-        const getReComments = (replyer, regdate) => {
-            axios.get(`${ip}/ReComments/free/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
+        const getReComments = async(replyer, regdate) => {
+            await axios.get(`${ip}/ReComments/free/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
 
             },
                 {
@@ -277,8 +277,10 @@ const SingleReComment = ({
         setReCommentChangeValue("@" + ReComment.author + "\n");
 
         getReCommenterRole(ReComment.author);
-        getLikers(ReComment.author, ReComment.regdate);
         getReComments(ReComment.original_author, ReComment.original_regdate);
+
+        
+        getLikes(ReComment.author, ReComment.regdate);
 
         setReCommentStatusDivHide(false);
 
@@ -348,9 +350,9 @@ const SingleReComment = ({
                     return res.data;
                 })
                 .then((data) => {
+                    addReComment(data, ReComments);
                     setToggleState2(!toggleState2);
                     setToggleState(!toggleState);
-                    addReComment(data, ReComments);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
                     setReCommentChangeValue('<p><br></p>');
