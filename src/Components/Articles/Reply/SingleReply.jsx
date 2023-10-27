@@ -377,6 +377,8 @@ const SingleReply = ({
     const deleteReComment = (ReCommentId) => {
         let newReComments = ReComments.filter(item => item.id !== ReCommentId);
         setReComments(newReComments);
+        setReCommentHide(true);
+        setOnReplyBtn(false);
     }
 
 
@@ -770,6 +772,7 @@ const SingleReply = ({
                                         addReComment={addReComment}
                                         editReComment={editReComment}
                                         deleteReComment={deleteReComment}
+                                        setReCommentHide={setReCommentHide}
 
                                         setReDeleteMode={setModalReCommenterdeleteMode}
                                         RedeleteMode={ModalReCommenterdeleteMode}

@@ -42,6 +42,7 @@ const SingleReComment = ({
     editReComment,
     deleteReComment,
     setReDeleteMode,
+    setReCommentHide,
     RedeleteMode,
     setModalreCommenter,
     setModalreCommentId,
