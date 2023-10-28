@@ -31,7 +31,7 @@ const ReCommentDeleteModal = ({
 
         e.preventDefault();
 
-        axios.delete(`${ip}/Board/article/reply/reComment/${reCommenter}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
+        axios.delete(`${ip}/ReComments/free/reComment/${reCommenter}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
 
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -41,9 +41,9 @@ const ReCommentDeleteModal = ({
                 return res.data;
             })
             .then((data) => {
+                deleteReComment(Commentid);
                 setToggleState2(!toggleState2);
                 setToggleState(!toggleState);
-                deleteReComment(Commentid);
                 setIsmodalchange(false);
                 setCompleteModal(
                     <CompleteModalBox>

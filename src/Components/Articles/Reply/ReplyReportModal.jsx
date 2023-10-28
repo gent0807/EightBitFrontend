@@ -76,7 +76,7 @@ const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id }) =
         if (checkList === "욕설/비방 신고") {
             axios.post(`${ip}/Reports/comment/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                replyer: replyer,
+                author: replyer,
                 regdate: regdate,
                 report: "abuse"
             },
@@ -107,7 +107,7 @@ const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id }) =
                 else if(data==0){
                     axios.post(`${ip}/Reports/comment/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        replyer: replyer,
+                        author: replyer,
                         regdate: regdate,
                         report: "abuse"
                     }, {
@@ -153,7 +153,7 @@ const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id }) =
         } else if (checkList === "음란물 신고") {
             axios.post(`${ip}/Reports/comment/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                replyer: replyer,
+                author: replyer,
                 regdate: regdate,
                 report: "lewd"
             },
@@ -184,7 +184,7 @@ const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id }) =
                 else if(data==0){
                     axios.post(`${ip}/Reports/comment/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        replyer: replyer,
+                        author: replyer,
                         regdate: regdate,
                         report: "lewd"
                     }, {
@@ -231,7 +231,7 @@ const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id }) =
 
             axios.post(`${ip}/Reports/comment/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                replyer: replyer,
+                author: replyer,
                 regdate: regdate,
                 report: "incoporate"
             },
@@ -262,7 +262,7 @@ const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id }) =
                 else if(data==0){
                     axios.post(`${ip}/Reports/comment/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        replyer: replyer,
+                        author: replyer,
                         regdate: regdate,
                         report: "incoporate"
                     }, {
@@ -456,6 +456,7 @@ const ReportFormText = styled.span
 
 const SubmitBox = styled.form
     `
+    color: black;
 
 `
 

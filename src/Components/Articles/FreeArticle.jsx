@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { toggle } from "./Toggle";
+import { toggle2 } from "./Toggle";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled, { ThemeProvider, keyframes } from "styled-components";
@@ -47,7 +48,7 @@ const FreeArticle = () => {
     const [visitcnt, setVisitcnt] = useState(0);
     const [likecount, setLikecount] = useState(0);
     const [writerRole, setWriterRole] = useState("");
-    const [Fitter, setFitter] = useState("최신순");
+    const [Fitter, setFitter] = useState("과거순");
     const [attachCount, setAttachCount] = useState(0);
     const [attachmentes, setAttachmentes] = useState([]);
     const [reportMode, setReportMode] = useState(false);
@@ -72,7 +73,7 @@ const FreeArticle = () => {
     const FolderRef = useRef(null);
     const ShareRef = useRef(null);
     const FillterRef = useRef("");
-    const totalCommentCount = useRef(0);
+   
 
     useEffect(() => {
         function handleOuside(e) {
@@ -98,8 +99,10 @@ const FreeArticle = () => {
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
+    let totalCommentCount = useRef(0);
 
     const [toggleState, setToggleState] = useRecoilState(toggle);
+    const [toggleState2, setToggleState2] = useRecoilState(toggle2);
 
     const [Comments, setComments] = useState([]);
 
@@ -212,8 +215,6 @@ const FreeArticle = () => {
 
     useEffect(() => {
 
-
-
         const getWriterRole = (writer) => {
             axios.get(`${ip}/Users/role?nickname=${writer}`, {
 
@@ -231,7 +232,7 @@ const FreeArticle = () => {
         }
 
         const getLikers = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/likers?writer=${writer}&regdate=${regdate}`, {
+            axios.get(`${ip}/Likes/article/free/likes?writer=${writer}&regdate=${regdate}`, {
 
             },
                 {
@@ -274,8 +275,8 @@ const FreeArticle = () => {
                 })
         }
 
-        const getReCommentCount = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/totalcomment/count?writer=${writer}&regdate=${regdate}`, {
+        const getReCommentCount = async (writer, regdate) => {
+            await axios.get(`${ip}/ReComments/free/reComments/count?writer=${writer}&regdate=${regdate}`, {
 
             },
                 {
@@ -290,8 +291,8 @@ const FreeArticle = () => {
                 })
         }
 
-        const getComments = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/replies?original_writer=${writer}&original_regdate=${regdate}`, {
+        const getComments = async (writer, regdate) => {
+            await axios.get(`${ip}/Comments/free/comments?original_writer=${writer}&original_regdate=${regdate}`, {
 
             },
                 {
@@ -302,26 +303,9 @@ const FreeArticle = () => {
                 })
                 .then(data => {
                     totalCommentCount.current = data.length;
-                    setComments(data.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)));
-                })
-        }
-
-        const updateUserFreeArticleView = async (nickname, writer, regdate) => {
-            await axios.post(`${ip}/Board/article/view`, {
-                viewer: nickname,
-                writer: writer,
-                regdate: regdate,
-            },
-                {
-                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
-                })
-                .then(res => {
-                    /* regenerateAccessTokenOrLogout(res, registerReply, e); */
-                    return res.data;
-                })
-                .then(data => {
-                    return;
-                })
+                    setComments(data);
+                    getReCommentCount(writer, regdate);
+                });
         }
 
         const getAttachList = async (writer, regdate) => {
@@ -342,7 +326,7 @@ const FreeArticle = () => {
 
 
 
-        axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
+        axios.get(`${ip}/Board/article?viewer=${loginMaintain==null ? null : loginMaintain == "true" ? (userInfo.loginState=="allok" ? userInfo.nickName : (user==null ? null : (user.login_state =="allok" ? user.nickname: null))) :  (user==null ? null : (user.login_state =="allok" ? user.nickname: null))}&writer=${writer}&regdate=${regdate}&boardType=free`, {
 
         },
             {
@@ -350,16 +334,6 @@ const FreeArticle = () => {
             })
             .then(res => res.data)
             .then(data => {
-                if (loginMaintain == "true") {
-                    if (userInfo != null) {
-                        updateUserFreeArticleView(userInfo.nickName, writer, regdate);
-                    }
-                }
-                else if (loginMaintain == "false") {
-                    if (user.nickname != null) {
-                        updateUserFreeArticleView(user.nickname, writer, regdate);
-                    }
-                }
                 setTitle(data.title);
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
@@ -368,7 +342,6 @@ const FreeArticle = () => {
                 getWriterRole(data.writer);
                 getComments(data.writer, data.regdate);
                 getLikers(data.writer, data.regdate);
-                getReCommentCount(data.writer, data.regdate);
                 if (data.attach_count > 0) {
                     getAttachList(data.writer, data.regdate);
                 }
@@ -377,16 +350,16 @@ const FreeArticle = () => {
                 }
             })
 
-    }, [toggleState]);
+    }, [toggleState, toggleState2]);
 
 
     
 
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Board/article/like/`, {
+        await axios.post(`${ip}/Likes/article/free/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            writer: writer,
+            author: writer,
             regdate: regdate,
         },
             {
@@ -407,7 +380,7 @@ const FreeArticle = () => {
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`,
+            await axios.delete(`${ip}/Likes/article/free/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
@@ -429,9 +402,9 @@ const FreeArticle = () => {
             const addedCmtId = Comments[lastCmtIndex].id + 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -443,9 +416,9 @@ const FreeArticle = () => {
             const addedCmtId = 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -462,9 +435,9 @@ const FreeArticle = () => {
             const addedCmtId = Comments[lastCmtIndex].id + 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue2,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -476,9 +449,9 @@ const FreeArticle = () => {
             const addedCmtId = 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue2,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -503,15 +476,17 @@ const FreeArticle = () => {
     const deleteComment = (commentId) => {
         let newComments = Comments.filter(item => item.id !== commentId);
         setComments(newComments);
+        setToggleState(!toggleState);
     }
+
 
     const registerReply = async (e) => {
         e.preventDefault();
         if (replyChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply`, {
-                original_writer: writer,
+            await axios.post(`${ip}/Comments/free/comment`, {
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
             },
                 {
@@ -522,28 +497,10 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    setToggleState(!toggleState);
                     addComment(data, Comments);
+                    setToggleState(!toggleState);
                     setReplyChangeValue("<p><br></p>");
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            })
-                            .then((data) => {
-                                dispatch(point(data));
-                                return;
-                            });
-                    }
-
-                    pointUp();
+                    dispatch(point(user.point + 5));
 
                     return;
 
@@ -560,10 +517,10 @@ const FreeArticle = () => {
     const registerReply2 = async (e) => {
         e.preventDefault();
         if (replyChangeValue2 !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply`, {
-                original_writer: writer,
+            await axios.post(`${ip}/Comments/free/comment`, {
+                original_author: writer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue2
             },
                 {
@@ -576,27 +533,7 @@ const FreeArticle = () => {
                 .then((data) => {
                     addComment2(data, Comments);
                     setOnReplyBtn(false);
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            }
-                            )
-                            .then((data) => {
-                                dispatch(point(data));
-                                return;
-                            });
-                    }
-
-                    pointUp();
-
+                    dispatch(point(user.point + 5));
                     return;
 
                 });
@@ -1007,7 +944,7 @@ const FreeArticle = () => {
             <ReplyFillAllBox>
                 {Comments.length > 0 ?
                     <ReplyCountBox>
-                        {totalCommentCount.current}개 댓글
+                        총 {totalCommentCount.current}개 댓글
                     </ReplyCountBox> : ""}
 
                 <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>

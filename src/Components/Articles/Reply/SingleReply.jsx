@@ -54,7 +54,7 @@ const SingleReply = ({
 }) => {
     const [ModalReplyUpdateCommentOnOff, setModalReplyUpdateCommentOnOff] = useState(false);
     const [id, setId] = useState(Comment.id);
-    const [replyer, setReplyer] = useState(Comment.replyer);
+    const [replyer, setReplyer] = useState(Comment.author);
     const [content, setContent] = useState(Comment.content);
     const [regdate, setRegdate] = useState(Comment.regdate);
     const [updatedate, setUpdatedate] = useState(Comment.updatedate);
@@ -62,7 +62,7 @@ const SingleReply = ({
     const [replyerRole, setReplyerRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("<p><br></p>");
-    const [reCommentHide, setReCommentHide] = useState(false);
+    const [reCommentHide, setReCommentHide] = useState(true);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(false);
     const [updateReplyText, setUpdateReplyText] = useState("");
     const [selectedReCommentIndex, setSelectedReCommentIndex] = useState(0);
@@ -97,6 +97,9 @@ const SingleReply = ({
     const [ReComments, setReComments] = useState([]);
 
     useEffect(() => {
+
+        console.log("------------------댓글 정보--------------------");
+        console.log(Comment);
         
 
         const getReplyerRole = (replyer) => {
@@ -114,52 +117,55 @@ const SingleReply = ({
                 })
         }
 
-        const getLikers = (replyer, regdate) => {
-            axios.get(`${ip}/Board/article/reply/likers?replyer=${replyer}&regdate=${regdate}`, {
+        const getLikes = (replyer, regdate) => {
+        
+                axios.get(`${ip}/Likes/comment/free/likes?replyer=${replyer}&regdate=${regdate}`, {
 
-            },
-                {
-
-                })
-                .then((res) => {
-                    return res.data;
-                })
-                .then((data) => {
-                    setLikecount(data.length);
-                    if (loginMaintain == "true") {
-                        if (userInfo != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == userInfo.nickName) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
+                },
+                    {       
+    
+                    })
+                    .then((res) => {
+                        return res.data;
+                    })
+                    .then((data) => {
+                        setLikecount(data.length);
+                        if (loginMaintain == "true") {
+                            if (userInfo != null) {
+                                for (let i = 0; i < data.length; i++) {
+                                    if (data[i] == userInfo.nickName) {
+                                        likeMode.current = true;
+                                        break;
+                                    }
+                                    else {
+                                        likeMode.current = false;
+                                    }
                                 }
                             }
                         }
-                    }
-                    else if (loginMaintain == "false") {
-                        if (user.nickname != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == user.nickname) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
+                        else if (loginMaintain == "false") {
+                            if (user.nickname != null) {
+                                for (let i = 0; i < data.length; i++) {
+                                    if (data[i] == user.nickname) {
+                                        likeMode.current = true;
+                                        break;
+                                    }
+                                    else {
+                                        likeMode.current = false;
+                                    }
                                 }
                             }
                         }
-                    }
-                    else if (loginMaintain == null) {
-                        likeMode.current = false;
-                    }
-                })
+                        else if (loginMaintain == null) {
+                            likeMode.current = false;
+                        }
+                    })
+            
+            
         }
 
         const getReComments = (replyer, regdate) => {
-            axios.get(`${ip}/Board/article/reply/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
+            axios.get(`${ip}/ReComments/free/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
 
             },
                 {
@@ -169,12 +175,7 @@ const SingleReply = ({
                     return res.data;
                 })
                 .then((data) => {
-                    if (data.length == 0) {
-                        setReCommentHide(true);
-                    }
-                    else if (data.length > 0) {
-                        setReCommentHide(false);
-                    }
+                    
                     //console.log("----------------------------------");
                     //console.log("ReComment"+data.id);
                     //console.log("----------------------------------");
@@ -183,40 +184,16 @@ const SingleReply = ({
                 })
         }
 
-        /* 
-            axios.get(`${ip}/Board/article/reply?replyer=${Comment.replyer}&regdate=${Comment.regdate}`,
-           {
-
-           },
-           {
-
-           })
-           .then((res) => {
-               return res.data;
-           })
-           .then((data) => {
-               setReplyer(data.replyer);
-               setContent(data.content);
-               setRegdate(data.regdate);
-               setUpdatedate(data.updatedate);
-               setUpdateReplyText(data.content);
-               setReportMode(false);
-               getReplyerProfileImagePath(data.replyer);
-               getReplyerRole(data.replyer);
-               getLikers(data.replyer, data.regdate);
-               getReComments(data.replyer, data.regdate);
-           }); 
-        */
         setId(Comment.id);
         setModalReplyDeleteToggleState(toggleState);
-        setReplyer(Comment.replyer);
+        setReplyer(Comment.author); 
         setContent(Comment.content);
         setRegdate(Comment.regdate);
         setUpdatedate(Comment.updatedate);
         setUpdateReplyText(Comment.content);
-        getReplyerRole(Comment.replyer);
-        getLikers(Comment.replyer, Comment.regdate);
-        getReComments(Comment.replyer, Comment.regdate);
+        getReplyerRole(Comment.author);
+        getLikes(Comment.author, Comment.regdate);
+        getReComments(Comment.author, Comment.regdate);
 
         setReplyStatusDivHide(false);
 
@@ -317,9 +294,9 @@ const SingleReply = ({
 
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Board/article/reply/like/`, {
+        await axios.post(`${ip}/Likes/comment/free/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            replyer: replyer,
+            author: replyer,
             regdate: regdate,
         },
             {
@@ -340,7 +317,7 @@ const SingleReply = ({
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/reply/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${replyer}/${regdate}`,
+            await axios.delete(`${ip}/Likes/comment/free/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${replyer}/${regdate}`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
@@ -363,9 +340,9 @@ const SingleReply = ({
             const addedCmtId = ReComments[lastCmtIndex].id + 1;
             const newReComment = {
                 id: addedCmtId,
-                original_replyer: replyer,
+                original_author: replyer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -377,9 +354,9 @@ const SingleReply = ({
             const addedCmtId = 1;
             const newReComment = {
                 id: addedCmtId,
-                original_replyer: replyer,
+                original_author: replyer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -403,6 +380,10 @@ const SingleReply = ({
     const deleteReComment = (ReCommentId) => {
         let newReComments = ReComments.filter(item => item.id !== ReCommentId);
         setReComments(newReComments);
+        setReCommentHide(true);
+        setOnReplyBtn(false);
+        setToggleState(!toggleState);
+        setToggleState2(!toggleState2);
     }
 
 
@@ -412,7 +393,7 @@ const SingleReply = ({
         e.preventDefault();
 
         if (updateReplyText !== '<p><br></p>') {
-            await axios.patch(`${ip}/Board/article/reply?replyer=${replyer}&regdate=${regdate}`,
+            await axios.patch(`${ip}/Comments/free/comment?replyer=${replyer}&regdate=${regdate}`,
                 {
                     content: updateReplyText,
                 },
@@ -440,10 +421,10 @@ const SingleReply = ({
         e.preventDefault();
 
         if (reCommentChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply/reComment`, {
-                original_replyer: replyer,
+            await axios.post(`${ip}/ReComments/free/reComment`, {
+                original_author: replyer,
                 original_regdate: regdate,
-                reCommenter: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
             },
                 {
@@ -454,31 +435,11 @@ const SingleReply = ({
                     return res.data;
                 })
                 .then((data) => {
-                    setToggleState(!toggleState);
                     addReComment(data, ReComments);
+                    setToggleState(!toggleState);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            }
-                            )
-                            .then((data) => {
-                                dispatch(point(data));
-                                return;
-                            });
-                    }
-
-                    pointUp();
-
+                    dispatch(point(user.point + 5));
                     return;
                 })
 
@@ -746,41 +707,7 @@ const SingleReply = ({
                     ModalReplyUpdateCommentOnOff={ModalReplyUpdateCommentOnOff}
                  /> : <></> }
 
-                {onReplyBtn && (<ReCommentForm
-                    LoginMaintain={loginMaintain}
-
-                    UserInfo={userInfo} User={userInfo == null ?
-                        null : userInfo.loginState}
-
-                    UserCheck={user.login_state}
-
-                    UserNicknameCheck={user.nickname}
-
-                    UserNickname={userInfo == null ?
-                        null : userInfo.nickName}
-
-                    onSubmit={registerReComment}>
-
-                    <ReCommentArea>
-                        <ReCommentProfile>
-                            <CommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
-                        </ReCommentProfile>
-                        <ReCommentInputBox>
-                            <Editer2
-                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
-                                value={reCommentChangeValue}
-                                onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
-                                modules={modules}
-                                formats={formats}>
-                            </Editer2>
-                        </ReCommentInputBox>
-                    </ReCommentArea>
-                    <ReCommentBtnBox>
-                        <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
-                        <ReCommentBtn>댓글 쓰기</ReCommentBtn>
-                    </ReCommentBtnBox>
-                </ReCommentForm>
-                )}
+                
 
                 <ReCommentDeleteModal
                     setDeleteMode={setModalReCommenterdeleteMode}
@@ -799,7 +726,42 @@ const SingleReply = ({
                     toggleState={ModalToggleState}
                 />
 
-                <ReCommentSector View={ReComments.length}>
+                <ReCommentSector>
+                    {onReplyBtn && (<ReCommentForm
+                        LoginMaintain={loginMaintain}
+
+                        UserInfo={userInfo} User={userInfo == null ?
+                            null : userInfo.loginState}
+
+                        UserCheck={user.login_state}
+
+                        UserNicknameCheck={user.nickname}
+
+                        UserNickname={userInfo == null ?
+                            null : userInfo.nickName}
+
+                        onSubmit={registerReComment}>
+
+                        <ReCommentArea>
+                            <ReCommentProfile>
+                                <CommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                            </ReCommentProfile>
+                            <ReCommentInputBox>
+                                <Editer2
+                                    placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
+                                    value={reCommentChangeValue}
+                                    onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
+                                    modules={modules}
+                                    formats={formats}>
+                                </Editer2>
+                            </ReCommentInputBox>
+                        </ReCommentArea>
+                        <ReCommentBtnBox>
+                            <CancelBtn type="button" onClick={() => { setOnReplyBtn(!onReplyBtn) }}>취소</CancelBtn>
+                            <ReCommentBtn>댓글 쓰기</ReCommentBtn>
+                        </ReCommentBtnBox>
+                    </ReCommentForm>
+                    )}
                     <ReCommentBox reCommentHide={reCommentHide}>
                         {ReComments.length > 0 &&
                             ReComments.map(ReComment => {
@@ -815,6 +777,7 @@ const SingleReply = ({
                                         addReComment={addReComment}
                                         editReComment={editReComment}
                                         deleteReComment={deleteReComment}
+                                        setReCommentHide={setReCommentHide}
 
                                         setReDeleteMode={setModalReCommenterdeleteMode}
                                         RedeleteMode={ModalReCommenterdeleteMode}
@@ -1189,7 +1152,7 @@ const DeleteReply = styled.div
 
 const ReCommentSector = styled.div
     `
-    display: ${props => props.View === 0 ? "none" : "block"};
+    
     margin: 0px 12px 40px 12px;
     padding: 0px 6px 0px 30px;
     border-left: solid 3px ${props => props.theme.textColor};

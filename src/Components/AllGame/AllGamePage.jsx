@@ -147,8 +147,8 @@ const AllGamePage = () => {
             const SearchResult = Slide.filter((board) =>
                 SearchFillText === "제목" ?
                 board.title.toUpperCase().includes(Search.toUpperCase()) :
-                SearchFillText === "내용" ?
-                board.content.toUpperCase().includes(Search.toUpperCase()) :
+                SearchFillText === "개발자" ?
+                board.developer.toUpperCase().includes(Search.toUpperCase()) :
                 board.title.toUpperCase().includes(Search.toUpperCase())
             );
 

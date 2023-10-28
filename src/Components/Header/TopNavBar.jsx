@@ -678,7 +678,7 @@ const HeaderBox = () => {
                                                     onClick={() => [setProfileMenuShow(!ProfileMenuShow),
                                                     setProfileClickCheck(!ProfileClickCheck)]}
                                                 >
-                                                    <DropdownImg src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`: user.login_state === null ? User :`${ip}/Users/profileImg/${user.nickname}`}/>
+                                                    <DropdownImg src={loginMaintain==null ? User : loginMaintain=="true" ?`${ip}/Users/profileImg/${userInfo.nickName}`: user==null ? User : user.login_state == null ? User :`${ip}/Users/profileImg/${user.nickname}`}/>
                                                     <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
                                                 </Profileli>    
                                             </Link>
@@ -788,8 +788,8 @@ const HeaderBox = () => {
                         <SubNavMenu LineCheck={BackgroundLine}>
                             <GameSubNav display={isGameTabCheck} TopBack={scrollPosition}>
                                 <Link to='/'><SubNavText>홈</SubNavText></Link>
-                                <Link to='/AllGamePage'><SubNavText>인디게임</SubNavText></Link>
                                 <Link to='/OfficialGame'><SubNavText>공식게임</SubNavText></Link>
+                                <Link to='/AllGamePage'><SubNavText>인디게임</SubNavText></Link>
                             </GameSubNav>
                             <ShopSubNav display={isShopTabCheck} TopBack={scrollPosition}>
                                 <Link to='/'><SubNavText>홈</SubNavText></Link>

@@ -80,7 +80,7 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
         if (checkList === "욕설/비방 신고") {
             axios.post(`${ip}/Reports/article/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                writer: writer,
+                author: writer,
                 regdate: regdate,
                 report: "abuse"
             },
@@ -111,7 +111,7 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
                 else if(data==0){
                     axios.post(`${ip}/Reports/article/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        writer: writer,
+                        author: writer,
                         regdate: regdate,
                         report: "abuse"
                     }, {
@@ -159,7 +159,7 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
         } else if (checkList === "음란물 신고") {
             axios.post(`${ip}/Reports/article/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                writer: writer,
+                author: writer,
                 regdate: regdate,
                 report: "lewd"
             },
@@ -190,7 +190,7 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
                 else if(data==0){
                     axios.post(`${ip}/Reports/article/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        writer: writer,
+                        author: writer,
                         regdate: regdate,
                         report: "lewd"
                     }, {
@@ -237,7 +237,7 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
 
             axios.post(`${ip}/Reports/article/free/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                writer: writer,
+                author: writer,
                 regdate: regdate,
                 report: "incoporate"
             },
@@ -268,9 +268,9 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
                 else if(data==0){
                     axios.post(`${ip}/Reports/article/free/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        writer: writer,
+                        author: writer,
                         regdate: regdate,
-                        report: "lewd"
+                        report: "incoporate"
                     }, {
                         headers: {
                             Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
@@ -462,6 +462,7 @@ const ReportFormText = styled.span
 
 const SubmitBox = styled.form
     `
+    color: black;
 
 `
 

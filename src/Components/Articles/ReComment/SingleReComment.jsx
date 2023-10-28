@@ -42,6 +42,7 @@ const SingleReComment = ({
     editReComment,
     deleteReComment,
     setReDeleteMode,
+    setReCommentHide,
     RedeleteMode,
     setModalreCommenter,
     setModalreCommentId,
@@ -50,9 +51,9 @@ const SingleReComment = ({
     setModalToggleState
 }) => {
     const [id, setId] = useState(ReComment.id);
-    const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_replyer);
+    const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_author);
     const [originalRegdate, setOriginalRegdate] = useState(ReComment.original_regdate);
-    const [reCommenter, setReCommenter] = useState(ReComment.reCommenter);
+    const [reCommenter, setReCommenter] = useState(ReComment.author);
     const [content, setContent] = useState(ReComment.content);
     const [regdate, setRegdate] = useState(ReComment.regdate);
     const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
@@ -183,8 +184,11 @@ const SingleReComment = ({
 
     useEffect(() => {
         
-        const getReCommenterRole = (reCommenter) => {
-            axios.get(`${ip}/Users/role?nickname=${reCommenter}`, {
+        console.log("------------------대댓글 정보--------------------");
+        console.log(ReComment);
+
+        const getReCommenterRole = async (reCommenter) => {
+            await axios.get(`${ip}/Users/role?nickname=${reCommenter}`, {
 
             },
                 {
@@ -199,53 +203,55 @@ const SingleReComment = ({
 
         }
 
-        const getLikers = (reCommenter, regdate) => {
-            axios.get(`${ip}/Board/article/reply/reComment/likers?reCommenter=${reCommenter}&regdate=${regdate}`, {
+        const getLikes = async (reCommenter, regdate) => {
+            if(regdate != undefined){
+                await axios.get(`${ip}/Likes/reComment/free/likes?reCommenter=${reCommenter}&regdate=${regdate}`, {
 
-            },
-                {
+                },
+                    {
 
-                })
-                .then((res) => {
-                    return res.data;
-                })
-                .then((data) => {
-                    setLikecount(data.length);
-                    if (loginMaintain == "true") {
-                        if (userInfo != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == userInfo.nickName) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
+                    })
+                    .then((res) => {
+                        return res.data;
+                    })
+                    .then((data) => {
+                        setLikecount(data.length);
+                        if (loginMaintain == "true") {
+                            if (userInfo != null) {
+                                for (let i = 0; i < data.length; i++) {
+                                    if (data[i] == userInfo.nickName) {
+                                        likeMode.current = true;
+                                        break;
+                                    }
+                                    else {
+                                        likeMode.current = false;
+                                    }
                                 }
                             }
                         }
-                    }
-                    else if (loginMaintain == "false") {
-                        if (user.nickname != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == user.nickname) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
+                        else if (loginMaintain == "false") {
+                            if (user.nickname != null) {
+                                for (let i = 0; i < data.length; i++) {
+                                    if (data[i] == user.nickname) {
+                                        likeMode.current = true;
+                                        break;
+                                    }
+                                    else {
+                                        likeMode.current = false;
+                                    }
                                 }
                             }
                         }
-                    }
-                    else if (loginMaintain == null) {
-                        likeMode.current = false;
-                    }
-                })
+                        else if (loginMaintain == null) {
+                            likeMode.current = false;
+                        }
+                    })
+            }
         }
 
 
-        const getReComments = (replyer, regdate) => {
-            axios.get(`${ip}/Board/article/reply/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
+        const getReComments = async(replyer, regdate) => {
+            await axios.get(`${ip}/ReComments/free/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
 
             },
                 {
@@ -259,47 +265,24 @@ const SingleReComment = ({
                 })
         }
 
-        /*    axios.get(`${ip}/Board/article/reply/reComment?reCommenter=${ReComment.reCommenter}&regdate=${ReComment.regdate}`,
-               {
-   
-               },
-               {
-   
-               })
-               .then((res) => {
-                   return res.data;
-               })
-               .then((data) => {
-                   setOriginalReplyer(data.original_replyer);
-                   setOriginalRegdate(data.original_regdate);
-                   setReCommenter(data.reCommenter);
-                   setContent(data.content);
-                   setRegdate(data.regdate);
-                   setUpdatedate(data.updatedate);
-                   setReportMode(false);
-                   setUpdateReCommentText(data.content);
-                   setReCommentChangeValue("@" + data.reCommenter + "\n");
-   
-                   getReCommenterProfileImagePath(data.reCommenter);
-                   getReCommenterRole(data.reCommenter);
-                   getLikers(data.reCommenter, data.regdate);
-               });  */
 
         setId(ReComment.id);
         setModalToggleState2(toggleState2);
         setModalToggleState(toggleState);
-        setOriginalReplyer(ReComment.original_replyer);
+        setOriginalReplyer(ReComment.original_author);
         setOriginalRegdate(ReComment.original_regdate);
-        setReCommenter(ReComment.reCommenter);
+        setReCommenter(ReComment.author);
         setContent(ReComment.content);
         setRegdate(ReComment.regdate);
         setUpdatedate(ReComment.updatedate);
         setUpdateReCommentText(ReComment.content);
-        setReCommentChangeValue("@" + ReComment.reCommenter + "\n");
+        setReCommentChangeValue("@" + ReComment.author + "\n");
 
-        getReCommenterRole(ReComment.reCommenter);
-        getLikers(ReComment.reCommenter, ReComment.regdate);
-        getReComments(ReComment.original_replyer, ReComment.original_regdate);
+        getReCommenterRole(ReComment.author);
+        getReComments(ReComment.original_author, ReComment.original_regdate);
+
+        
+        getLikes(ReComment.author, ReComment.regdate);
 
         setReCommentStatusDivHide(false);
 
@@ -311,9 +294,9 @@ const SingleReComment = ({
 
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Board/article/reply/reComment/like/`, {
+        await axios.post(`${ip}/Likes/reComment/free/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            reCommenter: reCommenter,
+            author: reCommenter,
             regdate: regdate,
         },
             {
@@ -334,7 +317,7 @@ const SingleReComment = ({
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Board/article/reply/reComment/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}`,
+            await axios.delete(`${ip}/Likes/reComment/free/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
@@ -355,10 +338,10 @@ const SingleReComment = ({
         e.preventDefault();
 
         if (reCommentChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply/reComment`, {
-                original_replyer: originalReplyer,
+            await axios.post(`${ip}/ReComments/free/reComment`, {
+                original_author: originalReplyer,
                 original_regdate: originalRegdate,
-                reCommenter: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
             },
                 {
@@ -369,31 +352,13 @@ const SingleReComment = ({
                     return res.data;
                 })
                 .then((data) => {
+                    addReComment(data, ReComments);
                     setToggleState2(!toggleState2);
                     setToggleState(!toggleState);
-                    addReComment(data, ReComments);
                     setOnReplyBtn(false);
                     setReCommentCount(reCommentCount + 1);
                     setReCommentChangeValue('<p><br></p>');
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            }
-                            )
-                            .then((data) => {
-                                dispatch(point(data));
-                            });
-                    }
-
-                    pointUp();
+                    dispatch(point(user.point + 5));
                 })
 
         }
@@ -408,7 +373,7 @@ const SingleReComment = ({
     const updateReComment = async (e) => {
         e.preventDefault();
         if (updateReCommentText !== '<p><br></p>') {
-            await axios.patch(`${ip}/Board/article/reply/reComment?reCommenter=${reCommenter}&regdate=${regdate}`,
+            await axios.patch(`${ip}/ReComments/free/reComment?reCommenter=${reCommenter}&regdate=${regdate}`,
                 {
                     content: updateReCommentText,
                 },
