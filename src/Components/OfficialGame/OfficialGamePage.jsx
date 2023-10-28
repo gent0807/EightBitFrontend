@@ -21,123 +21,67 @@ const OfficialGamePage = () => {
         <OfficialGameAllBox>
             <OfficialGameBox>
 
-            <Link to={`/GameInformationView/${GameInformaion[0].id}`} onClick={() => ScrollTop()}>
+
                 <OfficialGame1>
-                    <OfficialGame1imgBox>
-                        <OfficialGame1img src={GameInformaion[0].img} />
+                    <Link to={`/GameInformationView/${GameInformaion[0].id}`} onClick={() => ScrollTop()}>
+                        <OfficialGame1imgBox>
+                            <OfficialGame1img src={GameInformaion[0].thumbnailImg} />
 
-                        <OfficialGame1InformaitonBox />
+                            <OfficialGame1InformaitonBox />
 
-                    </OfficialGame1imgBox>
+                        </OfficialGame1imgBox>
+                    </Link>
                 </OfficialGame1>
-            </Link>
 
-            <Link to={`/GameInformationView/${GameInformaion[1].id}`} onClick={() => ScrollTop()}>
                 <OfficialGame2>
-                    <OfficialGame2imgBox>
-                        <OfficialGame2img src={GameInformaion[1].img} />
+                    <Link to={`/GameInformationView/${GameInformaion[1].id}`} onClick={() => ScrollTop()}>
+                        <OfficialGame2imgBox>
+                            <OfficialGame2img src={GameInformaion[1].thumbnailImg} />
 
-                        <OfficialGame2InformaitonBox />
+                            <OfficialGame2InformaitonBox />
 
-                    </OfficialGame2imgBox>
+                        </OfficialGame2imgBox>
+                    </Link>
                 </OfficialGame2>
-            </Link>
 
-            <Link to={`/GameInformationView/${GameInformaion[2].id}`} onClick={() => ScrollTop()}>
                 <OfficialGame3>
-                    <OfficialGame3imgBox>
-                        <OfficialGame3img src={GameInformaion[2].img} />
+                    <Link to={`/GameInformationView/${GameInformaion[2].id}`} onClick={() => ScrollTop()}>
+                        <OfficialGame3imgBox>
+                            <OfficialGame3img src={GameInformaion[2].thumbnailImg} />
 
-                        <OfficialGame3InformaitonBox />
+                            <OfficialGame3InformaitonBox />
 
-                    </OfficialGame3imgBox>
+                        </OfficialGame3imgBox>
+                    </Link>
                 </OfficialGame3>
-            </Link>
+
 
             </OfficialGameBox>
+
+            <GradientBox />
+
         </OfficialGameAllBox>
     );
 }
 
 export default OfficialGamePage;
 
-const InformaionAllBox = styled.div
-    `
-    padding: 23vh 0px 0px 0px;
-    a{
-        text-decoration: none;
-    }
+const GradientBox = styled.div
 `
-
-const OfficialBtnBox = styled.div
-    `
-    display: flex;
-    justify-content: center;
-    margin: 4vw 0px 4vw 0px;
-`
-
-const VideoInformationBtn = styled.div
-    `
-    display: flex;
-    background: #007aff;
-    padding: 0.6vw;
-    white-space: nowrap;
-    border-radius: 5px;
-    margin: 0px 0px 0px 20px;
-`
-
-const VideoInformationBtnIcon = styled.i
-    `
-    display: flex;
-    align-items: center;
-    font-size: 2.4vw;
-    svg
-    {
-        color: white;
-    }
-`
-
-const VideoInformationBtnText = styled.div
-    `
-    color: white;
-    font-size: 2vw;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 9px 0px 6px 10px;
-`
-
-const VideoDownloadBtn = styled.div
-    `
-    display: flex;
-    background: #007aff;
-    padding: 0.6vw;
-    white-space: nowrap;
-    border-radius: 5px;
-`
-
-const VideoDownloadBtnIcon = styled.i
-    `
-    display: flex;
-    align-items: center;
-    font-size: 2.4vw;
-    svg
-    {
-        color: white;
-    }
-`
-
-const VideoDownloadBtnText = styled.span
-    `
-    color: white;
-    font-size: 2vw;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 9px 0px 6px 10px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50vw;
+    z-index: 999;
+    pointer-events: none; 
+    background-image: linear-gradient(to top, rgba(25,25,25,1) -1%, transparent 30%);
 `
 
 const OfficialGame1InformaitonBox = styled.div
     `
-    position: fixed;
+    position: absolute;
     width: 33.4vw;
     height: 100%;
     top: 0;
@@ -147,65 +91,11 @@ const OfficialGame1InformaitonBox = styled.div
     opacity: 1;
 `
 
-const OfficialInforTextBox = styled.div
-    `
-    display: flex;
-    justify-content: center;
-`
-
-const OfficialIntroduceBox = styled.div
-    `
-    display: flex;
-    justify-content: center;
-    margin: 2vw 0px 2vw 0px;
-`
-
-const OfficialIntroduceText = styled.span
-    `
-    font-size: 3vw;
-    font-weight: bold;
-    color: white;
-`
-
-const OfficialInforText = styled.span
-    `
-     color: white;
-     font-size: 1.5vw;
-     font-weight: bold;
-`
-
-const OfficialInforImgBox = styled.div
-    `
-    display: flex;
-    justify-content: center;
-`
-
-const OfficialGame1Inforimg = styled.img
-    `
-    width: 20vw;
-    height: 30vh;
-    border-radius: 17px;
-`
-
-const OfficialGame2Inforimg = styled.img
-    `
-    width: 20vw;
-    height: 30vh;
-    border-radius: 17px;
-`
-
-const OfficialGame3Inforimg = styled.img
-    `
-    width: 20vw;
-    height: 30vh;
-    border-radius: 17px;
-`
-
 const OfficialGame2InformaitonBox = styled.div
     `
-    position: fixed;
+    position: absolute;
     width: 33.4vw;
-    height:100%;
+    height: 100%;
     top: 0;
     bottom: 0;
     background: rgba(0,0,0,0.5);
@@ -215,9 +105,9 @@ const OfficialGame2InformaitonBox = styled.div
 
 const OfficialGame3InformaitonBox = styled.div
     `
-    position: fixed;
+    position: absolute;
     width: 33.4vw;
-    height:100%;
+    height: 100%;
     top: 0;
     bottom: 0;
     right: 0;
@@ -227,27 +117,24 @@ const OfficialGame3InformaitonBox = styled.div
 `
 const OfficialGame1img = styled.img
     `
-    position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     transform: scale(1);
     transition: transform 0.5s;
 `
 
 const OfficialGame2img = styled.img
     `
-    position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     transform: scale(1);
     transition: transform 0.5s;
 `
 
 const OfficialGame3img = styled.img
     `
-    position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     transform: scale(1);
     transition: transform 0.5s;
 `
@@ -255,9 +142,12 @@ const OfficialGame3img = styled.img
 const OfficialGame1 = styled.div
     `
     width: 100%;
-    height: 100vh;
+    height: 50vw;
     overflow: hidden;
     cursor: pointer;
+    a{
+            text-decoration: none;
+        }
     &:hover{
         ${OfficialGame1InformaitonBox}{
             transition: opacity 0.5s ease;
@@ -273,10 +163,13 @@ const OfficialGame1 = styled.div
 const OfficialGame2 = styled.div
     `
     width: 100%;
-    height: 100vh;
+    height: 50vw;
     overflow: hidden;
     position: relative;
     cursor: pointer;
+    a{
+            text-decoration: none;
+        }
     &:hover{
         ${OfficialGame2InformaitonBox}{
             transition: opacity 0.5s ease;
@@ -291,9 +184,12 @@ const OfficialGame2 = styled.div
 const OfficialGame3 = styled.div
     `
     width: 100%;
-    height: 100vh;
+    height: 50vw;
     overflow: hidden;
     cursor: pointer;
+    a{
+        text-decoration: none;
+    }
     &:hover{
         ${OfficialGame3InformaitonBox}{
             transition: opacity 0.5s ease;
@@ -313,24 +209,24 @@ const OfficialGameAllBox = styled.div
 const OfficialGameBox = styled.div
     `
         display: flex;
-        a{
-            text-decoration: none;
-        }
+        position: relative;
+        background: rgba(25,25,25,1);
     `
 
 
 const OfficialGame1imgBox = styled.div
     `
+        position: relative;
     `
 
 const OfficialGame2imgBox = styled.div
     `
-    
+        position: relative;
     `
 
 const OfficialGame3imgBox = styled.div
     `
-    
+         position: relative;
     `
 
 

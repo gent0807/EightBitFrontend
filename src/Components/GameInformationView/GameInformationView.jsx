@@ -327,7 +327,7 @@ const GameInformationView = () => {
     return (
         <GameViewBackground>
             <BackgroundEffect />
-            <GameViewBackgroundImg src={GameInformaion[0].BackgroundImg} />
+            <GameViewBackgroundImg src={GameInformaion[0].backgroundImg} />
 
             <GameViewAllBox>
                 <GameTitleAllBox>
@@ -341,13 +341,13 @@ const GameInformationView = () => {
                 <GameInformaionAllBox>
                     <GameAllBox>
                         <GameInformaionImgBox>
-                            <GameInformaionImg src={GameInformaion[0].InformaionImg} />
+                            <GameInformaionImg src={GameInformaion[0].mainImg} />
                         </GameInformaionImgBox>
 
                         <GameIntroduceBox>
                             <GameExplanationText>게임 설명</GameExplanationText>
                             <GameExplanation>
-                                {GameInformaion[0].informaion}
+                                {GameInformaion[0].explanation}
                             </GameExplanation>
                         </GameIntroduceBox>
 

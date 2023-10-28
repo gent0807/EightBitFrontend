@@ -15,8 +15,6 @@ const Main = () => {
 
 
   const isDarkmode = useRecoilValue(isDark);
-
-  console.log(isDarkmode)
   
   return (
     <ThemeProvider theme={isDarkmode ? darkTheme : lightTheme}>

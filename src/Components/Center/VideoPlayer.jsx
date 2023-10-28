@@ -32,6 +32,10 @@ const VideoPlayler = () => {
 
     const swiperParams =
     {
+        centeredSlides: true,
+        loopAdditionalSlides: 2,
+        loop: true,
+        effect: "coverflow",
         navigation: { prevEl: navPrevRef.current, nextEl: navNextRef.current },
 
         pagination: {
@@ -43,7 +47,7 @@ const VideoPlayler = () => {
         autoplay: {
             delay: 20000,
             disableOnInteraction: false,
-          },
+        },
 
         onBeforeInit: (swiper) => {
             swiper.params.navigation.prevEl = navPrevRef.current;
@@ -58,7 +62,7 @@ const VideoPlayler = () => {
 
         coverflowEffect: {
             rotate: 20,
-            stretch: 10,
+            stretch: 6,
             depth: 115,
             modifier: 1,
             scale: 1,
@@ -70,13 +74,9 @@ const VideoPlayler = () => {
                 spaceBetween: 30,
                 slidesPerView: 1,
             },
-            561: {
+            600: {
                 spaceBetween: 30,
-                slidesPerView: 2,
-            },
-            794: {
-                spaceBetween: 30,
-                slidesPerView: 3,
+                slidesPerView: 4,
             },
             1342: {
                 spaceBetween: 30,
@@ -84,12 +84,6 @@ const VideoPlayler = () => {
             }
         },
 
-        spaceBetween: 30,
-        slidesPerView: 4,
-        centeredSlides: true,
-        loopAdditionalSlides: 1,
-        loop: true,
-        effect: "coverflow",
     }
 
     function NextSlide() {
@@ -112,7 +106,7 @@ const VideoPlayler = () => {
 
                     <VideoInformationTextBox>
                         <VideoInformationText>
-                            {Slide[mainImageIndex].informaion}
+                            {Slide[mainImageIndex].information}
                         </VideoInformationText>
                     </VideoInformationTextBox>
 
@@ -142,7 +136,7 @@ const VideoPlayler = () => {
 
                 </VideoInformation>
                 <VideoViewBox ref={setSwiper}>
-                    {Slide[mainImageIndex].video === "" ? <VideoImg src={Slide[mainImageIndex].BackgroundImg} /> :
+                    {Slide[mainImageIndex].video === "" ? <VideoImg src={Slide[mainImageIndex].backgroundImg} /> :
                         <VideoPlay
                             url={Slide[mainImageIndex].video}
                             loop={false}
@@ -169,22 +163,17 @@ const VideoPlayler = () => {
             </VideoBox>
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, img, informaion, title }) => (
+                    {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, thumbnailImg }) => (
                         <SwiperSlide key={id}>
-                            <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
-                                <SlideAllBox>
-                                    <SlideBox>
-                                        <ImgBox src={img} />
-                                    </SlideBox>
-
-                                    <AllBox>
-                                        <InformaionBoxTextBox>
-                                            <TitleBox>{title}</TitleBox>
-                                            <InformaionBox>{informaion}</InformaionBox>
-                                        </InformaionBoxTextBox>
-                                    </AllBox>
-                                </SlideAllBox>
-                            </Link>
+                            <VideoSlideBox>
+                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
+                                    <SlideAllBox>
+                                        <SlideBox>
+                                            <ImgBox src={thumbnailImg} />
+                                        </SlideBox>
+                                    </SlideAllBox>
+                                </Link>
+                            </VideoSlideBox>
                         </SwiperSlide>
                     ))}
                 </Slider>
@@ -199,6 +188,11 @@ const VideoPlayler = () => {
 }
 
 export default VideoPlayler
+
+const VideoSlideBox = styled.div
+    `
+    
+`
 
 const MuteBtnBox = styled.div
     `
@@ -272,7 +266,6 @@ const VideoInformationDownLoadBtnBox = styled.div
     display: flex;
     margin: 2vw 0px 0px 0px;
     justify-content: start;
-    width: 400px;
 
     a
     {
@@ -331,6 +324,7 @@ const VideoInformationLogo = styled.img
 
 const VideoInformationTextBox = styled.div
     `
+    margin: 2vw 0px 0px 0px;
     text-align: start;
 `
 
@@ -350,7 +344,7 @@ const VideoBox = styled.div
 const VideoInformation = styled.div
     `
     position: absolute;
-    top: 17vw;
+    top: 12vw;
     right: 3vw;
     width: 24vw;
     border-radius: 18px;
@@ -374,7 +368,8 @@ const Slider = styled(Swiper)
     padding: 0;
     z-index: 1;
     margin-bottom: 20px;
-    height: 382px;
+    height: 400px;
+    max-width: 850px;
 
     a{
         text-decoration: none;
@@ -479,7 +474,7 @@ const GameSlideBox = styled.div
 const ImgBox = styled.img
     `
     width: 100%;
-    height: 285px;
+    height: 100%;
 `
 
 const AllBox = styled.div

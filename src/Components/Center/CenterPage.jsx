@@ -10,8 +10,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import VideoPlayler from './VideoPlayer';
 import { Slide } from "../Game";
-import test6 from "../../img/MainSlide/test6.png";
-import test7 from "../../img/MainSlide/test7.png";
+import Banner1 from "../../img/mainSlide/banner/banner1.png";
+import Banner2 from "../../img/mainSlide/banner/banner2.png";
 
 SwiperCore.use([Navigation, Pagination, EffectCoverflow]);
 
@@ -39,15 +39,11 @@ const CenterPage = () => {
     const [AdSlide2, setAdSlide2] = useState([
         {
             id: 1,
-            img: test6,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
+            banner: Banner1,
         },
         {
             id: 2,
-            img: test7,
-            informaion: "질리지 않는 8비트 공식게임!",
-            title: "모험가키우기"
+            banner: Banner2,
         },
     ]);
 
@@ -66,7 +62,7 @@ const CenterPage = () => {
             swiper.navigation.update();
         },
         spaceBetween: 30,
-        slidesPerView: 5,
+        slidesPerView: 3,
         loop: true,
         loopAdditionalSlides: 1,
         onSwiper: setSwiper,
@@ -84,14 +80,6 @@ const CenterPage = () => {
                 spaceBetween: 30,
                 slidesPerView: 3,
             },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
-            1342: {
-                spaceBetween: 30,
-                slidesPerView: 5,
-            }
         },
     }
 
@@ -110,7 +98,7 @@ const CenterPage = () => {
             swiper.navigation.update();
         },
         spaceBetween: 30,
-        slidesPerView: 5,
+        slidesPerView: 3,
         loop: true,
         loopAdditionalSlides: 1,
         onSwiper: setSwiper,
@@ -128,14 +116,6 @@ const CenterPage = () => {
                 spaceBetween: 30,
                 slidesPerView: 3,
             },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
-            1342: {
-                spaceBetween: 30,
-                slidesPerView: 5,
-            }
         },
     }
 
@@ -154,7 +134,7 @@ const CenterPage = () => {
             swiper.navigation.update();
         },
         spaceBetween: 30,
-        slidesPerView: 5,
+        slidesPerView: 3,
         loop: true,
         loopAdditionalSlides: 1,
         onSwiper: setSwiper,
@@ -172,14 +152,6 @@ const CenterPage = () => {
                 spaceBetween: 30,
                 slidesPerView: 3,
             },
-            1060: {
-                spaceBetween: 30,
-                slidesPerView: 4,
-            },
-            1342: {
-                spaceBetween: 30,
-                slidesPerView: 5,
-            }
         },
     }
 
@@ -220,14 +192,14 @@ const CenterPage = () => {
                 <AdContainerBox>
                     <AdSlideBox>
                         <AdSlider {...AdSwiper2} ref={setSwiper}>
-                            {AdSlide2.length !== 0 && AdSlide2.map(({ id, img, informaion, title }) => (
+                            {AdSlide2.length !== 0 && AdSlide2.map(({ id, banner }) => (
                                 <SwiperSlide key={id}>
                                     <ImgAllBox>
                                         <GradiBox>
                                             <GradiLeft/>
                                             <GradiRight/>
                                         </GradiBox>
-                                        <ImgAdBox src={img} />
+                                        <ImgAdBox src={banner} />
                                     </ImgAllBox>
                                 </SwiperSlide>
                             ))}
@@ -246,18 +218,18 @@ const CenterPage = () => {
                     <PopTitleBox>Best of 8bit</PopTitleBox>
 
                     <Slider {...swiperParams} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title }) => (
                             <SwiperSlide key={id}>
                                 <Link to={`/GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
-                                            <ImgBox src={img} />
+                                            <ImgBox src={mainImg} />
                                         </SlideBox>
 
                                         <AllBox>
                                             <InformaionBoxTextBox>
                                                 <TitleBox>{title}</TitleBox>
-                                                <InformaionBox>{informaion}</InformaionBox>
+                                                <InformaionBox>{information}</InformaionBox>
                                             </InformaionBoxTextBox>
                                         </AllBox>
                                     </SlideAllBox>
@@ -275,18 +247,22 @@ const CenterPage = () => {
                     <PopTitleBox>최신 인디게임</PopTitleBox>
 
                     <Slider {...swiperParams2} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).slice(offset, limit).map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide
+                        .filter((game) => game.game === "인디게임")
+                        .sort((a, b) => new Date(b.regdate) - new Date(a.regdate))
+                        .slice(offset, limit)
+                        .map(({ id, mainImg, information, title }) => (
                             <SwiperSlide key={id}>
                                 <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
-                                            <ImgBox src={img} />
+                                            <ImgBox src={mainImg} />
                                         </SlideBox>
 
                                         <AllBox>
                                             <InformaionBoxTextBox>
                                                 <TitleBox>{title}</TitleBox>
-                                                <InformaionBox>{informaion}</InformaionBox>
+                                                <InformaionBox>{information}</InformaionBox>
                                             </InformaionBoxTextBox>
                                         </AllBox>
                                     </SlideAllBox>
@@ -308,18 +284,18 @@ const CenterPage = () => {
                     <PopTitleBox>인기판매 굿즈</PopTitleBox>
 
                     <Slider {...swiperParams3} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, img, informaion, title }) => (
+                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title }) => (
                             <SwiperSlide key={id}>
                                 <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
-                                            <ImgBox src={img} />
+                                            <ImgBox src={mainImg} />
                                         </SlideBox>
 
                                         <AllBox>
                                             <InformaionBoxTextBox>
                                                 <TitleBox>{title}</TitleBox>
-                                                <InformaionBox>{informaion}</InformaionBox>
+                                                <InformaionBox>{information}</InformaionBox>
                                             </InformaionBoxTextBox>
                                         </AllBox>
                                     </SlideAllBox>
@@ -484,7 +460,7 @@ const AllBox = styled.div
     justify-content: end;
     background: rgba(0,0,0,0.3);
     top: 0%;
-    height: 74.7%;
+    height: 60%;
     left: 0%;
     border-radius: 8px;
     width: 100%;
@@ -517,7 +493,7 @@ const ButtonBox = styled.div
     `
     display: flex;
     justify-content: center;
-    margin: -71px 0px 0px 0px;
+    margin: -133px 0px 0px 0px;
 `
 
 const AdButtonBox = styled(ButtonBox)
@@ -562,6 +538,7 @@ const GameSlideBox = styled.div
 
 const PopTitleBox = styled.h2
     `
+    margin: 70px 0px 15px 0px;
     color: ${props => props.theme.CenterTextColor};
     transition: color 0.5s;
 `
@@ -574,7 +551,7 @@ const SwiperBox = styled.div
 const ImgBox = styled.img
     `
     width: 100%;
-    height: 285px;
+    height: 100%;
 `
 
 const ImgAdBox = styled.img
@@ -639,7 +616,7 @@ const SlideBox = styled.div
     border-radius: 10px;
     overflow: hidden;
     transition: border 0.5s;
-    height: 285px;
+    height: 229px;
 `
 
 export default CenterPage;

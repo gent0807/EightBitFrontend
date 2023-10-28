@@ -215,18 +215,18 @@ const AllGamePage = () => {
             <BoardBox>
                 {SearchList.length === 0 && <NotPage />}
                 <BoardContentAllBox View={SearchList.length}>
-                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, title, content, img }) => (
+                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, title, information, mainImg }) => (
                        <BoardContentBox key={id}>
                            <Link to={`/GameInformationView/${id}`} onClick={() => ScrollTop()}>
                                <SlideAllBox>
                                    <SlideBox>
-                                       <ImgBox src={img} />
+                                       <ImgBox src={mainImg} />
                                    </SlideBox>
 
                                    <AllBox>
                                        <InformaionBoxTextBox>
                                            <TitleBox>{title}</TitleBox>
-                                           <InformaionBox>{content}</InformaionBox>
+                                           <InformaionBox>{information}</InformaionBox>
                                        </InformaionBoxTextBox>
                                    </AllBox>
                                </SlideAllBox>
@@ -290,13 +290,13 @@ const SlideBox = styled.div
     border-radius: 10px;
     overflow: hidden;
     transition: border 0.5s;
-    height: 285px;
+    height: 214px;
 `
 
 const ImgBox = styled.img
     `
     width: 100%;
-    height: 285px;
+    height: 100%;
 `
 
 const InformaionBoxTextBox = styled.div
@@ -355,7 +355,7 @@ const BoardContentNumber = styled.div
 const BoardContentAllBox = styled.div
     `
     display: ${ props => props.View === 0 ? "none" : "grid"};
-    grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(380px,1fr));
     grid-gap: 30px;
 `
 

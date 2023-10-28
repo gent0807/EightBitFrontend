@@ -3,8 +3,9 @@ import OfficialGamePage from "./OfficialGamePage"
 
 let Containerbox = styled.div
     `
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(25,25,25,1);
 `
 
 const OfficialGameContainer = () =>
