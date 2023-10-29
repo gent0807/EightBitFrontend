@@ -279,7 +279,7 @@ const WriteBoard = () => {
                 fd.append("files", files[i].object);
             }
 
-            await axios.post(`${ip}/Board/article/shareFiles`, fd, {
+            await axios.post(`${ip}/Files/attach/article/free/files`, fd, {
                 headers: {
                     'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
                     'Content-Type': 'multipart/form-data'
@@ -316,7 +316,7 @@ const WriteBoard = () => {
         }
 
 
-        axios.post(`${ip}/Board/article`, {
+        axios.post(`${ip}/Articles/free/article`, {
             title: WriterChangeValue,
             content: EditerValue,
             writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,

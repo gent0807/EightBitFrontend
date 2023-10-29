@@ -280,7 +280,7 @@ const UpdateBoard = () => {
 
         const deleteFile = async (deleteFileList) => {
 
-            await axios.delete(`${ip}/Board/article/shareFiles`,
+            await axios.delete(`${ip}/Files/attach/article/free/files`,
                 {
                     data: deleteFileList,
                     headers: {
@@ -309,7 +309,7 @@ const UpdateBoard = () => {
                 fd.append("files", files[i].object);
             }
 
-            await axios.post(`${ip}/Board/article/shareFiles`, fd, {
+            await axios.post(`${ip}/Files/attach/article/free/files`, fd, {
                 headers: {
                     'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
                     'Content-Type': 'multipart/form-data'
@@ -342,7 +342,7 @@ const UpdateBoard = () => {
         }
 
 
-        axios.patch(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
+        axios.patch(`${ip}/Articles/free/article?writer=${writer}&regdate=${regdate}`, {
             title: WriterChangeValue,
             content: EditerValue,
         },
