@@ -25,6 +25,7 @@ import Shop from "../../img/MySlide/store.png";
 import Update from "../../img/MySlide/update.png";
 import Logout from "../../img/MySlide/logout.png";
 
+import Upload from "../../img/BoardSlide/upload.png";
 import Essay from "../../img/BoardSlide/essay.png";
 import Discussion from "../../img/BoardSlide/discussion.png";
 import Strategy from "../../img/BoardSlide/strategy.png";
@@ -590,7 +591,7 @@ const HeaderBox = () => {
                                                             ref={ProfileRef}
                                                             onClick={() => ProfileMenuCheck()}
                                                         >
-                                                        <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
+                                                            <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
                                                         </Profile>,
 
                                                         <WriteBox
@@ -678,9 +679,9 @@ const HeaderBox = () => {
                                                     onClick={() => [setProfileMenuShow(!ProfileMenuShow),
                                                     setProfileClickCheck(!ProfileClickCheck)]}
                                                 >
-                                                    <DropdownImg src={loginMaintain==null ? User : loginMaintain=="true" ?`${ip}/Users/profileImg/${userInfo.nickName}`: user==null ? User : user.login_state == null ? User :`${ip}/Users/profileImg/${user.nickname}`}/>
+                                                    <DropdownImg src={loginMaintain == null ? User : loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : user == null ? User : user.login_state == null ? User : `${ip}/Users/profileImg/${user.nickname}`} />
                                                     <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
-                                                </Profileli>    
+                                                </Profileli>
                                             </Link>
 
                                             <Profileli
@@ -741,6 +742,7 @@ const HeaderBox = () => {
                                         zindex={writeMemuTopZIndex.current}
                                         default={isDefaultWriteScene}
                                         show={WriteMenuShow}
+                                        size={user.role}
                                     >
                                         <ProfileUl>
                                             <Link to="/WriteBoard">
@@ -777,6 +779,38 @@ const HeaderBox = () => {
                                                 <ProfileliText MediaLeft={"17px"}>게임 리뷰</ProfileliText>
                                             </Profileli>
 
+                                            {loginMaintain == null ?
+                                                <></> :
+                                                loginMaintain == "true" ?
+                                                    userInfo == null ?
+                                                        <></> :
+
+                                                        userInfo.loginState === "allok" ?
+                                                            user.role === "DEVELOPER" ?
+                                                                <Link to="/GameUploadPage">
+                                                                    <Profileli
+                                                                        padding="15px 0px 15px 13px"
+                                                                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                                                                    >
+                                                                        <DropdownImg src={Upload} />
+                                                                        <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
+                                                                    </Profileli>
+                                                                </Link> :
+                                                                <></> :
+                                                            <></> :
+                                                    user.login_state === "allok" ?
+                                                        user.role === "DEVELOPER" ?
+                                                            <Link to="/GameUploadPage">
+                                                                <Profileli
+                                                                    padding="15px 0px 15px 13px"
+                                                                    onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                                                                >
+                                                                    <DropdownImg src={Upload} />
+                                                                    <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
+                                                                </Profileli>
+                                                            </Link> :
+                                                            <></> :
+                                                        <></>}
                                         </ProfileUl>
                                     </WriteListBox>
                                 </ButtonBox>
@@ -1406,7 +1440,6 @@ const DropdownImg = styled.img
     `
     width: 34px;
     height: 34px;
-    border-radius: 22px;
 `
 
 const ProFileSlideDown = keyframes
@@ -1423,10 +1456,10 @@ const ProFileSlideDown = keyframes
 const WriterSlideDown = keyframes
     `
     0%{
-        height: 0px;
+        height: 0%;
     }
     100%{
-        height: 255px;
+        ${props => props.size === "DEVELOPER" ? "319px" : "255px"}
     }
 `
 
@@ -1454,13 +1487,18 @@ const FastListBox = styled(ProfileListBox)
     z-index: ${props => props.zindex ? 2 : 1};
 `
 
-const WriteListBox = styled(ProfileListBox)
+const WriteListBox = styled.div
     `
-    display: ${props => props.default ? "block" : "none"};
+    display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 194.9px;
-    height: ${props => props.show ? "255px" : "0px"};
+    margin: 59px 0px 0px 194.5px;
+    box-shadow: 0px 0px 0px ${props => props.show ? "3px" : "0px"} ${props => props.theme.borderColor};
+    background: white;
+    border-radius: 10px;
+    position: absolute;
+    height: ${props => props.show ? props.size === "DEVELOPER" ? "319px" : "255px" : "0px"};
     animation: ${props => props.show ? WriterSlideDown : "none"} 0.25s;
+    overflow: hidden;
     z-index: ${props => props.zindex ? 2 : 1};
 `
 

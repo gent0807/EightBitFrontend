@@ -1,14 +1,31 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import styled, { ThemeProvider } from "styled-components";
 
-const WirteFileModal = ({
+const GameUploadFileModal = ({
     setWriteFileModalOnOff,
     WriteFileModalOnOff,
-    ExtensionCheck,
-    ExtensionList,
-    FileSize,
+
+    PcExtensionCheck,
+    PcExtensionList,
+    MobileExtensionCheck,
+    MobileExtensionList,
+    MainImgExtensionCheck,
+    MainImgExtensionList,
+    BackgroundImgExtensionCheck,
+    BackgroundImgExtensionList,
+
+    pcfileSize,
+    mobilefileSize,
+    mainimgSize,
+    backgroundimgSize,
+
     MaxSize,
-    files,
+
+    pcfiles,
+    mobilefiles,
+    mainimgfiles,
+    backgroundimgfiles,
+
 }) => {
 
     return (
@@ -16,12 +33,26 @@ const WirteFileModal = ({
             <FileCheckModalAllBox>
                 <FileCheckBox>
                     <FileCheckText>
-                        {ExtensionList.indexOf(ExtensionCheck) > -1 || ExtensionCheck === "" ?
+                        {PcExtensionList.indexOf(PcExtensionCheck) === -1 ||
+                            PcExtensionCheck === "" ||
+                            MobileExtensionList.indexOf(MobileExtensionCheck) === -1 ||
+                            MobileExtensionCheck === "" ||
+                            MainImgExtensionList.indexOf(MainImgExtensionCheck) === -1 ||
+                            MainImgExtensionCheck === "" ||
+                            BackgroundImgExtensionList.indexOf(BackgroundImgExtensionCheck) === -1 ||
+                            BackgroundImgExtensionCheck === "" ?
                             "파일 업로드가 불가한 파일입니다!" :
-                            FileSize > MaxSize ?
+                            pcfileSize > MaxSize ||
+                                mobilefileSize > MaxSize ||
+                                mainimgSize > MaxSize ||
+                                backgroundimgSize > MaxSize ?
                                 "파일은 2GB 이내로 업로드 가능합니다!" :
-                                files.length >= 5 ?
-                                    "최대 5개 까지만 업로드 가능합니다!" : ""
+                                pcfiles.length >= 1 ||
+                                    mobilefiles.length >= 1 ||
+                                    mainimgfiles.length >= 1 ||
+                                    backgroundimgfiles >= 1 ?
+                                    "하나의 파일만 업로드 하세요!" :
+                                    ""
                         }
                     </FileCheckText>
                 </FileCheckBox>
@@ -37,7 +68,7 @@ const WirteFileModal = ({
     );
 }
 
-export default WirteFileModal;
+export default GameUploadFileModal;
 
 const FileChechBtnBox = styled.div
     `

@@ -1393,6 +1393,11 @@ const Editer = styled(ReactQuill)
         font-size: 20px;
     }
 
+    .ql-editor ol.ql-editor ul
+    {
+        color:${props => props.theme.textColor};
+    }
+
     .ql-snow .ql-picker.ql-expanded .ql-picker-options
     {
         display: block;
@@ -1462,6 +1467,11 @@ const Editer2 = styled(ReactQuill)
     
     .ql-editor.ql-blank::before{
         color: ${props => props.theme.textColor};
+    }
+    
+    .ql-editor ol.ql-editor ul
+    {
+        color:${props => props.theme.textColor};
     }
 
     .ql-editor
