@@ -199,7 +199,7 @@ const MuteBtnBox = styled.div
     position: absolute;
     top: 38vw;
     right: 3%;
-    z-index: 9999;
+    z-index: 999;
 `
 
 const VideoViewBox = styled.div

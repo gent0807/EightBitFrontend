@@ -535,7 +535,7 @@ const Editer = styled(ReactQuill)
         color:${props => props.theme.textColor};
     }
 
-    .ql-editor ol.ql-editor ul
+    .ql-editor ol, .ql-editor ul
     {
         color:${props => props.theme.textColor};
     }

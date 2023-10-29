@@ -1,64 +1,39 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import styled, { ThemeProvider } from "styled-components";
 
-const GameUploadFileModal = ({
-    setWriteFileModalOnOff,
-    WriteFileModalOnOff,
+const GameUploadBackgroundModal = ({
+    setGameUploadBackgroundModalOnOff,
+    GameUploadBackgroundModalOnOff,
 
-    PcExtensionCheck,
-    PcExtensionList,
-    MobileExtensionCheck,
-    MobileExtensionList,
-    MainImgExtensionCheck,
-    MainImgExtensionList,
     BackgroundImgExtensionCheck,
     BackgroundImgExtensionList,
 
-    pcfileSize,
-    mobilefileSize,
-    mainimgSize,
     backgroundimgSize,
 
-    MaxSize,
-
-    pcfiles,
-    mobilefiles,
-    mainimgfiles,
     backgroundimgfiles,
 
+    MaxSize
 }) => {
 
     return (
-        <FileCheckModalBackground OnOff={WriteFileModalOnOff}>
+        <FileCheckModalBackground OnOff={GameUploadBackgroundModalOnOff}>
             <FileCheckModalAllBox>
                 <FileCheckBox>
                     <FileCheckText>
-                        {PcExtensionList.indexOf(PcExtensionCheck) === -1 ||
-                            PcExtensionCheck === "" ||
-                            MobileExtensionList.indexOf(MobileExtensionCheck) === -1 ||
-                            MobileExtensionCheck === "" ||
-                            MainImgExtensionList.indexOf(MainImgExtensionCheck) === -1 ||
-                            MainImgExtensionCheck === "" ||
-                            BackgroundImgExtensionList.indexOf(BackgroundImgExtensionCheck) === -1 ||
+                        {
+                            BackgroundImgExtensionList.indexOf(BackgroundImgExtensionCheck) === -1 || 
                             BackgroundImgExtensionCheck === "" ?
                             "파일 업로드가 불가한 파일입니다!" :
-                            pcfileSize > MaxSize ||
-                                mobilefileSize > MaxSize ||
-                                mainimgSize > MaxSize ||
-                                backgroundimgSize > MaxSize ?
-                                "파일은 2GB 이내로 업로드 가능합니다!" :
-                                pcfiles.length >= 1 ||
-                                    mobilefiles.length >= 1 ||
-                                    mainimgfiles.length >= 1 ||
-                                    backgroundimgfiles >= 1 ?
-                                    "하나의 파일만 업로드 하세요!" :
-                                    ""
+                            backgroundimgSize > MaxSize ?
+                            "파일은 2GB 이내로 업로드 가능합니다!" :
+                            backgroundimgfiles.length >= 1 ?
+                            "하나의 파일만 업로드 해주세요!" : ""
                         }
                     </FileCheckText>
                 </FileCheckBox>
 
                 <FileChechBtnBox>
-                    <FileCheckBtn onClick={() => setWriteFileModalOnOff(!WriteFileModalOnOff)}>
+                    <FileCheckBtn onClick={() =>  setGameUploadBackgroundModalOnOff(!GameUploadBackgroundModalOnOff)}>
                         <FileBtnText>확인</FileBtnText>
                     </FileCheckBtn>
                 </FileChechBtnBox>
@@ -68,7 +43,7 @@ const GameUploadFileModal = ({
     );
 }
 
-export default GameUploadFileModal;
+export default GameUploadBackgroundModal;
 
 const FileChechBtnBox = styled.div
     `

@@ -1392,7 +1392,7 @@ const Editer = styled(ReactQuill)
         font-size: 20px;
     }
 
-    .ql-editor ol.ql-editor ul
+    .ql-editor ol, .ql-editor ul
     {
         color:${props => props.theme.textColor};
     }
