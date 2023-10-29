@@ -200,7 +200,7 @@ const GameUploadPage = () => {
         setPcExtensionCheck(PcExtensionCheck);
         const MaxSize = FileMaxSize;
 
-        if (pcfileSize > MaxSize) {
+        if (FileSize > MaxSize) {
             setGameUploadPcFileModalOnOff(true);
             return;
         }
@@ -852,7 +852,9 @@ const GameUploadPage = () => {
         }
     })
 
-    console.log(ExplanationValue.length);
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
     return (
         <WriterInputBox>
@@ -1200,7 +1202,7 @@ const GameUploadPage = () => {
 
 
                 <SubmitBtnBox>
-                    <Link to="/FreeBoard"><CancelBtn type="button">취소</CancelBtn></Link>
+                    <Link to="/" onClick={() => ScrollTop()}><CancelBtn type="button">취소</CancelBtn></Link>
                     <SubmitBtn type='submit'>등록</SubmitBtn>
                 </SubmitBtnBox>
 
