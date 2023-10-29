@@ -277,7 +277,7 @@ const FreeArticle = () => {
         }
 
         const getTotalCommentCount = async (writer, regdate) => {
-            await axios.get(`${ip}/Board/totalCommentCount?writer=${writer}&regdate=${regdate}`, {
+            await axios.get(`${ip}/Articles/free/totalCommentCount?writer=${writer}&regdate=${regdate}`, {
 
             },
                 {
@@ -308,7 +308,7 @@ const FreeArticle = () => {
         }
 
         const getAttachList = async (writer, regdate) => {
-            await axios.get(`${ip}/Board/article/attaches/${writer}/${regdate}`, {
+            await axios.get(`${ip}/Files/attach/article/free/attaches/${writer}/${regdate}`, {
 
             }, {
 
@@ -325,7 +325,7 @@ const FreeArticle = () => {
 
 
 
-        axios.get(`${ip}/Board/article?viewer=${loginMaintain=="true" ? userInfo.nickName : user.login_state=="allok" ? user.nickname : "" }&writer=${writer}&regdate=${regdate}&boardType=free`, {
+        axios.get(`${ip}/Articles/free/article?viewer=${loginMaintain=="true" ? userInfo.nickName : user.login_state=="allok" ? user.nickname : "" }&writer=${writer}&regdate=${regdate}&contentType=free`, {
 
         },
             {
@@ -845,7 +845,7 @@ const FreeArticle = () => {
                                             return (
                                                 <Floderli>
                                                     <FloderText>
-                                                        <DownloadLink href={`${ip}/Board/article/attach/${id}/${uploader}/${regdate}`}>{uploadFilename}</DownloadLink>
+                                                        <DownloadLink href={`${ip}/Files/attach/article/free/attach/${id}/${uploader}/${regdate}`}>{uploadFilename}</DownloadLink>
                                                     </FloderText>
                                                 </Floderli>
                                             );

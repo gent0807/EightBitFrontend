@@ -167,7 +167,7 @@ const FreeBoard = () => {
     }, [PostsSize.length, posts.length]);
 
     useEffect(() => {
-        axios.get(`${ip}/Board/articles`, {
+        axios.get(`${ip}/Articles/free/articles`, {
 
         },
             {
@@ -188,7 +188,7 @@ const FreeBoard = () => {
         e.preventDefault();
 
         if (Search === "") {
-            axios.get(`${ip}/Board/articles`, {
+            axios.get(`${ip}/Articles/free/articles`, {
 
             },
                 {
