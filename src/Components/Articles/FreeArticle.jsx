@@ -50,6 +50,7 @@ const FreeArticle = () => {
     const [writerRole, setWriterRole] = useState("");
     const [Fitter, setFitter] = useState("과거순");
     const [attachCount, setAttachCount] = useState(0);
+    const [totalCommentCount, setTotalCommentCount] = useState(0);
     const [attachmentes, setAttachmentes] = useState([]);
     const [reportMode, setReportMode] = useState(false);
     const [deleteMode, setDeleteMode] = useState(false);
@@ -99,7 +100,7 @@ const FreeArticle = () => {
     const loginMaintain = localStorage.getItem("loginMaintain");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
-    let totalCommentCount = useRef(0);
+    
 
     const [toggleState, setToggleState] = useRecoilState(toggle);
     const [toggleState2, setToggleState2] = useRecoilState(toggle2);
@@ -275,8 +276,8 @@ const FreeArticle = () => {
                 })
         }
 
-        const getReCommentCount = async (writer, regdate) => {
-            await axios.get(`${ip}/ReComments/free/reComments/count?writer=${writer}&regdate=${regdate}`, {
+        const getTotalCommentCount = async (writer, regdate) => {
+            await axios.get(`${ip}/Board/totalCommentCount?writer=${writer}&regdate=${regdate}`, {
 
             },
                 {
@@ -286,8 +287,7 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
-                    totalCommentCount.current = totalCommentCount.current + data;
-                    setReCommentCount(data);
+                   setTotalCommentCount(data);
                 })
         }
 
@@ -302,9 +302,8 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
-                    totalCommentCount.current = data.length;
                     setComments(data);
-                    getReCommentCount(writer, regdate);
+                    getTotalCommentCount(writer, regdate);
                 });
         }
 
@@ -326,7 +325,7 @@ const FreeArticle = () => {
 
 
 
-        axios.get(`${ip}/Board/article?viewer=${loginMaintain==null ? null : loginMaintain == "true" ? (userInfo.loginState=="allok" ? userInfo.nickName : (user==null ? null : (user.login_state =="allok" ? user.nickname: null))) :  (user==null ? null : (user.login_state =="allok" ? user.nickname: null))}&writer=${writer}&regdate=${regdate}&boardType=free`, {
+        axios.get(`${ip}/Board/article?viewer=${loginMaintain=="true" ? userInfo.nickName : user.login_state=="allok" ? user.nickname : "" }&writer=${writer}&regdate=${regdate}&boardType=free`, {
 
         },
             {
@@ -944,7 +943,7 @@ const FreeArticle = () => {
             <ReplyFillAllBox>
                 {Comments.length > 0 ?
                     <ReplyCountBox>
-                        총 {totalCommentCount.current}개 댓글
+                        총 {totalCommentCount}개 댓글
                     </ReplyCountBox> : ""}
 
                 <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
