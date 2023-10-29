@@ -1009,9 +1009,6 @@ const GameUploadPage = () => {
 
                     {mainimgfiles.length > 0 &&
                         <MainImgViewAllBox>
-                            <TagTextBox>
-                                <TagText>미리보기</TagText>
-                            </TagTextBox>
                             <MainImgView>
                                 <SlideBox>
                                     <ImgBox src={MainImgURL} />
@@ -1070,9 +1067,6 @@ const GameUploadPage = () => {
 
                     {backgroundimgfiles.length > 0 &&
                         <BackgroundImgViewAllBox>
-                            <TagTextBox>
-                                <TagText>미리보기</TagText>
-                            </TagTextBox>
                             <BackgroundImgViewBox>
                                 <BackgroundBox width={WindowLength}>
                                     <ImgBox src={BackgroundImgURL} />
@@ -1235,7 +1229,7 @@ const MainImgView = styled.div
     padding: 20px;
     margin: 0px 20px 30px 20px;
     border-radius: 20px;
-    border: solid 3px ${props => props.theme.borderColor};
+    border: none;
 `
 
 const BackgroundImgViewBox = styled(MainImgView)
