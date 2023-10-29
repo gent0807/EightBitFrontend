@@ -636,7 +636,8 @@ const HeaderBox = () => {
                                                         ref={WriteRef}
                                                     >
                                                         <WriteBoxText >글쓰기</WriteBoxText>
-                                                    </WriteBox>] :
+                                                    </WriteBox>]
+                                                     :
                                                     [<LineBox
                                                         onClick={() => ScrollTop()}
                                                         left={"20px"}
