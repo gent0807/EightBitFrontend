@@ -299,7 +299,7 @@ const SingleReComment = ({
 
         await axios.post(`${ip}/Likes/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            author: reCommenter,
+            master: reCommenter,
             regdate: regdate,
             contentType: contentType,
             depth: 3,

@@ -234,47 +234,49 @@ const Article = () => {
         }
 
         const getLikers = (writer, regdate, contentType) => {
-            axios.get(`${ip}/Likes/likes?master=${writer}&regdate=${regdate}&contentType=${contentType}&depth=1`, {
+           
+                    axios.get(`${ip}/Likes/likes?master=${writer}&regdate=${regdate}&contentType=${contentType}&depth=1`, {
 
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data;
-                })
-                .then(data => {
-                    setLikecount(data.length);
-                    if (loginMaintain == "true") {
-                        if (userInfo != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == userInfo.nickName) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
+                    },
+                        {
+        
+                        })
+                        .then(res => {
+                            return res.data;
+                        })
+                        .then(data => {
+                            setLikecount(data.length);
+                            if (loginMaintain == "true") {
+                                if (userInfo != null) {
+                                    for (let i = 0; i < data.length; i++) {
+                                        if (data[i] == userInfo.nickName) {
+                                            likeMode.current = true;
+                                            break;
+                                        }
+                                        else {
+                                            likeMode.current = false;
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
-                    else if (loginMaintain == "false") {
-                        if (user.nickname != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == user.nickname) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
+                            else if (loginMaintain == "false") {
+                                if (user.nickname != null) {
+                                    for (let i = 0; i < data.length; i++) {
+                                        if (data[i] == user.nickname) {
+                                            likeMode.current = true;
+                                            break;
+                                        }
+                                        else {
+                                            likeMode.current = false;
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
-                    else if (loginMaintain == null) {
-                        likeMode.current = false;
-                    }
-                })
+                            else if (loginMaintain == null) {
+                                likeMode.current = false;
+                            }
+                        })
+            
         }
 
         const getReCommentCount = async (writer, regdate) => {
@@ -293,20 +295,22 @@ const Article = () => {
         }
 
         const getComments = async (writer, regdate, contentType) => {
-            await axios.get(`${ip}/Comments/comments?original_author=${writer}&original_regdate=${regdate}&contentType=${contentType}&depth=2`, {
+          
+                    await axios.get(`${ip}/Comments/comments?original_author=${writer}&original_regdate=${regdate}&contentType=${contentType}&depth=2`, {
 
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data;
-                })
-                .then(data => {
-                    totalCommentCount.current = data.length;
-                    setComments(data);
-                    getReCommentCount(writer, regdate);
-                });
+                    },
+                        {
+        
+                        })
+                        .then(res => {
+                            return res.data;
+                        })
+                        .then(data => {
+                            totalCommentCount.current = data.length;
+                            setComments(data);
+                            getReCommentCount(writer, regdate);
+                        });
+            
         }
 
         const getAttachList = async (writer, regdate, contentType) => {
@@ -408,9 +412,11 @@ const Article = () => {
                 original_author: writer,
                 original_regdate: regdate,
                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                contentType: contentType,
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
+                contentType: contentType,
             };
             setComments([...Comments, newComment]);
             setReplyChangeValue("<p><br></p>");
@@ -425,6 +431,8 @@ const Article = () => {
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
+                contentType: contentType,
+
             };
             setComments([...Comments, newComment]);
             setReplyChangeValue("<p><br></p>");
@@ -444,6 +452,7 @@ const Article = () => {
                 content: replyChangeValue2,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
+                contentType: contentType,
             };
             setComments([...Comments, newComment]);
             setReplyChangeValue2('<p><br></p>');
@@ -458,6 +467,7 @@ const Article = () => {
                 content: replyChangeValue2,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
+                contentType: contentType,
             };
             setComments([...Comments, newComment]);
             setReplyChangeValue2('<p><br></p>');
@@ -958,7 +968,7 @@ const Article = () => {
             <ReplyFillAllBox>
                 {Comments.length > 0 ?
                     <ReplyCountBox>
-                        총 {totalCommentCount}개 댓글
+                        총 {totalCommentCount.current}개 댓글
                     </ReplyCountBox> : ""}
 
                 <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
@@ -1052,7 +1062,7 @@ const Article = () => {
                 {Comments.length > 0 &&
                     Comments.slice(offset, offset + limit).map(Comment => {
                         const commentId = Comment.id;
-                        console.log("여기를 주목하세용~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        
                         return (
                             <SingleReply
                                 key={commentId}

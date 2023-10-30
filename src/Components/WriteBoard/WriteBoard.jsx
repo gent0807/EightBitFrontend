@@ -321,11 +321,10 @@ const WriteBoard = () => {
         }
 
 
-        axios.post(`${ip}/Articles/article`, {
+        axios.post(`${ip}/Articles/article/${contentType}`, {
             title: WriterChangeValue,
             content: EditerValue,
             writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            contentType: contentType,
             depth: 1,
         },
             {

@@ -766,6 +766,16 @@ const HeaderBox = () => {
                                                 <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
                                             </Profileli>
                                             </Link>
+
+                                            <Link to="/WriteBoard/question">
+                                            <Profileli
+                                                padding="15px 0px 15px 13px"
+                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
+                                            >
+                                                <DropdownImg src={Discussion} />
+                                                <ProfileliText MediaLeft={"17px"}>질문게시판</ProfileliText>
+                                            </Profileli>
+                                            </Link>
                                             
                                             <Profileli
                                                 padding="15px 0px 15px 13px"
@@ -1501,7 +1511,7 @@ const WriteListBox = styled.div
     background: white;
     border-radius: 10px;
     position: absolute;
-    height: ${props => props.show ? props.size === "DEVELOPER" ? "319px" : "255px" : "0px"};
+    height: ${props => props.show ? props.size === "DEVELOPER" ? "377px" : "314px" : "0px"};
     animation: ${props => props.show ? WriterSlideDown : "none"} 0.25s;
     overflow: hidden;
     z-index: ${props => props.zindex ? 2 : 1};

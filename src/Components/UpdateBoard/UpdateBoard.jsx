@@ -346,10 +346,9 @@ const UpdateBoard = () => {
         }
 
 
-        axios.patch(`${ip}/Articles/article?writer=${writer}&regdate=${regdate}`, {
+        axios.patch(`${ip}/Articles/article/${contentType}/${writer}/${regdate}`, {
             title: WriterChangeValue,
             content: EditerValue,
-            contentType: contentType,
             depth: 1,
         },
             {

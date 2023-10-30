@@ -52,6 +52,7 @@ const SingleReply = ({
     setReplyDeleteMode,
     ReplyDeleteMode,
 }) => {
+    
     const [ModalReplyUpdateCommentOnOff, setModalReplyUpdateCommentOnOff] = useState(false);
     const [id, setId] = useState(Comment.id);
     const [replyer, setReplyer] = useState(Comment.author);
@@ -98,12 +99,8 @@ const SingleReply = ({
 
     const [ReComments, setReComments] = useState([]);
 
-    useEffect(() => {
 
-        console.log("------------------댓글 정보--------------------");
-        console.log(Comment);
-        
-        console.log("댓글 들어옴!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    useEffect(() => {
 
         const getReplyerRole = (replyer) => {
             axios.get(`${ip}/Users/role?nickname=${replyer}`, {
@@ -121,70 +118,80 @@ const SingleReply = ({
         }
 
         const getLikes = (replyer, regdate, contentType) => {
-        
-                axios.get(`${ip}/Likes/likes?master=${replyer}&regdate=${regdate}&contentType=${contentType}&depth=2`, {
+            if(regdate!=undefined){
+                if(contentType!=undefined){
+                    axios.get(`${ip}/Likes/likes?master=${replyer}&regdate=${regdate}&contentType=${contentType}&depth=2`, {
 
-                },
-                    {       
-    
-                    })
-                    .then((res) => {
-                        return res.data;
-                    })
-                    .then((data) => {
-                        setLikecount(data.length);
-                        if (loginMaintain == "true") {
-                            if (userInfo != null) {
-                                for (let i = 0; i < data.length; i++) {
-                                    if (data[i] == userInfo.nickName) {
-                                        likeMode.current = true;
-                                        break;
-                                    }
-                                    else {
-                                        likeMode.current = false;
-                                    }
-                                }
-                            }
-                        }
-                        else if (loginMaintain == "false") {
-                            if (user.nickname != null) {
-                                for (let i = 0; i < data.length; i++) {
-                                    if (data[i] == user.nickname) {
-                                        likeMode.current = true;
-                                        break;
-                                    }
-                                    else {
-                                        likeMode.current = false;
+                    },
+                        {       
+        
+                        })
+                        .then((res) => {
+                            return res.data;
+                        })
+                        .then((data) => {
+                            setLikecount(data.length);
+                            if (loginMaintain == "true") {
+                                if (userInfo != null) {
+                                    for (let i = 0; i < data.length; i++) {
+                                        if (data[i] == userInfo.nickName) {
+                                            likeMode.current = true;
+                                            break;
+                                        }
+                                        else {
+                                            likeMode.current = false;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        else if (loginMaintain == null) {
-                            likeMode.current = false;
-                        }
-                    })
-            
+                            else if (loginMaintain == "false") {
+                                if (user.nickname != null) {
+                                    for (let i = 0; i < data.length; i++) {
+                                        if (data[i] == user.nickname) {
+                                            likeMode.current = true;
+                                            break;
+                                        }
+                                        else {
+                                            likeMode.current = false;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (loginMaintain == null) {
+                                likeMode.current = false;
+                            }
+                        })
+                
+                }
+            }
+               
             
         }
 
         const getReComments = (author, regdate,contentType) => {
-            axios.get(`${ip}/Comments/comments?original_author=${author}&original_regdate=${regdate}&contentType=${contentType}&depth=3`, {
+            if(regdate!=undefined){
+                if(contentType!=undefined){
 
-            },
-                {
+                    axios.get(`${ip}/Comments/comments?original_author=${author}&original_regdate=${regdate}&contentType=${contentType}&depth=3`, {
 
-                })
-                .then((res) => {
-                    return res.data;
-                })
-                .then((data) => {
-                    
-                    //console.log("----------------------------------");
-                    //console.log("ReComment"+data.id);
-                    //console.log("----------------------------------");
-                    setReComments(data);
-                    setReCommentCount(data.length);
-                })
+                    },
+                        {
+        
+                        })
+                        .then((res) => {
+                            return res.data;
+                        })
+                        .then((data) => {
+                            
+                            //console.log("----------------------------------");
+                            //console.log("ReComment"+data.id);
+                            //console.log("----------------------------------");
+                            setReComments(data);
+                            setReCommentCount(data.length);
+                        })
+                }
+            }
+            
         }
 
         setId(Comment.id);
@@ -201,7 +208,6 @@ const SingleReply = ({
         setReplyStatusDivHide(false);
 
     }, [editComment, addComment, deleteComment, toggleState2]);
-
 
     const toolbarOptions = [
         ["link", "image", "video"],
@@ -299,7 +305,7 @@ const SingleReply = ({
 
         await axios.post(`${ip}/Likes/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            author: replyer,
+            master: replyer,
             regdate: regdate,
             contentType: contentType,
             depth: 2,
@@ -351,6 +357,7 @@ const SingleReply = ({
                 content: reCommentChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
+                contentType: contentType,
             };
             setReComments([...ReComments, newReComment]);
             setReCommentChangeValue('<p><br></p>');
@@ -365,6 +372,7 @@ const SingleReply = ({
                 content: reCommentChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
+                contentType: contentType,
             };
             setReComments([...ReComments, newReComment]);
             setReCommentChangeValue('<p><br></p>');
