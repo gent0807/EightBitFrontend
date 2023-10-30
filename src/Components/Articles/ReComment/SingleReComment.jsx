@@ -26,7 +26,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { clearLoginState, accessToken, point } from "../../Redux/User";
-import ReCommentReportModal from "./ReCommentReportModal";
+import ReportModal from "../ReportModal";
 import ReplyUpdateReCommentModal from "./ReplyUpdateReCommentModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -57,6 +57,9 @@ const SingleReComment = ({
     const [content, setContent] = useState(ReComment.content);
     const [regdate, setRegdate] = useState(ReComment.regdate);
     const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
+    const [contentType, setContentType] = useState(ReComment.contentType);
+    const [depth, setDepth] = useState(ReComment.depth);
+
     const [likecount, setLikecount] = useState(0);
     const [reCommenterRole, setReCommenterRole] = useState("");
     const [reportMode, setReportMode] = useState(false);
@@ -205,7 +208,7 @@ const SingleReComment = ({
 
         const getLikes = async (reCommenter, regdate) => {
             if(regdate != undefined){
-                await axios.get(`${ip}/Likes/reComment/free/likes?reCommenter=${reCommenter}&regdate=${regdate}`, {
+                await axios.get(`${ip}/Likes/likes?master=${reCommenter}&regdate=${regdate}&contentType=${contentType}&depth=3`, {
 
                 },
                     {
@@ -251,7 +254,7 @@ const SingleReComment = ({
 
 
         const getReComments = async(replyer, regdate) => {
-            await axios.get(`${ip}/ReComments/free/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
+            await axios.get(`${ip}/Comments/comments?original_author=${replyer}&original_regdate=${regdate}&contentType=${contentType}&depth=3`, {
 
             },
                 {
@@ -294,10 +297,12 @@ const SingleReComment = ({
 
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Likes/reComment/free/like`, {
+        await axios.post(`${ip}/Likes/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
             author: reCommenter,
             regdate: regdate,
+            contentType: contentType,
+            depth: 3,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -317,7 +322,7 @@ const SingleReComment = ({
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Likes/reComment/free/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}`,
+            await axios.delete(`${ip}/Likes/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${reCommenter}/${regdate}/${contentType}/3`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
@@ -338,11 +343,13 @@ const SingleReComment = ({
         e.preventDefault();
 
         if (reCommentChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/ReComments/free/reComment`, {
+            await axios.post(`${ip}/Comments/comment`, {
                 original_author: originalReplyer,
                 original_regdate: originalRegdate,
                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
+                contentType: contentType,
+                depth: 3,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -373,7 +380,7 @@ const SingleReComment = ({
     const updateReComment = async (e) => {
         e.preventDefault();
         if (updateReCommentText !== '<p><br></p>') {
-            await axios.patch(`${ip}/ReComments/free/reComment?reCommenter=${reCommenter}&regdate=${regdate}`,
+            await axios.patch(`${ip}/Comments/comment?replyer=${reCommenter}&regdate=${regdate}`,
                 {
                     content: updateReCommentText,
                 },
@@ -501,11 +508,13 @@ const SingleReComment = ({
     return (
         <UserReCommentBox id={id}>
 
-            <ReCommentReportModal
-                reCommenter={reCommenter}
-                regdate={regdate}
-                setReportMode={setReportMode}
+            <ReportModal
                 ReportMode={reportMode}
+                setReportMode={setReportMode}
+                master={reCommenter}
+                regdate={regdate}
+                contentType={contentType}
+                depth={depth}
             />
 
             <div style={{ display: isEditing === true ? "none" : "block" }}>

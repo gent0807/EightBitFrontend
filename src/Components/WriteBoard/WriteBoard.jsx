@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
 import { ImageDrop } from "quill-image-drop-module";
@@ -24,6 +24,8 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const WriteBoard = () => {
+    const { contentType } = useParams();
+    const { depth } = useParams();  
     const [WriterChangeValue, setWriterChangeValue] = useState("");
     const [EditerValue, setEditerValue] = useState("");
     const [isDragging, setIsDragging] = useState(false);
@@ -269,17 +271,21 @@ const WriteBoard = () => {
     }, [initDragEvents, resetDragEvents]);
 
     const OncheckSubmit = (e) => {
-        const registFile = async (writer, regdate) => {
+        const registFile = async (writer, regdate, contentType,depth) => {
             const fd = new FormData();
 
-            fd.append("writer", writer);
+            fd.append("uploader", writer);
             fd.append("regdate", regdate);
+            fd.append("contentType", contentType);
+            fd.append("storeType","attach");
+            fd.append("depth", depth);
+
 
             for (let i = 0; i < files.length; i++) {
                 fd.append("files", files[i].object);
             }
 
-            await axios.post(`${ip}/Files/attach/article/free/files`, fd, {
+            await axios.post(`${ip}/Files/files`, fd, {
                 headers: {
                     'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
                     'Content-Type': 'multipart/form-data'
@@ -290,7 +296,7 @@ const WriteBoard = () => {
                 })
                 .then((data) => {
                     dispatch(point(user.point + 10));
-                    navigate('/FreeArticle/'+writer+'/'+regdate);
+                    navigate('/Article/'+writer+'/'+regdate+'/'+contentType+'/'+depth);
                     return;
                 })
 
@@ -316,10 +322,12 @@ const WriteBoard = () => {
         }
 
 
-        axios.post(`${ip}/Articles/free/article`, {
+        axios.post(`${ip}/Articles/article`, {
             title: WriterChangeValue,
             content: EditerValue,
             writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+            contentType: contentType,
+            depth: depth,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -334,12 +342,12 @@ const WriteBoard = () => {
 
                 if (files.length == 0) {
                     dispatch(point(user.point + 10));
-                    navigate('/FreeArticle/'+writer+'/'+regdate)
+                    navigate('/Article/'+writer+'/'+regdate+'/'+contentType+'/'+depth);
                     return;
                 }
 
                 else if (files.length > 0) {
-                    registFile(writer, regdate);
+                    registFile(writer, regdate, contentType, depth);
                     return;
                 }
 

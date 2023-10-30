@@ -1,4 +1,4 @@
-import FreeBoard from "./FreeBoard";
+import Board from "./Board";
 import { useState, useRef, useEffect } from "react";
 import { styled } from "styled-components";
 
@@ -17,7 +17,7 @@ const Containerbox = styled.div`
 const BoardContainer = () => {
     return (
         <Containerbox>
-            <FreeBoard />
+            <Board />
         </Containerbox>
     );
 }

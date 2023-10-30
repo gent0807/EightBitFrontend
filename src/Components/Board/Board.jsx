@@ -7,7 +7,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import Pagination from "./Pagination";
 import { useRecoilState } from "recoil";
 import { firstReset } from "../Darkmode/Darkmode";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import NotPage from "./NotPage";
 import { BiLogoDevTo } from "react-icons/bi";
 import { useSelector } from "react-redux";
@@ -19,6 +19,8 @@ import { BsHandThumbsUp } from "react-icons/bs";
 import DOMPurify from "dompurify";
 
 const FreeBoard = () => {
+    const { contentType } = useParams();
+    const { depth } = useParams();
     const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
     const [SearchFillText, setSearchFillText] = useState("제목");
@@ -167,7 +169,7 @@ const FreeBoard = () => {
     }, [PostsSize.length, posts.length]);
 
     useEffect(() => {
-        axios.get(`${ip}/Articles/free/articles`, {
+        axios.get(`${ip}/Articles/articles?contentType=${contentType}`, {
 
         },
             {
@@ -188,7 +190,7 @@ const FreeBoard = () => {
         e.preventDefault();
 
         if (Search === "") {
-            axios.get(`${ip}/Articles/free/articles`, {
+            axios.get(`${ip}/Articles/articles?contentType=${contentType}`, {
 
             },
                 {
@@ -272,14 +274,14 @@ const FreeBoard = () => {
                     </LimitSelectAllBox>
 
                     <WriteBtn>{loginMaintain == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> : loginMaintain == "true" ? userInfo == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> :
-                        (userInfo.loginState === "allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to='/WriteBoard'><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}</WriteBtn>
+                        (userInfo.loginState === "allok" ? <Link to={`/WriteBoard/${contentType}/${depth}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to={`/WriteBoard/${contentType}/${depth}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}</WriteBtn>
                 </FitterBox>
             </SearchBox>
 
             <BoardBox>
                 {SearchList.length === 0 && <NotPage />}
                 <BoardContentAllBox>
-                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, writer, role, regdate, updatedate, visitcnt, reply_count, likecount, content }) => (
+                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, writer, role, regdate, updatedate, visitcnt, reply_count, likecount, content, contentType, depth }) => (
                         <BoardContentBox key={id}>
                             <ReplyCountAllBox>
                                 <ReplyCountBox>
@@ -313,9 +315,9 @@ const FreeBoard = () => {
                                 </ProfileAllBox>
 
                                 <BoardTitleContentAllBox>
-                                    <BoardContentTitle><Link to={`/FreeArticle/${writer}/${regdate}`}>{title}</Link></BoardContentTitle>
+                                    <BoardContentTitle><Link to={`/Article/${writer}/${regdate}/${contentType}/${depth}`}>{title}</Link></BoardContentTitle>
                                     <BoardCotent>
-                                        <Link to={`/FreeArticle/${writer}/${regdate}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} /></Link>
+                                        <Link to={`/Article/${writer}/${regdate}/${contentType}/${depth}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} /></Link>
                                     </BoardCotent>
                                 </BoardTitleContentAllBox>
                                 <ViewlikeAllBox>

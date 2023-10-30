@@ -4,10 +4,9 @@ import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 
-const FreeReportModal = ({ setReportMode, ReportMode }) => {
+const ReportModal = ({ setReportMode, ReportMode, master, regdate, contentType, depth}) => {
     const ip = localStorage.getItem("ip");
-    const { writer } = useParams();
-    const { regdate } = useParams();
+  
 
     const [RadioAbuseBtnOnOff, setRadioAbuseBtnOnOff] = useState(true);
     const [Radio19BtnOnOff, setRadio19BtnOnOff] = useState(false);
@@ -78,11 +77,13 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
         e.preventDefault();
 
         if (checkList === "욕설/비방 신고") {
-            axios.post(`${ip}/Reports/article/free/report/count`,{
+            axios.post(`${ip}/Reports/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                author: writer,
+                master: master,
                 regdate: regdate,
-                report: "abuse"
+                report: "abuse",
+                contentType: contentType,
+                depth: depth
             },
             {
                 headers: {
@@ -109,11 +110,13 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
                     );
                 }
                 else if(data==0){
-                    axios.post(`${ip}/Reports/article/free/report`, {
+                    axios.post(`${ip}/Reports/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        author: writer,
+                        master: master,
                         regdate: regdate,
-                        report: "abuse"
+                        report: "abuse",
+                        contentType: contentType,
+                        depth: depth
                     }, {
                         headers: {
                             Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
@@ -157,11 +160,13 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
 
             
         } else if (checkList === "음란물 신고") {
-            axios.post(`${ip}/Reports/article/free/report/count`,{
+            axios.post(`${ip}/Reports/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                author: writer,
+                master: master,
                 regdate: regdate,
-                report: "lewd"
+                report: "lewd",
+                contentType: contentType,
+                depth: depth
             },
             {
                 headers: {
@@ -188,11 +193,13 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
                     );
                 }
                 else if(data==0){
-                    axios.post(`${ip}/Reports/article/free/report`, {
+                    axios.post(`${ip}/Reports/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        author: writer,
+                        master: master,
                         regdate: regdate,
-                        report: "lewd"
+                        report: "lewd",
+                        contentType: contentType,
+                        depth: depth
                     }, {
                         headers: {
                             Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
@@ -235,11 +242,13 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
             })
         } else if (checkList === "게시판 부적합 신고") {
 
-            axios.post(`${ip}/Reports/article/free/report/count`,{
+            axios.post(`${ip}/Reports/report/count`,{
                 reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                author: writer,
+                master: master,
                 regdate: regdate,
-                report: "incoporate"
+                report: "incoporate",
+                contentType: contentType,
+                depth: depth
             },
             {
                 headers: {
@@ -266,11 +275,13 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
                     );
                 }
                 else if(data==0){
-                    axios.post(`${ip}/Reports/article/free/report`, {
+                    axios.post(`${ip}/Reports/report`, {
                         reporter: loginMaintain=="true" ? userInfo.nickName : user==null ? null : user.login_state=="allok" ? user.nickname:null,
-                        author: writer,
+                        master: master,
                         regdate: regdate,
-                        report: "incoporate"
+                        report: "incoporate",
+                        contentType: contentType,
+                        depth: depth
                     }, {
                         headers: {
                             Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`
@@ -384,7 +395,7 @@ const FreeReportModal = ({ setReportMode, ReportMode }) => {
     );
 };
 
-export default FreeReportModal;
+export default ReportModal;
 
 const CompleteBtnText = styled.span
     `

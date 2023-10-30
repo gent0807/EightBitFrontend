@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 
-const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id }) => {
+const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id , contentType, }) => {
     const ip = localStorage.getItem("ip");
     const [RadioAbuseBtnOnOff, setRadioAbuseBtnOnOff] = useState(true);
     const [Radio19BtnOnOff, setRadio19BtnOnOff] = useState(false);

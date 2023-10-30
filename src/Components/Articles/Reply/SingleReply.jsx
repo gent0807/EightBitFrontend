@@ -27,7 +27,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { clearLoginState, accessToken, point } from "../../Redux/User";
-import ReplyReportModal from "./ReplyReportModal"
+import ReportModal from "../ReportModal"
 import ReCommentDeleteModal from "../ReComment/ReCommentDeleteModal";
 import ReplyUpdateCommentModal from "./ReplyUpdateCommentModal";
 
@@ -57,6 +57,8 @@ const SingleReply = ({
     const [replyer, setReplyer] = useState(Comment.author);
     const [content, setContent] = useState(Comment.content);
     const [regdate, setRegdate] = useState(Comment.regdate);
+    const [contentType, setContentType] = useState(Comment.contentType);
+    const [depth, setDepth] = useState(Comment.depth);  
     const [updatedate, setUpdatedate] = useState(Comment.updatedate);
     const [likecount, setLikecount] = useState(0);
     const [replyerRole, setReplyerRole] = useState("");
@@ -117,9 +119,9 @@ const SingleReply = ({
                 })
         }
 
-        const getLikes = (replyer, regdate) => {
+        const getLikes = (replyer, regdate, contentType) => {
         
-                axios.get(`${ip}/Likes/comment/free/likes?replyer=${replyer}&regdate=${regdate}`, {
+                axios.get(`${ip}/Likes/likes?master=${replyer}&regdate=${regdate}&contentType=${contentType}&depth=2`, {
 
                 },
                     {       
@@ -164,8 +166,8 @@ const SingleReply = ({
             
         }
 
-        const getReComments = (replyer, regdate) => {
-            axios.get(`${ip}/ReComments/free/reComments?original_replyer=${replyer}&original_regdate=${regdate}`, {
+        const getReComments = (author, regdate,contentType) => {
+            axios.get(`${ip}/Comments/comments?original_author=${author}&original_regdate=${regdate}&contentType=${contentType}&depth=3`, {
 
             },
                 {
@@ -192,8 +194,8 @@ const SingleReply = ({
         setUpdatedate(Comment.updatedate);
         setUpdateReplyText(Comment.content);
         getReplyerRole(Comment.author);
-        getLikes(Comment.author, Comment.regdate);
-        getReComments(Comment.author, Comment.regdate);
+        getLikes(Comment.author, Comment.regdate, Comment.contentType);
+        getReComments(Comment.author, Comment.regdate, Comment.contentType);
 
         setReplyStatusDivHide(false);
 
@@ -294,10 +296,12 @@ const SingleReply = ({
 
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Likes/comment/free/like`, {
+        await axios.post(`${ip}/Likes/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
             author: replyer,
             regdate: regdate,
+            contentType: contentType,
+            depth: 2,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -317,7 +321,7 @@ const SingleReply = ({
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Likes/comment/free/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${replyer}/${regdate}`,
+            await axios.delete(`${ip}/Likes/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${replyer}/${regdate}/${contentType}/2`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
@@ -393,9 +397,11 @@ const SingleReply = ({
         e.preventDefault();
 
         if (updateReplyText !== '<p><br></p>') {
-            await axios.patch(`${ip}/Comments/free/comment?replyer=${replyer}&regdate=${regdate}`,
+            await axios.patch(`${ip}/Comments/comment?replyer=${replyer}&regdate=${regdate}`,
                 {
                     content: updateReplyText,
+                    contentType: contentType,
+                    depth: depth,   
                 },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -421,11 +427,14 @@ const SingleReply = ({
         e.preventDefault();
 
         if (reCommentChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/ReComments/free/reComment`, {
+            await axios.post(`${ip}/Comments/comment`, {
                 original_author: replyer,
                 original_regdate: regdate,
                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: reCommentChangeValue,
+                contentType: contentType,
+                depth: 3,
+
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -554,12 +563,13 @@ const SingleReply = ({
     return (
         <UserCommentBox id={id}>
 
-            <ReplyReportModal
-                replyer={replyer}
-                regdate={regdate}
+            <ReportModal
                 ReportMode={reportMode}
                 setReportMode={setReportMode}
-                id={key}
+                master={replyer}
+                regdate={regdate}
+                contentType={contentType}
+                depth={depth}
             />
 
             <div style={{ display: isEditing === true ? "none" : "block" }}>
@@ -718,12 +728,14 @@ const SingleReply = ({
                     deleteReComment={deleteReComment}
                     Commentid={ModalreCommentId}
                     reCommenter={ModalreCommenter}
-
+                
                     regdate={ModalreRegdate}
                     setToggleState2={setModalToggleState2}
                     toggleState2={ModalToggleState2}
                     setToggleState={setModalToggleState}
                     toggleState={ModalToggleState}
+                    contentType={contentType}
+                    depth={depth}   
                 />
 
                 <ReCommentSector>

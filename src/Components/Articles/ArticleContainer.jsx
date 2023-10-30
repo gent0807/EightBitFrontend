@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
-import FreeArticle from "./FreeArticle";
+import Article from "./Article";
 import { styled } from "styled-components";
 
 
@@ -20,14 +20,13 @@ let Containerbox = styled.div
     }
 `
 
-const FreeArticleContainer = () => {
+const ArticleContainer = () => {
 
     return (
         <Containerbox>
-            <FreeArticle 
-                />
+            <Article/>
         </Containerbox>
     );
 }
 
-export default FreeArticleContainer;
+export default ArticleContainer;

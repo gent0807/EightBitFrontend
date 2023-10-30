@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import { useSelector, useDispatch } from 'react-redux';
@@ -25,6 +25,8 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const UpdateBoard = () => {
+    const {contentType}=useParams();
+    const {depth}=useParams();
     const location = useLocation();
     const writer = location.state.writer;
     const regdate = location.state.regdate;
@@ -280,7 +282,7 @@ const UpdateBoard = () => {
 
         const deleteFile = async (deleteFileList) => {
 
-            await axios.delete(`${ip}/Files/attach/article/free/files`,
+            await axios.delete(`${ip}/Files/files`,
                 {
                     data: deleteFileList,
                     headers: {
@@ -298,18 +300,21 @@ const UpdateBoard = () => {
 
         }
 
-        const registFile = async (writer, regdate) => {
+        const registFile = async (writer, regdate, contentType, depth) => {
 
             const fd = new FormData();
 
             fd.append("writer", writer);
             fd.append("regdate", regdate);
+            fd.append("contentType", contentType);
+            fd.append("storeType", "attach")
+            fd.append("depth", depth);
 
             for (let i = 0; i < files.length; i++) {
                 fd.append("files", files[i].object);
             }
 
-            await axios.post(`${ip}/Files/attach/article/free/files`, fd, {
+            await axios.post(`${ip}/Files/files`, fd, {
                 headers: {
                     'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
                     'Content-Type': 'multipart/form-data'
@@ -342,9 +347,11 @@ const UpdateBoard = () => {
         }
 
 
-        axios.patch(`${ip}/Articles/free/article?writer=${writer}&regdate=${regdate}`, {
+        axios.patch(`${ip}/Articles/article?writer=${writer}&regdate=${regdate}`, {
             title: WriterChangeValue,
             content: EditerValue,
+            contentType: contentType,
+            depth: depth,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -369,12 +376,12 @@ const UpdateBoard = () => {
                 }
 
                 if (files.length == 0) {
-                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    navigate('/Article/' + writer + '/' + regdate+ '/' + contentType + '/' + depth);
                     return;
                 }
                 else if (files.length > 0) {
-                    registFile(writer, regdate);
-                    navigate('/FreeArticle/' + writer + '/' + regdate);
+                    registFile(writer, regdate, contentType, depth);
+                    navigate('/Article/' + writer + '/' + regdate+ '/' + contentType + '/' + depth);
                     return;
                 }
             })

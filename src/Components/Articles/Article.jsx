@@ -27,21 +27,23 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
 import { clearLoginState, accessToken, point } from "../Redux/User";
-import FreeReportModal from "./FreeReportModal";
+import ReportModal from "./ReportModal";
 import ReplyPagination from "./Reply/ReplyPagination";
 import DeleteModal from "./DeleteModal";
-import ReplyDeleteModal from "../Articles/Reply/ReplyDeleteModal";
+import ReplyDeleteModal from "./Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
-import FreeArticleReplyModal from "./FreeArticleReplyModal";
+import ArticleReplyModal from "./ArticleReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
 
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const FreeArticle = () => {
+const Article = () => {
     const { writer } = useParams();
     const { regdate } = useParams();
+    const { contentType } = useParams();
+    const { depth } = useParams();  
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [updatedate, setUpdatedate] = useState("");
@@ -50,7 +52,6 @@ const FreeArticle = () => {
     const [writerRole, setWriterRole] = useState("");
     const [Fitter, setFitter] = useState("과거순");
     const [attachCount, setAttachCount] = useState(0);
-    const [totalCommentCount, setTotalCommentCount] = useState(0);
     const [attachmentes, setAttachmentes] = useState([]);
     const [reportMode, setReportMode] = useState(false);
     const [deleteMode, setDeleteMode] = useState(false);
@@ -121,6 +122,7 @@ const FreeArticle = () => {
     const CommentSize = Comments.slice(offset, offset + limit);
 
     let likeMode = useRef(false);
+    let totalCommentCount = useRef(0);
 
     const toolbarOptions = [
         ["link", "image", "video"],
@@ -232,8 +234,8 @@ const FreeArticle = () => {
 
         }
 
-        const getLikers = (writer, regdate) => {
-            axios.get(`${ip}/Likes/article/free/likes?writer=${writer}&regdate=${regdate}`, {
+        const getLikers = (writer, regdate, contentType) => {
+            axios.get(`${ip}/Likes/likes?master=${writer}&regdate=${regdate}&contentType=${contentType}&depth=1`, {
 
             },
                 {
@@ -276,8 +278,8 @@ const FreeArticle = () => {
                 })
         }
 
-        const getTotalCommentCount = async (writer, regdate) => {
-            await axios.get(`${ip}/Articles/free/totalCommentCount?writer=${writer}&regdate=${regdate}`, {
+        const getReCommentCount = async (writer, regdate) => {
+            await axios.get(`${ip}/Comments/count?writer=${writer}&regdate=${regdate}`, {
 
             },
                 {
@@ -287,12 +289,12 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
-                   setTotalCommentCount(data);
+                   totalCommentCount.current = totalCommentCount.current + data;
                 })
         }
 
-        const getComments = async (writer, regdate) => {
-            await axios.get(`${ip}/Comments/free/comments?original_writer=${writer}&original_regdate=${regdate}`, {
+        const getComments = async (writer, regdate, contentType) => {
+            await axios.get(`${ip}/Comments/comments?original_author=${writer}&original_regdate=${regdate}&contentType=${contentType}&depth=2`, {
 
             },
                 {
@@ -302,13 +304,14 @@ const FreeArticle = () => {
                     return res.data;
                 })
                 .then(data => {
+                    totalCommentCount.current = data.length;
                     setComments(data);
-                    getTotalCommentCount(writer, regdate);
+                    getReCommentCount(writer, regdate);
                 });
         }
 
-        const getAttachList = async (writer, regdate) => {
-            await axios.get(`${ip}/Files/attach/article/free/attaches/${writer}/${regdate}`, {
+        const getAttachList = async (writer, regdate, contentType) => {
+            await axios.get(`${ip}/Files/files/${writer}/${regdate}/${contentType}/attach/1`, {
 
             }, {
 
@@ -325,7 +328,7 @@ const FreeArticle = () => {
 
 
 
-        axios.get(`${ip}/Articles/free/article?viewer=${loginMaintain=="true" ? userInfo.nickName : user.login_state=="allok" ? user.nickname : "" }&writer=${writer}&regdate=${regdate}&contentType=free`, {
+        axios.get(`${ip}/Articles/article?viewer=${loginMaintain=="true" ? userInfo.nickName : user.login_state=="allok" ? user.nickname : "" }&writer=${writer}&regdate=${regdate}&contentType=${contentType}`, {
 
         },
             {
@@ -339,10 +342,10 @@ const FreeArticle = () => {
                 setVisitcnt(data.visitcnt);
                 setAttachCount(data.attach_count);
                 getWriterRole(data.writer);
-                getComments(data.writer, data.regdate);
-                getLikers(data.writer, data.regdate);
+                getComments(data.writer, data.regdate, data.contentType);
+                getLikers(data.writer, data.regdate, data.contentType);
                 if (data.attach_count > 0) {
-                    getAttachList(data.writer, data.regdate);
+                    getAttachList(data.writer, data.regdate, data.contentType);
                 }
                 else if (data.attach_count == 0) {
                     console.log("첨부파일 개수 0개");
@@ -356,10 +359,12 @@ const FreeArticle = () => {
 
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Likes/article/free/like`, {
+        await axios.post(`${ip}/Likes/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-            author: writer,
+            master: writer,
             regdate: regdate,
+            depth:1,
+            contentType: contentType,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -379,7 +384,7 @@ const FreeArticle = () => {
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Likes/article/free/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}`,
+            await axios.delete(`${ip}/Likes/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${writer}/${regdate}/${contentType}/1`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
@@ -482,11 +487,13 @@ const FreeArticle = () => {
     const registerReply = async (e) => {
         e.preventDefault();
         if (replyChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/Comments/free/comment`, {
+            await axios.post(`${ip}/Comments/comment`, {
                 original_author: writer,
                 original_regdate: regdate,
                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
+                depth: 2,
+                contentType: contentType,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -516,11 +523,13 @@ const FreeArticle = () => {
     const registerReply2 = async (e) => {
         e.preventDefault();
         if (replyChangeValue2 !== '<p><br></p>') {
-            await axios.post(`${ip}/Comments/free/comment`, {
+            await axios.post(`${ip}/Comments/comment`, {
                 original_author: writer,
                 original_regdate: regdate,
                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-                content: replyChangeValue2
+                content: replyChangeValue2,
+                depth: 2,
+                contentType: contentType,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -731,9 +740,13 @@ const FreeArticle = () => {
     return (
         <FreeArticleBox>
 
-            <FreeReportModal
+            <ReportModal
                 ReportMode={reportMode}
                 setReportMode={setReportMode}
+                master={writer}
+                regdate={regdate}
+                contentType={contentType}
+                depth={depth}
             />
 
             <UserBox>
@@ -840,12 +853,15 @@ const FreeArticle = () => {
                                             const uploader = attachment.uploader;
                                             const regdate = attachment.regdate;
                                             const uploadFilename = attachment.uploadFilename;
+                                            const contentType = attachment.contentType;
+                                            const storeType=attachment.storeType;
+                                            const depth=attachment.depth;
 
                                             console.log(id, uploader, regdate, uploadFilename);
                                             return (
                                                 <Floderli>
                                                     <FloderText>
-                                                        <DownloadLink href={`${ip}/Files/attach/article/free/attach/${id}/${uploader}/${regdate}`}>{uploadFilename}</DownloadLink>
+                                                        <DownloadLink href={`${ip}/Files/file/${id}/${uploader}/${regdate}/${contentType}/${storeType}/${depth}`}>{uploadFilename}</DownloadLink>
                                                     </FloderText>
                                                 </Floderli>
                                             );
@@ -969,7 +985,7 @@ const FreeArticle = () => {
                 </LikeBtn>
 
                 <Link
-                    to='/UpdateBoard' state={{ writer: writer, regdate: regdate, title: title, content: content, attachmentes: attachmentes }}
+                    to={`/UpdateBoard/${contentType}/${depth}`} state={{ writer: writer, regdate: regdate, title: title, content: content, attachmentes: attachmentes }}
                     style={{
                         display: loginMaintain == null ? "none" : loginMaintain == "true" ?
                             (userInfo == null ?
@@ -990,6 +1006,7 @@ const FreeArticle = () => {
                     loginMaintain={loginMaintain}
                     userInfo={userInfo}
                     user={user}
+                    contentType={contentType}
                 />
 
                 <DeleteBtn
@@ -1010,7 +1027,7 @@ const FreeArticle = () => {
                     삭제
                 </DeleteBtn>
 
-                <Link to="/FreeBoard">목록</Link>
+                <Link to={`/Board/${contentType}/${depth}`}>목록</Link>
 
             </EditAllBox>
 
@@ -1028,6 +1045,8 @@ const FreeArticle = () => {
                 setToggleState={setModalReplyDeleteSetToggleState}
                 toggleState={ModalReplyDeleteToggleState}
                 id={ModalReplyDeleteId}
+                contentType={contentType}
+                depth={depth}
             />
 
             <CommentBox>
@@ -1072,7 +1091,7 @@ const FreeArticle = () => {
                     />
                 }
 
-                {ModalFreeArticleReplyCommentOnOff ? <FreeArticleReplyModal
+                {ModalFreeArticleReplyCommentOnOff ? <ArticleReplyModal
                     setModalFreeArticleReplyCommentOnOff={setModalFreeArticleReplyCommentOnOff}
                     ModalFreeArticleReplyCommentOnOff={ModalFreeArticleReplyCommentOnOff}
                 /> : <></>}
@@ -1112,7 +1131,7 @@ const FreeArticle = () => {
     );
 }
 
-export default FreeArticle;
+export default Article;
 
 const FillterSlideDown = keyframes
     `

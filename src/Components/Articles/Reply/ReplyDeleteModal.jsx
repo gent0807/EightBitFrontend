@@ -15,7 +15,10 @@ const ReplyDeleteModal = ({
     setToggleState,
     toggleState,
     deleteComment,
-    id
+    id,
+    contentType,
+    depth
+
 }) => {
     const ip = localStorage.getItem("ip");
     const navigate = useNavigate();
@@ -31,7 +34,7 @@ const ReplyDeleteModal = ({
 
         e.preventDefault();
 
-        axios.delete(`${ip}/Comments/free/comment/${replyer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
+        axios.delete(`${ip}/Comments/comment/${replyer}/${regdate}/${contentType}/2/${loginMaintain == "true" ? userInfo.role : user.role}`,
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })

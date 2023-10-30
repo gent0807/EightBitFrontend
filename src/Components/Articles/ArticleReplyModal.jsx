@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import styled, { ThemeProvider } from "styled-components";
 
-const FreeArticleReplyModal = ({
+const ArticleReplyModal = ({
     setModalFreeArticleReplyCommentOnOff,
     ModalFreeArticleReplyCommentOnOff
 }) => {
@@ -32,7 +32,7 @@ const FreeArticleReplyModal = ({
     );
 };
 
-export default FreeArticleReplyModal;
+export default ArticleReplyModal;
 
 const ModalDeleteBtn = styled.div
     `

@@ -35,6 +35,7 @@ import Digital from "../../img/BoardSlide/digital.png";
 
 import axios from 'axios';
 import Store from "../Redux/Store";
+import { contextType } from "react-quill";
 
 const HeaderBox = () => {
     const [Search, setSearch] = useState("");
@@ -746,7 +747,7 @@ const HeaderBox = () => {
                                         size={user.role}
                                     >
                                         <ProfileUl>
-                                            <Link to="/WriteBoard">
+                                            <Link to='/WriteBoard/free/1'>
                                                 <Profileli
                                                     padding="15px 0px 15px 13px"
                                                     onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
@@ -755,7 +756,8 @@ const HeaderBox = () => {
                                                     <ProfileliText MediaLeft={"17px"}>자유게시판</ProfileliText>
                                                 </Profileli>
                                             </Link>
-
+                                            
+                                            <Link to="/StrategyWriteBoard">
                                             <Profileli
                                                 padding="15px 0px 15px 13px"
                                                 onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
@@ -763,7 +765,8 @@ const HeaderBox = () => {
                                                 <DropdownImg src={Strategy} />
                                                 <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
                                             </Profileli>
-
+                                            </Link>
+                                            
                                             <Profileli
                                                 padding="15px 0px 15px 13px"
                                                 onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
@@ -833,10 +836,10 @@ const HeaderBox = () => {
                                 <Link to='/'><SubNavText>장바구니</SubNavText></Link>
                             </ShopSubNav>
                             <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
-                                <Link to='/FreeBoard'><SubNavText>공지사항</SubNavText></Link>
-                                <Link to='/'><SubNavText>이벤트</SubNavText></Link>
-                                <Link to='/FreeBoard'><SubNavText>공략게시판</SubNavText></Link>
-                                <Link to='/FreeBoard'><SubNavText>자유게시판</SubNavText></Link>
+                                <Link to='/Board/notice/1'><SubNavText>공지사항</SubNavText></Link>
+                                <Link to='/Event'><SubNavText>이벤트</SubNavText></Link>
+                                <Link to='/Board/strategy/1'><SubNavText>공략게시판</SubNavText></Link>
+                                <Link to='/Board/free/1'><SubNavText>자유게시판</SubNavText></Link>
                             </ComunitySubNav>
                             <SupportSubNav display={isSupprotTabCheck} TopBack={scrollPosition}>
                                 <Link to='/'><SubNavText>이용문의</SubNavText></Link>

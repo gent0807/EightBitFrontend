@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const DeleteModal = ({ setDeleteMode, deleteMode, regdate, writer, loginMaintain, userInfo, user }) => {
+const DeleteModal = ({ setDeleteMode, deleteMode, regdate, writer, loginMaintain, userInfo, user, contentType}) => {
     const ip = localStorage.getItem("ip");
     const navigate = useNavigate();
     const [CompleteModal, setCompleteModal] = useState("");
@@ -13,14 +13,14 @@ const DeleteModal = ({ setDeleteMode, deleteMode, regdate, writer, loginMaintain
     const Completehandle = () => {
         setDeleteMode(!deleteMode);
         setIsmodalchange(true);
-        navigate("/FreeBoard");
+        navigate("/Board"+"/"+contentType+"/1");
     }
 
     const Sumbit = (e) => {
 
         e.preventDefault();
 
-        axios.delete(`${ip}/Articles/free/article/${writer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
+        axios.delete(`${ip}/Articles/article/${writer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}/${contentType}`,
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
