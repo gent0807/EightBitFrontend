@@ -25,7 +25,6 @@ Quill.register("modules/imageResize", ImageResize);
 
 const WriteBoard = () => {
     const { contentType } = useParams();
-    const { depth } = useParams();  
     const [WriterChangeValue, setWriterChangeValue] = useState("");
     const [EditerValue, setEditerValue] = useState("");
     const [isDragging, setIsDragging] = useState(false);
@@ -271,14 +270,14 @@ const WriteBoard = () => {
     }, [initDragEvents, resetDragEvents]);
 
     const OncheckSubmit = (e) => {
-        const registFile = async (writer, regdate, contentType,depth) => {
+        const registFile = async (writer, regdate, contentType) => {
             const fd = new FormData();
 
             fd.append("uploader", writer);
             fd.append("regdate", regdate);
             fd.append("contentType", contentType);
             fd.append("storeType","attach");
-            fd.append("depth", depth);
+            fd.append("depth", 1);
 
 
             for (let i = 0; i < files.length; i++) {
@@ -296,7 +295,7 @@ const WriteBoard = () => {
                 })
                 .then((data) => {
                     dispatch(point(user.point + 10));
-                    navigate('/Article/'+writer+'/'+regdate+'/'+contentType+'/'+depth);
+                    navigate('/Article/'+writer+'/'+regdate+'/'+contentType);
                     return;
                 })
 
@@ -327,7 +326,7 @@ const WriteBoard = () => {
             content: EditerValue,
             writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
             contentType: contentType,
-            depth: depth,
+            depth: 1,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -342,12 +341,12 @@ const WriteBoard = () => {
 
                 if (files.length == 0) {
                     dispatch(point(user.point + 10));
-                    navigate('/Article/'+writer+'/'+regdate+'/'+contentType+'/'+depth);
+                    navigate('/Article/'+writer+'/'+regdate+'/'+contentType);
                     return;
                 }
 
                 else if (files.length > 0) {
-                    registFile(writer, regdate, contentType, depth);
+                    registFile(writer, regdate, contentType);
                     return;
                 }
 
@@ -523,7 +522,7 @@ const WriteBoard = () => {
                     </FileList>
                 </FileUploadBox>
                 <SubmitBtnBox>
-                    <Link to="/FreeBoard"><CancelBtn type="button">취소</CancelBtn></Link>
+                    <Link to={`/Board/${contentType}`}><CancelBtn type="button">취소</CancelBtn></Link>
                     <SubmitBtn type='submit'>등록</SubmitBtn>
                 </SubmitBtnBox>
             </WriteBoardSubmit>

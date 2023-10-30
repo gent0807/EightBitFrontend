@@ -747,7 +747,7 @@ const HeaderBox = () => {
                                         size={user.role}
                                     >
                                         <ProfileUl>
-                                            <Link to='/WriteBoard/free/1'>
+                                            <Link to='/WriteBoard/free'>
                                                 <Profileli
                                                     padding="15px 0px 15px 13px"
                                                     onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
@@ -757,7 +757,7 @@ const HeaderBox = () => {
                                                 </Profileli>
                                             </Link>
                                             
-                                            <Link to="/StrategyWriteBoard">
+                                            <Link to="/WriteBoard/strategy">
                                             <Profileli
                                                 padding="15px 0px 15px 13px"
                                                 onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
@@ -836,10 +836,11 @@ const HeaderBox = () => {
                                 <Link to='/'><SubNavText>장바구니</SubNavText></Link>
                             </ShopSubNav>
                             <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
-                                <Link to='/Board/notice/1'><SubNavText>공지사항</SubNavText></Link>
+                                <Link to='/Board/notice'><SubNavText>공지사항</SubNavText></Link>
                                 <Link to='/Event'><SubNavText>이벤트</SubNavText></Link>
-                                <Link to='/Board/strategy/1'><SubNavText>공략게시판</SubNavText></Link>
-                                <Link to='/Board/free/1'><SubNavText>자유게시판</SubNavText></Link>
+                                <Link to='/Board/question'><SubNavText>질문게시판</SubNavText></Link>
+                                <Link to='/Board/strategy'><SubNavText>공략게시판</SubNavText></Link>
+                                <Link to='/Board/free'><SubNavText>자유게시판</SubNavText></Link>
                             </ComunitySubNav>
                             <SupportSubNav display={isSupprotTabCheck} TopBack={scrollPosition}>
                                 <Link to='/'><SubNavText>이용문의</SubNavText></Link>

@@ -15,8 +15,6 @@ const ReportModal = ({ setReportMode, ReportMode, master, regdate, contentType, 
     const [ismodalchange, setIsmodalchange] = useState(true);
     const [CompleteModal, setCompleteModal] = useState("");
 
-    const [comment, setComment] = useState("");
-
     const [checkList, setCheckList] = useState("욕설/비방 신고");
 
     const user = useSelector((state) => state.user);

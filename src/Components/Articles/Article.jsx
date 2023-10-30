@@ -42,8 +42,7 @@ Quill.register("modules/imageResize", ImageResize);
 const Article = () => {
     const { writer } = useParams();
     const { regdate } = useParams();
-    const { contentType } = useParams();
-    const { depth } = useParams();  
+    const { contentType } = useParams(); 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [updatedate, setUpdatedate] = useState("");
@@ -492,8 +491,8 @@ const Article = () => {
                 original_regdate: regdate,
                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
-                depth: 2,
                 contentType: contentType,
+                depth:2,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -528,8 +527,8 @@ const Article = () => {
                 original_regdate: regdate,
                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue2,
-                depth: 2,
                 contentType: contentType,
+                depth: 2,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -746,7 +745,7 @@ const Article = () => {
                 master={writer}
                 regdate={regdate}
                 contentType={contentType}
-                depth={depth}
+                depth={1}
             />
 
             <UserBox>
@@ -985,7 +984,7 @@ const Article = () => {
                 </LikeBtn>
 
                 <Link
-                    to={`/UpdateBoard/${contentType}/${depth}`} state={{ writer: writer, regdate: regdate, title: title, content: content, attachmentes: attachmentes }}
+                    to={`/UpdateBoard/${contentType}`} state={{ writer: writer, regdate: regdate, title: title, content: content, attachmentes: attachmentes }}
                     style={{
                         display: loginMaintain == null ? "none" : loginMaintain == "true" ?
                             (userInfo == null ?
@@ -1027,7 +1026,7 @@ const Article = () => {
                     삭제
                 </DeleteBtn>
 
-                <Link to={`/Board/${contentType}/${depth}`}>목록</Link>
+                <Link to={`/Board/${contentType}`}>목록</Link>
 
             </EditAllBox>
 
@@ -1046,7 +1045,6 @@ const Article = () => {
                 toggleState={ModalReplyDeleteToggleState}
                 id={ModalReplyDeleteId}
                 contentType={contentType}
-                depth={depth}
             />
 
             <CommentBox>
@@ -1054,6 +1052,7 @@ const Article = () => {
                 {Comments.length > 0 &&
                     Comments.slice(offset, offset + limit).map(Comment => {
                         const commentId = Comment.id;
+                        console.log("여기를 주목하세용~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                         return (
                             <SingleReply
                                 key={commentId}

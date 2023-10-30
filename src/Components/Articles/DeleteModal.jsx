@@ -13,7 +13,7 @@ const DeleteModal = ({ setDeleteMode, deleteMode, regdate, writer, loginMaintain
     const Completehandle = () => {
         setDeleteMode(!deleteMode);
         setIsmodalchange(true);
-        navigate("/Board"+"/"+contentType+"/1");
+        navigate("/Board"+"/"+contentType);
     }
 
     const Sumbit = (e) => {

@@ -17,7 +17,6 @@ const ReplyDeleteModal = ({
     deleteComment,
     id,
     contentType,
-    depth
 
 }) => {
     const ip = localStorage.getItem("ip");

@@ -24,16 +24,16 @@ const Router = () => {
             <TopNavBar />
             <Routes>
                 <Route element={<Footer />} >
-                    <Route path="/Board/:contentType/:depth" element={<Board />} />
+                    <Route path="/Board/:contentType" element={<Board />} />
                     <Route path="/" element={<Center />} />
-                    <Route path="/Article/:writer/:regdate/:contentType/:depth" element={<Article />} />
+                    <Route path="/Article/:writer/:regdate/:contentType" element={<Article />} />
                     <Route path="/GameInformationView/:id" element={<GameInformationView />} />
                     <Route path="/GameUploadPage" element={<GameUploadPage />} />
                 </Route>
                     <Route path="/OfficialGame" element={<OfficialGame />} />
                     <Route path="/AllGamePage" element={<AllGamePage />} />
-                    <Route path="/WriteBoard/:contentType/:depth" element={<WriteBoard />} />
-                    <Route path="/UpdateBoard/:contentType/:depth" element={<UpdateBoard />} />
+                    <Route path="/WriteBoard/:contentType" element={<WriteBoard />} />
+                    <Route path="/UpdateBoard/:contentType" element={<UpdateBoard />} />
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Sign" element={<Sign />} />
                     <Route path="/SelectSign" element={<SelectSign />} />

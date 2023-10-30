@@ -20,7 +20,6 @@ import DOMPurify from "dompurify";
 
 const FreeBoard = () => {
     const { contentType } = useParams();
-    const { depth } = useParams();
     const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
     const [SearchFillText, setSearchFillText] = useState("제목");
@@ -28,6 +27,7 @@ const FreeBoard = () => {
     const [LimtText, setLimtText] = useState("10개");
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
+    const [boardType, setBoardType] = useState("");
     const offset = (page - 1) * limit;
     const [FitterDropdown, setFitterDropdown] = useState(false);
     const [LimitDropdown, setLimitDropdown] = useState(false);
@@ -182,7 +182,21 @@ const FreeBoard = () => {
                 setPosts(data);
                 setSearchList(data);
             })
-    }, []);
+
+            if(contentType=="free"){
+                setBoardType("자유게시판");
+             }
+             else if(contentType=="question"){
+                 setBoardType("질문게시판");
+             }
+             else if(contentType=="notice"){
+                 setBoardType("공지사항");
+             }
+             else if(contentType=="strategy"){
+                 setBoardType("공략게시판");
+             }
+
+    }, [contentType]);
 
 
 
@@ -225,7 +239,7 @@ const FreeBoard = () => {
         <FreeBoardBox>
             <InformationAllBox>
                 <FreeBoardInformation>
-                    <FreeBoardInformationText>자유게시판</FreeBoardInformationText>
+                    <FreeBoardInformationText>{boardType}</FreeBoardInformationText>
                 </FreeBoardInformation>
             </InformationAllBox>
             <SearchBox>
@@ -273,8 +287,10 @@ const FreeBoard = () => {
                         <LimitArrowBox direction={LimitDropdown}>{LimitDropdown ? "▲" : "▼"}</LimitArrowBox>
                     </LimitSelectAllBox>
 
-                    <WriteBtn>{loginMaintain == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> : loginMaintain == "true" ? userInfo == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> :
-                        (userInfo.loginState === "allok" ? <Link to={`/WriteBoard/${contentType}/${depth}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to={`/WriteBoard/${contentType}/${depth}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}</WriteBtn>
+                    <WriteBtn style={{display: contentType!="notice" ? "block": contentType=="notice" ? user.role=="ADMIN" ? "block" : "none" : "block"}}>
+                        {loginMaintain == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> : loginMaintain == "true" ? userInfo == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> :
+                        (userInfo.loginState === "allok" ? <Link to={`/WriteBoard/${contentType}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to={`/WriteBoard/${contentType}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}
+                    </WriteBtn>
                 </FitterBox>
             </SearchBox>
 
@@ -315,9 +331,9 @@ const FreeBoard = () => {
                                 </ProfileAllBox>
 
                                 <BoardTitleContentAllBox>
-                                    <BoardContentTitle><Link to={`/Article/${writer}/${regdate}/${contentType}/${depth}`}>{title}</Link></BoardContentTitle>
+                                    <BoardContentTitle><Link to={`/Article/${writer}/${regdate}/${contentType}`}>{title}</Link></BoardContentTitle>
                                     <BoardCotent>
-                                        <Link to={`/Article/${writer}/${regdate}/${contentType}/${depth}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} /></Link>
+                                        <Link to={`/Article/${writer}/${regdate}/${contentType}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} /></Link>
                                     </BoardCotent>
                                 </BoardTitleContentAllBox>
                                 <ViewlikeAllBox>

@@ -58,7 +58,7 @@ const SingleReply = ({
     const [content, setContent] = useState(Comment.content);
     const [regdate, setRegdate] = useState(Comment.regdate);
     const [contentType, setContentType] = useState(Comment.contentType);
-    const [depth, setDepth] = useState(Comment.depth);  
+    const [depth, setDepth] = useState(2);  
     const [updatedate, setUpdatedate] = useState(Comment.updatedate);
     const [likecount, setLikecount] = useState(0);
     const [replyerRole, setReplyerRole] = useState("");
@@ -103,6 +103,7 @@ const SingleReply = ({
         console.log("------------------댓글 정보--------------------");
         console.log(Comment);
         
+        console.log("댓글 들어옴!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         const getReplyerRole = (replyer) => {
             axios.get(`${ip}/Users/role?nickname=${replyer}`, {
@@ -401,7 +402,7 @@ const SingleReply = ({
                 {
                     content: updateReplyText,
                     contentType: contentType,
-                    depth: depth,   
+                    depth: 2,   
                 },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -569,7 +570,7 @@ const SingleReply = ({
                 master={replyer}
                 regdate={regdate}
                 contentType={contentType}
-                depth={depth}
+                depth={2}
             />
 
             <div style={{ display: isEditing === true ? "none" : "block" }}>
@@ -735,7 +736,7 @@ const SingleReply = ({
                     setToggleState={setModalToggleState}
                     toggleState={ModalToggleState}
                     contentType={contentType}
-                    depth={depth}   
+                    
                 />
 
                 <ReCommentSector>

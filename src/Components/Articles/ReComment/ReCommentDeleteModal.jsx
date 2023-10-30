@@ -18,7 +18,7 @@ const ReCommentDeleteModal = ({
     deleteReComment,
     Commentid,
     contentType,
-    depth
+
 
 }) => {
     const ip = localStorage.getItem("ip");
@@ -34,7 +34,7 @@ const ReCommentDeleteModal = ({
 
         e.preventDefault();
 
-        axios.delete(`${ip}/Comments/comment/${reCommenter}/${regdate}/${contentType}/${depth+1}/${loginMaintain == "true" ? userInfo.role : user.role}`,
+        axios.delete(`${ip}/Comments/comment/${reCommenter}/${regdate}/${contentType}/3/${loginMaintain == "true" ? userInfo.role : user.role}`,
 
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }

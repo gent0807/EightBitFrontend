@@ -26,7 +26,6 @@ Quill.register("modules/imageResize", ImageResize);
 
 const UpdateBoard = () => {
     const {contentType}=useParams();
-    const {depth}=useParams();
     const location = useLocation();
     const writer = location.state.writer;
     const regdate = location.state.regdate;
@@ -300,15 +299,15 @@ const UpdateBoard = () => {
 
         }
 
-        const registFile = async (writer, regdate, contentType, depth) => {
+        const registFile = async (writer, regdate, contentType) => {
 
             const fd = new FormData();
 
-            fd.append("writer", writer);
+            fd.append("uploader", writer);
             fd.append("regdate", regdate);
             fd.append("contentType", contentType);
             fd.append("storeType", "attach")
-            fd.append("depth", depth);
+            fd.append("depth", 1);
 
             for (let i = 0; i < files.length; i++) {
                 fd.append("files", files[i].object);
@@ -351,7 +350,7 @@ const UpdateBoard = () => {
             title: WriterChangeValue,
             content: EditerValue,
             contentType: contentType,
-            depth: depth,
+            depth: 1,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -376,12 +375,12 @@ const UpdateBoard = () => {
                 }
 
                 if (files.length == 0) {
-                    navigate('/Article/' + writer + '/' + regdate+ '/' + contentType + '/' + depth);
+                    navigate('/Article/' + writer + '/' + regdate+ '/' + contentType);
                     return;
                 }
                 else if (files.length > 0) {
-                    registFile(writer, regdate, contentType, depth);
-                    navigate('/Article/' + writer + '/' + regdate+ '/' + contentType + '/' + depth);
+                    registFile(writer, regdate, contentType);
+                    navigate('/Article/' + writer + '/' + regdate+ '/' + contentType);
                     return;
                 }
             })
@@ -580,7 +579,7 @@ const UpdateBoard = () => {
                     </FileList>
                 </FileUploadBox>
                 <SubmitBtnBox1>
-                    <Link to="/FreeBoard"><CancelBtn1>취소</CancelBtn1></Link>
+                    <Link to={`/Board/${contentType}`}><CancelBtn1>취소</CancelBtn1></Link>
                     <SubmitBtn1>수정</SubmitBtn1>
                 </SubmitBtnBox1>
             </WriteBoardSubmit>

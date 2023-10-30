@@ -58,7 +58,7 @@ const SingleReComment = ({
     const [regdate, setRegdate] = useState(ReComment.regdate);
     const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
     const [contentType, setContentType] = useState(ReComment.contentType);
-    const [depth, setDepth] = useState(ReComment.depth);
+    const [depth, setDepth] = useState(3);
 
     const [likecount, setLikecount] = useState(0);
     const [reCommenterRole, setReCommenterRole] = useState("");
@@ -514,7 +514,7 @@ const SingleReComment = ({
                 master={reCommenter}
                 regdate={regdate}
                 contentType={contentType}
-                depth={depth}
+                depth={3}
             />
 
             <div style={{ display: isEditing === true ? "none" : "block" }}>
