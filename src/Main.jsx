@@ -1,13 +1,12 @@
 import { styled, createGlobalStyle, ThemeProvider } from 'styled-components';
 import Router from './Router';
 import { useRecoilValue } from 'recoil';
-import { isDark } from './Components/Darkmode/Darkmode';
+import { isDark } from './Recoil/Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
 const ip = `http://localhost:8088`;
 
-//'http://localhost:8035'
 
 const Main = () => {
 

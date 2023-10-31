@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import reportWebVitals from './reportWebVitals';
 import "./fonts/font.css";
 import Main from './Main';
 import styled from 'styled-components';
@@ -32,4 +31,4 @@ root.render(
     </RecoilRoot>
 );
 
-reportWebVitals();
+
