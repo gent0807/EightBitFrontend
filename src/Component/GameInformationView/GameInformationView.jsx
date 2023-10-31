@@ -9,7 +9,7 @@ import { toggle2 } from "../../Recoil/ArticleReset/Toggle";
 import { Slide } from "../Game";
 import { AiOutlineDownload } from "react-icons/ai";
 import { BsHandThumbsUpFill } from "react-icons/bs";
-import SingleReply from "./Reply/SingleReply";
+import SingleReply from "../Reply/SingleReply";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
@@ -47,6 +47,8 @@ const GameInformationView = () => {
     const [banner, setBanner] = useState("");
     const [role, setRole] = useState("");
     const [likecount, setLikecount] = useState(0);
+    const [email, setEmail] = useState("");
+    const [type, setType] = useState("");
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -92,10 +94,11 @@ const GameInformationView = () => {
     let likeMode = useRef(false);
     let totalCommentCount = useRef(0);
 
-    const [selectedReportDeveloper, setSelectedReportDeveloper] = useState("");
+    const [selectedReportWriter, setSelectedReportWriter] = useState("");
     const [selectedReportRegdate, setSelectedReportRegdate] = useState("");
     const [selectedReportContentType, setSelectedReportContentType] = useState("");
     const [selectedReportDepth, setSelectedReportDepth] = useState("");
+
     const [ModalFreeArticleReplyCommentOnOff, setModalFreeArticleReplyCommentOnOff] = useState(false);
 
     const toolbarOptions = [
@@ -143,6 +146,22 @@ const GameInformationView = () => {
 
     useEffect(() => {
 
+        const getUserEmail = (nickname) => {
+            axios.get(`${ip}/Users/email?nickname=${nickname}`, {
+
+            },
+                {
+
+                })
+                .then(res => {
+                    return res.data
+                })
+                .then(data => {
+                    setEmail(data);
+                })
+        }
+
+
         const getRole = (user) => {
             axios.get(`${ip}/Users/role?nickname=${user}`, {
 
@@ -157,6 +176,20 @@ const GameInformationView = () => {
                     setRole(data);
                 })
 
+        }
+
+        const getOfficialGameList = () => {
+            axios.get(`${ip}/Games/games/official`, {
+
+            }, {
+
+            })
+                .then((res) => {
+                    return res.data;
+                })
+                .then(data => {
+                    return data;
+                })
         }
 
 
@@ -276,6 +309,7 @@ const GameInformationView = () => {
                 setGenre(data.genre);
 
                 getRole(data.developer);
+                getUserEmail(data.developer);
                 getComments(data.developer, data.regdate, data.contentType, data.depth);
                 getLikers(data.developer, data.regdate, data.contentType, data.depth);
 
@@ -295,24 +329,19 @@ const GameInformationView = () => {
                     setBanner(getFileList(data.developer, data.regdate, data.contentType, "gameBanner", data.depth)[0]);
                 }
 
+                if (getOfficialGameList().include(data.title)) {
+                    setType("공식");
+                }
+                else if (!getOfficialGameList().include(data.title)) {
+                    setType("인디");
+                }
+
+
             })
 
     }, [toggleState, toggleState2]);
 
-    const getUserEmail = (nickname) => {
-        axios.get(`${ip}/Users/email?nickname=${nickname}`, {
 
-        }, {
-
-        })
-            .then(res => {
-                return res.data
-            })
-            .then(data => {
-                return data;
-            })
-        }   
-    }
 
     const addLike = async (e) => {
 
@@ -559,6 +588,7 @@ const GameInformationView = () => {
             <GameViewAllBox>
                 <GameTitleAllBox>
                     <GameTitleTextBox>
+                        <GameText> {type} 게임</GameText>
                         <GameTitleText>{title}</GameTitleText>
                     </GameTitleTextBox>
                     <BackButton onClick={() => navigate(-1)}>뒤로가기</BackButton>
@@ -612,6 +642,7 @@ const GameInformationView = () => {
                                 setToggleState={setModalReplyDeleteSetToggleState}
                                 toggleState={ModalReplyDeleteToggleState}
                                 id={ModalReplyDeleteId}
+                                contentType={contentType}
                             />
 
                             <CommentBox>
@@ -619,6 +650,7 @@ const GameInformationView = () => {
                                 {Comments.length > 0 &&
                                     Comments.slice(offset, offset + limit).map(Comment => {
                                         const commentId = Comment.id;
+
                                         return (
                                             <SingleReply
                                                 key={commentId}
@@ -639,13 +671,20 @@ const GameInformationView = () => {
 
                                                 setModalReplyDeleteId={setModalReplyDeleteId}
 
+                                                reportMode={reportMode}
+                                                setReportMode={setReportMode}
+                                                setSelectedReportWriter={setSelectedReportWriter}
+                                                setSelectedReportRegdate={setSelectedReportRegdate}
+                                                setSelectedReportContentType={setSelectedReportContentType}
+                                                setSelectedReportDepth={setSelectedReportDepth}
+
                                                 setReplyDeleteMode={setReplyDeleteMode}
                                                 ReplyDeleteMode={ReplyDeleteMode}
+
                                             />
                                         );
                                     })
                                 }
-
                                 {Comments.length > 0 &&
                                     <ReplyPagination
                                         total={Comments.length}
@@ -669,7 +708,7 @@ const GameInformationView = () => {
                                     UserNicknameCheck={user.nickname}
                                     UserNickname={userInfo == null ?
                                         null : userInfo.nickName}
-                                    Writer={writer}
+                                    Writer={developer}
                                     onSubmit={registerReply}>
                                     <CommentArea>
                                         <CommentProfile>
@@ -756,7 +795,7 @@ const GameInformationView = () => {
                                     업로더 : {developer}
                                 </DeveloperText>
                                 <DeveloperText>
-                                    이메일 : {getUserEmail(developer)}
+                                    이메일 : {email}
                                 </DeveloperText>
                             </DeveloperInformationTextBox>
                         </DeveloperInformationBox>
