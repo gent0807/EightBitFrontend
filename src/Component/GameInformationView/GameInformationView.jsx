@@ -326,8 +326,8 @@ const GameInformationView = () => {
 
     return (
         <GameViewBackground>
-            <BackgroundEffect />
-            <GameViewBackgroundImg src={GameInformaion[0].backgroundImg} />
+            {GameInformaion[0].backgroundImg === "" ? <></> : <BackgroundEffect />}
+            {GameInformaion[0].backgroundImg === "" ? <DefaultBackground /> : <GameViewBackgroundImg src={GameInformaion[0].backgroundImg} />}
 
             <GameViewAllBox>
                 <GameTitleAllBox>
@@ -547,6 +547,12 @@ const GameInformationView = () => {
 }
 
 export default GameInformationView;
+
+const DefaultBackground = styled.div
+`
+    width: 100%;
+    height: 40vw;
+`
 
 const Editer = styled(ReactQuill)
     `

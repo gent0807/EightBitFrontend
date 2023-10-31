@@ -1,39 +1,40 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import styled, { ThemeProvider } from "styled-components";
 
-const GameUploadBackgroundModal = ({
-    setGameUploadBackgroundModalOnOff,
-    GameUploadBackgroundModalOnOff,
+const GameUploadPcFileModal = ({
+    setGameUploadPcFileModalOnOff,
+    GameUploadPcFileModalOnOff,
 
-    BackgroundImgExtensionCheck,
-    BackgroundImgExtensionList,
+    PcExtensionCheck,
+    PcExtensionList,
 
-    backgroundimgSize,
+    pcfileSize,
 
-    backgroundimgfiles,
+    pcfiles,
 
     MaxSize
+
 }) => {
 
     return (
-        <FileCheckModalBackground OnOff={GameUploadBackgroundModalOnOff}>
+        <FileCheckModalBackground OnOff={GameUploadPcFileModalOnOff}>
             <FileCheckModalAllBox>
                 <FileCheckBox>
                     <FileCheckText>
                         {
-                            BackgroundImgExtensionList.indexOf(BackgroundImgExtensionCheck) === -1 || 
-                            BackgroundImgExtensionCheck === "" ?
+                            PcExtensionList.indexOf(PcExtensionCheck) === -1 ||
+                            PcExtensionCheck === "" ?
                             "파일 업로드가 불가한 파일입니다!" :
-                            backgroundimgSize > MaxSize ?
+                            pcfileSize > MaxSize ?
                             "파일은 2GB 이내로 업로드 가능합니다!" :
-                            backgroundimgfiles.length >= 1 ?
+                            pcfiles.length >= 1 ?
                             "하나의 파일만 업로드 해주세요!" : ""
                         }
                     </FileCheckText>
                 </FileCheckBox>
 
                 <FileChechBtnBox>
-                    <FileCheckBtn onClick={() =>  setGameUploadBackgroundModalOnOff(!GameUploadBackgroundModalOnOff)}>
+                    <FileCheckBtn onClick={() => setGameUploadPcFileModalOnOff(!GameUploadPcFileModalOnOff)}>
                         <FileBtnText>확인</FileBtnText>
                     </FileCheckBtn>
                 </FileChechBtnBox>
@@ -43,7 +44,7 @@ const GameUploadBackgroundModal = ({
     );
 }
 
-export default GameUploadBackgroundModal;
+export default GameUploadPcFileModal;
 
 const FileChechBtnBox = styled.div
     `

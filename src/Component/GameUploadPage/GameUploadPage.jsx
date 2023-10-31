@@ -15,8 +15,12 @@ import ZIP from "../../Item/img/FileList/zip.png";
 
 import { accessToken, clearLoginState, point } from '../../Redux/User';
 
-import GameUploadModal from "./GameUploadModal";
-import GameUploadFileModal from "./GameUploadFileModal";
+import GameUploadModal from "./Modal/GameUploadModal";
+
+import GameUploadPcFileModal from "./Modal/GameUploadPcFileModal";
+import GameUploadMobileFileModal from "./Modal/GameUploadMobileFileModal";
+import GameUploadMainModal from "./Modal/GameUploadMainModal";
+import GameUploadBackgroundModal from "./Modal/GameUploadBackgroundModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -24,16 +28,23 @@ Quill.register("modules/imageResize", ImageResize);
 const GameUploadPage = () => {
     const [TitleChangeValue, setTitleChangeValue] = useState("");
     const [URLChangeValue, setURLChangeValue] = useState("");
-    const [ExplanationValue, setExplanationValue] = useState("");
+    const [GenreChangeValue, setGenreChangeValue] = useState("");
+    const [ExplanationValue, setExplanationValue] = useState('<p><br></p>');
     const [WordCountValue, setWordCountValue] = useState(0);
+    const [MainImgURL, setMainImgURL] = useState("");
+    const [BackgroundImgURL, setBackgroundImgURL] = useState("");
 
     const [isPcDragging, setIsPcDragging] = useState(false);
     const [isMobileDragging, setIsMobileDragging] = useState(false);
     const [isMainImgDragging, setIsMainImgDragging] = useState(false);
     const [isBackgroungImgDragging, setIsBackgroungImgDragging] = useState(false);
 
-    const [WriteBoardModalOnOff, setWriteBoardModalOnOff] = useState(false);
-    const [WriteFileModalOnOff, setWriteFileModalOnOff] = useState(false);
+    const [GameUploadModalOnOff, setGameUploadModalOnOff] = useState(false);
+
+    const [GameUploadPcFileModalOnOff, setGameUploadPcFileModalOnOff] = useState(false);
+    const [GameUploadMobileFileModalOnOff, setGameUploadMobileFileModalOnOff] = useState(false);
+    const [GameUploadMainModalOnOff, setGameUploadMainModalOnOff] = useState(false);
+    const [GameUploadBackgroundModalOnOff, setGameUploadBackgroundModalOnOff] = useState(false);
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
@@ -96,6 +107,11 @@ const GameUploadPage = () => {
     const TitleChange = (e) => {
         const currentTitle = e.target.value;
         setTitleChangeValue(currentTitle);
+    }
+
+    const GenreChange = (e) => {
+        const currentGenre = e.target.value;
+        setGenreChangeValue(currentGenre);
     }
 
     const URLChange = (e) => {
@@ -184,18 +200,18 @@ const GameUploadPage = () => {
         setPcExtensionCheck(PcExtensionCheck);
         const MaxSize = FileMaxSize;
 
-        if (pcfileSize > MaxSize) {
-            setWriteFileModalOnOff(true);
+        if (FileSize > MaxSize) {
+            setGameUploadPcFileModalOnOff(true);
             return;
         }
 
         if (pcfiles.length >= 1) {
-            setWriteFileModalOnOff(true);
+            setGameUploadPcFileModalOnOff(true);
             return;
         }
 
         if (PcExtensionCheck === "") {
-            setWriteFileModalOnOff(true);
+            setGameUploadPcFileModalOnOff(true);
             return;
         }
 
@@ -212,7 +228,7 @@ const GameUploadPage = () => {
 
             setPcfiles(tempFiles);
         } else {
-            setWriteFileModalOnOff(true);
+            setGameUploadPcFileModalOnOff(true);
             return;
         }
 
@@ -237,17 +253,17 @@ const GameUploadPage = () => {
         const MaxSize = FileMaxSize;
 
         if (FileSize > MaxSize) {
-            setWriteFileModalOnOff(true);
+            setGameUploadMobileFileModalOnOff(true);
             return;
         }
 
         if (mobilefiles.length >= 1) {
-            setWriteFileModalOnOff(true);
+            setGameUploadMobileFileModalOnOff(true);
             return;
         }
 
         if (MobileExtensionCheck === "") {
-            setWriteFileModalOnOff(true);
+            setGameUploadMobileFileModalOnOff(true);
             return;
         }
 
@@ -264,7 +280,7 @@ const GameUploadPage = () => {
 
             setMobilefiles(tempFiles);
         } else {
-            setWriteFileModalOnOff(true);
+            setGameUploadMobileFileModalOnOff(true);
             return;
         }
 
@@ -283,24 +299,26 @@ const GameUploadPage = () => {
 
         const Extension = selectFiles[0].name;
         const MainImgExtensionCheck = MainImgExtensionName({ Extension });
+
         const FileSize = selectFiles[0].size;
+
         setMainImgSize(FileSize);
         setMainImgExtensionCheck(MainImgExtensionCheck);
         console.log(MainImgExtensionCheck);
         const MaxSize = FileMaxSize;
 
         if (FileSize > MaxSize) {
-            setWriteFileModalOnOff(true);
+            setGameUploadMainModalOnOff(true);
             return;
         }
 
         if (mainimgfiles.length >= 1) {
-            setWriteFileModalOnOff(true);
+            setGameUploadMainModalOnOff(true);
             return;
         }
 
         if (MainImgExtensionCheck === "") {
-            setWriteFileModalOnOff(true);
+            setGameUploadMainModalOnOff(true);
             return;
         }
 
@@ -316,10 +334,20 @@ const GameUploadPage = () => {
             }
 
             setMainImgfiles(tempFiles);
+
+            const file = selectFiles[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            reader.onloadend = () => {
+                setMainImgURL(reader.result);
+            }
+
         } else {
-            setWriteFileModalOnOff(true);
+            setGameUploadMainModalOnOff(true);
             return;
         }
+
 
     }, [mainimgfiles]);
 
@@ -335,6 +363,8 @@ const GameUploadPage = () => {
         }
 
         const Extension = selectFiles[0].name;
+
+
         const BackgroundImgExtensionCheck = BackgroundImgExtensionName({ Extension });
         const FileSize = selectFiles[0].size;
         setBackgroundImgSize(FileSize);
@@ -342,17 +372,17 @@ const GameUploadPage = () => {
         const MaxSize = FileMaxSize;
 
         if (FileSize > MaxSize) {
-            setWriteFileModalOnOff(true);
+            setGameUploadBackgroundModalOnOff(true);
             return;
         }
 
         if (backgroundimgfiles.length >= 1) {
-            setWriteFileModalOnOff(true);
+            setGameUploadBackgroundModalOnOff(true);
             return;
         }
 
         if (BackgroundImgExtensionCheck === "") {
-            setWriteFileModalOnOff(true);
+            setGameUploadBackgroundModalOnOff(true);
             return;
         }
 
@@ -368,10 +398,20 @@ const GameUploadPage = () => {
             }
 
             setBackgroundImgfiles(tempFiles);
+
+            const file = selectFiles[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            reader.onloadend = () => {
+                setBackgroundImgURL(reader.result);
+            }
+
         } else {
-            setWriteFileModalOnOff(true);
+            setGameUploadBackgroundModalOnOff(true);
             return;
         }
+
 
     }, [backgroundimgfiles]);
 
@@ -616,6 +656,30 @@ const GameUploadPage = () => {
     }, [initBackgroundImgDragEvents, resetBackgroundImgDragEvents]);
 
     const OncheckSubmit = (e) => {
+
+        e.preventDefault();
+        
+        if (
+            TitleChangeValue.length === 0 &&
+            mainimgfiles.length === 0 &&
+            GenreChangeValue.length === 0 ) 
+        {
+            setGameUploadModalOnOff(true)
+            return;
+        }
+        else if (
+            TitleChangeValue.length === 0 ||
+            mainimgfiles.length === 0 ||
+            GenreChangeValue.length === 0)
+        {
+            setGameUploadModalOnOff(true)
+            return;
+        }else if (pcfiles.length === 0 && mobilefiles.length === 0 && URLChangeValue.length === 0)
+        {
+            setGameUploadModalOnOff(true)
+            return;
+        }
+
         const registFile = async (writer, regdate) => {
             const fd = new FormData();
 
@@ -641,44 +705,9 @@ const GameUploadPage = () => {
                     return;
                 })
 
-
-
         }
 
-        e.preventDefault();
 
-        if (TitleChangeValue.length < 5 && ExplanationValue.length > 20) {
-            setWriteBoardModalOnOff(true);
-            return;
-        }
-        else if (TitleChangeValue.length > 5 && ExplanationValue.length < 20) {
-            setWriteBoardModalOnOff(true);
-            return;
-        }
-        else if (TitleChangeValue.length < 5 && ExplanationValue.length < 20) {
-            setWriteBoardModalOnOff(true);
-            return;
-        }
-        else if (pcfiles.length === 0 && mobilefiles.length === 0 && mainimgfiles.length === 0 && backgroundimgfiles.length === 0 && URLChangeValue === "") {
-            setWriteBoardModalOnOff(true)
-            return;
-        }
-        else if (pcfiles.length > 0 && mainimgfiles.length === 0 && backgroundimgfiles.length === 0 && mobilefiles.length === 0 && URLChangeValue === "") {
-            setWriteBoardModalOnOff(true)
-            return;
-        }
-        else if (pcfiles.length === 0 && mainimgfiles.length > 0 && backgroundimgfiles.length === 0 && mobilefiles.length === 0 && URLChangeValue === "") {
-            setWriteBoardModalOnOff(true)
-            return;
-        }
-        else if (pcfiles.length === 0 && mainimgfiles.length === 0 && backgroundimgfiles.length > 0 && mobilefiles.length === 0 && URLChangeValue === "") {
-            setWriteBoardModalOnOff(true)
-            return;
-        }
-        else if (pcfiles.length > 0 && mainimgfiles.length > 0 && backgroundimgfiles.length > 0 && mobilefiles.length === 0 && URLChangeValue === "") {
-            setWriteBoardModalOnOff(true)
-            return;
-        }
 
         axios.post(`${ip}/Board/article`, {
             title: TitleChangeValue,
@@ -796,7 +825,7 @@ const GameUploadPage = () => {
     const deleteRefreshToken = (name) => {
         document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
-    
+
     const handleEditer = (content, delta, source, editor) => {
         const Length = editor.getLength();
         const Html = editor.getHTML();
@@ -805,54 +834,109 @@ const GameUploadPage = () => {
         setWordCountValue(WordCount);
         setExplanationValue(Html);
 
-        if(MAX < Length)
-        {
+        if (MAX < Length) {
             quill.current.editor.deleteText(MAX, Length);
         }
     }
 
-    console.log(quill);
+    const [WindowLength, setWindowLength] = useState(window.innerWidth);
+
+    const handleResize = () => {
+        setWindowLength(window.innerWidth);
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        }
+    })
+
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     return (
         <WriterInputBox>
 
-            {WriteFileModalOnOff ? <GameUploadFileModal
+            {GameUploadPcFileModalOnOff ? <GameUploadPcFileModal
 
-                setWriteFileModalOnOff={setWriteFileModalOnOff}
-                WriteFileModalOnOff={WriteFileModalOnOff}
+                setGameUploadPcFileModalOnOff={setGameUploadPcFileModalOnOff}
+                GameUploadPcFileModalOnOff={GameUploadPcFileModalOnOff}
 
                 PcExtensionCheck={PcExtensionCheck}
                 PcExtensionList={PcExtensionAllList}
+
+                pcfileSize={pcfileSize}
+
+                pcfiles={pcfiles}
+
+                MaxSize={FileMaxSize}
+
+            /> : <></>}
+
+            {GameUploadMobileFileModalOnOff ? <GameUploadMobileFileModal
+
+                setGameUploadMobileFileModalOnOff={setGameUploadMobileFileModalOnOff}
+                GameUploadMobileFileModalOnOff={GameUploadMobileFileModalOnOff}
+
                 MobileExtensionCheck={MobileExtensionCheck}
                 MobileExtensionList={MobileExtensionAllList}
-                MainImgExtensionCheck={MainImgExtensionCheck}
-                MainImgExtensionList={MainImgExtensionAllList}
+
+                mobilefileSize={mobilefileSize}
+
+                mobilefiles={mobilefiles}
+
+                MaxSize={FileMaxSize}
+
+            /> : <></>}
+
+            {GameUploadBackgroundModalOnOff ? <GameUploadBackgroundModal
+
+                setGameUploadBackgroundModalOnOff={setGameUploadBackgroundModalOnOff}
+                GameUploadBackgroundModalOnOff={GameUploadBackgroundModalOnOff}
+
                 BackgroundImgExtensionCheck={BackgroundImgExtensionCheck}
                 BackgroundImgExtensionList={BackgroundImgExtensionAllList}
 
-                pcfileSize={pcfileSize}
-                mobilefileSize={mobilefileSize}
-                mainimgSize={mainimgSize}
                 backgroundimgSize={backgroundimgSize}
 
-                pcfiles={pcfiles}
-                mobilefiles={mobilefiles}
-                mainimgfiles={mainimgfiles}
                 backgroundimgfiles={backgroundimgfiles}
 
                 MaxSize={FileMaxSize}
 
             /> : <></>}
 
-            {WriteBoardModalOnOff ? <GameUploadModal
-                setWriteBoardModalOnOff={setWriteBoardModalOnOff}
-                WriteBoardModalOnOff={WriteBoardModalOnOff}
-                ExplanationValue={ExplanationValue}
-                TitleChangeValue={TitleChangeValue}
-                URLChangeValue={URLChangeValue}
-                pcfiles={pcfiles}
-                mobilefiles={mobilefiles}
+            {GameUploadMainModalOnOff ? <GameUploadMainModal
+
+                setGameUploadMainModalOnOff={setGameUploadMainModalOnOff}
+                GameUploadMainModalOnOff={GameUploadMainModalOnOff}
+
+                MainImgExtensionCheck={MainImgExtensionCheck}
+                MainImgExtensionList={MainImgExtensionAllList}
+
+                mainimgSize={mainimgSize}
+
                 mainimgfiles={mainimgfiles}
-                backgroundimgfiles={backgroundimgfiles}
+
+                MaxSize={FileMaxSize}
+
+            /> : <></>}
+
+            {GameUploadModalOnOff ? <GameUploadModal
+
+                setGameUploadModalOnOff={setGameUploadModalOnOff}
+                GameUploadModalOnOff={GameUploadModalOnOff}
+
+                TitleChangeValue = {TitleChangeValue}
+                ExplanationValue = {ExplanationValue}
+                pcfiles = {pcfiles}
+                mobilefiles = {mobilefiles}
+                URLChangeValue = {URLChangeValue}
+                mainimgfiles = {mainimgfiles}
+                backgroundimgfiles = {backgroundimgfiles}
+                GenreChangeValue = {GenreChangeValue}
+
             /> : <></>}
 
             <WriterInformationTextAllBox>
@@ -862,15 +946,26 @@ const GameUploadPage = () => {
             <WriteBoardSubmit onSubmit={OncheckSubmit}>
 
                 <TitleBox>
-                    <TagTextBox><TagText>게임 제목</TagText></TagTextBox>
+                    <TagTextBox>
+                        <TagText>게임 제목</TagText>
+                        <SubText>(필수)</SubText>
+                    </TagTextBox>
                     <WriterInput placeholder='게임 제목을 입력해 주세요!' maxLength={50} onChange={TitleChange} value={TitleChangeValue} />
                 </TitleBox>
+
+                <GenreBox>
+                    <TagTextBox>
+                        <TagText>장르</TagText>
+                        <SubText>(필수)</SubText>
+                    </TagTextBox>
+                    <WriterInput placeholder='장르를 입력해 주세요!' maxLength={50} onChange={GenreChange} value={GenreChangeValue} />
+                </GenreBox>
 
                 <MainImgBox>
 
                     <TagTextBox>
                         <TagText>메인 이미지</TagText>
-                        <SubText>16 : 9 사이즈의 미리보기 이미지 </SubText>
+                        <SubText>16 : 9 사이즈의 미리보기 이미지 (필수)</SubText>
                     </TagTextBox>
 
                     <FileUploadBox ref={MainImgDragRef} checkFile={isMainImgDragging}>
@@ -913,6 +1008,17 @@ const GameUploadPage = () => {
                             }
                         </FileList>
                     </FileUploadBox>
+
+                    {mainimgfiles.length > 0 &&
+                        <MainImgViewAllBox>
+                            <MainImgView>
+                                <SlideBox>
+                                    <ImgBox src={MainImgURL} />
+                                </SlideBox>
+                            </MainImgView>
+                        </MainImgViewAllBox>
+                    }
+
                 </MainImgBox>
 
                 <BackgroundImgBox>
@@ -960,6 +1066,17 @@ const GameUploadPage = () => {
                             }
                         </FileList>
                     </FileUploadBox>
+
+                    {backgroundimgfiles.length > 0 &&
+                        <BackgroundImgViewAllBox>
+                            <BackgroundImgViewBox>
+                                <BackgroundBox width={WindowLength}>
+                                    <ImgBox src={BackgroundImgURL} />
+                                </BackgroundBox>
+                            </BackgroundImgViewBox>
+                        </BackgroundImgViewAllBox>
+                    }
+
                 </BackgroundImgBox>
 
                 <ExplanationBox>
@@ -1085,7 +1202,7 @@ const GameUploadPage = () => {
 
 
                 <SubmitBtnBox>
-                    <Link to="/FreeBoard"><CancelBtn type="button">취소</CancelBtn></Link>
+                    <Link to="/" onClick={() => ScrollTop()}><CancelBtn type="button">취소</CancelBtn></Link>
                     <SubmitBtn type='submit'>등록</SubmitBtn>
                 </SubmitBtnBox>
 
@@ -1096,10 +1213,86 @@ const GameUploadPage = () => {
 
 export default GameUploadPage;
 
+const MainImgViewAllBox = styled.div
+    `
+
+
+`
+
+const BackgroundImgViewAllBox = styled.div
+    `
+
+`
+
+const MainImgView = styled.div
+    `
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin: 0px 20px 30px 20px;
+    border-radius: 20px;
+    border: none;
+`
+
+const BackgroundImgViewBox = styled(MainImgView)
+    `
+
+`
+
+const ImgBox = styled.img
+    `
+    width: 100%;
+    height: 100%;
+`
+
+const AllBox = styled.div
+    `
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    justify-content: end;
+    background: rgba(0,0,0,0.3);
+    top: 0%;
+    height: 74.7%;
+    left: 0%;
+    border-radius: 8px;
+    width: 100%;
+    overflow: hidden;
+     @media (min-width:250px) and (max-width:560px)
+    {
+        width: 100%;
+    }
+`
+
+const SlideBox = styled.div
+    `
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border 0.5s;
+    width: 407px;
+    height: 229px;
+`
+
+const BackgroundBox = styled(SlideBox)
+    `
+    width: 1536px;
+    height: ${props => props.width >= 1280 ? "667px" : "46.7vw"};
+`
+
+const BackgroundImgView = styled.div
+    `
+
+`
+
 const TitleBox = styled.div
     `
     display: flex;
     flex-direction: column;
+`
+
+const GenreBox = styled(TitleBox)
+    `
+
 `
 
 const ExplanationBox = styled.div
@@ -1142,7 +1335,7 @@ const Editer = styled(ReactQuill)
         color:${props => props.theme.textColor};
     }
 
-    .ql-editor ol.ql-editor ul
+    .ql-editor ol, .ql-editor ul
     {
         color:${props => props.theme.textColor};
     }
@@ -1158,6 +1351,7 @@ const Editer = styled(ReactQuill)
         min-height: 300px;
         font-size: 20px;
         background: ${props => props.theme.backgroundColor};
+        transition: background 0.5s;
     }
 
     .ql-editor::-webkit-scrollbar 
@@ -1375,6 +1569,7 @@ const FileUploadBox = styled.div
     justify-content: center;
     padding: 19px 0px 0px 0px;
     background: ${props => props.checkFile ? "rgb(0,0,0,0.04)" : props.theme.backgroundColor};
+    transition: background 0.5s;
     min-height: 135px;
     @media (hover: hover)
     {
@@ -1398,7 +1593,8 @@ const WriterInput = styled.input
     height: 70px;
     font-size: 23px;
     color : ${props => props.theme.textColor}; 
-    background: ${props => props.theme.backgroundColor};   
+    background: ${props => props.theme.backgroundColor};
+    transition: background 0.5s;
     &::placeholder{
         color:${props => props.theme.textColor};
     }
