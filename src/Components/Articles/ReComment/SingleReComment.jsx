@@ -25,7 +25,7 @@ import Siren from "../../../img/Siren/Siren.png";
 import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { clearLoginState, accessToken, point } from "../../Redux/User";
+import { clearLoginState, accessToken, point } from "../../../Redux/User";
 import ReportModal from "../ReportModal";
 import ReplyUpdateReCommentModal from "./ReplyUpdateReCommentModal";
 
@@ -48,7 +48,13 @@ const SingleReComment = ({
     setModalreCommentId,
     setModalreRegdate,
     setModalToggleState2,
-    setModalToggleState
+    setModalToggleState,
+    reportMode,
+    setReportMode,
+    setSelectedReportWriter,
+    setSelectedReportRegdate,
+    setSelectedReportContentType,
+    setSelectedReportDepth
 }) => {
     const [id, setId] = useState(ReComment.id);
     const [originalReplyer, setOriginalReplyer] = useState(ReComment.original_author);
@@ -62,7 +68,6 @@ const SingleReComment = ({
 
     const [likecount, setLikecount] = useState(0);
     const [reCommenterRole, setReCommenterRole] = useState("");
-    const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState('<p><br></p>');
     const [timecount, setTimecount] = useState("1시간");
     const [reCommentStatusDivHide, setReCommentStatusDivHide] = useState(false);
@@ -508,14 +513,7 @@ const SingleReComment = ({
     return (
         <UserReCommentBox id={id}>
 
-            <ReportModal
-                ReportMode={reportMode}
-                setReportMode={setReportMode}
-                master={reCommenter}
-                regdate={regdate}
-                contentType={contentType}
-                depth={3}
-            />
+            
 
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <ReCommentUserProfileBox>
@@ -547,7 +545,13 @@ const SingleReComment = ({
                                         (userInfo.login_state=="allok" ? "flex": user.login_state=="allok"? "flex":"none")
                                          : user.login_state=="allok" ? "flex":"none"}}>
                             신고
-                            <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
+                            <SirenImg src={Siren} onClick={() => { 
+                                setReportMode(!reportMode) 
+                                setSelectedReportWriter(reCommenter);
+                                setSelectedReportRegdate(regdate);
+                                setSelectedReportContentType(contentType);
+                                setSelectedReportDepth(3);    
+                            }} />
                         </RedateBox>
 
                         <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>

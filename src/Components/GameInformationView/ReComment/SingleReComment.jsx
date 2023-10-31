@@ -25,7 +25,7 @@ import Siren from "../../../img/Siren/Siren.png";
 import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { clearLoginState, accessToken, point } from "../../Redux/User";
+import { clearLoginState, accessToken, point } from "../../../Redux/User";
 import ReCommentReportModal from "./ReCommentReportModal";
 import ReplyUpdateReCommentModal from "./ReplyUpdateReCommentModal";
 

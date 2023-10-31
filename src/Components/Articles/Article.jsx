@@ -26,7 +26,7 @@ import { BiLogoDevTo } from "react-icons/bi";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { RiInstagramFill } from "react-icons/ri";
 import Siren from "../../img/Siren/Siren.png";
-import { clearLoginState, accessToken, point } from "../Redux/User";
+import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReportModal from "./ReportModal";
 import ReplyPagination from "./Reply/ReplyPagination";
 import DeleteModal from "./DeleteModal";
@@ -68,6 +68,11 @@ const Article = () => {
     const [ModalReplyDeleteToggleState, setModalReplyDeleteToggleState] = useState("");
     const [ModalReplyDeleteId, setModalReplyDeleteId] = useState("");
     const [FitterDropdown, setFitterDropdown] = useState(false);
+
+    const [selectedReportWriter, setSelectedReportWriter] = useState("");
+    const [selectedReportRegdate, setSelectedReportRegdate] = useState("");
+    const [selectedReportContentType, setSelectedReportContentType] = useState("");
+    const [selectedReportDepth, setSelectedReportDepth] = useState("");
 
     const [ModalFreeArticleReplyCommentOnOff, setModalFreeArticleReplyCommentOnOff] = useState(false);
 
@@ -752,10 +757,10 @@ const Article = () => {
             <ReportModal
                 ReportMode={reportMode}
                 setReportMode={setReportMode}
-                master={writer}
-                regdate={regdate}
-                contentType={contentType}
-                depth={1}
+                master={selectedReportWriter}
+                regdate={selectedReportRegdate}
+                contentType={selectedReportContentType}
+                depth={selectedReportDepth}
             />
 
             <UserBox>
@@ -820,7 +825,13 @@ const Article = () => {
                                         (userInfo.loginState=="allok" ? "flex": user.login_state=="allok"? "flex":"none")
                                          : user.login_state=="allok" ? "flex":"none"}}>
                             <ReportAllBoxText>신고</ReportAllBoxText>
-                            <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
+                            <SirenImg src={Siren} onClick={() => { 
+                                setReportMode(!reportMode); 
+                                setSelectedReportWriter(writer);
+                                setSelectedReportRegdate(regdate);
+                                setSelectedReportContentType(contentType);
+                                setSelectedReportDepth(1);
+                            }} />
                         </RedateBox>
 
                         <DayBox>
@@ -1082,6 +1093,13 @@ const Article = () => {
                                 setModalReplyDeleteToggleState={setModalReplyDeleteToggleState}
 
                                 setModalReplyDeleteId={setModalReplyDeleteId}
+
+                                reportMode={reportMode}
+                                setReportMode={setReportMode}
+                                setSelectedReportWriter={setSelectedReportWriter}
+                                setSelectedReportRegdate={setSelectedReportRegdate}
+                                setSelectedReportContentType={setSelectedReportContentType}
+                                setSelectedReportDepth={setSelectedReportDepth}
 
                                 setReplyDeleteMode={setReplyDeleteMode}
                                 ReplyDeleteMode={ReplyDeleteMode}

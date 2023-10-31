@@ -26,7 +26,7 @@ import SingleReComment from "../ReComment/SingleReComment";
 import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { clearLoginState, accessToken, point } from "../../Redux/User";
+import { clearLoginState, accessToken, point } from "../../../Redux/User";
 import ReportModal from "../ReportModal"
 import ReCommentDeleteModal from "../ReComment/ReCommentDeleteModal";
 import ReplyUpdateCommentModal from "./ReplyUpdateCommentModal";
@@ -51,6 +51,12 @@ const SingleReply = ({
     setModalReplyDeleteId,
     setReplyDeleteMode,
     ReplyDeleteMode,
+    reportMode,
+    setReportMode,
+    setSelectedReportWriter,
+    setSelectedReportRegdate,
+    setSelectedReportContentType,
+    setSelectedReportDepth
 }) => {
     
     const [ModalReplyUpdateCommentOnOff, setModalReplyUpdateCommentOnOff] = useState(false);
@@ -63,7 +69,6 @@ const SingleReply = ({
     const [updatedate, setUpdatedate] = useState(Comment.updatedate);
     const [likecount, setLikecount] = useState(0);
     const [replyerRole, setReplyerRole] = useState("");
-    const [reportMode, setReportMode] = useState(false);
     const [reCommentChangeValue, setReCommentChangeValue] = useState("<p><br></p>");
     const [reCommentHide, setReCommentHide] = useState(true);
     const [replyStatusDivHide, setReplyStatusDivHide] = useState(false);
@@ -572,14 +577,7 @@ const SingleReply = ({
     return (
         <UserCommentBox id={id}>
 
-            <ReportModal
-                ReportMode={reportMode}
-                setReportMode={setReportMode}
-                master={replyer}
-                regdate={regdate}
-                contentType={contentType}
-                depth={2}
-            />
+          
 
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <CommentUserProfileBox>
@@ -612,7 +610,13 @@ const SingleReply = ({
                                         (userInfo.loginState=="allok" ? "flex": user.login_state=="allok"? "flex":"none")
                                          : user.login_state=="allok" ? "flex":"none"}}>
                             신고
-                            <SirenImg src={Siren} onClick={() => { setReportMode(!reportMode) }} />
+                            <SirenImg src={Siren} onClick={() => { 
+                                setReportMode(!reportMode) 
+                                setSelectedReportWriter(replyer);
+                                setSelectedReportRegdate(regdate);
+                                setSelectedReportContentType(contentType);
+                                setSelectedReportDepth(2);
+                            }} />
                         </RedateBox>
                         <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
                     </div>
@@ -799,6 +803,13 @@ const SingleReply = ({
                                         editReComment={editReComment}
                                         deleteReComment={deleteReComment}
                                         setReCommentHide={setReCommentHide}
+
+                                        reportMode={reportMode}
+                                        setReportMode={setReportMode}
+                                        setSelectedReportWriter={setSelectedReportWriter}
+                                        setSelectedReportRegdate={setSelectedReportRegdate}
+                                        setSelectedReportContentType={setSelectedReportContentType}
+                                        setSelectedReportDepth={setSelectedReportDepth}
 
                                         setReDeleteMode={setModalReCommenterdeleteMode}
                                         RedeleteMode={ModalReCommenterdeleteMode}

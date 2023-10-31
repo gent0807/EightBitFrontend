@@ -13,7 +13,7 @@ import JPG from "../../img/FileList/jpg.png";
 import PNG from "../../img/FileList/png.png";
 import ZIP from "../../img/FileList/zip.png";
 
-import { accessToken, clearLoginState, point } from '../Redux/User';
+import { accessToken, clearLoginState, point } from '../../Redux/User';
 
 import GameUploadModal from "./GameUploadModal";
 import GameUploadFileModal from "./GameUploadFileModal";

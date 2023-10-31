@@ -1,21 +1,21 @@
-import TopNavBar from './Header/TopNavBarContainer';
-import Login from './Login/LoginContainer';
-import Sign from './Sign/SignContainer';
-import EmailPwFound from './EmailPwFound/EmailPwFoundContainer';
-import PhoneAuth from './Phone/PhoneAuthContainer';
-import SelectSign from "./Phone/SelectSignContainer";
-import Board from "./Board/BoardContainer";
+import TopNavBar from './Components/Header/TopNavBarContainer';
+import Login from './Components/Login/LoginContainer';
+import Sign from './Components/Sign/SignContainer';
+import EmailPwFound from './Components/EmailPwFound/EmailPwFoundContainer';
+import PhoneAuth from './Components/Phone/PhoneAuthContainer';
+import SelectSign from "./Components/Phone/SelectSignContainer";
+import Board from "./Components/Board/BoardContainer";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Footer from "./Footer/Footer";
-import NotFound from "./ErrorPage/NotFound";
-import WriteBoard from "./WriteBoard/WriteBoardContainer";
-import Article from "./Articles/ArticleContainer";
-import UpdateBoard from "./UpdateBoard/UpdateBoardContainer";
-import Center from "./Center/CenterContainer";
-import OfficialGame from "./OfficialGame/OfficialGameContainer";
-import AllGamePage from "./AllGame/AllGamePageContainer";
-import GameInformationView from "./GameInformationView/GameInformationViewContainer";
-import GameUploadPage from "./GameUploadPage/GameUploadPageContainer";
+import Footer from "./Components/Footer/Footer";
+import NotFound from "./Components/ErrorPage/NotFound";
+import WriteBoard from "./Components/WriteBoard/WriteBoardContainer";
+import Article from "./Components/Articles/ArticleContainer";
+import UpdateBoard from "./Components/UpdateBoard/UpdateBoardContainer";
+import Center from "./Components/Center/CenterContainer";
+import OfficialGame from "./Components/OfficialGame/OfficialGameContainer";
+import AllGamePage from "./Components/AllGame/AllGamePageContainer";
+import GameInformationView from "./Components/GameInformationView/GameInformationViewContainer";
+import GameUploadPage from "./Components/GameUploadPage/GameUploadPageContainer";
 
 const Router = () => {
 

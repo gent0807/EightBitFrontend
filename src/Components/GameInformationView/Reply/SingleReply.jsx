@@ -26,7 +26,7 @@ import SingleReComment from "../ReComment/SingleReComment";
 import { BsPencilSquare } from "react-icons/bs";
 import { BiLogoDevTo } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { clearLoginState, accessToken, point } from "../../Redux/User";
+import { clearLoginState, accessToken, point } from "../../../Redux/User";
 import ReplyReportModal from "./ReplyReportModal"
 import ReCommentDeleteModal from "../ReComment/ReCommentDeleteModal";
 import ReplyUpdateCommentModal from "./ReplyUpdateCommentModal";

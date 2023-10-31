@@ -6,7 +6,7 @@ import { CgMenuGridR } from "react-icons/cg";
 import { useSelector, useDispatch } from "react-redux";
 import Darkmode from "../Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
-import { clearLoginState } from "../Redux/User";
+import { clearLoginState } from "../../Redux/User";
 import { Outlet } from "react-router-dom"
 
 import LogoLight from "../../img/LOGO/8bitLight.png";
@@ -34,7 +34,7 @@ import Console from "../../img/BoardSlide/console.png";
 import Digital from "../../img/BoardSlide/digital.png";
 
 import axios from 'axios';
-import Store from "../Redux/Store";
+import Store from "../../Redux/Store";
 import { contextType } from "react-quill";
 
 const HeaderBox = () => {

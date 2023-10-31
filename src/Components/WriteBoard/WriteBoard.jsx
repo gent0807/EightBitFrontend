@@ -16,7 +16,7 @@ import PDF from "../../img/FileList/pdf.png";
 import TXT from "../../img/FileList/txt.png";
 import ZIP from "../../img/FileList/zip.png";
 import Default from "../../img/FileList/defaultWhite.png"
-import { accessToken, clearLoginState, point } from '../Redux/User';
+import { accessToken, clearLoginState, point } from '../../Redux/User';
 import WriteBoardModal from "./WriteBoardModal";
 import WirteFileModal from "./WirteFileModal";
 

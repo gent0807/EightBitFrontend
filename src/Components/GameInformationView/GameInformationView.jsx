@@ -15,7 +15,7 @@ import { ImageDrop } from "quill-image-drop-module";
 import dayjs from "dayjs";
 import axios from "axios";
 import DOMPurify from "dompurify";
-import { clearLoginState, accessToken, point } from "../Redux/User";
+import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReplyPagination from "./Reply/ReplyPagination";
 import ReplyDeleteModal from "../Articles/Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
