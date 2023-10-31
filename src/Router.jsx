@@ -27,7 +27,7 @@ const Router = () => {
                     <Route path="/Board/:contentType" element={<Board />} />
                     <Route path="/" element={<Center />} />
                     <Route path="/Article/:writer/:regdate/:contentType" element={<Article />} />
-                    <Route path="/GameInformationView/:developer/:regdate/:contentType/:depth" element={<GameInformationView />} />
+                    <Route path="/GameInformationView/:developer/:regdate/:contentType" element={<GameInformationView />} />
                     <Route path="/GameUploadPage/:contentType" element={<GameUploadPage />} />
                 </Route>
                     <Route path="/OfficialGame" element={<OfficialGame />} />

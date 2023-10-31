@@ -4,12 +4,17 @@ import axios from "axios";
 const ip = localStorage.getItem("ip");
 
 
-const GameMainImg = ({ uploader, regdate, contentType, storeType,depth }) => {
-    const [gameImages, setGameImages] = useState([]);
+const GameMainImg = ({ uploader, regdate, contentType, storeType, depth }) => {
+
     const [id, setId] = useState("");
 
     useEffect(() => {
-        const getFileList = async (uploader, regdate, contentType, storeType) => {
+        console.log("uploader : " + uploader);
+        console.log("regdate : " + regdate);
+        console.log("contentType : " + contentType);
+        console.log("storeType : " + storeType);
+        console.log("depth : " + depth);
+        const getFileList = async (uploader, regdate, contentType, storeType, depth) => {
             await axios.get(`${ip}/Files/files/${uploader}/${regdate}/${contentType}/${storeType}/${depth}`, {
 
             }, {
@@ -21,19 +26,24 @@ const GameMainImg = ({ uploader, regdate, contentType, storeType,depth }) => {
                 .then(data => {
                     console.log("메인 이미지 파일 1개 이상");
                     console.log(data);
-                    setGameImages(data);
+                    setId(data[0].id);
+                    uploader=data[0].uploader;
+                    regdate=data[0].regdate;
+                    contentType=data[0].contentType;
+                    storeType=data[0].storeType;
+                    depth=data[0].depth;
                 })
         }
 
-        getFileList(uploader, regdate, contentType, storeType);
-        setId(gameImages[0].id);
+        getFileList(uploader, regdate, contentType, storeType, depth);
+        
     });
 
     
 
 
     return (
-        <img src={`${ip}/Files/file/${id}/${gameImages[0].uploader}/${gameImages[0].regdate}/${gameImages[0].contentType}/${gameImages[0].storeType}/${gameImages[0].depth}`} alt="게임 이미지" />
+        <img src={`${ip}/Files/file/${id}/${uploader}/${regdate}/${contentType}/${storeType}/${depth}`} alt="게임 이미지" />
     );
 
 }

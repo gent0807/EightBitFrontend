@@ -18,12 +18,11 @@ import dayjs from "dayjs";
 import axios from "axios";
 import DOMPurify from "dompurify";
 import { clearLoginState, accessToken, point } from "../../Redux/User";
-import ReplyPagination from "./Reply/ReplyPagination";
+import ReplyPagination from "../Reply/ReplyPagination";
 import ReplyDeleteModal from "../Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
 import GameInformationViewReplyModal from "./GameInformationViewReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
-import { BsHandThumbsUpFill } from "react-icons/bs";
 import { BsHandThumbsUp } from "react-icons/bs"
 
 Quill.register("modules/imageDrop", ImageDrop);
@@ -33,7 +32,6 @@ const GameInformationView = () => {
     const { developer } = useParams();
     const { regdate } = useParams();
     const { contentType } = useParams();
-    const { depth } = useParams();
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [updatedate, setUpdatedate] = useState("");
@@ -42,14 +40,15 @@ const GameInformationView = () => {
     const [MobileGameCount, setMobileGameCount] = useState(0);
     const [ImgCount, setImgCount] = useState(0);
     const [BannerCount, setBannerCount] = useState(0);
-    const [PCGame, setPCGame] = useState("");
-    const [mobileGame, setMobileGame] = useState("");
-    const [mainImg, setMainImg] = useState("");
-    const [banner, setBanner] = useState("");
+    const [PCGame, setPCGame] = useState({});
+    const [mobileGame, setMobileGame] = useState({});
+    const [mainImg, setMainImg] = useState({});
+    const [banner, setBanner] = useState({});
     const [role, setRole] = useState("");
     const [likecount, setLikecount] = useState(0);
     const [email, setEmail] = useState("");
     const [type, setType] = useState("");
+    const [OfficialGameList, setOfficialGameList] = useState([]);   
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -196,14 +195,14 @@ const GameInformationView = () => {
                     return res.data;
                 })
                 .then(data => {
-                    return data;
+                    setOfficialGameList(data);
                 })
         }
 
 
-        const getLikers = (developer, regdate, contentType, depth) => {
+        const getLikers = (developer, regdate, contentType) => {
 
-            axios.get(`${ip}/Likes/likes?master=${developer}&regdate=${regdate}&contentType=${contentType}&depth=${depth}`, {
+            axios.get(`${ip}/Likes/likes?master=${developer}&regdate=${regdate}&contentType=${contentType}&depth=1`, {
 
             },
                 {
@@ -262,9 +261,9 @@ const GameInformationView = () => {
                 })
         }
 
-        const getComments = async (developer, regdate, contentType, depth) => {
+        const getComments = async (developer, regdate, contentType) => {
 
-            await axios.get(`${ip}/Comments/comments?original_author=${developer}&original_regdate=${regdate}&contentType=${contentType}&depth=${depth + 1}`, {
+            await axios.get(`${ip}/Comments/comments?original_author=${developer}&original_regdate=${regdate}&contentType=${contentType}&depth=2`, {
 
             },
                 {
@@ -281,8 +280,8 @@ const GameInformationView = () => {
 
         }
 
-        const getFileList = async (developer, regdate, contentType, storeType, depth) => {
-            await axios.get(`${ip}/Files/files/${developer}/${regdate}/${contentType}/${storeType}/${depth}`, {
+        const getFileList = async (developer, regdate, contentType, storeType) => {
+            await axios.get(`${ip}/Files/files/${developer}/${regdate}/${contentType}/${storeType}/1`, {
 
             }, {
 
@@ -291,7 +290,20 @@ const GameInformationView = () => {
                     return res.data
                 })
                 .then(data => {
-                    return data;
+                    if (storeType == "pcGame") {
+                        setPCGame(data[0]);
+                    }
+                    else if (storeType == "mobileGame") {
+                        setMobileGame(data[0]);
+                    }
+
+                    else if (storeType == "gameImage") {
+                        setMainImg(data[0]);
+                    }
+                    else if (storeType == "gameBanner") {
+                        setBanner(data[0]);
+                    }
+                    
                 })
         }
 
@@ -322,25 +334,25 @@ const GameInformationView = () => {
                 getLikers(data.developer, data.regdate, data.contentType, data.depth);
 
                 if (data.pcGameCount > 0) {
-                    setPCGame(getFileList(data.developer, data.regdate, data.contentType, "pcGame", data.depth)[0]);
+                    getFileList(data.developer, data.regdate, data.contentType, "pcGame");
                 }
 
                 if (data.mobileGameCount > 0) {
-                    setMobileGame(getFileList(data.developer, data.regdate, data.contentType, "mobileGame", data.depth)[0]);
+                    getFileList(data.developer, data.regdate, data.contentType, "mobileGame");
                 }
 
                 if (data.imgCount > 0) {
-                    setMainImg(getFileList(data.developer, data.regdate, data.contentType, "gameImage", data.depth)[0]);
+                    getFileList(data.developer, data.regdate, data.contentType, "gameImage");
                 }
 
                 if (data.bannerCount > 0) {
-                    setBanner(getFileList(data.developer, data.regdate, data.contentType, "gameBanner", data.depth)[0]);
+                    getFileList(data.developer, data.regdate, data.contentType, "gameBanner");
                 }
 
-                if (getOfficialGameList().include(data.title)) {
+                if (OfficialGameList.includes(data.title)) {
                     setType("공식");
                 }
-                else if (!getOfficialGameList().include(data.title)) {
+                else if (!OfficialGameList.includes(data.title)) {
                     setType("인디");
                 }
 
@@ -357,7 +369,7 @@ const GameInformationView = () => {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
             master: developer,
             regdate: regdate,
-            depth: depth,
+            depth: 1,
             contentType: contentType,
         },
             {
@@ -378,7 +390,7 @@ const GameInformationView = () => {
 
     const reduceLike = async (e) => {
         if (likecount > 0) {
-            await axios.delete(`${ip}/Likes/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${developer}/${regdate}/${contentType}/${depth}`,
+            await axios.delete(`${ip}/Likes/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${developer}/${regdate}/${contentType}/1`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
                 })
@@ -493,7 +505,7 @@ const GameInformationView = () => {
                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 contentType: contentType,
-                depth: depth + 1,
+                depth: 2,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -563,9 +575,6 @@ const GameInformationView = () => {
         window.scrollTo({ top: 835, behavior: "smooth" });
     }
 
-    useEffect(() => {
-        setGameInformation(Slide.filter((Game) => Game.id == id))
-    }, [id]);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -599,8 +608,8 @@ const GameInformationView = () => {
                 depth={selectedReportDepth}
             />
 
-            {banner === "" ? <></> : <BackgroundEffect />}
-            {banner === "" ? <DefaultBackground /> : <GameViewBackgroundImg src={`${ip}/Files/file/${banner.id}/${banner.uploader}/${banner.regdate}/${banner.contentType}/${banner.storeType}/${banner.depth}`} />}
+            {banner == {} ? <></> : <BackgroundEffect />}
+            {banner == {} ? <DefaultBackground /> : <GameViewBackgroundImg src={`${ip}/Files/file/${banner.id}/${banner.uploader}/${banner.regdate}/${banner.contentType}/${banner.storeType}/1`} />}
 
             <GameViewAllBox>
                 <GameTitleAllBox>
@@ -614,7 +623,7 @@ const GameInformationView = () => {
                 <GameInformaionAllBox>
                     <GameAllBox>
                         <GameInformaionImgBox>
-                            <GameInformaionImg src={`${ip}/Files/file/${mainImg.id}/${mainImg.uploader}/${mainImg.regdate}/${mainImg.contentType}/${mainImg.storeType}/${mainImg.depth}`} />
+                            <GameInformaionImg src={`${ip}/Files/file/${mainImg.id}/${mainImg.uploader}/${mainImg.regdate}/${mainImg.contentType}/${mainImg.storeType}/1`} />
                         </GameInformaionImgBox>
 
                         <GameIntroduceBox>
@@ -782,10 +791,12 @@ const GameInformationView = () => {
                                         onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
                                         {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                                     </LikeBtn>
-
+                                   <div>
+                                     다운로드
+                                   </div>
                                     <DownloadBtn>
                                         <DownloadBtnText>
-                                            <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`} >다운로드</DownloadLink>
+                                            <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>PC</DownloadLink>
                                         </DownloadBtnText>
                                         <DownloadBtnIcon>
                                             <AiOutlineDownload />
@@ -793,13 +804,16 @@ const GameInformationView = () => {
                                     </DownloadBtn>
 
                                     <MoblieBtn>
-                                        <DownloadBtnText href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}  >
-                                            모바일
+                                        <DownloadBtnText>
+                                        <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>모바일</DownloadLink>
                                         </DownloadBtnText>
                                         <DownloadBtnIcon>
                                             <AiOutlineDownload />
                                         </DownloadBtnIcon>
                                     </MoblieBtn>
+                                    <div>
+                                        모바일 앱스토어: <a href={`${URL}`}>{URL}</a>
+                                    </div>
                                 </ButtonAllBox>
                             </GameIntroduceSubTextBox>
 

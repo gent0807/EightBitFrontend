@@ -34,7 +34,8 @@ const AllGamePage = () => {
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
     const [SearchList, setSearchList] = useState([]);
-    const SlideSize = Slide.slice(offset, offset + limit);
+    const PostsSize = posts.slice(offset, offset + limit);
+
     const [FillterState, setFillerState] = useState("title");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
@@ -85,6 +86,65 @@ const AllGamePage = () => {
         };
     }, [LimitRef]);
 
+    useEffect(() => {
+        axios.get(`${ip}/Games/games?contentType=${contentType}`, {
+
+        },
+            {
+
+            })
+            .then(res => res.data
+            )
+            .then(data => {
+                console.log(data);
+                setPosts(data);
+                setSearchList(data);
+            })
+    }, [contentType]);
+
+    const SearchSubmit = (e) => {
+        e.preventDefault();
+        if (Search === "") {
+            axios.get(`${ip}/Games/games?contentType=${contentType}`, {
+
+            },
+                {
+
+                })
+                .then(res => res.data
+                )
+                .then(data => {
+                    console.log(data);
+                    setPosts(data);
+                    setSearchList(posts);
+                    setPage(1);
+                })
+        } else {
+            const SearchResult = posts.filter((board) =>
+            SearchFillText === "제목" ?
+                board.title.toUpperCase().includes(Search.toUpperCase()) :
+                SearchFillText === "개발자" ?
+                    board.developer.toUpperCase().includes(Search.toUpperCase()) :
+                    SearchFillText === "내용" ?
+                        board.content.toUpperCase().includes(Search.toUpperCase()) :
+                        board.title.toUpperCase().includes(Search.toUpperCase())
+        );
+
+            setSearchList(SearchResult);
+            setSearch("");
+            setPage(1);
+        }
+    }
+
+    useEffect(() => {
+        if (posts.length > 0 && PostsSize.length === 0) {
+            setPage(page - 1);
+        }
+    }, [PostsSize.length, posts.length]);
+
+
+    
+
     const OnSearch = (e) => {
         const currentSearch = e.target.value;
         setSearch(currentSearch);
@@ -130,61 +190,10 @@ const AllGamePage = () => {
         setFirstReset(false);
     }
 
-    useEffect(() => {
-        if (posts.length > 0 && PostsSize.length === 0) {
-            setPage(page - 1);
-        }
-    }, [PostsSize.length, posts.length]);
+    
 
-    useEffect(() => {
-        axios.get(`${ip}/Articles/articles?contentType=${contentType}`, {
 
-        },
-            {
-
-            })
-            .then(res => res.data
-            )
-            .then(data => {
-                console.log(data);
-                setPosts(data);
-                setSearchList(data);
-            })
-    }, [contentType]);
-
-    const SearchSubmit = (e) => {
-        e.preventDefault();
-        if (Search === "") {
-            axios.get(`${ip}/Articles/articles?contentType=${contentType}`, {
-
-            },
-                {
-
-                })
-                .then(res => res.data
-                )
-                .then(data => {
-                    console.log(data);
-                    setPosts(data);
-                    setSearchList(posts);
-                    setPage(1);
-                })
-        } else {
-            const SearchResult = posts.filter((board) =>
-            SearchFillText === "제목" ?
-                board.title.toUpperCase().includes(Search.toUpperCase()) :
-                SearchFillText === "개발자" ?
-                    board.developer.toUpperCase().includes(Search.toUpperCase()) :
-                    SearchFillText === "내용" ?
-                        board.content.toUpperCase().includes(Search.toUpperCase()) :
-                        board.title.toUpperCase().includes(Search.toUpperCase())
-        );
-
-            setSearchList(SearchResult);
-            setSearch("");
-            setPage(1);
-        }
-    }
+    
 
     const ScrollTop = () => {
         window.scrollTo({ top: 835, behavior: "smooth" });
