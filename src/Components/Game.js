@@ -24,6 +24,7 @@ import Logo5 from "../img/mainSlide/logo/logo5.png"
 
 import Video1 from "../img/mainSlide/video/Official1.mp4";
 import Video2 from "../img/mainSlide/video/Official2.mp4";
+import Video3 from "../img/mainSlide/video/Official3.mp4";
 
 export const Slide = [
     {
@@ -80,7 +81,7 @@ export const Slide = [
         mainImg: Main3,
         backgroundImg: Background3,
         Logo: Logo3,
-        video: "",
+        video: Video3,
 
         developer: "란토",
         distributor: "8bit",
