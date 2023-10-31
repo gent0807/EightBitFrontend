@@ -20,7 +20,7 @@ const DeleteModal = ({ setDeleteMode, deleteMode, regdate, writer, loginMaintain
 
         e.preventDefault();
 
-        axios.delete(`${ip}/Articles/article/${writer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}/${contentType}`,
+        axios.delete(`${ip}/Articles/article/${contentType}/${writer}/${regdate}/${loginMaintain == "true" ? userInfo.role : user.role}`,
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })

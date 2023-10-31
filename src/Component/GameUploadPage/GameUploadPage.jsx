@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReactQuill, { Quill } from "react-quill";
 import ImageResize from "quill-image-resize-module-react";
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from 'styled-components';
 import axios from 'axios';
 import { ImageDrop } from "quill-image-drop-module";
@@ -26,6 +26,7 @@ Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const GameUploadPage = () => {
+    const { contentType } = useParams();
     const [TitleChangeValue, setTitleChangeValue] = useState("");
     const [URLChangeValue, setURLChangeValue] = useState("");
     const [GenreChangeValue, setGenreChangeValue] = useState("");
@@ -658,6 +659,36 @@ const GameUploadPage = () => {
     const OncheckSubmit = (e) => {
 
         e.preventDefault();
+
+        const registFile = async (developer, regdate, contentType, files, storeType) => {
+            const fd = new FormData();
+
+            fd.append("uploader", developer);
+            fd.append("regdate", regdate);
+            fd.append("storeType", storeType);
+
+            for (let i = 0; i < files.length; i++) {
+                fd.append("files", files[i].object);
+            }
+
+            await axios.post(`${ip}/Files/files/${contentType}/1`, fd, {
+                headers: {
+                    'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then((res) => {
+                    return res.data;
+                })
+                .then((data) => {
+                    dispatch(point(user.point + 10));
+                    navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
+                    return;
+                })
+
+        }
+
+
         
         if (
             TitleChangeValue.length === 0 &&
@@ -680,39 +711,21 @@ const GameUploadPage = () => {
             return;
         }
 
-        const registFile = async (writer, regdate) => {
-            const fd = new FormData();
 
-            fd.append("writer", writer);
-            fd.append("regdate", regdate);
+    
 
-            for (let i = 0; i < pcfiles.length; i++) {
-                fd.append("files", pcfiles[i].object);
-            }
-
-            await axios.post(`${ip}/Board/article/shareFiles`, fd, {
-                headers: {
-                    'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-                .then((res) => {
-                    return res.data;
-                })
-                .then((data) => {
-                    dispatch(point(user.point + 10));
-                    navigate('/FreeArticle/' + writer + '/' + regdate);
-                    return;
-                })
-
-        }
+        
 
 
 
-        axios.post(`${ip}/Board/article`, {
+        axios.post(`${ip}/Games/game`, {
             title: TitleChangeValue,
             content: ExplanationValue,
-            writer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+            developer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+            url: URLChangeValue,
+            genre: GenreChangeValue,
+            contentType: contentType,
+            depth: 1,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -722,17 +735,34 @@ const GameUploadPage = () => {
                 return res.data;
             })
             .then((data) => {
-                const writer = data.writer;
+                const developer = data.developer;
                 const regdate = data.regdate;
 
-                if (pcfiles.length == 0) {
-                    dispatch(point(user.point + 10));
-                    navigate('/FreeArticle/' + writer + '/' + regdate)
+                if (pcfiles.length == 0 && mobilefiles.length == 0 && mainimgfiles.length == 0 && backgroundimgfiles.length == 0) {
+                    dispatch(point(user.point + 5));
+                    navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
                     return;
                 }
 
-                else if (pcfiles.length > 0) {
-                    registFile(writer, regdate);
+                else if (!(pcfiles.length == 0 && mobilefiles.length == 0 && mainimgfiles.length == 0 && backgroundimgfiles.length == 0)) {
+                    if(pcfiles.length==1){
+                        registFile(developer, regdate, contentType, pcfiles, "pcGame");
+                    }
+                    
+                    if(mobilefiles.length==1){
+                        registFile(developer, regdate, contentType, mobilefiles, "mobileGame");
+                    }
+
+                    if(mainimgfiles.length==1){
+                        registFile(developer, regdate, contentType, mainimgfiles, "gameImage");
+                    }
+
+                    if(backgroundimgfiles.length==1){
+                        registFile(developer, regdate, contentType, backgroundimgfiles, "gameBanner");
+                    }
+                    
+                    dispatch(point(user.point + 10));
+                    navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
                     return;
                 }
 

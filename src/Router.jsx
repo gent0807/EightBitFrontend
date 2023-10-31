@@ -7,7 +7,7 @@ import SelectSign from "./Component/Phone/SelectSignContainer";
 import Board from "./Component/Board/BoardContainer";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Footer from "./Component/Footer/Footer";
-import NotFound from "./Component/Error/NotPage";
+import NotFound from "./Component/Error/NotPageContainer";
 import WriteBoard from "./Component/WriteBoard/WriteBoardContainer";
 import Article from "./Component/Article/ArticleContainer";
 import UpdateBoard from "./Component/UpdateBoard/UpdateBoardContainer";
@@ -27,11 +27,11 @@ const Router = () => {
                     <Route path="/Board/:contentType" element={<Board />} />
                     <Route path="/" element={<Center />} />
                     <Route path="/Article/:writer/:regdate/:contentType" element={<Article />} />
-                    <Route path="/GameInformationView/:id" element={<GameInformationView />} />
-                    <Route path="/GameUploadPage" element={<GameUploadPage />} />
+                    <Route path="/GameInformationView/:developer/:regdate/:contentType/:depth" element={<GameInformationView />} />
+                    <Route path="/GameUploadPage/:contentType" element={<GameUploadPage />} />
                 </Route>
                     <Route path="/OfficialGame" element={<OfficialGame />} />
-                    <Route path="/AllGamePage" element={<AllGamePage />} />
+                    <Route path="/AllGamePage/:contentType" element={<AllGamePage />} />
                     <Route path="/WriteBoard/:contentType" element={<WriteBoard />} />
                     <Route path="/UpdateBoard/:contentType" element={<UpdateBoard />} />
                     <Route path="/Login" element={<Login />} />

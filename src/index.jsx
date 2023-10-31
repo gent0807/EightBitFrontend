@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import "./fonts/font.css";
+import "./Item/fonts/font.css";
 import Main from './Main';
 import styled from 'styled-components';
 import { Provider } from "react-redux";

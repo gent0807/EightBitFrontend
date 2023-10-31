@@ -6,13 +6,16 @@ import { HiOutlineSearch } from "react-icons/hi";
 import Pagination from "./Pagination";
 import { useRecoilState } from "recoil";
 import { firstReset } from "../../Recoil/Darkmode/Darkmode";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import NotPage from "./NotPage";
 import { useSelector } from "react-redux";
-import { Slide } from "../Game";
+
+import GameMainImg from "./GameMainImg";
 import axios from "axios";
 
 const AllGamePage = () => {
+    const { contentType } = useParams();
+    const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
     const [SearchFillText, setSearchFillText] = useState("제목");
     const [Fitter, setFitter] = useState("최신순");
@@ -128,29 +131,54 @@ const AllGamePage = () => {
     }
 
     useEffect(() => {
-        if (Slide.length > 0 && SlideSize.length === 0) {
+        if (posts.length > 0 && PostsSize.length === 0) {
             setPage(page - 1);
         }
-    }, [SlideSize.length, Slide.length]);
+    }, [PostsSize.length, posts.length]);
 
     useEffect(() => {
-        setSearchList(Slide);
-    }, []);
+        axios.get(`${ip}/Articles/articles?contentType=${contentType}`, {
+
+        },
+            {
+
+            })
+            .then(res => res.data
+            )
+            .then(data => {
+                console.log(data);
+                setPosts(data);
+                setSearchList(data);
+            })
+    }, [contentType]);
 
     const SearchSubmit = (e) => {
         e.preventDefault();
         if (Search === "") {
-            setSearchList(Slide);
-            setPage(1);
-        } else {
+            axios.get(`${ip}/Articles/articles?contentType=${contentType}`, {
 
-            const SearchResult = Slide.filter((board) =>
-                SearchFillText === "제목" ?
+            },
+                {
+
+                })
+                .then(res => res.data
+                )
+                .then(data => {
+                    console.log(data);
+                    setPosts(data);
+                    setSearchList(posts);
+                    setPage(1);
+                })
+        } else {
+            const SearchResult = posts.filter((board) =>
+            SearchFillText === "제목" ?
                 board.title.toUpperCase().includes(Search.toUpperCase()) :
                 SearchFillText === "개발자" ?
-                board.developer.toUpperCase().includes(Search.toUpperCase()) :
-                board.title.toUpperCase().includes(Search.toUpperCase())
-            );
+                    board.developer.toUpperCase().includes(Search.toUpperCase()) :
+                    SearchFillText === "내용" ?
+                        board.content.toUpperCase().includes(Search.toUpperCase()) :
+                        board.title.toUpperCase().includes(Search.toUpperCase())
+        );
 
             setSearchList(SearchResult);
             setSearch("");
@@ -166,7 +194,7 @@ const AllGamePage = () => {
         <FreeBoardBox>
             <InformationAllBox>
                 <FreeBoardInformation>
-                    <FreeBoardInformationText>인디게임</FreeBoardInformationText>
+                    <FreeBoardInformationText>전체게임</FreeBoardInformationText>
                 </FreeBoardInformation>
             </InformationAllBox>
             <SearchBox>
@@ -215,18 +243,24 @@ const AllGamePage = () => {
             <BoardBox>
                 {SearchList.length === 0 && <NotPage />}
                 <BoardContentAllBox View={SearchList.length}>
-                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, title, information, mainImg }) => (
+                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, content, developer, regdate, updatedate, genre, url, visitcnt, reply_count, likecount, pcGameCount, mobileGameCount, contentType, depth}) => (
                        <BoardContentBox key={id}>
-                           <Link to={`/GameInformationView/${id}`} onClick={() => ScrollTop()}>
+                           <Link to={`/GameInformationView/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
                                <SlideAllBox>
                                    <SlideBox>
-                                       <ImgBox src={mainImg} />
+                                      <GameMainImg 
+                                        uploader={developer} 
+                                        regdate={regdate}
+                                        contentType={contentType}
+                                        storeType="gameImage"
+                                        depth={depth}
+                                      ></GameMainImg>
                                    </SlideBox>
 
                                    <AllBox>
                                        <InformaionBoxTextBox>
                                            <TitleBox>{title}</TitleBox>
-                                           <InformaionBox>{information}</InformaionBox>
+                                           <InformaionBox>{content}</InformaionBox>
                                        </InformaionBoxTextBox>
                                    </AllBox>
                                </SlideAllBox>

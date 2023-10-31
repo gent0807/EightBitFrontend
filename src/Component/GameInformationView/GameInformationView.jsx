@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ReactQuill, { Quill } from "react-quill";
-import { toggle } from "./Toggle";
+import { toggle } from "../../Recoil/ArticleReset/Toggle";
+import { toggle2 } from "../../Recoil/ArticleReset/Toggle";
 import { Slide } from "../Game";
 import { AiOutlineDownload } from "react-icons/ai";
 import { BsHandThumbsUpFill } from "react-icons/bs";
@@ -21,14 +22,31 @@ import ReplyDeleteModal from "../Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
 import GameInformationViewReplyModal from "./GameInformationViewReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
+import { BsHandThumbsUpFill } from "react-icons/bs";
+import { BsHandThumbsUp } from "react-icons/bs"
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
 const GameInformationView = () => {
-    const { id } = useParams();
-    const { writer } = useParams();
+    const { developer } = useParams();
     const { regdate } = useParams();
+    const { contentType } = useParams();
+    const { depth } = useParams();
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [updatedate, setUpdatedate] = useState("");
+    const [visitcnt, setVisitcnt] = useState(0);
+    const [PCGameCount, setPCGameCount] = useState(0);
+    const [MobileGameCount, setMobileGameCount] = useState(0);
+    const [ImgCount, setImgCount] = useState(0);
+    const [BannerCount, setBannerCount] = useState(0);
+    const [PCGame, setPCGame] = useState("");
+    const [mobileGame, setMobileGame] = useState("");
+    const [mainImg, setMainImg] = useState("");
+    const [banner, setBanner] = useState("");
+    const [role, setRole] = useState("");
+    const [likecount, setLikecount] = useState(0);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -40,6 +58,11 @@ const GameInformationView = () => {
     const user = useSelector((state) => state.user);
 
     const [toggleState, setToggleState] = useRecoilState(toggle);
+    const [toggleState2, setToggleState2] = useRecoilState(toggle2);
+
+
+    const [genre, setGenre] = useState("");
+    const [URL, setURL] = useState("");
     const [Fitter, setFitter] = useState("최신순");
     const [GameInformaion, setGameInformation] = useState(Slide)
     const [deleteMode, setDeleteMode] = useState(false);
@@ -60,10 +83,20 @@ const GameInformationView = () => {
     const [limit, setLimit] = useState(5);
     const [page, setPage] = useState(1);
 
+
+
     const offset = (page - 1) * limit;
     const CommentSize = Comments.slice(offset, offset + limit);
     const FillterRef = useRef("");
-    const totalCommentCount = useRef(0);
+
+    let likeMode = useRef(false);
+    let totalCommentCount = useRef(0);
+
+    const [selectedReportDeveloper, setSelectedReportDeveloper] = useState("");
+    const [selectedReportRegdate, setSelectedReportRegdate] = useState("");
+    const [selectedReportContentType, setSelectedReportContentType] = useState("");
+    const [selectedReportDepth, setSelectedReportDepth] = useState("");
+    const [ModalFreeArticleReplyCommentOnOff, setModalFreeArticleReplyCommentOnOff] = useState(false);
 
     const toolbarOptions = [
         ["link", "image", "video"],
@@ -110,8 +143,71 @@ const GameInformationView = () => {
 
     useEffect(() => {
 
-        const getReCommentCount = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/totalcomment/count?writer=${writer}&regdate=${regdate}`, {
+        const getRole = (user) => {
+            axios.get(`${ip}/Users/role?nickname=${user}`, {
+
+            },
+                {
+
+                })
+                .then((res) => {
+                    return res.data;
+                })
+                .then(data => {
+                    setRole(data);
+                })
+
+        }
+
+
+        const getLikers = (developer, regdate, contentType, depth) => {
+
+            axios.get(`${ip}/Likes/likes?master=${developer}&regdate=${regdate}&contentType=${contentType}&depth=${depth}`, {
+
+            },
+                {
+
+                })
+                .then(res => {
+                    return res.data;
+                })
+                .then(data => {
+                    setLikecount(data.length);
+                    if (loginMaintain == "true") {
+                        if (userInfo != null) {
+                            for (let i = 0; i < data.length; i++) {
+                                if (data[i] == userInfo.nickName) {
+                                    likeMode.current = true;
+                                    break;
+                                }
+                                else {
+                                    likeMode.current = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (loginMaintain == "false") {
+                        if (user.nickname != null) {
+                            for (let i = 0; i < data.length; i++) {
+                                if (data[i] == user.nickname) {
+                                    likeMode.current = true;
+                                    break;
+                                }
+                                else {
+                                    likeMode.current = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (loginMaintain == null) {
+                        likeMode.current = false;
+                    }
+                })
+
+        }
+
+        const getReCommentCount = async (developer, regdate) => {
+            await axios.get(`${ip}/Comments/count?writer=${developer}&regdate=${regdate}`, {
 
             },
                 {
@@ -122,12 +218,12 @@ const GameInformationView = () => {
                 })
                 .then(data => {
                     totalCommentCount.current = totalCommentCount.current + data;
-                    setReCommentCount(data);
                 })
         }
 
-        const getComments = (writer, regdate) => {
-            axios.get(`${ip}/Board/article/replies?original_writer=${writer}&original_regdate=${regdate}`, {
+        const getComments = async (developer, regdate, contentType, depth) => {
+
+            await axios.get(`${ip}/Comments/comments?original_author=${developer}&original_regdate=${regdate}&contentType=${contentType}&depth=${depth + 1}`, {
 
             },
                 {
@@ -138,11 +234,29 @@ const GameInformationView = () => {
                 })
                 .then(data => {
                     totalCommentCount.current = data.length;
-                    setComments(data.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)));
+                    setComments(data);
+                    getReCommentCount(developer, regdate);
+                });
+
+        }
+
+        const getFileList = async (developer, regdate, contentType, storeType, depth) => {
+            await axios.get(`${ip}/Files/files/${developer}/${regdate}/${contentType}/${storeType}/${depth}`, {
+
+            }, {
+
+            })
+                .then(res => {
+                    return res.data
+                })
+                .then(data => {
+                    return data;
                 })
         }
 
-        axios.get(`${ip}/Board/article?writer=${writer}&regdate=${regdate}`, {
+
+
+        axios.get(`${ip}/Games/game?viewer=${loginMaintain == "true" ? userInfo.nickName : user.login_state == "allok" ? user.nickname : ""}&developer=${developer}&regdate=${regdate}&contentType=${contentType}`, {
 
         },
             {
@@ -150,11 +264,100 @@ const GameInformationView = () => {
             })
             .then(res => res.data)
             .then(data => {
-                getComments(data.writer, data.regdate);
-                getReCommentCount(data.writer, data.regdate);
+                setTitle(data.title);
+                setContent(data.content);
+                setUpdatedate(data.updatedate);
+                setVisitcnt(data.visitcnt);
+                setPCGameCount(data.pcGameCount);
+                setMobileGameCount(data.mobileGameCount);
+                setImgCount(data.imgCount);
+                setBannerCount(data.bannerCount);
+                setURL(data.url);
+                setGenre(data.genre);
+
+                getRole(data.developer);
+                getComments(data.developer, data.regdate, data.contentType, data.depth);
+                getLikers(data.developer, data.regdate, data.contentType, data.depth);
+
+                if (data.pcGameCount > 0) {
+                    setPCGame(getFileList(data.developer, data.regdate, data.contentType, "pcGame", data.depth)[0]);
+                }
+
+                if (data.mobileGameCount > 0) {
+                    setMobileGame(getFileList(data.developer, data.regdate, data.contentType, "mobileGame", data.depth)[0]);
+                }
+
+                if (data.imgCount > 0) {
+                    setMainImg(getFileList(data.developer, data.regdate, data.contentType, "gameImage", data.depth)[0]);
+                }
+
+                if (data.bannerCount > 0) {
+                    setBanner(getFileList(data.developer, data.regdate, data.contentType, "gameBanner", data.depth)[0]);
+                }
+
             })
 
-    }, [toggleState]);
+    }, [toggleState, toggleState2]);
+
+    const getUserEmail = (nickname) => {
+        axios.get(`${ip}/Users/email?nickname=${nickname}`, {
+
+        }, {
+
+        })
+            .then(res => {
+                return res.data
+            })
+            .then(data => {
+                return data;
+            })
+        }   
+    }
+
+    const addLike = async (e) => {
+
+        await axios.post(`${ip}/Likes/like`, {
+            liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+            master: developer,
+            regdate: regdate,
+            depth: depth,
+            contentType: contentType,
+        },
+            {
+                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+            })
+            .then(res => {
+                /* regenerateAccessTokenOrLogout(res, addLike, e); */
+                return res.data;
+            })
+            .then(data => {
+                setLikecount(data.length);
+                likeMode.current = true;
+            })
+    }
+
+
+
+
+    const reduceLike = async (e) => {
+        if (likecount > 0) {
+            await axios.delete(`${ip}/Likes/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${developer}/${regdate}/${contentType}/${depth}`,
+                {
+                    headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
+                })
+                .then(res => {
+                    return res.data;
+                })
+                .then(data => {
+                    setLikecount(data.length);
+                    likeMode.current = false;
+                })
+
+        }
+        else return;
+    }
+
+
 
     const addComment = (data, Comments) => {
         if (Comments.length > 0) {
@@ -162,9 +365,10 @@ const GameInformationView = () => {
             const addedCmtId = Comments[lastCmtIndex].id + 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: developer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                contentType: contentType,
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
@@ -176,18 +380,54 @@ const GameInformationView = () => {
             const addedCmtId = 1;
             const newComment = {
                 id: addedCmtId,
-                original_writer: writer,
+                original_author: developer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
                 regdate: data.regdate,
                 updatedate: data.updatedate,
+                contentType: contentType,
+
             };
             setComments([...Comments, newComment]);
             setReplyChangeValue("<p><br></p>");
         }
 
     };
+
+    const addComment2 = (data, Comments) => {
+        if (Comments.length > 0) {
+            const lastCmtIndex = Comments.length - 1;
+            const addedCmtId = Comments[lastCmtIndex].id + 1;
+            const newComment = {
+                id: addedCmtId,
+                original_author: developer,
+                original_regdate: regdate,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: replyChangeValue2,
+                regdate: data.regdate,
+                updatedate: data.updatedate,
+                contentType: contentType,
+            };
+            setComments([...Comments, newComment]);
+            setReplyChangeValue2('<p><br></p>');
+        }
+        else if (Comments.length === 0) {
+            const addedCmtId = 1;
+            const newComment = {
+                id: addedCmtId,
+                original_author: developer,
+                original_regdate: regdate,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                content: replyChangeValue2,
+                regdate: data.regdate,
+                updatedate: data.updatedate,
+                contentType: contentType,
+            };
+            setComments([...Comments, newComment]);
+            setReplyChangeValue2('<p><br></p>');
+        }
+    }
 
     const editComment = (commentId, editValue) => {
         let newComments = Comments.map((item) => {
@@ -200,14 +440,23 @@ const GameInformationView = () => {
         setComments(newComments);
     };
 
+    const deleteComment = (commentId) => {
+        let newComments = Comments.filter(item => item.id !== commentId);
+        setComments(newComments);
+        setToggleState(!toggleState);
+    }
+
+
     const registerReply = async (e) => {
         e.preventDefault();
         if (replyChangeValue !== '<p><br></p>') {
-            await axios.post(`${ip}/Board/article/reply`, {
-                original_writer: writer,
+            await axios.post(`${ip}/Comments/comment`, {
+                original_author: developer,
                 original_regdate: regdate,
-                replyer: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
                 content: replyChangeValue,
+                contentType: contentType,
+                depth: depth + 1,
             },
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -217,43 +466,21 @@ const GameInformationView = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    setToggleState(!toggleState);
                     addComment(data, Comments);
+                    setToggleState(!toggleState);
                     setReplyChangeValue("<p><br></p>");
-                    const pointUp = (/* f */) => {
-                        axios.patch(`${ip}/Users/point/up?writer=${loginMaintain == "true" ? userInfo.nickName : user.nickname}&point=5`,
-                            {
-
-                            },
-                            {
-                                headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
-                            })
-                            .then((res) => {
-                                /*  f(res,pointUp,e) */
-                                return res.data;
-                            })
-                            .then((data) => {
-                                dispatch(point(data));
-                                return;
-                            });
-                    }
-
-                    pointUp();
+                    dispatch(point(user.point + 5));
 
                     return;
 
                 });
         }
         else if (replyChangeValue === '<p><br></p>' && replyChangeValue.length === 11) {
-            setModalReplyCommentOnOff(!ModalReplyCommentOnOff);
+            setModalFreeArticleReplyCommentOnOff(!ModalFreeArticleReplyCommentOnOff);
             return;
         }
     }
 
-    const deleteComment = (commentId) => {
-        let newComments = Comments.filter(item => item.id !== commentId);
-        setComments(newComments);
-    }
 
     const setReplyValue = (e) => {
         const { innerText } = e.target;
@@ -326,14 +553,13 @@ const GameInformationView = () => {
 
     return (
         <GameViewBackground>
-            {GameInformaion[0].backgroundImg === "" ? <></> : <BackgroundEffect />}
-            {GameInformaion[0].backgroundImg === "" ? <DefaultBackground /> : <GameViewBackgroundImg src={GameInformaion[0].backgroundImg} />}
+            {banner === "" ? <></> : <BackgroundEffect />}
+            {banner === "" ? <DefaultBackground /> : <GameViewBackgroundImg src={`${ip}/Files/file/${banner.id}/${banner.uploader}/${banner.regdate}/${banner.contentType}/${banner.storeType}/${banner.depth}`} />}
 
             <GameViewAllBox>
                 <GameTitleAllBox>
                     <GameTitleTextBox>
-                        <GameText>{GameInformaion[0].game}</GameText>
-                        <GameTitleText>{GameInformaion[0].title}</GameTitleText>
+                        <GameTitleText>{title}</GameTitleText>
                     </GameTitleTextBox>
                     <BackButton onClick={() => navigate(-1)}>뒤로가기</BackButton>
                 </GameTitleAllBox>
@@ -341,23 +567,23 @@ const GameInformationView = () => {
                 <GameInformaionAllBox>
                     <GameAllBox>
                         <GameInformaionImgBox>
-                            <GameInformaionImg src={GameInformaion[0].mainImg} />
+                            <GameInformaionImg src={`${ip}/Files/file/${mainImg.id}/${mainImg.uploader}/${mainImg.regdate}/${mainImg.contentType}/${mainImg.storeType}/${mainImg.depth}`} />
                         </GameInformaionImgBox>
 
                         <GameIntroduceBox>
                             <GameExplanationText>게임 설명</GameExplanationText>
                             <GameExplanation>
-                                {GameInformaion[0].explanation}
+                                {content}
                             </GameExplanation>
                         </GameIntroduceBox>
 
                         <SingleReplyBox>
                             <ReplyFillAllBox>
                                 <ReplyCounterAllBox>
-                                {Comments.length > 0 ?
-                                    <ReplyCountBox>
-                                        {totalCommentCount.current}개 댓글
-                                    </ReplyCountBox> : ""}
+                                    {Comments.length > 0 ?
+                                        <ReplyCountBox>
+                                            총 {totalCommentCount.current}개 댓글
+                                        </ReplyCountBox> : ""}
                                 </ReplyCounterAllBox>
 
                                 <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
@@ -478,35 +704,32 @@ const GameInformationView = () => {
                                 </GameIntroduceTextBox>
                                 <GameIntroduceSubTextAllBox>
                                     <GameIntroduceSubText>
-                                        장르 : {GameInformaion[0].genre}
+                                        장르 : {genre}
                                     </GameIntroduceSubText>
                                     <GameIntroduceSubText>
-                                        창작자 : {GameInformaion[0].developer}
+                                        창작자 : {developer}
                                     </GameIntroduceSubText>
-                                    <GameIntroduceSubText>
-                                        배급사 : {GameInformaion[0].distributor}
-                                    </GameIntroduceSubText>
+
                                     <GameIntroduceSubText>
                                         출시일 : {dayjs(GameInformaion[0].regdate).format("YY.MM.DD")}
                                     </GameIntroduceSubText>
                                     <GameIntroduceSubText>
-                                        추천수 : {GameInformaion[0].likecount}
+                                        추천수 : {likecount}
                                     </GameIntroduceSubText>
                                 </GameIntroduceSubTextAllBox>
 
                                 <ButtonAllBox>
-                                    <LikeBtn>
-                                        <LikeBtnText>
-                                            추천
-                                        </LikeBtnText>
-                                        <LikeIcon>
-                                            <BsHandThumbsUpFill />
-                                        </LikeIcon>
+                                    <LikeBtn
+                                        LoginMaintain={loginMaintain}
+                                        UserInfo={userInfo == null ? null : userInfo.loginState}
+                                        User={user.login_state}
+                                        onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
+                                        {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
                                     </LikeBtn>
 
                                     <DownloadBtn>
                                         <DownloadBtnText>
-                                            다운로드
+                                            <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`} >다운로드</DownloadLink>
                                         </DownloadBtnText>
                                         <DownloadBtnIcon>
                                             <AiOutlineDownload />
@@ -514,7 +737,7 @@ const GameInformationView = () => {
                                     </DownloadBtn>
 
                                     <MoblieBtn>
-                                        <DownloadBtnText>
+                                        <DownloadBtnText href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}  >
                                             모바일
                                         </DownloadBtnText>
                                         <DownloadBtnIcon>
@@ -530,10 +753,10 @@ const GameInformationView = () => {
                             <DeveloperInformationText>개발자 연락처</DeveloperInformationText>
                             <DeveloperInformationTextBox>
                                 <DeveloperText>
-                                    업로더 : {GameInformaion[0].developer}
+                                    업로더 : {developer}
                                 </DeveloperText>
                                 <DeveloperText>
-                                    이메일 : {GameInformaion[0].email}
+                                    이메일 : {getUserEmail(developer)}
                                 </DeveloperText>
                             </DeveloperInformationTextBox>
                         </DeveloperInformationBox>
@@ -549,7 +772,7 @@ const GameInformationView = () => {
 export default GameInformationView;
 
 const DefaultBackground = styled.div
-`
+    `
     width: 100%;
     height: 40vw;
 `
@@ -722,7 +945,7 @@ const ReplyFillAllBox = styled.div
 `
 
 const ReplyCounterAllBox = styled.div
-`
+    `
 
 `
 
@@ -888,6 +1111,9 @@ const GameIntroduceSubTextAllBox = styled.div
 
 const LikeBtn = styled.div
     `
+    display: ${props => props.LoginMaintain == null ? "none" : (props.LoginMaintain == "true" ? (props.UserInfo === "allok" ? "block" : "none") : (props.User === "allok" ? "block" : "none"))};
+    cursor : pointer;
+    color: orange;
     display: flex;
     background: #007aff;
     padding: 7px;
@@ -908,7 +1134,7 @@ const DownloadBtn = styled.div
 `
 
 const MoblieBtn = styled(DownloadBtn)
-`
+    `
     margin: 0px 0px 0px 0px;
 `
 
@@ -953,6 +1179,13 @@ const DownloadBtnText = styled.span
     cursor: pointer;
     margin: 9px 0px 6px 10px;
 `
+
+const DownloadLink = styled.a
+    `
+    text-decoration: none;
+    color: ${props => props.theme.textColor};
+`
+
 
 const ButtonAllBox = styled.div
     `

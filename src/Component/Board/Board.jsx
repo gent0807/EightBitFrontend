@@ -18,7 +18,7 @@ import { AiOutlineEye } from "react-icons/ai";
 import { BsHandThumbsUp } from "react-icons/bs";
 import DOMPurify from "dompurify";
 
-const FreeBoard = () => {
+const Board = () => {
     const { contentType } = useParams();
     const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
@@ -365,7 +365,7 @@ const FreeBoard = () => {
     );
 }
 
-export default FreeBoard;
+export default Board;
 
 const BoardTitleContentAllBox = styled.div
     `

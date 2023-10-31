@@ -31,7 +31,7 @@ import ReportModal from "./ReportModal";
 import ReplyPagination from "../Reply/ReplyPagination";
 import DeleteModal from "./DeleteModal";
 import ReplyDeleteModal from "../Reply/ReplyDeleteModal";
-import NotPage from "./NotPage";
+import NotPage from "../Error/NotPage";
 import ArticleReplyModal from "./ArticleReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
 
@@ -349,6 +349,7 @@ const Article = () => {
                 setUpdatedate(data.updatedate);
                 setVisitcnt(data.visitcnt);
                 setAttachCount(data.attach_count);
+                
                 getWriterRole(data.writer);
                 getComments(data.writer, data.regdate, data.contentType);
                 getLikers(data.writer, data.regdate, data.contentType);
@@ -532,7 +533,7 @@ const Article = () => {
         }
     }
 
-    console.log(replyChangeValue.length);
+
 
     const registerReply2 = async (e) => {
         e.preventDefault();

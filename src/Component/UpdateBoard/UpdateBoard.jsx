@@ -279,9 +279,9 @@ const UpdateBoard = () => {
 
         // }
 
-        const deleteFile = async (deleteFileList) => {
+        const deleteFile = async (deleteFileList,contentType) => {
 
-            await axios.delete(`${ip}/Files/files`,
+            await axios.delete(`${ip}/Files/files/${contentType}/1`,
                 {
                     data: deleteFileList,
                     headers: {
@@ -305,15 +305,14 @@ const UpdateBoard = () => {
 
             fd.append("uploader", writer);
             fd.append("regdate", regdate);
-            fd.append("contentType", contentType);
             fd.append("storeType", "attach")
-            fd.append("depth", 1);
+        
 
             for (let i = 0; i < files.length; i++) {
                 fd.append("files", files[i].object);
             }
 
-            await axios.post(`${ip}/Files/files`, fd, {
+            await axios.post(`${ip}/Files/files/${contentType}/1`, fd, {
                 headers: {
                     'Authorization': loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}`,
                     'Content-Type': 'multipart/form-data'
@@ -369,7 +368,7 @@ const UpdateBoard = () => {
                     //     deleteFile(deleteFileList[i]);
                     // }
 
-                    deleteFile(deleteFileList);
+                    deleteFile(deleteFileList, contentType);
 
                 }
 
