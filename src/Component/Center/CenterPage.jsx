@@ -218,9 +218,9 @@ const CenterPage = () => {
                     <PopTitleBox>Best of 8bit</PopTitleBox>
 
                     <Slider {...swiperParams} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title }) => (
+                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`/GameInformationView/${id}`} onClick={() => ScrollTop()}>
+                                <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={mainImg} />
@@ -284,9 +284,9 @@ const CenterPage = () => {
                     <PopTitleBox>인기판매 굿즈</PopTitleBox>
 
                     <Slider {...swiperParams3} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title }) => (
+                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate}) => (
                             <SwiperSlide key={id}>
-                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
+                                <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={mainImg} />

@@ -10,6 +10,7 @@ import { Slide } from "../Game";
 import { AiOutlineDownload } from "react-icons/ai";
 import { BsHandThumbsUpFill } from "react-icons/bs";
 import SingleReply from "../Reply/SingleReply";
+import ReportModal from "../Article/ReportModal";
 import ImageResize from "quill-image-resize-module-react";
 import "react-quill/dist/quill.snow.css";
 import { ImageDrop } from "quill-image-drop-module";
@@ -65,7 +66,7 @@ const GameInformationView = () => {
 
     const [genre, setGenre] = useState("");
     const [URL, setURL] = useState("");
-    const [Fitter, setFitter] = useState("최신순");
+    const [Fitter, setFitter] = useState("과거순");
     const [GameInformaion, setGameInformation] = useState(Slide)
     const [deleteMode, setDeleteMode] = useState(false);
     const [ReplyDeleteMode, setReplyDeleteMode] = useState(false);
@@ -84,6 +85,13 @@ const GameInformationView = () => {
     const [Comments, setComments] = useState([]);
     const [limit, setLimit] = useState(5);
     const [page, setPage] = useState(1);
+
+    const [writerRole, setWriterRole] = useState("");
+   
+   
+    const [reportMode, setReportMode] = useState(false);
+
+   
 
 
 
@@ -582,6 +590,15 @@ const GameInformationView = () => {
 
     return (
         <GameViewBackground>
+            <ReportModal
+                ReportMode={reportMode}
+                setReportMode={setReportMode}
+                master={selectedReportWriter}
+                regdate={selectedReportRegdate}
+                contentType={selectedReportContentType}
+                depth={selectedReportDepth}
+            />
+
             {banner === "" ? <></> : <BackgroundEffect />}
             {banner === "" ? <DefaultBackground /> : <GameViewBackgroundImg src={`${ip}/Files/file/${banner.id}/${banner.uploader}/${banner.regdate}/${banner.contentType}/${banner.storeType}/${banner.depth}`} />}
 

@@ -23,7 +23,7 @@ const OfficialGamePage = () => {
 
 
                 <OfficialGame1>
-                    <Link to={`/GameInformationView/${GameInformaion[0].id}`} onClick={() => ScrollTop()}>
+                    <Link to={`/GameInformationView/${GameInformaion[0].developer}/${GameInformaion[0].regdate}/indie}`} onClick={() => ScrollTop()}>
                         <OfficialGame1imgBox>
                             <OfficialGame1img src={GameInformaion[0].thumbnailImg} />
 
@@ -34,7 +34,7 @@ const OfficialGamePage = () => {
                 </OfficialGame1>
 
                 <OfficialGame2>
-                    <Link to={`/GameInformationView/${GameInformaion[1].id}`} onClick={() => ScrollTop()}>
+                    <Link to={`/GameInformationView/${GameInformaion[1].developer}/${GameInformaion[1].regdate}/indie}`} onClick={() => ScrollTop()}>
                         <OfficialGame2imgBox>
                             <OfficialGame2img src={GameInformaion[1].thumbnailImg} />
 
@@ -45,7 +45,7 @@ const OfficialGamePage = () => {
                 </OfficialGame2>
 
                 <OfficialGame3>
-                    <Link to={`/GameInformationView/${GameInformaion[2].id}`} onClick={() => ScrollTop()}>
+                    <Link to={`/GameInformationView/${GameInformaion[2].developer}/${GameInformaion[2].regdate}/indie}`} onClick={() => ScrollTop()}>
                         <OfficialGame3imgBox>
                             <OfficialGame3img src={GameInformaion[2].thumbnailImg} />
 

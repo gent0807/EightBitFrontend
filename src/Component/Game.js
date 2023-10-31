@@ -42,7 +42,7 @@ export const Slide = [
         Logo: Logo1,
         video: Video1,
 
-        developer: "란토",
+        developer: "주녕밥",
         distributor: "8bit",
         email: "khs641010@naver.com"
     },
@@ -62,7 +62,7 @@ export const Slide = [
         Logo: Logo2,
         video: Video2,
 
-        developer: "란토",
+        developer: "주녕밥",
         distributor: "8bit",
         email: "khs641010@naver.com"
     },
@@ -82,7 +82,7 @@ export const Slide = [
         Logo: Logo3,
         video: "",
 
-        developer: "란토",
+        developer: "나동빈",
         distributor: "8bit",
         email: "khs641010@naver.com"
     },
@@ -102,7 +102,7 @@ export const Slide = [
         Logo: Logo4,
         video: "",
 
-        developer: "란토",
+        developer: "주녕밥",
         distributor: "8bit",
         email: "khs641010@naver.com"
     },
@@ -122,7 +122,7 @@ export const Slide = [
         Logo: Logo5,
         video: "",
 
-        developer: "란토",
+        developer: "주녕밥",
         distributor: "8bit",
         email: "khs641010@naver.com"
     },
