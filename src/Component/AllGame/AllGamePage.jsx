@@ -98,8 +98,8 @@ const AllGamePage = () => {
             )
             .then(data => {
                 console.log(data);
-                setPosts(data);
-                setSearchList(data);
+                setPosts(data.filter((game)=>game.developer!="eight_dev"));
+                setSearchList(data.filter((game)=>game.developer!="eight_dev"));
             })
     }, [contentType]);
 
@@ -117,7 +117,7 @@ const AllGamePage = () => {
                 .then(data => {
                     console.log(data);
                     setPosts(data.filter((game)=>game.developer!="eight_dev"));
-                    setSearchList(posts);
+                    setSearchList(data.filter((game)=>game.developer!="eight_dev"));
                     setPage(1);
                 })
         } else {

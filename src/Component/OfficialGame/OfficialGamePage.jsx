@@ -23,7 +23,7 @@ const OfficialGamePage = () => {
 
 
                 <OfficialGame1>
-                    <Link to={`/GameInformationView/${GameInformaion[0].developer}/${GameInformaion[0].regdate}/indie}`} onClick={() => ScrollTop()}>
+                    <Link to={`/GameInformationView/${GameInformaion[0].developer}/${GameInformaion[0].regdate}/indie`} onClick={() => ScrollTop()}>
                         <OfficialGame1imgBox>
                             <OfficialGame1img src={GameInformaion[0].thumbnailImg} />
 

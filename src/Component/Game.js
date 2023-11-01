@@ -31,7 +31,7 @@ export const Slide = [
         title: "방치모험가",
         game: "공식게임",
         genre: "방치형",
-        regdate: "2023-10-22 13:45:35",
+        regdate: "2023-11-01 17:48:36",
         information: "게임을 켜 두기만 해도 알아서 탐험하며 사냥하는 모험가를 키우자!",
         explanation: "",
         likecount: 432,
@@ -42,7 +42,7 @@ export const Slide = [
         Logo: Logo1,
         video: Video1,
 
-        developer: "주녕밥",
+        developer: "eight_dev",
         distributor: "8bit",
         email: "khs641010@naver.com"
     },
