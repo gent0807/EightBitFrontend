@@ -618,7 +618,7 @@ const SingleReply = ({
                                 setSelectedReportDepth(2);
                             }} />
                         </RedateBox>
-                        <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
+                        <Regdate>{dayjs(regdate).format("YYYY-MM-DD")}</Regdate>
                     </div>
 
                 </CommentUserProfileBox>
@@ -980,6 +980,7 @@ const CommentreplyBox = styled.div
 const CommentreplyAllBox = styled.div
     `
     display: flex;
+    color : white;
 `
 
 const CommentreplyLikeAllBox = styled.div
@@ -1030,6 +1031,7 @@ const CommentreplyBtn = styled.div
     margin: ${props => props.ReCommentCnt > 0 ? "3px 0px 0px 18px" : "3px 0px 0px 1px"};
     font-weight: bold;
     font-size: 14.5px;
+    color: white;
     cursor: pointer;
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.User === "allok" ? "block" : "none")) :
         (props.UserCheck === "allok" ? "block" : "none")};
@@ -1038,6 +1040,7 @@ const CommentreplyBtn = styled.div
 const CommentText = styled.div
     `
     font-size: 25px;
+    color: white;
 `
 
 const CommentInformationBox = styled.div
@@ -1081,7 +1084,9 @@ const UserNicknameText = styled.span
 
 const Regdate = styled.span
     `
+    color: white;
     font-size: 17px;
+    font-weight: bold;
 `
 
 const RedateBox = styled.div
@@ -1091,6 +1096,7 @@ const RedateBox = styled.div
     justify-content: end;
     cursor: pointer;
     margin: 0px -3px 10px 0px;
+    color: white;
 `
 
 const ReportBox = styled.div
@@ -1107,6 +1113,7 @@ const ReportBox = styled.div
 const CommentInformationAllBox = styled.div
     `
     display: flex;
+    color: white;
     flex-direction: column;
     padding: 21px 0px 0px 15px;
 `
@@ -1193,6 +1200,7 @@ const ReCommentSector = styled.div
     margin: 0px 12px 40px 12px;
     padding: 0px 6px 0px 30px;
     border-left: solid 3px ${props => props.theme.textColor};
+    color: white;
 `
 
 const ReCommentInputBox = styled.div
