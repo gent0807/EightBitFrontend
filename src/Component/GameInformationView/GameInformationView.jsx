@@ -191,20 +191,6 @@ const GameInformationView = () => {
 
         }
 
-        const getOfficialGameList = () => {
-            axios.get(`${ip}/Games/games/official`, {
-
-            }, {
-
-            })
-                .then((res) => {
-                    return res.data;
-                })
-                .then(data => {
-                    setOfficialGameList(data);
-                })
-        }
-
 
         const getLikers = (developer, regdate, contentType) => {
 
@@ -800,23 +786,26 @@ const GameInformationView = () => {
 
                                 <ButtonAllBox>
 
+                                    {
                                     <DownloadBtn>
                                         <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
                                             <DownloadImg src={DownloadImgBtn} />
                                         </DownloadLink>
-                                    </DownloadBtn>
-
+                                    </DownloadBtn>}
+                                    
+                                    {
                                     <MoblieBtn>
                                         <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
                                             <MobileImg src={MobileImgBtn} />
                                         </DownloadLink>
-                                    </MoblieBtn>
-
+                                    </MoblieBtn>}
+                                    
+                                    {
                                     <PlayStorekBtn>
                                         <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
                                             <PlayStoreImg src={PlayStore} />
                                         </DownloadLink>
-                                    </PlayStorekBtn>
+                                    </PlayStorekBtn>}
 
                                 </ButtonAllBox>
                             </GameIntroduceSubTextBox>
