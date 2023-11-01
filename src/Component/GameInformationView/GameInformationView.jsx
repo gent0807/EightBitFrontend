@@ -793,12 +793,14 @@ const GameInformationView = () => {
                                         </DownloadLink>
                                     </DownloadBtn>}
                                     
-                                    {MobileGameCount === 0 ? <></> :
+                                    
+                                    {/* {MobileGameCount === 0 ? <></> :
                                     <MoblieBtn>
                                         <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
                                             <MobileImg src={MobileImgBtn} />
                                         </DownloadLink>
-                                    </MoblieBtn>}
+                                    </MoblieBtn>} */}
+                                    
                                     
                                     {URL === "" ? <></> : 
                                     <PlayStorekBtn>

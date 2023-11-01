@@ -363,10 +363,17 @@ const TitleBox = styled.div
 
 const InformaionBox = styled.div
     `
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    color: white;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    p{
+        margin: 0;
+        text-decoration: none;
+        color: white;
+    }
 `
 
 const SearchAllBox = styled.div

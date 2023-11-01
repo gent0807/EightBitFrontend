@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
 const ip = localStorage.getItem("ip");
 
 
@@ -43,9 +44,15 @@ const GameMainImg = ({ uploader, regdate, contentType, storeType, depth }) => {
 
 
     return (
-        <img src={`${ip}/Files/file/${id}/${uploader}/${regdate}/${contentType}/${storeType}/${depth}`} alt="게임 이미지" />
+        <MainImg src={`${ip}/Files/file/${id}/${uploader}/${regdate}/${contentType}/${storeType}/${depth}`} alt="게임 이미지" />
     );
 
 }
 
 export default GameMainImg;
+
+const MainImg = styled.img
+`
+    width: 100%;
+    height: 100%;
+`
