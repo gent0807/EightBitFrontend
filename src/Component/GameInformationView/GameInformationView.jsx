@@ -24,6 +24,12 @@ import NotPage from "./NotPage";
 import GameInformationViewReplyModal from "./GameInformationViewReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
 import { BsHandThumbsUp } from "react-icons/bs"
+import DownloadImgBtn from "../../Item/img/Button/Download.png";
+import MobileImgBtn from "../../Item/img/Button/MobileDownload.png";
+import LikeImgBtn from "../../Item/img/Button/Like.png";
+import LikeImgFillBtn from "../../Item/img/Button/FillLike.png";
+import PlayStore from "../../Item/img/Button/PlayStore.png";
+
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -48,7 +54,7 @@ const GameInformationView = () => {
     const [likecount, setLikecount] = useState(0);
     const [email, setEmail] = useState("");
     const [type, setType] = useState("");
-    const [OfficialGameList, setOfficialGameList] = useState([]);   
+    const [OfficialGameList, setOfficialGameList] = useState([]);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -86,11 +92,11 @@ const GameInformationView = () => {
     const [page, setPage] = useState(1);
 
     const [writerRole, setWriterRole] = useState("");
-   
-   
+
+
     const [reportMode, setReportMode] = useState(false);
 
-   
+
 
 
 
@@ -303,7 +309,7 @@ const GameInformationView = () => {
                     else if (storeType == "gameBanner") {
                         setBanner(data[0]);
                     }
-                    
+
                 })
         }
 
@@ -617,7 +623,7 @@ const GameInformationView = () => {
                         <GameText> {type} 게임</GameText>
                         <GameTitleText>{title}</GameTitleText>
                     </GameTitleTextBox>
-                    <BackButton onClick={() => navigate(-1)}>뒤로가기</BackButton>
+                    <BackButton onClick={() => navigate(-1)}>← 뒤로가기</BackButton>
                 </GameTitleAllBox>
 
                 <GameInformaionAllBox>
@@ -781,39 +787,37 @@ const GameInformationView = () => {
                                     <GameIntroduceSubText>
                                         추천수 : {likecount}
                                     </GameIntroduceSubText>
-                                </GameIntroduceSubTextAllBox>
 
-                                <ButtonAllBox>
-                                    <LikeBtn
+                                    <LikeCheckBtn
                                         LoginMaintain={loginMaintain}
                                         UserInfo={userInfo == null ? null : userInfo.loginState}
                                         User={user.login_state}
                                         onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
-                                        {likeMode.current === false ? <BsHandThumbsUp /> : <BsHandThumbsUpFill />}
-                                    </LikeBtn>
-                                   <div>
-                                     다운로드
-                                   </div>
+                                        {likeMode.current === false ? <LikeImg src={LikeImgBtn} /> : <LikeImg src={LikeImgFillBtn} />}
+                                    </LikeCheckBtn>
+
+                                </GameIntroduceSubTextAllBox>
+
+                                <ButtonAllBox>
+
                                     <DownloadBtn>
-                                        <DownloadBtnText>
-                                            <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>PC</DownloadLink>
-                                        </DownloadBtnText>
-                                        <DownloadBtnIcon>
-                                            <AiOutlineDownload />
-                                        </DownloadBtnIcon>
+                                        <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
+                                            <DownloadImg src={DownloadImgBtn} />
+                                        </DownloadLink>
                                     </DownloadBtn>
 
                                     <MoblieBtn>
-                                        <DownloadBtnText>
-                                        <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>모바일</DownloadLink>
-                                        </DownloadBtnText>
-                                        <DownloadBtnIcon>
-                                            <AiOutlineDownload />
-                                        </DownloadBtnIcon>
+                                        <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
+                                            <MobileImg src={MobileImgBtn} />
+                                        </DownloadLink>
                                     </MoblieBtn>
-                                    <div>
-                                        모바일 앱스토어: <a href={`${URL}`}>{URL}</a>
-                                    </div>
+
+                                    <PlayStorekBtn>
+                                        <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
+                                            <PlayStoreImg src={PlayStore} />
+                                        </DownloadLink>
+                                    </PlayStorekBtn>
+
                                 </ButtonAllBox>
                             </GameIntroduceSubTextBox>
 
@@ -1023,6 +1027,7 @@ const ReplyCountBox = styled.div
     `
     display: flex;
     font-size: 20px;
+    color: white;
 `
 
 const FitterSelectAllBox = styled.div
@@ -1187,25 +1192,44 @@ const GameIntroduceSubTextAllBox = styled.div
 const LikeBtn = styled.div
     `
     display: ${props => props.LoginMaintain == null ? "none" : (props.LoginMaintain == "true" ? (props.UserInfo === "allok" ? "block" : "none") : (props.User === "allok" ? "block" : "none"))};
-    cursor : pointer;
-    color: orange;
-    display: flex;
-    background: #007aff;
-    padding: 7px;
-    white-space: nowrap;
-    justify-content: center;
-    border-radius: 5px;
-    margin: 0px 0px 20px 0px;
 `
 const DownloadBtn = styled.div
     `
     display: flex;
-    background: #007aff;
-    padding: 7px;
-    white-space: nowrap;
-    justify-content: center;
-    border-radius: 5px;
-    margin: 0px 0px 20px 0px;
+    box-sizing: border-box;
+    &:not(:last-child){
+        margin: 0px 0px 20px 0px;
+    }
+`
+
+const LikeCheckBtn = styled(DownloadBtn)
+    `
+    display: ${props => props.LoginMaintain == null ? "none" : (props.LoginMaintain == "true" ? (props.UserInfo === "allok" ? "flex" : "none") : (props.User === "allok" ? "flex" : "none"))};
+    cursor: pointer;
+`
+
+const PlayStorekBtn = styled(DownloadBtn)
+    `
+
+`
+
+const DownloadImg = styled.img
+    `
+    width: 100%;
+    height: 100%;
+`
+
+const LikeImg = styled(DownloadImg)
+    `
+
+`
+const MobileImg = styled(DownloadImg)
+    `
+
+`
+const PlayStoreImg = styled(DownloadImg)
+    `
+
 `
 
 const MoblieBtn = styled(DownloadBtn)
@@ -1341,13 +1365,15 @@ const BackButton = styled.div
     `
     cursor: pointer;
     display: flex;
-    width: 100px;
+    width: 140px;
     height: 50px;
     border-radius: 8px;
-    background: white;
+    background: transparent;
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    font-size: 26px;
+    color: white;
 `
 
 const GameTitleTextBox = styled.div

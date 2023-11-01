@@ -512,9 +512,6 @@ const SingleReComment = ({
 
     return (
         <UserReCommentBox id={id}>
-
-            
-
             <div style={{ display: isEditing === true ? "none" : "block" }}>
                 <ReCommentUserProfileBox>
                     <ReCommentUserBox>
@@ -554,7 +551,7 @@ const SingleReComment = ({
                             }} />
                         </RedateBox>
 
-                        <Regdate>{dayjs(regdate).format("YYYY-MM-DD HH:mm")}</Regdate>
+                        <Regdate>{dayjs(regdate).format("YYYY-MM-DD")}</Regdate>
                     </div>
                 </ReCommentUserProfileBox>
                 <ReCommentInformationBox>
@@ -812,6 +809,7 @@ const ReportBox = styled.div
 const Regdate = styled.span
     `
     font-size: 17px;
+    font-weight: bold;
 `
 
 const ReCommentInformationBox = styled.div
@@ -1022,7 +1020,7 @@ const ReCommentBtnBox = styled.div
 
 const ReCommentBtn = styled.button
     `
-    width: 9%;
+    width: 100px;
     background: #55AAFF;
     outline: none;
     border-radius: 10px;
@@ -1036,7 +1034,7 @@ const ReCommentBtn = styled.button
 
 const CancelBtn = styled(ReCommentBtn)
     `
-    width: 6%;
+    width: 70px;
     background: white;
     margin : 10px 10px 10px 0px;
 `

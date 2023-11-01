@@ -69,15 +69,15 @@ const GlobalStyle = createGlobalStyle
 `
   body
   {
-      font-family: "NanumSquareR";
+      font-family: "LIGHT";
 
       input
       {
-          font-family: "NanumSquareR";
+          font-family: "LIGHT";
 
           &::placeholder
           {
-              font-family: "NanumSquareR";
+              font-family: "LIGHT";
           }
 
       }
@@ -89,7 +89,7 @@ const GlobalStyle = createGlobalStyle
   
       button
       {
-          font-family: "NanumSquareR";
+          font-family: "LIGHT";
       }
 
       background-color: ${(props) => props.theme.backgroundColor};

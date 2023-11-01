@@ -497,7 +497,7 @@ const RadioBtnlabel = styled.label
         height: 10px;
         background: #fff;
         border-radius: 50%;
-        margin: 8px 0px 0px -169px;
+        margin: 8px 0px 0px -163px;
     }
 `
 
@@ -511,7 +511,7 @@ const Radio19Btnlabel = styled(RadioBtnlabel)
         height: 10px;
         background: #fff;
         border-radius: 50%;
-        margin: 8px 0px 0px -140px;
+        margin: 8px 0px 0px -163px;
     }
 `
 
@@ -525,7 +525,7 @@ const RadioBtnIncoporatehandlelabel = styled(RadioBtnlabel)
         height: 10px;
         background: #fff;
         border-radius: 50%;
-        margin: 8px 0px 0px -206px;
+        margin: 8px 0px 0px -163px;
     }
 `
 
@@ -561,7 +561,7 @@ const ReportModalAllBox = styled.div
     display: ${props => props.ModalChange ? "block" : "none"};
     width: 560px;
     height: 300px;
-    background: ${props => props.theme.backgroundColor};
+    background: white;
     border-radius: 10px;
 `
 

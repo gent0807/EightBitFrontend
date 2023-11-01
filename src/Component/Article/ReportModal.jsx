@@ -426,7 +426,7 @@ const CompleteModalBox = styled.div
     display: block;
     width: 560px;
     height: 240px;
-    background: ${props => props.theme.backgroundColor};
+    background: white;
     border-radius: 10px;
 `
 
@@ -512,7 +512,7 @@ const RadioBtnlabel = styled.label
         height: 10px;
         background: #fff;
         border-radius: 50%;
-        margin: 8px 0px 0px -169px;
+        margin: 8px 0px 0px -163px;
     }
 `
 
@@ -526,7 +526,7 @@ const Radio19Btnlabel = styled(RadioBtnlabel)
         height: 10px;
         background: #fff;
         border-radius: 50%;
-        margin: 8px 0px 0px -141px;
+        margin: 8px 0px 0px -133px;
     }
 `
 
@@ -540,7 +540,7 @@ const RadioBtnIncoporatehandlelabel = styled(RadioBtnlabel)
         height: 10px;
         background: #fff;
         border-radius: 50%;
-        margin: 8px 0px 0px -206px;
+        margin: 8px 0px 0px -196px;
     }
 `
 

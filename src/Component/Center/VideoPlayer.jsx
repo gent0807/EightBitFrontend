@@ -14,6 +14,7 @@ import { VscUnmute } from "react-icons/vsc";
 import ReactPlayer from 'react-player'
 import { Link, useNavigate } from "react-router-dom";
 import { Slide } from "../Game";
+import InformationImgBtn from "../../Item/img/Button/Information.png";
 
 
 SwiperCore.use([Navigation, Pagination, EffectCoverflow, Autoplay]);
@@ -112,23 +113,9 @@ const VideoPlayler = () => {
 
                     <VideoInformationDownLoadBtnBox>
 
-                        <VideoDownloadBtn>
-                            <VideoDownloadBtnIcon>
-                                <AiOutlineDownload />
-                            </VideoDownloadBtnIcon>
-                            <VideoDownloadBtnText>
-                                다운로드
-                            </VideoDownloadBtnText>
-                        </VideoDownloadBtn>
-
                         <Link to={`GameInformationView/${Slide[mainImageIndex].id}`}>
                             <VideoInformationBtn>
-                                <VideoInformationBtnIcon>
-                                    <RiInformationLine />
-                                </VideoInformationBtnIcon>
-                                <VideoInformationBtnText>
-                                    상세정보
-                                </VideoInformationBtnText>
+                                <InformaionBoxImg src={InformationImgBtn} /> 
                             </VideoInformationBtn>
                         </Link>
 
@@ -189,6 +176,12 @@ const VideoPlayler = () => {
 
 export default VideoPlayler
 
+const InformaionBoxImg = styled.img
+`
+    width: 100%;
+    height: 100%;
+`
+
 const VideoSlideBox = styled.div
     `
     
@@ -239,28 +232,6 @@ const MuteBtnIcon = styled.i
     margin: 17px 0px 7px 0px;
 `
 
-const VideoInformationBtnIcon = styled.i
-    `
-    display: flex;
-    align-items: center;
-    font-size: 33px;
-    svg
-    {
-        color: white;
-    }
-`
-
-const VideoDownloadBtnIcon = styled.i
-    `
-    display: flex;
-    align-items: center;
-    font-size: 33px;
-    svg
-    {
-        color: white;
-    }
-`
-
 const VideoInformationDownLoadBtnBox = styled.div
     `
     display: flex;
@@ -276,38 +247,9 @@ const VideoInformationDownLoadBtnBox = styled.div
 const VideoInformationBtn = styled.div
     `
     display: flex;
-    background: #007aff;
-    padding: 7px;
-    white-space: nowrap;
     border-radius: 5px;
-    margin: 0px 0px 0px 10px;
-`
-
-const VideoInformationBtnText = styled.div
-    `
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 9px 0px 6px 10px;
-`
-
-const VideoDownloadBtn = styled.div
-    `
-    display: flex;
-    background: #007aff;
-    padding: 7px;
-    white-space: nowrap;
-    border-radius: 5px;
-`
-
-const VideoDownloadBtnText = styled.span
-    `
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 9px 0px 6px 10px;
+    box-sizing: border-box;
+    width: 17vw;
 `
 
 const VideoInformationLogoBox = styled.div
