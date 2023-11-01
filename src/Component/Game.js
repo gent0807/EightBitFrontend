@@ -48,11 +48,11 @@ export const Slide = [
     },
     {
         id: 1,
-        title: "토파즈",
+        title: "로드 오브 토파즈",
         game: "공식게임",
         genre: "액션",
         regdate: "2023-10-22 13:45:35",
-        information: "켜두기만 하면 캐릭터가 성장한다!",
+        information: "인간이 되고 싶은 뱀파이어를 돕게 되었다.",
         explanation: "",
         likecount: 432,
 
@@ -73,7 +73,7 @@ export const Slide = [
         genre: "액션",
         regdate: "2023-10-22 13:45:35",
         likecount: 432,
-        information: "켜두기만 하면 캐릭터가 성장한다!",
+        information: "끝없이 무기를 강화하고, 강해져라!",
         explanation: "",
 
         thumbnailImg: Thumbnail3,
@@ -93,7 +93,7 @@ export const Slide = [
         genre: "판타지",
         regdate: "2023-10-22 13:45:35",
         likecount: 432,
-        information: "켜두기만 하면 캐릭터가 성장한다!",
+        information: "수학 문제를 풀어 강해지고, 전투해라!",
         explanation: "",
 
         thumbnailImg: Thumbnail4,
@@ -113,7 +113,7 @@ export const Slide = [
         genre: "좀비",
         regdate: "2023-10-22 13:45:35",
         likecount: 432,
-        information: "켜두기만 하면 캐릭터가 성장한다!",
+        information: "드릴로부터 피해 멈추지 말고 달려라!",
         explanation: "",
 
         thumbnailImg: Thumbnail5,
