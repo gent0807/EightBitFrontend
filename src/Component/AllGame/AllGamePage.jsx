@@ -116,7 +116,7 @@ const AllGamePage = () => {
                 )
                 .then(data => {
                     console.log(data);
-                    setPosts(data);
+                    setPosts(data.filter((game)=>game.developer!="eight_dev"));
                     setSearchList(posts);
                     setPage(1);
                 })
@@ -204,7 +204,7 @@ const AllGamePage = () => {
         <FreeBoardBox>
             <InformationAllBox>
                 <FreeBoardInformation>
-                    <FreeBoardInformationText>전체게임</FreeBoardInformationText>
+                    <FreeBoardInformationText>인디 게임</FreeBoardInformationText>
                 </FreeBoardInformation>
             </InformationAllBox>
             <SearchBox>

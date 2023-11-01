@@ -185,20 +185,6 @@ const GameInformationView = () => {
 
         }
 
-        const getOfficialGameList = () => {
-            axios.get(`${ip}/Games/games/official`, {
-
-            }, {
-
-            })
-                .then((res) => {
-                    return res.data;
-                })
-                .then(data => {
-                    setOfficialGameList(data);
-                })
-        }
-
 
         const getLikers = (developer, regdate, contentType) => {
 
@@ -349,10 +335,10 @@ const GameInformationView = () => {
                     getFileList(data.developer, data.regdate, data.contentType, "gameBanner");
                 }
 
-                if (OfficialGameList.includes(data.title)) {
+                if (data.developer == "eight_dev") {
                     setType("공식");
                 }
-                else if (!OfficialGameList.includes(data.title)) {
+                else if (data.developer != "eight_dev") {
                     setType("인디");
                 }
 
@@ -617,8 +603,42 @@ const GameInformationView = () => {
                         <GameText> {type} 게임</GameText>
                         <GameTitleText>{title}</GameTitleText>
                     </GameTitleTextBox>
-                    <BackButton onClick={() => navigate(-1)}>뒤로가기</BackButton>
+                    <Link
+                    to={`/GameUpdatePage/${contentType}`} state={{ developer: developer, regdate: regdate, title: title, content: content, genre: genre, URL: URL, PCGame: PCGame, mobileGame: mobileGame, mainImg: mainImg, banner: banner}}
+                    style={{
+                        display: loginMaintain == null ? "none" : loginMaintain == "true" ?
+                            (userInfo == null ?
+                                "none" : (userInfo.loginState === "allok" ?
+                                    (userInfo.nickName == developer ? "block" : "none") : "none")) :
+                            (user.login_state === "allok" ?
+                                (user.nickname == developer ?
+                                    "block" : "none") : "none"),
+                        color: "white",
+                        fontSize: "21px",
+                        cursor: "pointer",
+                        }}>
+                    수정
+                    </Link>
+                    <Delete
+                        LoginMaintain={loginMaintain}
+                        User={user.login_state}
+                        UserInfo={userInfo}
+                        UserInfoState={userInfo == null ?
+                            null : userInfo.loginState}
+                        UserInfoNickname={userInfo == null ?
+                            (user.login_state === "allok" ?
+                                user.nickname : null) : userInfo.nickName}
+                        UserInfoRole={userInfo == null ?
+                            (user.login_state === "allok" ?
+                                user.role : null) : userInfo.role}
+                        onClick={() => setDeleteMode(!deleteMode)}
+                    >삭제</Delete>
+                    <BackButton onClick={() => navigate(-1)}>
+                        뒤로가기
+                    </BackButton>
                 </GameTitleAllBox>
+
+                
 
                 <GameInformaionAllBox>
                     <GameAllBox>
@@ -1341,13 +1361,15 @@ const BackButton = styled.div
     `
     cursor: pointer;
     display: flex;
+    color: white;
     width: 100px;
     height: 50px;
     border-radius: 8px;
-    background: white;
+    background none;
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    font-size: 21px;
 `
 
 const GameTitleTextBox = styled.div
@@ -1356,6 +1378,18 @@ const GameTitleTextBox = styled.div
     flex-direction: column;
     margin: 0px 0px 20px 0px;
 `
+
+
+const Delete = styled.div
+`
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
+    cursor : pointer;
+    color : white;
+    font-size: 21px;
+`
+
+
 
 const GameTitleText = styled.span
     `
