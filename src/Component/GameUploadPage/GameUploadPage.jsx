@@ -681,8 +681,7 @@ const GameUploadPage = () => {
                     return res.data;
                 })
                 .then((data) => {
-                    dispatch(point(user.point + 10));
-                    navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
+                
                     return;
                 })
 
@@ -761,10 +760,11 @@ const GameUploadPage = () => {
                         registFile(developer, regdate, contentType, backgroundimgfiles, "gameBanner");
                     }
                     
-                    dispatch(point(user.point + 10));
+                }
+
+                dispatch(point(user.point + 10));
                     navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
                     return;
-                }
 
 
 

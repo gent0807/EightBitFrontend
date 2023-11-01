@@ -5,7 +5,7 @@ import { isDark } from './Recoil/Darkmode/Darkmode';
 import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-const ip = `http://localhost:8088`;
+const ip = `http://59.14.217.233:8038`;
 
 
 const Main = () => {

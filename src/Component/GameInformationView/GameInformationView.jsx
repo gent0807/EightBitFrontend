@@ -629,7 +629,7 @@ const GameInformationView = () => {
                         <GameIntroduceBox>
                             <GameExplanationText>게임 설명</GameExplanationText>
                             <GameExplanation>
-                                {content}
+                                <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
                             </GameExplanation>
                         </GameIntroduceBox>
 
@@ -1128,6 +1128,10 @@ const GameExplanation = styled.p
     font-size: 20px;
     font-weight: bold;
 `
+const Information = styled.div
+    `
+    font-size: 24px;
+`
 
 const GameAllBox = styled.div
     `
@@ -1158,6 +1162,7 @@ const DeveloperText = styled(DeveloperInformationText)
     color: white;
     font-size: 15px;
     font-weight: bold;
+    word-break: break-all;
     &:not(:first-child){
         margin: 10px 0px 0px 0px;
     }

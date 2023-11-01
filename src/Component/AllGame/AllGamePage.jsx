@@ -4,6 +4,7 @@ import { SearchInputBox, SearchInput, SearchInputIconBox, SearchButton } from ".
 import { ArrowBox } from "../Sign/Signinput";
 import { HiOutlineSearch } from "react-icons/hi";
 import Pagination from "./Pagination";
+import DOMPurify from "dompurify";
 import { useRecoilState } from "recoil";
 import { firstReset } from "../../Recoil/Darkmode/Darkmode";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -269,7 +270,7 @@ const AllGamePage = () => {
                                    <AllBox>
                                        <InformaionBoxTextBox>
                                            <TitleBox>{title}</TitleBox>
-                                           <InformaionBox>{content}</InformaionBox>
+                                           <InformaionBox dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}></InformaionBox>
                                        </InformaionBoxTextBox>
                                    </AllBox>
                                </SlideAllBox>
