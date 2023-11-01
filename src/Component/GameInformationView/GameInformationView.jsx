@@ -820,23 +820,23 @@ const GameInformationView = () => {
 
                                 <ButtonAllBox>
 
-                                    {
+                                    {PCGameCount === 0 ? <></> :
                                     <DownloadBtn>
                                         <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
                                             <DownloadImg src={DownloadImgBtn} />
                                         </DownloadLink>
                                     </DownloadBtn>}
                                     
-                                    {
+                                    {MobileGameCount === 0 ? <></> :
                                     <MoblieBtn>
                                         <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
                                             <MobileImg src={MobileImgBtn} />
                                         </DownloadLink>
                                     </MoblieBtn>}
                                     
-                                    {
+                                    {URL === "" ? <></> : 
                                     <PlayStorekBtn>
-                                        <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
+                                        <DownloadLink href={URL}>
                                             <PlayStoreImg src={PlayStore} />
                                         </DownloadLink>
                                     </PlayStorekBtn>}
