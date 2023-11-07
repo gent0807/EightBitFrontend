@@ -74,15 +74,13 @@ export default Darkmode;
 const IconsBox = styled.div
     `
     cursor: pointer;
-    background: white;
     background: ${props => props.change ? "rgba(55,65,118,1)" : "rgba(0,144,249,1)" };
     border-radius: 42px;
-    margin: 16px -6px 0px 19px;
     padding: 5px;
     width: 50px;
     height: 20px;
     -webkit-tap-highlight-color:transparent;
-    tratransition: background 0.5s;
+    transition: background 0.5s;
 `
 
 const IconsAllBox = styled.div
