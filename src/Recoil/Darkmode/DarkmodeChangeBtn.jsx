@@ -79,6 +79,7 @@ const IconsBox = styled.div
     padding: 5px;
     width: 50px;
     height: 20px;
+    margin: 0px 10px 0px 10px;
     -webkit-tap-highlight-color:transparent;
     transition: background 0.5s;
 `

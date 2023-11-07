@@ -8,7 +8,11 @@ import Darkmode from "../../Recoil/Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
 import { clearLoginState } from "../../Redux/User";
 import { Outlet } from "react-router-dom"
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper.scss";
+import "swiper/components/navigation/navigation.scss";
+import "swiper/components/pagination/pagination.scss";
+import SwiperCore, { FreeMode, Navigation, Pagination, EffectCoverflow } from "swiper";
 import LogoLight from "../../Item/img/LOGO/8bitLight.png";
 
 import User from "../../Item/img/MySlide/user.png";
@@ -29,6 +33,9 @@ import Digital from "../../Item/img/BoardSlide/digital.png";
 import axios from 'axios';
 import Store from "../../Redux/Store";
 import { contextType } from "react-quill";
+
+SwiperCore.use([Navigation, Pagination, EffectCoverflow]);
+
 
 const HeaderBox = () => {
     const [Search, setSearch] = useState("");
@@ -54,7 +61,7 @@ const HeaderBox = () => {
     const [BackgroundLine, setBackgroundLine] = useState(false)
     const [modalOnOffBtn, setModalOnOffBtn] = useState(false);
     const [searchmodalOnOffBtn, setSearchModalOnOffBtn] = useState(false);
-
+    const [swiper, setSwiper] = useState(null);
 
 
     const user = useSelector((state) => state.user);
@@ -73,6 +80,13 @@ const HeaderBox = () => {
     let FastRef = useRef(null);
     let WriteRef = useRef(null);
     let BtnLeaveRef = useRef(null);
+
+    const swiperParams =
+    {
+        onSwiper: setSwiper,
+        spaceBetween: 4,
+        slidesPerView: "auto",
+    }
 
     const [WindowLength, setWindowLength] = useState(window.innerWidth);
 
@@ -660,30 +674,48 @@ const HeaderBox = () => {
 
                         <Topnav>
 
-                            <NavBox>
+                            <NavBox TopBack={scrollPosition}>
                                 <NavMenuAllBox>
                                     <LogoBox>
                                         <Link to='/'><Logo src={LogoLight} alt='로고' /></Link>
                                     </LogoBox>
+
                                     <NavUl>
                                         <GameLi onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
                                         <ShopLi onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
                                         <ComunityLi onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
                                         <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
                                     </NavUl>
+
+                                    <SlideNav {...swiperParams} ref={setSwiper}>
+                                        <SwiperSlide>
+                                            <GameLi as={"div"} onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
+                                        </SwiperSlide>
+                                        <SwiperSlide>
+                                            <ShopLi as={"div"} onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
+                                        </SwiperSlide>
+                                        <SwiperSlide>
+                                            <ComunityLi as={"div"} onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
+                                        </SwiperSlide>
+                                        <SwiperSlide>
+                                            <SupportLi as={"div"} onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
+                                        </SwiperSlide>
+                                    </SlideNav>
+
                                 </NavMenuAllBox>
+
                             </NavBox>
+
+
 
                             <AllButtonBox>
 
-                                <ButtonBox
-                                    menucheck={loginMaintain == null ?
-                                        false : loginMaintain === "true" ?
-                                            (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
-                                >
+
+                                <ButtonBox>
+
 
                                     <Darkmode />
-                                    
+
                                     <SearchInputBox>
                                         <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
                                         <SearchInputIconBox>
@@ -700,23 +732,13 @@ const HeaderBox = () => {
 
                                     {loginMaintain == null ? [] : loginMaintain == "true" ?
                                         (userInfo == null ? [] : userInfo.loginState === "allok" ?
-                                            [<ShoppingBox
-                                                left={"19px"}
-                                                top={"8.3px"}
-                                                size={"33px"}
-                                                padding={"5.4px 0px 0px 0px"}
-                                            >
-                                                <AiOutlineShopping />
+                                            [<ShoppingBox>
+                                                <ShoppingMenuIcon><AiOutlineShopping /></ShoppingMenuIcon>
                                             </ShoppingBox>] : []) :
 
                                         (user.login_state === "allok" ?
-                                            [<ShoppingBox
-                                                left={"19px"}
-                                                top={"8.3px"}
-                                                size={"33px"}
-                                                padding={"5.4px 0px 0px 0px"}
-                                            >
-                                                <AiOutlineShopping />
+                                            [<ShoppingBox>
+                                                <ShoppingMenuIcon><AiOutlineShopping /></ShoppingMenuIcon>
                                             </ShoppingBox>] : [])}
 
                                     <WriteListBox
@@ -825,6 +847,21 @@ export const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+const SlideNav = styled(Swiper)
+    `
+    display: none;
+
+    .swiper-slide {
+        display: inline-flex;
+    }
+
+    @media (min-width:250px) and (max-width:891px)
+    {
+        display: flex;
+    }
+
+`
+
 const ModalAllOffBtn = styled.div
     `
     display: flex;
@@ -897,7 +934,10 @@ const ModalFastMenu = styled.div
         justify-content: center;
         font-size: 35px;
         cursor: pointer;
-        margin: -10px 0px 0px 10px;
+        margin: 0px 10px 0px 0px;
+        &:hover{
+        color: #55aaff;
+    }
 `
 
 const SearchModalMenu = styled.div
@@ -912,7 +952,10 @@ const SearchModalMenu = styled.div
         justify-content: center;
         font-size: 35px;
         cursor: pointer;
-        margin: -10px 0px 0px 0px;
+        margin: 0px 10px 0px 0px;
+        &:hover{
+            color: #55aaff;
+        }
     };
 `
 
@@ -923,12 +966,20 @@ const NavMenuAllBox = styled.div
 
 const ModalFastMenuIcon = styled.i
     `
+    display: flex;
+    align-items: center;
+`
 
+const ShoppingMenuIcon = styled.i
+    `
+    display: flex;
+    align-items: center;
 `
 
 const ModalSearchMenuIcon = styled.i
     `
-
+    display: flex;
+    align-items: center;
 `
 
 const LeaveBox = styled.div
@@ -1121,6 +1172,9 @@ const SubNavText = styled.span
 
 const GameLi = styled.li
     `
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 0px 20px 0px 20px;
     list-style: none;
     white-space: nowrap;
@@ -1192,50 +1246,35 @@ const Logo = styled.img
 
 const LogoBox = styled.div
     `
-    margin: -13px 0px 0px 0px;
-
-    @media (min-width:250px) and (max-width:666px)
-    {
-        margin: 0px 0px 0px 0px;
-    }
 `
 
 const NavBox = styled.div
     `
     display: flex;
-    margin: 15px 0px 15px 0px;
+    align-items: center;
+    position: relative;
     color: white;
+    overflow: hidden;
 
-    @media (min-width:250px) and (max-width:666px)
+    @media (min-width:250px) and (max-width:891px)
     {
-        margin: 12px 0px 0px 0px;
-        text-align: center;
+        -webkit-mask-image: linear-gradient(270deg,transparent,#000 4.2rem);
     }
+`
+const NavSlideAllBox = styled.div
+    `
 
-    @media (min-width:666px) and (max-width:1342px)
-    {
-        justify-content: space-between;
-    }
 `
 
 const NavUl = styled.ul
     `
     display: flex;
-    margin: 12px 0px 12px 0px;
     white-space: nowrap;
     height: 27px;
-    overflow: scroll;
 
-    &::-webkit-scrollbar
+    @media (min-width:250px) and (max-width:891px)
     {
         display: none;
-    }
-
-    @media (min-width:250px) and (max-width:784px)
-    {
-        width: 48vw;
-        padding: 0px;
-        justify-content: start;
     }
 `
 
@@ -1247,9 +1286,9 @@ export const SearchInput = styled.input
     border-bottom-left-radius: 10px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    padding: 3px 0px 0px 11px;
+    padding: 0px 8px 0px 12px;
     font-size: 20px;
-    width: 200px;
+    width: 170px;
     height: 43.5px;
     caret-color: #3c3c3c;
     background: #dee2e6;
@@ -1258,6 +1297,7 @@ export const SearchInput = styled.input
 const AllButtonBox = styled.div
     `
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     color: white;
@@ -1267,15 +1307,12 @@ const AllButtonBox = styled.div
 const ButtonBox = styled.div
     `
     display: flex;
+    align-items: center;
 `
 
 const MenuBox = styled.div
     `
     color: ${props => props.click ? "#6a9dda" : "white"};
-    font-size: ${props => props.size};
-    margin-left: ${props => props.left};
-    margin-top: ${props => props.top};
-    padding: ${props => props.padding};
     cursor: pointer;
     white-space: nowrap;
     a
@@ -1296,8 +1333,18 @@ const MenuBox = styled.div
     }
 `
 
-const ShoppingBox = styled(MenuBox)
+const ShoppingBox = styled.div
     `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    cursor: pointer;
+    margin: 0px 10px 0px 0px;
+    &:hover{
+        color: #55aaff;
+    }
 `
 
 const LineBox = styled(MenuBox)
@@ -1318,6 +1365,7 @@ export const SearchInputBox = styled.div
     display: flex;
     border: solid 3px #3c3c3c;
     border-radius: 13px;
+    margin: 0px 10px 0px 0px;
 
     @media (min-width:250px) and (max-width:1155px)
     {
@@ -1331,7 +1379,7 @@ export const SearchInputIconBox = styled.div
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     background: #dee2e6;
-    height: 46.5px;
+    height: 43.5px;
     -webkit-user-select: none;
 `
 
