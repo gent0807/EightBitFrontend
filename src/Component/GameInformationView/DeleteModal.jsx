@@ -159,6 +159,7 @@ const CompleteText = styled.span
     `
     font-size: 37px;
     font-weight: bold;
+    color: white;
 `
 
 const DeleteTextBox = styled(CompleteTextBox)
@@ -169,7 +170,6 @@ const DeleteTextBox = styled(CompleteTextBox)
 const DeleteText = styled(CompleteText)
     `
     color: black;
-
 `
 
 

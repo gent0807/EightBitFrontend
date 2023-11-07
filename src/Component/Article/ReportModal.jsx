@@ -399,7 +399,6 @@ const CompleteBtnText = styled.span
     `
     font-weight: bold;
     font-size: 16px;
-    color: white;
 `
 
 const CompleteBtn = styled.div
@@ -460,13 +459,13 @@ const ReportFormBtn = styled.button
     border-radius: 10px;
     cursor: pointer;
     border: none;
+    color: white;
 `
 
 const ReportFormText = styled.span
     `
     font-weight: bold;
     font-size: 16px;
-    color: white;
 `
 
 const SubmitBox = styled.form

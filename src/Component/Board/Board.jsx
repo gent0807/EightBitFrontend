@@ -287,8 +287,19 @@ const Board = () => {
                         <LimitArrowBox direction={LimitDropdown}>{LimitDropdown ? "▲" : "▼"}</LimitArrowBox>
                     </LimitSelectAllBox>
 
-                    <WriteBtn style={{display: contentType!="notice" ? "block": contentType=="notice" ? user.role=="ADMIN" ? "block" : "none" : "block"}}>
-                        {loginMaintain == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> : loginMaintain == "true" ? userInfo == null ? <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link> :
+                    <WriteBtn 
+                        contentType={contentType}
+                        user={user} 
+                    >
+                        {loginMaintain == null ? 
+                            <Link to='/Login'>
+                                <WriteBtnText>글쓰기</WriteBtnText>
+                            </Link> : 
+                            loginMaintain == "true" ? 
+                            userInfo == null ? 
+                            <Link to='/Login'>
+                                <WriteBtnText>글쓰기</WriteBtnText>
+                            </Link> :
                         (userInfo.loginState === "allok" ? <Link to={`/WriteBoard/${contentType}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to={`/WriteBoard/${contentType}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}
                     </WriteBtn>
                 </FitterBox>
@@ -441,8 +452,10 @@ const WriteBtnText = styled.span
 `
 
 const WriteBtn = styled.div
-    `   
-    text-align: center;
+    `
+    display: ${props => props.contentType!="notice" ? "flex": props.contentType=="notice" ? props.user.role=="ADMIN" ? "flex" : "none" : "flex"};
+    justify-content: center;
+    align-items: center;
     width: 70px;
     height: 23px;
     border: none;
@@ -451,15 +464,14 @@ const WriteBtn = styled.div
     background: #6A9DDA;
     color: white;
     overflow: hidden;
-    padding: 13px 7px 7px 7px;
-    font-weight:bold;
-    -webkit-tap-highlight-color:transparent;
+    padding: 10px;
+    font-weight: bold;
+    -webkit-tap-highlight-color: transparent;
     &:hover
     {
         ${WriteBtnText}{
-            background-color: rgba( 0, 0, 0, 0.2 );
-            padding: 13px 24.2px 12px 24.2px;
-            margin: 0px 0px 0px -11px;
+            background: rgba(0,0,0,0.2);
+            padding: 30px;
         }
     }
 

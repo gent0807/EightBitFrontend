@@ -99,6 +99,7 @@ const ReportModalAllBox = styled.div
     height: 240px;
     background: white;
     border-radius: 10px;
+    color: black;
 `
 
 const DeleteModalBackground = styled.div

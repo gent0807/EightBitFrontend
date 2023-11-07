@@ -1433,6 +1433,31 @@ const Editer = styled(ReactQuill)
         color: ${props => props.theme.textColor};
     }
 
+    .ql-container.ql-snow
+    {
+        position: relative;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+
+    .ql-toolbar.ql-snow{
+        background: white;
+        border: none;
+        span:nth-child(2){
+            .ql-picker-options{
+                margin: -170px 0px 0px 0px;
+            }
+        }
+    }
+    }
+
+    .ql-snow .ql-picker.ql-expanded .ql-picker-options {
+        display: block;
+        margin: -135px 0px 0px 0px;
+        top: 100%;
+        z-index: 1;
+    }
+
     .ql-editor
     {
         margin: 0px -2px -2px 0px;
@@ -1443,14 +1468,6 @@ const Editer = styled(ReactQuill)
     .ql-editor ol, .ql-editor ul
     {
         color:${props => props.theme.textColor};
-    }
-
-    .ql-snow .ql-picker.ql-expanded .ql-picker-options
-    {
-        display: block;
-        margin-top: -133px;
-        top: 100%;
-        z-index: 1;
     }
 
     .ql-editor::-webkit-scrollbar 
@@ -1490,6 +1507,8 @@ const Editer = styled(ReactQuill)
     .ql-toolbar.ql-toolbar.ql-snow
     {
         order: 2;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
     }
 
     .ql-snow .ql-picker.ql-expanded .ql-picker-options {
@@ -1514,6 +1533,13 @@ const Editer2 = styled(ReactQuill)
     
     .ql-editor.ql-blank::before{
         color: ${props => props.theme.textColor};
+    }
+
+    .ql-container.ql-snow
+    {
+        position: relative;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
     }
     
     .ql-editor ol.ql-editor ul
@@ -1569,19 +1595,41 @@ const Editer2 = styled(ReactQuill)
     .ql-toolbar.ql-toolbar.ql-snow
     {
         order: 2;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+
+    .ql-toolbar.ql-snow
+    {
+        border: none;
+        background: white;
+    }
+
+    .ql-toolbar.ql-snow{
+        background: white;
+        border: none;
+        span:nth-child(2){
+            .ql-picker-options{
+                margin: -170px 0px 0px 0px;
+            }
+        }
+    }
     }
 
     .ql-snow .ql-picker.ql-expanded .ql-picker-options {
         display: block;
-        margin-top: -135px;
+        margin: -135px 0px 0px 0px;
         top: 100%;
         z-index: 1;
     }
 
     .ql-tooltip.ql-editing.ql-flip
     {
-        left: 0% !important;
-        top: 80% !important;
+        left: 0%!important;
+        top: 80%!important;
+        bottom: 0;
+        width: 320px;
+        height: 41px;
     }
 `
 
@@ -1703,8 +1751,6 @@ const CommentInputBox = styled.div
     grid-template-columns: 2fr;
     border: solid 3px ${props => props.theme.textColor};
     border-radius: 10px;
-    overflow: hidden;
-    
 `
 
 const CommentBtn = styled.button
