@@ -315,7 +315,7 @@ const ReplyReportModal = ({ setReportMode, ReportMode, replyer, regdate, id , co
                     <ModalInformation>
                         <ModalInformationText>
                             신고하기
-                    </ModalInformationText>
+                        </ModalInformationText>
                         <ModalDeleteBtn
                             onClick={() => [setReportMode(!ReportMode),
                             setCheckList("욕설/비방 신고"),
@@ -384,7 +384,6 @@ const CompleteBtnText = styled.span
     `
     font-weight: bold;
     font-size: 16px;
-    color: white;
 `
 
 const CompleteBtn = styled.div

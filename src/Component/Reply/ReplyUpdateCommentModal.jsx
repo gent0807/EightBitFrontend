@@ -89,7 +89,6 @@ const DeleteTextBox = styled(CompleteTextBox)
 
 const DeleteText = styled(CompleteText)
     `
-
 `
 
 const ReportModalAllBox = styled.div
@@ -99,6 +98,7 @@ const ReportModalAllBox = styled.div
     height: 240px;
     background: white;
     border-radius: 10px;
+    color: black;
 `
 
 const DeleteModalBackground = styled.div

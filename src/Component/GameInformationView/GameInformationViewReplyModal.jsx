@@ -89,7 +89,7 @@ const DeleteTextBox = styled(CompleteTextBox)
 
 const DeleteText = styled(CompleteText)
     `
-
+    color: black;
 `
 
 const ReportModalAllBox = styled.div

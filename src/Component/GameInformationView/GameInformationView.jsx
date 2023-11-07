@@ -7,8 +7,6 @@ import ReactQuill, { Quill } from "react-quill";
 import { toggle } from "../../Recoil/ArticleReset/Toggle";
 import { toggle2 } from "../../Recoil/ArticleReset/Toggle";
 import { Slide } from "../Game";
-import { AiOutlineDownload } from "react-icons/ai";
-import { BsHandThumbsUpFill } from "react-icons/bs";
 import SingleReply from "../Reply/SingleReply";
 import ReportModal from "../Article/ReportModal";
 import ImageResize from "quill-image-resize-module-react";
@@ -23,13 +21,12 @@ import ReplyDeleteModal from "../Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
 import GameInformationViewReplyModal from "./GameInformationViewReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
-import { BsHandThumbsUp } from "react-icons/bs"
 import DownloadImgBtn from "../../Item/img/Button/Download.png";
 import MobileImgBtn from "../../Item/img/Button/MobileDownload.png";
 import LikeImgBtn from "../../Item/img/Button/Like.png";
 import LikeImgFillBtn from "../../Item/img/Button/FillLike.png";
 import PlayStore from "../../Item/img/Button/PlayStore.png";
-
+import ArticleReplyModal from "../Article/ArticleReplyModal";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
@@ -718,6 +715,11 @@ const GameInformationView = () => {
                                     ModalReplyCommentOnOff={ModalReplyCommentOnOff}
                                 /> : <></>}
 
+                                {ModalFreeArticleReplyCommentOnOff ? <ArticleReplyModal
+                                    setModalFreeArticleReplyCommentOnOff={setModalFreeArticleReplyCommentOnOff}
+                                    ModalFreeArticleReplyCommentOnOff={ModalFreeArticleReplyCommentOnOff}
+                                /> : <></>}
+
                                 <CommentForm
                                     LoginMaintain={loginMaintain}
                                     UserInfo={userInfo} User={userInfo == null ?
@@ -787,27 +789,27 @@ const GameInformationView = () => {
                                 <ButtonAllBox>
 
                                     {PCGameCount === 0 ? <></> :
-                                    <DownloadBtn>
-                                        <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
-                                            <DownloadImg src={DownloadImgBtn} />
-                                        </DownloadLink>
-                                    </DownloadBtn>}
-                                    
-                                    
-                                    {/* {MobileGameCount === 0 ? <></> :
-                                    <MoblieBtn>
-                                        <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
-                                            <MobileImg src={MobileImgBtn} />
-                                        </DownloadLink>
-                                    </MoblieBtn>} */}
-                                    
-                                    
-                                    {URL === "" ? <></> : 
-                                    <PlayStorekBtn>
-                                        <DownloadLink href={URL}>
-                                            <PlayStoreImg src={PlayStore} />
-                                        </DownloadLink>
-                                    </PlayStorekBtn>}
+                                        <DownloadBtn>
+                                            <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
+                                                <DownloadImg src={DownloadImgBtn} />
+                                            </DownloadLink>
+                                        </DownloadBtn>}
+
+
+                                    {MobileGameCount === 0 ? <></> :
+                                        <MoblieBtn>
+                                            <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
+                                                <MobileImg src={MobileImgBtn} />
+                                            </DownloadLink>
+                                        </MoblieBtn>}
+
+
+                                    {URL === "" ? <></> :
+                                        <PlayStorekBtn>
+                                            <DownloadLink href={URL}>
+                                                <PlayStoreImg src={PlayStore} />
+                                            </DownloadLink>
+                                        </PlayStorekBtn>}
 
                                 </ButtonAllBox>
                             </GameIntroduceSubTextBox>
@@ -848,6 +850,11 @@ const Editer = styled(ReactQuill)
     flex-direction: column;
 
     .ql-editor.ql-blank::before{
+        color: white;
+    }
+
+    .ql-editor ol, .ql-editor ul
+    {
         color: white;
     }
 
@@ -908,13 +915,22 @@ const Editer = styled(ReactQuill)
     .ql-toolbar.ql-toolbar.ql-snow
     {
         order: 2;
+    }
+
+    .ql-toolbar.ql-snow{
         background: white;
         border: none;
+        span:nth-child(2){
+            .ql-picker-options{
+                margin: -170px 0px 0px 0px;
+            }
+        }
+    }
     }
 
     .ql-snow .ql-picker.ql-expanded .ql-picker-options {
         display: block;
-        margin-top: -135px;
+        margin: -135px 0px 0px 0px;
         top: 100%;
         z-index: 1;
     }
@@ -1228,54 +1244,10 @@ const MoblieBtn = styled(DownloadBtn)
     margin: 0px 0px 0px 0px;
 `
 
-const LikeIcon = styled.i
-    `
-    display: flex;
-    align-items: center;
-    margin: 0px 0px 0px 10px;
-    font-size: 33px;
-    svg
-    {
-        color: white;
-    }
-`
-
-const DownloadBtnIcon = styled.i
-    `
-    display: flex;
-    align-items: center;
-    margin: 0px 0px 0px 10px;
-    font-size: 33px;
-    svg
-    {
-        color: white;
-    }
-`
-
-const LikeBtnText = styled.span
-    `
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 9px 0px 6px 10px;
-`
-
-const DownloadBtnText = styled.span
-    `
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 9px 0px 6px 10px;
-`
-
 const DownloadLink = styled.a
     `
     text-decoration: none;
-    color: ${props => props.theme.textColor};
 `
-
 
 const ButtonAllBox = styled.div
     `
@@ -1383,7 +1355,6 @@ const GameTitleText = styled.span
 
 const GameText = styled(GameTitleText)
     `
-    color: white;
     font-size: 18px;
     font-weight: bold;
     margin: 0px 0px 10px 0px;

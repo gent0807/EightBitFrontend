@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useMatch } from 'react-router-dom';
 import { useRecoilState } from "recoil";
 import { toggle } from "../../Recoil/ArticleReset/Toggle";
 import { toggle2 } from "../../Recoil/ArticleReset/Toggle";
@@ -65,6 +66,9 @@ const SingleReComment = ({
     const [updatedate, setUpdatedate] = useState(ReComment.updatedate);
     const [contentType, setContentType] = useState(ReComment.contentType);
     const [depth, setDepth] = useState(3);
+    const location = useLocation();
+
+    const GameView = useMatch('/GameInformationView/:developer/:regdate/:contentType');
 
     const [likecount, setLikecount] = useState(0);
     const [reCommenterRole, setReCommenterRole] = useState("");
@@ -191,7 +195,7 @@ const SingleReComment = ({
 
 
     useEffect(() => {
-        
+
         console.log("------------------대댓글 정보--------------------");
         console.log(ReComment);
 
@@ -212,7 +216,7 @@ const SingleReComment = ({
         }
 
         const getLikes = async (reCommenter, regdate) => {
-            if(regdate != undefined){
+            if (regdate != undefined) {
                 await axios.get(`${ip}/Likes/likes?master=${reCommenter}&regdate=${regdate}&contentType=${contentType}&depth=3`, {
 
                 },
@@ -258,7 +262,7 @@ const SingleReComment = ({
         }
 
 
-        const getReComments = async(replyer, regdate) => {
+        const getReComments = async (replyer, regdate) => {
             await axios.get(`${ip}/Comments/comments?original_author=${replyer}&original_regdate=${regdate}&contentType=${contentType}&depth=3`, {
 
             },
@@ -289,7 +293,7 @@ const SingleReComment = ({
         getReCommenterRole(ReComment.author);
         getReComments(ReComment.original_author, ReComment.original_regdate);
 
-        
+
         getLikes(ReComment.author, ReComment.regdate);
 
         setReCommentStatusDivHide(false);
@@ -512,54 +516,84 @@ const SingleReComment = ({
 
     return (
         <UserReCommentBox id={id}>
-            <div style={{ display: isEditing === true ? "none" : "block" }}>
-                <ReCommentUserProfileBox>
-                    <ReCommentUserBox>
-                        <ReCommentUserProfile src={`${ip}/Users/profileImg/${reCommenter}`} />
-                        <ReCommentInformationAllBox>
-                            <div style={{ display: "flex" }}>
-                                <UserNicknameText>{reCommenter}</UserNicknameText>
-                                <BiLogoDevTo size={24} style={{ margin: "0px 0px 2px 0px", display: reCommenterRole === "DEVELOPER" ? "block" : "none" }}></BiLogoDevTo>
-                                {regdate == updatedate ? "" :
-                                    <div style={{ display: "flex", margin: "5px 0px 0px -1px" }}>
-                                        <AiFillCheckCircle style={{ margin: "1px 3px 0px 3px" }} />
-                                        수정됨
-                                    </div>}
 
-                            </div>
-                            <div style={{ display: "flex" }}>
-                                <BsHandThumbsUp size={17} style={{ margin: "3px 0px 0px 0px" }} />
-                                <ReCommentreplyLikeCount>{likecount}</ReCommentreplyLikeCount>
+            <IsEditingBox isEditing={isEditing}>
+
+                <ReCommentUserProfileBox>
+
+                    <ReCommentUserBox>
+
+                        <ReCommentUserProfile src={`${ip}/Users/profileImg/${reCommenter}`} />
+
+                        <ReCommentInformationAllBox>
+
+                            <ProfileInformationBox>
+
+                                <UserNickNameBox
+                                    reCommenterRole={reCommenterRole}
+                                    GameView={GameView}
+                                >
+                                    <UserNicknameText>{reCommenter}</UserNicknameText>
+                                    <BiLogoDevTo />
+                                </UserNickNameBox>
+
+                                {regdate == updatedate ? "" :
+                                    <UpdateBox GameView={GameView}>
+                                        <AiFillCheckCircle />
+                                        수정됨
+                                    </UpdateBox>
+                                }
+
+                            </ProfileInformationBox>
+
+
+                            <LikeCmCountBox GameView={GameView}>
+
+                                <LikeBox>
+                                    <ReCommentLikeIcon><BsHandThumbsUp /></ReCommentLikeIcon>
+                                    <ReCommentreplyLikeCount>{likecount}</ReCommentreplyLikeCount>
+                                </LikeBox>
+
                                 {/* <BsDot style={{ margin: "3px -1px 0px -2px" }}></BsDot> */}
                                 {/* <ReCommentreplyIcon>약 {timecount} 전</ReCommentreplyIcon> */}
-                            </div>
+
+                            </LikeCmCountBox>
 
                         </ReCommentInformationAllBox>
-                    </ReCommentUserBox>
-                    <div style={{ margin: "15px 0px 0px 0px" }}>
 
-                        <RedateBox style={{display: loginMaintain == null? "none": loginMaintain =="true" ? 
-                                        (userInfo.login_state=="allok" ? "flex": user.login_state=="allok"? "flex":"none")
-                                         : user.login_state=="allok" ? "flex":"none"}}>
+                    </ReCommentUserBox>
+
+                    <ReplyReportBox GameView={GameView}>
+
+                        <RedateBox
+                            loginMaintain={loginMaintain}
+                            userInfo={userInfo}
+                            user={user}
+                        >
                             신고
-                            <SirenImg src={Siren} onClick={() => { 
-                                setReportMode(!reportMode) 
-                                setSelectedReportWriter(reCommenter);
-                                setSelectedReportRegdate(regdate);
-                                setSelectedReportContentType(contentType);
-                                setSelectedReportDepth(3);    
-                            }} />
+                            <SirenImg src={Siren}
+                                onClick={() => {
+                                    setReportMode(!reportMode)
+                                    setSelectedReportWriter(reCommenter);
+                                    setSelectedReportRegdate(regdate);
+                                    setSelectedReportContentType(contentType);
+                                    setSelectedReportDepth(3);
+                                }} />
                         </RedateBox>
 
                         <Regdate>{dayjs(regdate).format("YYYY-MM-DD")}</Regdate>
-                    </div>
+
+                    </ReplyReportBox>
+
                 </ReCommentUserProfileBox>
-                <ReCommentInformationBox>
+
+                <ReCommentInformationBox GameView={GameView}>
                     <ReCommentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
                 </ReCommentInformationBox>
 
                 <ReCommentreplyBox>
-                    <ReCommentreplyAllBox>
+
+                    <ReCommentreplyAllBox GameView={GameView}>
                         <ReCommentreplyBtn
                             LoginMaintain={loginMaintain}
                             UserInfo={userInfo} User={userInfo == null ?
@@ -588,6 +622,7 @@ const SingleReComment = ({
 
                         <OptionBox
                             LoginMaintain={loginMaintain}
+                            GameView={GameView}
                             User={user.login_state}
                             UserInfo={userInfo}
                             UserInfoState={userInfo == null ?
@@ -604,8 +639,11 @@ const SingleReComment = ({
                         >
                             <SlOptions />
 
-                            <SettingReplyStatusDiv ReCommentStatusDivHide={reCommentStatusDivHide}>
+                            <SettingReplyStatusDiv 
+                                ReCommentStatusDivHide={reCommentStatusDivHide} 
+                                GameView={GameView}>
                                 <UpdateReply
+                                    GameView={GameView}
                                     LoginMaintain={loginMaintain}
                                     User={user.login_state}
                                     UserInfo={userInfo}
@@ -629,6 +667,7 @@ const SingleReComment = ({
                                 </UpdateReply>
 
                                 <DeleteReply
+                                    GameView={GameView}
                                     onClick={() => { setReDeleteMode(!RedeleteMode); setModalreCommentId(id); setModalreCommenter(reCommenter); setModalreRegdate(regdate) }}
                                 >
                                     <span>
@@ -663,18 +702,21 @@ const SingleReComment = ({
                         null : userInfo.nickName}
 
 
-                    onSubmit={registerReComment}>
+                    onSubmit={registerReComment}
+                    >
                     <ReCommentArea>
                         <ReCommentProfile>
-                            <ReCommentUserProfile2 src={loginMaintain=="true" ? `${ip}/Users/profileImg/${userInfo.nickName}`:`${ip}/Users/profileImg/${user.nickname}`} />
+                            <ReCommentUserProfile2 src={loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : `${ip}/Users/profileImg/${user.nickname}`} />
                         </ReCommentProfile>
-                        <ReCommentInputBox>
+                        <ReCommentInputBox GameView={GameView}>
                             <Editer2
                                 placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
                                 value={reCommentChangeValue}
                                 onChange={(content, delta, source, editor) => setReCommentChangeValue(editor.getHTML())}
                                 modules={modules}
-                                formats={formats}>
+                                formats={formats}
+                                GameView={GameView}
+                            >
                             </Editer2>
                         </ReCommentInputBox>
                     </ReCommentArea>
@@ -684,7 +726,7 @@ const SingleReComment = ({
                     </ReCommentBtnBox>
                 </ReCommentForm>
                 )}
-            </div>
+            </IsEditingBox>
             <div style={{ display: isEditing === false ? "none" : "block", margin: "40px 0px 0px 0px" }}>
 
                 {ModalReplyUpdateReCommentOnOff ? <ReplyUpdateReCommentModal
@@ -710,13 +752,15 @@ const SingleReComment = ({
                         <ReCommentProfile>
                             <ReCommentUserProfile2 src={`${ip}/Users/profileImg/${reCommenter}`} />
                         </ReCommentProfile>
-                        <ReCommentInputBox>
+                        <ReCommentInputBox GameView={GameView}>
                             <Editer2
                                 placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
                                 value={updateReCommentText}
                                 onChange={(content, delta, source, editor) => setUpdateReCommentText(editor.getHTML())}
                                 modules={modules}
-                                formats={formats}>
+                                formats={formats}
+                                GameView={GameView}
+                            >
                             </Editer2>
                         </ReCommentInputBox>
                     </ReCommentArea>
@@ -726,7 +770,9 @@ const SingleReComment = ({
                     </ReCommentBtnBox>
                 </ReCommentForm>
             </div>
-            <ReCommentLine />
+
+            <ReCommentLine GameView={GameView} />
+            
         </UserReCommentBox>
     );
 }
@@ -742,6 +788,12 @@ const ReCommentUserProfileBox = styled.div
     display: flex;
     justify-content: space-between;
     margin: 0px 0px 17px 0px;
+`
+
+const IsEditingBox = styled.div
+    `
+    display: ${props => props.isEditing === true ? "none" : "block"};
+
 `
 
 const ReCommentUserBox = styled.div
@@ -766,6 +818,51 @@ const ReCommentInformationAllBox = styled.div
     padding: 21px 0px 0px 15px;
 `
 
+const ProfileInformationBox = styled.div
+    `
+    display: flex;
+`
+
+const LikeCmCountBox = styled.div
+    `
+    display: flex;
+    align-items: center;
+    color: ${props => props.GameView ? "white" : props.theme.textColor};
+`
+
+const LikeBox = styled.div
+    `
+    display: flex;
+    align-items: center;
+`
+
+const ReCommentLikeIcon = styled.i
+    `
+    margin: 0px 6px 0px 0px;
+    font-size: 20px;
+`
+
+const UserNickNameBox = styled.div
+    `
+    display: flex;
+    color: ${props => props.GameView ? "white" : props.theme.textColor};
+    svg{
+        font-size: 23px;
+        margin: -1px 0px 0px 0px;
+        display: ${props => props.reCommenterRole === "DEVELOPER" ? "block" : "none"};
+    }
+`
+
+const UpdateBox = styled.div
+    `
+    display: flex;
+    margin: 5px 0px 0px -1px;
+    color: ${props => props.GameView ? "white" : props.theme.textColor};
+    svg{
+        margin: 1px 3px 0px 3px;
+    }
+`
+
 const UserNicknameText = styled.span
     `
     font-size: 21px;
@@ -786,24 +883,21 @@ const ReCommentreplyCount = styled.span
     font-weight: bold;
 `
 
+const ReplyReportBox = styled.div
+    `
+    margin: 15px 0px 0px 0px;
+    color: ${props => props.GameView ? "white" : props.theme.textColor};
+`
+
 const RedateBox = styled.div
     `
-    display: flex;
+    display: ${props => props.loginMaintain == null ? "none" : props.loginMaintain == "true" ?
+        (props.userInfo.loginState == "allok" ? "flex" : props.user.login_state == "allok" ? "flex" : "none")
+        : props.user.login_state == "allok" ? "flex" : "none"};
     align-items: end;
     justify-content: end;
     cursor: pointer;
     margin: 0px -3px 10px 0px;
-`
-
-const ReportBox = styled.div
-    `
-    border: 1px solid ${props => props.theme.textColor};
-    border-radius: 10px;
-    position: absolute;
-    z-index: 2;
-    background: ${props => props.theme.backgroundColor};
-    margin: 0px 0px 0px 10px;
-    display: ${props => props.ReportMode == false ? "none" : "block"};
 `
 
 const Regdate = styled.span
@@ -817,6 +911,7 @@ const ReCommentInformationBox = styled.div
     padding: 0px 0px 0px 0px;
     font-size: 20px;
     font-weight: bold;
+    color: ${props => props.GameView ? "white" : props.theme.textColor};
 `
 
 const ReCommentText = styled.div
@@ -838,9 +933,9 @@ const SettingReplyStatusDiv = styled.div
     position: absolute;
     border-radius: 6px;
     padding: 10px;
-    border: solid 1px ${props => props.theme.textColor};
+    border: solid 1px ${props => props.GameView ? "white" : props.theme.textColor};
     z-index: 2;
-    background: ${props => props.theme.backgroundColor};
+    background: ${props => props.GameView ? "rgba(41,41,41,1.7)" : props.theme.backgroundColor};
     margin: 5px 0px 0px -97px;
 `
 
@@ -852,6 +947,7 @@ const UpdateReply = styled.div
     align-items: center;
     font-size: 18px;
     margin: 0px 0px 10px 0px;
+    color : ${props => props.GameView ? "white" : props.theme.textColor};
 `
 
 const DeleteReply = styled.div
@@ -860,11 +956,13 @@ const DeleteReply = styled.div
     cursor: pointer;
     align-items: center;
     font-size: 18px;
+    color : ${props => props.GameView ? "white" : props.theme.textColor};
 `
 
 const ReCommentreplyAllBox = styled.div
     `
     display: flex;
+    color : ${(props) => props.GameView ? "white" : props.theme.textColor};
 `
 
 const ReCommentreplyBtn = styled.div
@@ -907,6 +1005,7 @@ const OptionBox = styled.div
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.ReCommenter || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
         (props.User === "allok" ? (props.UserInfoNickname == props.ReCommenter || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
     cursor : pointer;
+    color : ${props => props.GameView ? "white" : props.theme.textColor};
 `
 
 const ReCommentForm = styled.form
@@ -938,9 +1037,8 @@ const ReCommentInputBox = styled.div
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 2fr;
-    border: solid 2px ${props => props.theme.textColor};
+    border: solid 2px ${props => props.GameView ? "white" : props.theme.textColor};
     border-radius: 10px;
-    overflow: hidden;
 `
 
 const Editer2 = styled(ReactQuill)
@@ -949,12 +1047,19 @@ const Editer2 = styled(ReactQuill)
     flex-direction: column;
 
     .ql-editor.ql-blank::before{
-        color: ${props => props.theme.textColor};
+        color: ${props => props.GameView ? "white" : props.theme.textColor};
+    }
+
+    .ql-container.ql-snow
+    {
+        position: relative;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
     }
 
     .ql-editor ol, .ql-editor ul
     {
-        color:${props => props.theme.textColor};
+        color:${props => props.GameView ? "white" : props.theme.textColor};
     }
 
     .ql-editor
@@ -962,6 +1067,9 @@ const Editer2 = styled(ReactQuill)
         margin: 0px -2px -2px 0px;
         min-height: 100px;
         font-size: 20px;
+        p{
+            color:${props => props.GameView ? "white" : props.theme.textColor};
+        }
     }
 
     .ql-editor::-webkit-scrollbar 
@@ -1001,12 +1109,32 @@ const Editer2 = styled(ReactQuill)
     .ql-toolbar.ql-toolbar.ql-snow
     {
         order: 2;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
     }
 
     .ql-tooltip.ql-editing.ql-flip
     {
         left: 0% !important;
         top: 61% !important;
+    }
+
+    .ql-toolbar.ql-snow{
+        background: white;
+        border: none;
+        span:nth-child(2){
+            .ql-picker-options{
+                margin: -170px 0px 0px 0px;
+            }
+        }
+    }
+    }
+
+    .ql-snow .ql-picker.ql-expanded .ql-picker-options {
+        display: block;
+        margin: -135px 0px 0px 0px;
+        top: 100%;
+        z-index: 1;
     }
 
 `
@@ -1025,7 +1153,7 @@ const ReCommentBtn = styled.button
     outline: none;
     border-radius: 10px;
     margin: 10px 0px 10px 0px;
-    border: solid 3px black;
+    border: none;
     font-size: 19px;
     font-weight: bold;
     padding: 10px;
@@ -1049,5 +1177,5 @@ const SirenImg = styled.img
 const ReCommentLine = styled.div
     `
     width: 100%;
-    border: 1px solid ${props => props.theme.textColor};
+    border: 1px solid ${props => props.GameView ? "white" : props.theme.textColor};
 `

@@ -508,6 +508,8 @@ const HeaderBox = () => {
                                             (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
                                 >
 
+                                    <Darkmode />
+
                                     {loginMaintain == null ? [] : loginMaintain == "true" ?
                                         (userInfo == null ? [] : userInfo.loginState === "allok" ?
                                             [<MenuBox
@@ -528,20 +530,6 @@ const HeaderBox = () => {
                                             >
                                                 <AiOutlineShopping />
                                             </MenuBox>] : [])}
-
-                                    <Darkmode />
-
-                                    <MenuBox
-                                        click={FastClickCheck}
-                                        left={"24px"}
-                                        top={"9px"}
-                                        size={"33px"}
-                                        ref={FastRef}
-                                        padding={"4.8px 0px 0px 0px"}
-                                        onClick={() => FastMenuCheck()}
-                                    >
-                                        <CgMenuGridR />
-                                    </MenuBox>
 
                                     <>
                                         {loginMaintain == null ?
@@ -681,7 +669,7 @@ const HeaderBox = () => {
                                                     onClick={() => [setProfileMenuShow(!ProfileMenuShow),
                                                     setProfileClickCheck(!ProfileClickCheck)]}
                                                 >
-                                                    <DropdownImg src={loginMaintain == null ? User : loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : user == null ? User : user.login_state == null ? User : `${ip}/Users/profileImg/${user.nickname}`} />
+                                                    <ProfileImg src={loginMaintain == null ? User : loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : user == null ? User : user.login_state == null ? User : `${ip}/Users/profileImg/${user.nickname}`} />
                                                     <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
                                                 </Profileli>
                                             </Link>
@@ -1457,6 +1445,11 @@ const DropdownImg = styled.img
     height: 34px;
 `
 
+const ProfileImg = styled(DropdownImg)
+`
+    border-radius: 50%;
+`
+
 const ProFileSlideDown = keyframes
     `
     0%{
@@ -1482,7 +1475,7 @@ const ProfileListBox = styled.div
     `
     display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 108.5px;
+    margin: 59px 0px 0px 56.5px;
     box-shadow: 0px 0px 0px ${props => props.show ? "3px" : "0px"} ${props => props.theme.borderColor};
     background: white;  
     height: ${props => props.show ? "384px" : "0px"};
@@ -1506,7 +1499,7 @@ const WriteListBox = styled.div
     `
     display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 194.5px;
+    margin: 59px 0px 0px 137px;
     box-shadow: 0px 0px 0px ${props => props.show ? "3px" : "0px"} ${props => props.theme.borderColor};
     background: white;
     border-radius: 10px;
