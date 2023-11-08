@@ -63,7 +63,6 @@ const HeaderBox = () => {
     const [searchmodalOnOffBtn, setSearchModalOnOffBtn] = useState(false);
     const [swiper, setSwiper] = useState(null);
 
-
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -72,14 +71,7 @@ const HeaderBox = () => {
     const loginMaintain = localStorage.getItem("loginMaintain");
     const ip = localStorage.getItem("ip");
 
-
-    let fastMenuTopZIndex = useRef(false);
-    let profileMenuTopZIndex = useRef(false);
-    let writeMemuTopZIndex = useRef(false);
-    let ProfileRef = useRef(null);
-    let FastRef = useRef(null);
-    let WriteRef = useRef(null);
-    let BtnLeaveRef = useRef(null);
+    let BtnLeaveRef = useRef("");
 
     const swiperParams =
     {
@@ -123,73 +115,6 @@ const HeaderBox = () => {
             document.removeEventListener("mouseover", handleOuside);
         };
     }, [BtnLeaveRef]);
-
-    useEffect(() => {
-        function handleOuside(e) {
-            if (FastRef.current && !FastRef.current.contains(e.target)) {
-                setFastClickCheck(false);
-                setIsFastMenuShow(false);
-            }
-        };
-
-        if (WindowLength <= 1342) {
-            setFastClickCheck(false);
-            setIsFastMenuShow(false);
-        }
-
-        if (!FastMenuShow) {
-            document.addEventListener("click", handleOuside);
-        }
-        return () => {
-            document.removeEventListener("click", handleOuside);
-        };
-    }, [FastRef, WindowLength]);
-
-    useEffect(() => {
-        function handleOuside(e) {
-            if (ProfileRef.current && !ProfileRef.current.contains(e.target)) {
-                setProfileMenuShow(false);
-                setProfileClickCheck(false);
-            }
-        };
-
-        if (WindowLength <= 1342) {
-            setProfileMenuShow(false);
-            setProfileClickCheck(false);
-        }
-
-        if (!ProfileMenuShow) {
-            document.addEventListener("click", handleOuside);
-        }
-        return () => {
-            document.removeEventListener("click", handleOuside);
-        };
-    }, [ProfileRef, WindowLength]);
-
-    useEffect(() => {
-        function handleOuside(e) {
-            if (WriteRef.current && !WriteRef.current.contains(e.target)) {
-                setIsWriteMenuShow(false);
-                setIsWriteMenuClickCheck(false);
-                setWriteClickCheck(false);
-            }
-        };
-
-        if (WindowLength <= 1342) {
-            setIsWriteMenuShow(false);
-            setIsWriteMenuClickCheck(false);
-            setWriteClickCheck(false);
-        }
-
-        if (!WriteMenuShow) {
-            document.addEventListener("click", handleOuside);
-        }
-        return () => {
-            document.removeEventListener("click", handleOuside);
-        };
-    }, [WriteRef, WindowLength]);
-
-
 
     const OnSearch = (e) => {
         const currentSearch = e.target.value;
@@ -254,48 +179,6 @@ const HeaderBox = () => {
         setBackgroundLine(true);
     }
 
-    const FastMenuCheck = () => {
-        fastMenuTopZIndex.current = true;
-        profileMenuTopZIndex.current = false;
-        writeMemuTopZIndex.current = false;
-        setIsFastMenuShow(!FastMenuShow);
-        setFastClickCheck(!FastClickCheck);
-        setIsDefaultFastScene(true);
-        setProfileMenuShow(false);
-        setProfileClickCheck(false);
-        setWriteClickCheck(false);
-        setIsWriteMenuShow(false);
-        setIsWriteMenuClickCheck(false);
-    }
-
-    const ProfileMenuCheck = () => {
-        fastMenuTopZIndex.current = false;
-        profileMenuTopZIndex.current = true;
-        writeMemuTopZIndex.current = false;
-        setIsProfileLogoutCheck(false);
-        setProfileMenuShow(!ProfileMenuShow);
-        setProfileClickCheck(!ProfileClickCheck);
-        setIsDefaultProfileScene(true);
-        setIsFastMenuShow(false);
-        setFastClickCheck(false);
-        setWriteClickCheck(false);
-        setIsWriteMenuShow(false);
-        setIsWriteMenuClickCheck(false);
-    }
-
-    const WriteMenuCheck = () => {
-        fastMenuTopZIndex.current = false;
-        profileMenuTopZIndex.current = false;
-        writeMemuTopZIndex.current = true;
-        setIsWriteMenuShow(!WriteMenuShow);
-        setIsWriteMenuClickCheck(!WriteMenuClickCheck);
-        setWriteClickCheck(!WriteClickCheck);
-        setDefaultWriteScene(true);
-        setProfileMenuShow(false);
-        setProfileClickCheck(false);
-        setIsFastMenuShow(false);
-        setFastClickCheck(false);
-    }
 
     const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -307,13 +190,6 @@ const HeaderBox = () => {
         window.addEventListener('scroll', updateScroll);
     });
 
-    useEffect(() => {
-        if (WindowLength >= 1342) {
-            setModalOnOffBtn(false);
-            setSearchModalOnOffBtn(false);
-        }
-    }, [WindowLength])
-
     return (
         <>
             <ALLNavBox>
@@ -322,7 +198,8 @@ const HeaderBox = () => {
                     <BackgroudTopNav TopBack={scrollPosition}>
 
                         <ModalFast OnOff={modalOnOffBtn}>
-                            <ModalFastMenuBox>
+                            <ModalFastMenuBox OnOff={modalOnOffBtn}>
+
                                 <ModalAllOffBtn>
                                     <ModalAllOffBtnText
                                         onClick={() => setModalOnOffBtn(false)}
@@ -330,339 +207,113 @@ const HeaderBox = () => {
                                         x
                                     </ModalAllOffBtnText>
                                 </ModalAllOffBtn>
+
                                 <ModalUserMenu>
+
                                     {loginMaintain == null ?
-                                        [<LineBox
-                                            onClick={() => [
-                                                ScrollTop(),
-                                                setModalOnOffBtn(false),
-                                                setSearchModalOnOffBtn(false)
-                                            ]}
-                                            left={"20px"}
-                                            top={"7px"}
-                                            size={"15px"}
-                                            padding={"10px 0px 10px 0px"}
-                                        >
-                                            <Link to='/Login'>로그인</Link>
-                                        </LineBox>,
-                                        <MenuBox
-                                            onClick={() => [
-                                                ScrollTop(),
-                                                setModalOnOffBtn(false),
-                                                setSearchModalOnOffBtn(false)
-                                            ]}
-                                            left={"9px"}
-                                            top={"7px"}
-                                            size={"15px"}
-                                            padding={"10px 0px 10px 0px"}
-                                        >
-                                            <Link to='/SelectSign'>회원가입</Link>
-                                        </MenuBox>] :
+                                        <LoginCheckBox>
+                                            <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
+                                        </LoginCheckBox> :
 
                                         loginMaintain == "true" ?
-                                            (userInfo == null ?
-                                                [<LineBox
-                                                    onClick={() => [
-                                                        ScrollTop(),
-                                                        setModalOnOffBtn(false),
-                                                        setSearchModalOnOffBtn(false)
-                                                    ]}
-                                                    left={"20px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
-                                                >
-                                                    <Link to='/Login'>로그인</Link>
-                                                </LineBox>,
+                                            userInfo == null ?
 
-                                                <MenuBox
-                                                    onClick={() => [
-                                                        ScrollTop(),
-                                                        setModalOnOffBtn(false),
-                                                        setSearchModalOnOffBtn(false)
-                                                    ]}
-                                                    left={"9px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
-                                                >
-                                                    <Link to='/SelectSign'>회원가입</Link>
-                                                </MenuBox>] :
+                                                <LoginCheckBox>
+                                                    <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
+                                                </LoginCheckBox> :
 
                                                 userInfo.loginState === "allok" ?
-                                                    [<Profile
-                                                        click={ProfileClickCheck}
-                                                        ref={ProfileRef}
-                                                        onClick={() => ProfileMenuCheck()}
-                                                    >
+
+                                                    <ModalProfileImgBox>
+                                                        <Profile>
+                                                            <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
+                                                        </Profile>
+
+                                                        <ModalNickNameBox>
+                                                            <ModalNickNameText>
+                                                                <ModalNickNamePointText>
+                                                                    {user.nickname}
+                                                                </ModalNickNamePointText>
+                                                                님, 환영합니다!
+                                                            </ModalNickNameText>
+                                                        </ModalNickNameBox>
+
+                                                        <MyPageShopBox>
+                                                            <MyPageBtnBox>
+                                                                <Link to={"/"}>
+                                                                    <MyPageBtnText>마이페이지</MyPageBtnText>
+                                                                </Link>
+                                                            </MyPageBtnBox>
+
+                                                            <ShopBtnBox>
+                                                                <Link to={"/"}>
+                                                                    <ShopBtnText>장바구니</ShopBtnText>
+                                                                </Link>
+                                                            </ShopBtnBox>
+                                                        </MyPageShopBox>
+
+                                                    </ModalProfileImgBox> :
+
+                                                    <LoginCheckBox>
+                                                        <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
+                                                    </LoginCheckBox> :
+
+                                            user.login_state === "allok" ?
+
+                                                <ModalProfileImgBox>
+                                                    <Profile>
                                                         <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
-                                                    </Profile>,
-                                                    ] :
+                                                    </Profile>
 
-                                                    [<LineBox
-                                                        onClick={() => [
-                                                            ScrollTop(),
-                                                            setModalOnOffBtn(false),
-                                                            setSearchModalOnOffBtn(false)
-                                                        ]}
-                                                        left={"20px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/Login'>로그인</Link>
-                                                    </LineBox>,
+                                                    <ModalNickNameBox>
+                                                        <ModalNickNameText>
+                                                            <ModalNickNamePointText>
+                                                                {user.nickname}
+                                                            </ModalNickNamePointText>
+                                                            님, 환영합니다!
+                                                        </ModalNickNameText>
+                                                    </ModalNickNameBox>
 
-                                                    <MenuBox
-                                                        onClick={() => [
-                                                            ScrollTop(),
-                                                            setModalOnOffBtn(false),
-                                                            setSearchModalOnOffBtn(false)
-                                                        ]}
-                                                        left={"9px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/SelectSign'>회원가입</Link>
-                                                    </MenuBox>]) :
+                                                    <MyPageShopBox>
+                                                        <MyPageBtnBox>
+                                                            <Link to={"/"}>
+                                                                <MyPageBtnText>마이페이지</MyPageBtnText>
+                                                            </Link>
+                                                        </MyPageBtnBox>
 
-                                            (user.login_state === "allok" ?
-                                                [<Profile
-                                                    click={ProfileClickCheck}
-                                                    ref={ProfileRef}
-                                                    onClick={() => ProfileMenuCheck()}
-                                                >
-                                                    <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
-                                                </Profile>,
-                                                ] :
+                                                        <ShopBtnBox>
+                                                            <Link to={"/"}>
+                                                                <ShopBtnText>장바구니</ShopBtnText>
+                                                            </Link>
+                                                        </ShopBtnBox>
+                                                    </MyPageShopBox>
 
-                                                [<LineBox
-                                                    onClick={() => [
-                                                        ScrollTop(),
-                                                        setModalOnOffBtn(false),
-                                                        setSearchModalOnOffBtn(false)
-                                                    ]}
-                                                    left={"20px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
-                                                >
-                                                    <Link to='/Login'>로그인</Link>
-                                                </LineBox>,
+                                                </ModalProfileImgBox> :
 
-                                                <MenuBox
-                                                    onClick={() => [
-                                                        ScrollTop(),
-                                                        setModalOnOffBtn(false),
-                                                        setSearchModalOnOffBtn(false)
-                                                    ]}
-                                                    left={"9px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
-                                                >
-                                                    <Link to='/SelectSign'>회원가입</Link>
-                                                </MenuBox>])}
+                                                <LoginCheckBox>
+                                                    <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
+                                                </LoginCheckBox>
+                                    }
 
                                     {loginMaintain == null ?
                                         <></> :
                                         loginMaintain == "true" ?
                                             userInfo == null ?
                                                 <></> :
-
                                                 userInfo.loginState === "allok" ?
                                                     user.role === "DEVELOPER" ?
                                                         <Link to="/GameUploadPage/indie">
-                                                            <Profileli
-                                                                padding="15px 0px 15px 13px"
-                                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                                            >
-                                                                <DropdownImg src={Upload} />
-                                                                <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
-                                                            </Profileli>
+                                                            <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
                                                         </Link> :
                                                         <></> :
                                                     <></> :
                                             user.login_state === "allok" ?
                                                 user.role === "DEVELOPER" ?
                                                     <Link to="/GameUploadPage/indie">
-                                                        <Profileli
-                                                            padding="15px 0px 15px 13px"
-                                                            onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                                        >
-                                                            <DropdownImg src={Upload} />
-                                                            <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
-                                                        </Profileli>
+                                                        <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
                                                     </Link> :
                                                     <></> :
                                                 <></>}
-                                    <ProfileUl>
-                                        <Link to='/WriteBoard/free'>
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Essay} />
-                                                <ProfileliText MediaLeft={"17px"}>자유게시판</ProfileliText>
-                                            </Profileli>
-                                        </Link>
-
-                                        <Link to="/WriteBoard/strategy">
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Strategy} />
-                                                <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
-                                            </Profileli>
-                                        </Link>
-
-                                        <Link to="/WriteBoard/question">
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Discussion} />
-                                                <ProfileliText MediaLeft={"17px"}>질문게시판</ProfileliText>
-                                            </Profileli>
-                                        </Link>
-
-                                        <Profileli
-                                            padding="15px 0px 15px 13px"
-                                            onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                        >
-                                            <DropdownImg src={Rating} />
-                                            <ProfileliText MediaLeft={"17px"}>상품 리뷰</ProfileliText>
-                                        </Profileli>
-
-                                        <Profileli
-                                            padding="15px 0px 15px 13px"
-                                            onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                        >
-                                            <DropdownImg src={Console} />
-                                            <ProfileliText MediaLeft={"17px"}>게임 리뷰</ProfileliText>
-                                        </Profileli>
-
-                                    </ProfileUl>
-
-                                    <>
-                                        {loginMaintain == null ?
-                                            [<LineBox
-                                                onClick={() => ScrollTop()}
-                                                left={"20px"}
-                                                top={"7px"}
-                                                size={"15px"}
-                                                padding={"10px 0px 10px 0px"}
-                                            >
-                                                <Link to='/Login'>로그인</Link>
-                                            </LineBox>,
-                                            <MenuBox
-                                                onClick={() => ScrollTop()}
-                                                left={"9px"}
-                                                top={"7px"}
-                                                size={"15px"}
-                                                padding={"10px 0px 10px 0px"}
-                                            >
-                                                <Link to='/SelectSign'>회원가입</Link>
-                                            </MenuBox>] :
-
-                                            loginMaintain == "true" ?
-                                                (userInfo == null ?
-                                                    [<LineBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"20px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/Login'>로그인</Link>
-                                                    </LineBox>,
-
-                                                    <MenuBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"9px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/SelectSign'>회원가입</Link>
-                                                    </MenuBox>] :
-
-                                                    userInfo.loginState === "allok" ?
-                                                        [<Profile
-                                                            click={ProfileClickCheck}
-                                                            ref={ProfileRef}
-                                                            onClick={() => ProfileMenuCheck()}
-                                                        >
-                                                            <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
-                                                        </Profile>,
-
-                                                        <WriteBox
-                                                            click={WriteClickCheck}
-                                                            onClick={() => WriteMenuCheck()}
-                                                            ref={WriteRef}
-                                                        >
-                                                            <WriteBoxText >글쓰기</WriteBoxText>
-                                                        </WriteBox>] :
-
-                                                        [<LineBox
-                                                            onClick={() => ScrollTop()}
-                                                            left={"20px"}
-                                                            top={"7px"}
-                                                            size={"15px"}
-                                                            padding={"10px 0px 10px 0px"}
-                                                        >
-                                                            <Link to='/Login'>로그인</Link>
-                                                        </LineBox>,
-
-                                                        <MenuBox
-                                                            onClick={() => ScrollTop()}
-                                                            left={"9px"}
-                                                            top={"7px"}
-                                                            size={"15px"}
-                                                            padding={"10px 0px 10px 0px"}
-                                                        >
-                                                            <Link to='/SelectSign'>회원가입</Link>
-                                                        </MenuBox>]) :
-
-                                                (user.login_state === "allok" ?
-                                                    [<Profile
-                                                        click={ProfileClickCheck}
-                                                        ref={ProfileRef}
-                                                        onClick={() => ProfileMenuCheck()}
-                                                    >
-                                                        <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
-                                                    </Profile>,
-
-                                                    <WriteBox
-                                                        click={WriteClickCheck}
-                                                        onClick={() => WriteMenuCheck()}
-                                                        ref={WriteRef}
-                                                    >
-                                                        <WriteBoxText >글쓰기</WriteBoxText>
-                                                    </WriteBox>]
-                                                    :
-                                                    [<LineBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"20px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/Login'>로그인</Link>
-                                                    </LineBox>,
-
-                                                    <MenuBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"9px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/SelectSign'>회원가입</Link>
-                                                    </MenuBox>])}
-                                    </>
 
                                 </ModalUserMenu>
                             </ModalFastMenuBox>
@@ -687,22 +338,22 @@ const HeaderBox = () => {
                                         <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
                                     </NavUl>
 
-                                    <SlideNav {...swiperParams} ref={setSwiper}>
-                                        <SwiperSlide>
-                                            <GameLi as={"div"} onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <ShopLi as={"div"} onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <ComunityLi as={"div"} onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <SupportLi as={"div"} onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
-                                        </SwiperSlide>
-                                    </SlideNav>
-
                                 </NavMenuAllBox>
+
+                                <SlideNav {...swiperParams} ref={setSwiper}>
+                                    <SwiperSlide>
+                                        <GameLi as={"div"} onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <ShopLi as={"div"} onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <ComunityLi as={"div"} onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <SupportLi as={"div"} onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
+                                    </SwiperSlide>
+                                </SlideNav>
 
                             </NavBox>
 
@@ -713,12 +364,9 @@ const HeaderBox = () => {
 
                                 <ButtonBox>
 
-
-                                    <Darkmode />
-
                                     <SearchInputBox>
-                                        <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
-                                        <SearchInputIconBox>
+                                        <SearchInput TopBack={scrollPosition} placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
+                                        <SearchInputIconBox TopBack={scrollPosition}>
                                             <SearchButton><HiOutlineSearch /></SearchButton>
                                         </SearchInputIconBox>
                                     </SearchInputBox>
@@ -730,19 +378,13 @@ const HeaderBox = () => {
                                     </SearchModalMenu>
 
 
-                                    {loginMaintain == null ? [] : loginMaintain == "true" ?
-                                        (userInfo == null ? [] : userInfo.loginState === "allok" ?
-                                            [<ShoppingBox>
-                                                <ShoppingMenuIcon><AiOutlineShopping /></ShoppingMenuIcon>
-                                            </ShoppingBox>] : []) :
-
-                                        (user.login_state === "allok" ?
-                                            [<ShoppingBox>
-                                                <ShoppingMenuIcon><AiOutlineShopping /></ShoppingMenuIcon>
-                                            </ShoppingBox>] : [])}
+                                    <ShoppingBox
+                                        onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                    >
+                                        <ShoppingMenuIcon><AiOutlineShopping /></ShoppingMenuIcon>
+                                    </ShoppingBox>
 
                                     <WriteListBox
-                                        zindex={writeMemuTopZIndex.current}
                                         default={isDefaultWriteScene}
                                         show={WriteMenuShow}
                                         size={user.role}
@@ -803,6 +445,8 @@ const HeaderBox = () => {
                                         <ModalFastMenuIcon><CgMenuGridR /></ModalFastMenuIcon>
                                     </ModalFastMenu>
 
+                                    <Darkmode />
+
                                 </ButtonBox>
 
 
@@ -847,12 +491,29 @@ export const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+const LoginCheckBox = styled.div
+    `
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    color: #ededed;
+    font-size: 20px;
+    a{
+        color: #ededed;
+        margin: 0px 8px 0px 0px;
+    }
+`
+
 const SlideNav = styled(Swiper)
     `
     display: none;
+    -webkit-tap-highlight-color: transparent;
 
     .swiper-slide {
         display: inline-flex;
+        width: auto;
     }
 
     @media (min-width:250px) and (max-width:891px)
@@ -876,15 +537,12 @@ const ModalAllOffBtnText = styled.span
     margin: 14px 23px 0px 0px;
 `
 
-const ModatAllBox = styled.div
-    `
-    display: flex;
-`
-
 const ModalUserMenu = styled.div
     `
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 `
 
 const ModalFast = styled.div
@@ -892,6 +550,7 @@ const ModalFast = styled.div
     display: ${props => props.OnOff ? "flex" : "none"};
     justify-content: end;
     position: fixed;
+    white-space: nowrap;
     top: 0;
     bottom: 0;
     width: 100%;
@@ -900,15 +559,38 @@ const ModalFast = styled.div
     z-index:99999;
 `
 
+const ModalAnimateOpen = keyframes
+    `
+    0%{
+        width: 0px;
+    },
+    100%{
+        width: 375px;
+    }
+
+`
+
+const ModalAnimateClose = keyframes
+    `
+    0%{
+        width: 375px;
+    },
+    100%{
+        width: 0px;
+    }
+
+`
+
 const ModalFastMenuBox = styled.div
     `
     display: flex;
     flex-direction: column;
-    width: 375px;
+    width: ${props => props.OnOff ? "375px" : "0px"};
     height: 100%;
     background: rgba(25,25,25,1);
-
-    @media (min-width:250px) and (max-width:768px)
+    animation: ${props => props.OnOff ? ModalAnimateOpen : ModalAnimateClose} 0.5s;
+    overflow: hidden;
+    @media (min-width:250px) and (max-width:622px)
     {
          width: 100%;
     }
@@ -1019,7 +701,7 @@ const WriteBoxText = styled.span
 `
 const BackgroudTopNav = styled.div
     `
-    background-color: ${props => props.TopBack === 0 ? "rgba(25,25,25,0.4)" : "#3c3c3c"};
+    background-color: ${props => props.TopBack === 0 ? "rgba(25,25,25,0.6)" : "#2b2b2b"};
     transition: background-color 0.5s;
 
     @media (min-width:250px) and (max-width:666px)
@@ -1174,6 +856,7 @@ const GameLi = styled.li
     `
     display: flex;
     flex-direction: column;
+    -webkit-tap-highlight-color: transparent;
     justify-content: center;
     padding: 0px 20px 0px 20px;
     list-style: none;
@@ -1230,6 +913,12 @@ const Topnav = styled.header
         font-weight: bold;
         -webkit-tap-highlight-color:transparent;
     }
+
+    @media (min-width:250px) and (max-width:623px)
+    {
+        flex-direction: column;
+        padding: 10px;
+    }
 `
 
 const Logo = styled.img
@@ -1255,11 +944,7 @@ const NavBox = styled.div
     position: relative;
     color: white;
     overflow: hidden;
-
-    @media (min-width:250px) and (max-width:891px)
-    {
-        -webkit-mask-image: linear-gradient(270deg,transparent,#000 4.2rem);
-    }
+    -webkit-mask-image: linear-gradient(270deg,transparent,#000 2.2rem);
 `
 const NavSlideAllBox = styled.div
     `
@@ -1282,16 +967,22 @@ export const SearchInput = styled.input
     `
     border: none;
     outline: none;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     padding: 0px 8px 0px 12px;
     font-size: 20px;
     width: 170px;
-    height: 43.5px;
-    caret-color: #3c3c3c;
-    background: #dee2e6;
+    height: 35.5px;
+    caret-color: white;
+    background: ${props => props.TopBack === 0 ? "rgba(74, 74, 74, 0.7)" : "#4a4a4a"};
+    transition: background 0.5s;
+    color: #d1d1d1;
+
+    &::placeholder{
+        color: #d1d1d1;
+    }
 `
 
 const AllButtonBox = styled.div
@@ -1363,9 +1054,9 @@ const LineBox = styled(MenuBox)
 export const SearchInputBox = styled.div
     `
     display: flex;
-    border: solid 3px #3c3c3c;
+    border: none;
     border-radius: 13px;
-    margin: 0px 10px 0px 0px;
+    margin: 0px 16px 0px 0px;
 
     @media (min-width:250px) and (max-width:1155px)
     {
@@ -1376,10 +1067,11 @@ export const SearchInputBox = styled.div
 
 export const SearchInputIconBox = styled.div
     `
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    background: #dee2e6;
-    height: 43.5px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    background: ${props => props.TopBack === 0 ? "rgba(74, 74, 74, 0.7)" : "#4a4a4a"};
+    transition: background 0.5s;
+    height: 35.5px;
     -webkit-user-select: none;
 `
 
@@ -1387,10 +1079,10 @@ export const SearchButton = styled.button
     `
     border: none;
     background: transparent;
-    padding: 8px 8px 0px 0px;
+    padding: 2px 8px 0px 0px;
     cursor: pointer;
     font-size: 29px;
-    color: black;
+    color: white;
 
     @media (hover: hover)
     {
@@ -1402,20 +1094,73 @@ export const SearchButton = styled.button
 
 `
 
+const ModalProfileImgBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ededed;
+    margin: 14px 0px 0px 0px;
+`
+
+const ModalNickNameBox = styled.div
+    `
+    margin: 37px 0px 25px 0px;
+    font-size: 22px;
+`
+
+const ModalNickNamePointText = styled.span
+    `
+    font-weight: bold;
+`
+
+const ModalNickNameText = styled.span
+    `
+
+`
+
+const MyPageShopBox = styled.div
+    `
+    display: flex;
+    font-size: 18px;
+    color: #ededed;
+    a{
+        color: #ededed;
+    }
+`
+
+const MyPageBtnBox = styled.div
+    `
+    margin: 0px 23px 0px 0px;
+`
+
+const MyPageBtnText = styled.span
+    `
+
+`
+
+const ShopBtnBox = styled.div
+    `
+
+`
+
+const ShopBtnText = styled.span
+    `
+
+`
+
 const Profile = styled.div
     `
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 26px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
     box-sizing: border-box;
-    box-shadow: ${props => props.click ? "0px 0px 0px 3px" : "none"} #6a9dda;
     overflow: hidden;
     cursor: pointer;
-    margin: 12px 0px 0px 19px;
     
     @media (hover: hover)
     {
@@ -1429,8 +1174,8 @@ const Profile = styled.div
 
 const Profileimg = styled.img
     `
-    width: 36px;
-    height: 36px;
+    width: 130px;
+    height: 130px;
 `
 const DropdownImg = styled.img
     `
