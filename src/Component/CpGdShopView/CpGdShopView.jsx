@@ -19,7 +19,7 @@ import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReplyPagination from "../Reply/ReplyPagination";
 import ReplyDeleteModal from "../Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
-import GameInformationViewReplyModal from "./GameInformationViewReplyModal";
+import CpGdShopReplyModal from "./CpGdShopReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
 import DownloadImgBtn from "../../Item/img/Button/Download.png";
 import MobileImgBtn from "../../Item/img/Button/MobileDownload.png";
@@ -27,14 +27,23 @@ import LikeImgBtn from "../../Item/img/Button/Like.png";
 import LikeImgFillBtn from "../../Item/img/Button/FillLike.png";
 import PlayStore from "../../Item/img/Button/PlayStore.png";
 import ArticleReplyModal from "../Article/ArticleReplyModal";
+import { Goods } from "../CpGdShop/CpGdData";
+import { AiFillCreditCard } from "react-icons/ai";
+import { BsBasket2Fill } from "react-icons/bs";
 
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const GameInformationView = () => {
-    const { developer } = useParams();
-    const { regdate } = useParams();
-    const { contentType } = useParams();
+const CpGdShopView = () => {
+    const { id } = useParams();
+    const [GoodsInformation, setGoodsInformation] = useState(Goods)
+
+    useEffect(() => {
+        setGoodsInformation(Goods.filter((View) => View.id == id));
+    }, [Goods]);
+
+    console.log(GoodsInformation);
+
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [updatedate, setUpdatedate] = useState("");
@@ -154,207 +163,9 @@ const GameInformationView = () => {
         "width",
     ];
 
-    useEffect(() => {
-
-        const getUserEmail = (nickname) => {
-            axios.get(`${ip}/Users/email?nickname=${nickname}`, {
-
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data
-                })
-                .then(data => {
-                    setEmail(data);
-                })
-        }
-
-
-        const getRole = (user) => {
-            axios.get(`${ip}/Users/role?nickname=${user}`, {
-
-            },
-                {
-
-                })
-                .then((res) => {
-                    return res.data;
-                })
-                .then(data => {
-                    setRole(data);
-                })
-
-        }
-
-
-        const getLikers = (developer, regdate, contentType) => {
-
-            axios.get(`${ip}/Likes/likes?master=${developer}&regdate=${regdate}&contentType=${contentType}&depth=1`, {
-
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data;
-                })
-                .then(data => {
-                    setLikecount(data.length);
-                    if (loginMaintain == "true") {
-                        if (userInfo != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == userInfo.nickName) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
-                                }
-                            }
-                        }
-                    }
-                    else if (loginMaintain == "false") {
-                        if (user.nickname != null) {
-                            for (let i = 0; i < data.length; i++) {
-                                if (data[i] == user.nickname) {
-                                    likeMode.current = true;
-                                    break;
-                                }
-                                else {
-                                    likeMode.current = false;
-                                }
-                            }
-                        }
-                    }
-                    else if (loginMaintain == null) {
-                        likeMode.current = false;
-                    }
-                })
-
-        }
-
-        const getReCommentCount = async (developer, regdate) => {
-            await axios.get(`${ip}/Comments/count?writer=${developer}&regdate=${regdate}`, {
-
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data;
-                })
-                .then(data => {
-                    totalCommentCount.current = totalCommentCount.current + data;
-                })
-        }
-
-        const getComments = async (developer, regdate, contentType) => {
-
-            await axios.get(`${ip}/Comments/comments?original_author=${developer}&original_regdate=${regdate}&contentType=${contentType}&depth=2`, {
-
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data;
-                })
-                .then(data => {
-                    totalCommentCount.current = data.length;
-                    setComments(data);
-                    getReCommentCount(developer, regdate);
-                });
-
-        }
-
-        const getFileList = async (developer, regdate, contentType, storeType) => {
-            await axios.get(`${ip}/Files/files/${developer}/${regdate}/${contentType}/${storeType}/1`, {
-
-            }, {
-
-            })
-                .then(res => {
-                    return res.data
-                })
-                .then(data => {
-                    if (storeType == "pcGame") {
-                        setPCGame(data[0]);
-                    }
-                    else if (storeType == "mobileGame") {
-                        setMobileGame(data[0]);
-                    }
-
-                    else if (storeType == "gameImage") {
-                        setMainImg(data[0]);
-                    }
-                    else if (storeType == "gameBanner") {
-                        setBanner(data[0]);
-                    }
-
-                })
-        }
-
-
-
-        axios.get(`${ip}/Games/game?viewer=${loginMaintain == "true" ? userInfo.nickName : user.login_state == "allok" ? user.nickname : ""}&developer=${developer}&regdate=${regdate}&contentType=${contentType}`, {
-
-        },
-            {
-
-            })
-            .then(res => res.data)
-            .then(data => {
-                setTitle(data.title);
-                setContent(data.content);
-                setUpdatedate(data.updatedate);
-                setVisitcnt(data.visitcnt);
-                setPCGameCount(data.pcGameCount);
-                setMobileGameCount(data.mobileGameCount);
-                setImgCount(data.imgCount);
-                setBannerCount(data.bannerCount);
-                setURL(data.url);
-                setGenre(data.genre);
-
-                getRole(data.developer);
-                getUserEmail(data.developer);
-                getComments(data.developer, data.regdate, data.contentType, data.depth);
-                getLikers(data.developer, data.regdate, data.contentType, data.depth);
-
-                if (data.pcGameCount > 0) {
-                    getFileList(data.developer, data.regdate, data.contentType, "pcGame");
-                }
-
-                if (data.mobileGameCount > 0) {
-                    getFileList(data.developer, data.regdate, data.contentType, "mobileGame");
-                }
-
-                if (data.imgCount > 0) {
-                    getFileList(data.developer, data.regdate, data.contentType, "gameImage");
-                }
-
-                if (data.bannerCount > 0) {
-                    getFileList(data.developer, data.regdate, data.contentType, "gameBanner");
-                }
-
-                if (OfficialGameList.includes(data.title)) {
-                    setType("공식");
-                }
-                else if (!OfficialGameList.includes(data.title)) {
-                    setType("인디");
-                }
-
-
-            })
-
-    }, [toggleState, toggleState2]);
-
-
-
     const addLike = async (e) => {
 
-        await axios.post(`${ip}/Likes/like`, {
+        /*await axios.post(`${ip}/Likes/like`, {
             liker: loginMaintain == "true" ? userInfo.nickName : user.nickname,
             master: developer,
             regdate: regdate,
@@ -365,20 +176,20 @@ const GameInformationView = () => {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
             })
             .then(res => {
-                /* regenerateAccessTokenOrLogout(res, addLike, e); */
+                /* regenerateAccessTokenOrLogout(res, addLike, e);
                 return res.data;
             })
             .then(data => {
                 setLikecount(data.length);
                 likeMode.current = true;
-            })
+            })*/
     }
 
 
 
 
     const reduceLike = async (e) => {
-        if (likecount > 0) {
+        /*if (likecount > 0) {
             await axios.delete(`${ip}/Likes/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${developer}/${regdate}/${contentType}/1`,
                 {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` }
@@ -392,13 +203,13 @@ const GameInformationView = () => {
                 })
 
         }
-        else return;
+        else return;*/
     }
 
 
 
     const addComment = (data, Comments) => {
-        if (Comments.length > 0) {
+        /*if (Comments.length > 0) {
             const lastCmtIndex = Comments.length - 1;
             const addedCmtId = Comments[lastCmtIndex].id + 1;
             const newComment = {
@@ -429,42 +240,42 @@ const GameInformationView = () => {
             };
             setComments([...Comments, newComment]);
             setReplyChangeValue("<p><br></p>");
-        }
+        }*/
 
     };
 
     const addComment2 = (data, Comments) => {
-        if (Comments.length > 0) {
-            const lastCmtIndex = Comments.length - 1;
-            const addedCmtId = Comments[lastCmtIndex].id + 1;
-            const newComment = {
-                id: addedCmtId,
-                original_author: developer,
-                original_regdate: regdate,
-                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-                content: replyChangeValue2,
-                regdate: data.regdate,
-                updatedate: data.updatedate,
-                contentType: contentType,
-            };
-            setComments([...Comments, newComment]);
-            setReplyChangeValue2('<p><br></p>');
-        }
-        else if (Comments.length === 0) {
-            const addedCmtId = 1;
-            const newComment = {
-                id: addedCmtId,
-                original_author: developer,
-                original_regdate: regdate,
-                author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
-                content: replyChangeValue2,
-                regdate: data.regdate,
-                updatedate: data.updatedate,
-                contentType: contentType,
-            };
-            setComments([...Comments, newComment]);
-            setReplyChangeValue2('<p><br></p>');
-        }
+        /*if (Comments.length > 0) {
+             const lastCmtIndex = Comments.length - 1;
+             const addedCmtId = Comments[lastCmtIndex].id + 1;
+             const newComment = {
+                 id: addedCmtId,
+                 original_author: developer,
+                 original_regdate: regdate,
+                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                 content: replyChangeValue2,
+                 regdate: data.regdate,
+                 updatedate: data.updatedate,
+                 contentType: contentType,
+             };
+             setComments([...Comments, newComment]);
+             setReplyChangeValue2('<p><br></p>');
+         }
+         else if (Comments.length === 0) {
+             const addedCmtId = 1;
+             const newComment = {
+                 id: addedCmtId,
+                 original_author: developer,
+                 original_regdate: regdate,
+                 author: loginMaintain == "true" ? userInfo.nickName : user.nickname,
+                 content: replyChangeValue2,
+                 regdate: data.regdate,
+                 updatedate: data.updatedate,
+                 contentType: contentType,
+             };
+             setComments([...Comments, newComment]);
+             setReplyChangeValue2('<p><br></p>');
+         }*/
     }
 
     const editComment = (commentId, editValue) => {
@@ -486,7 +297,7 @@ const GameInformationView = () => {
 
 
     const registerReply = async (e) => {
-        e.preventDefault();
+        /*e.preventDefault();
         if (replyChangeValue !== '<p><br></p>') {
             await axios.post(`${ip}/Comments/comment`, {
                 original_author: developer,
@@ -500,7 +311,7 @@ const GameInformationView = () => {
                     headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
                 })
                 .then((res) => {
-                    /* regenerateAccessTokenOrLogout(res, registerReply, e); */
+                    /* regenerateAccessTokenOrLogout(res, registerReply, e); 
                     return res.data;
                 })
                 .then((data) => {
@@ -517,6 +328,7 @@ const GameInformationView = () => {
             setModalFreeArticleReplyCommentOnOff(!ModalFreeArticleReplyCommentOnOff);
             return;
         }
+        */
     }
 
 
@@ -561,7 +373,7 @@ const GameInformationView = () => {
     }
 
     const ScrollTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 835, behavior: "smooth" });
     }
 
 
@@ -586,6 +398,8 @@ const GameInformationView = () => {
         }
     }, [CommentSize.length, Comments.length]);
 
+
+
     return (
         <GameViewBackground>
             <ReportModal
@@ -597,14 +411,13 @@ const GameInformationView = () => {
                 depth={selectedReportDepth}
             />
 
-            {banner == {} ? <></> : <BackgroundEffect />}
-            {banner == {} ? <DefaultBackground /> : <GameViewBackgroundImg src={`${ip}/Files/file/${banner.id}/${banner.uploader}/${banner.regdate}/${banner.contentType}/${banner.storeType}/1`} />}
+            <DefaultBackground />
 
             <GameViewAllBox>
                 <GameTitleAllBox>
                     <GameTitleTextBox>
-                        <GameText> {type} 게임</GameText>
-                        <GameTitleText>{title}</GameTitleText>
+                        <GameText>{GoodsInformation[0].content}</GameText>
+                        <GameTitleText>{GoodsInformation[0].title}</GameTitleText>
                     </GameTitleTextBox>
                     <BackButton onClick={() => navigate(-1)}>← 뒤로가기</BackButton>
                 </GameTitleAllBox>
@@ -612,13 +425,13 @@ const GameInformationView = () => {
                 <GameInformaionAllBox>
                     <GameAllBox>
                         <GameInformaionImgBox>
-                            <GameInformaionImg src={`${ip}/Files/file/${mainImg.id}/${mainImg.uploader}/${mainImg.regdate}/${mainImg.contentType}/${mainImg.storeType}/1`} />
+                            <GameInformaionImg src={GoodsInformation[0].src} />
                         </GameInformaionImgBox>
 
                         <GameIntroduceBox>
                             <GameExplanationText>게임 설명</GameExplanationText>
                             <GameExplanation>
-                                <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
+                                <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(GoodsInformation[0].content) }} />
                             </GameExplanation>
                         </GameIntroduceBox>
 
@@ -657,7 +470,7 @@ const GameInformationView = () => {
                                 setToggleState={setModalReplyDeleteSetToggleState}
                                 toggleState={ModalReplyDeleteToggleState}
                                 id={ModalReplyDeleteId}
-                                contentType={contentType}
+                            //contentType={contentType}
                             />
 
                             <CommentBox>
@@ -710,7 +523,7 @@ const GameInformationView = () => {
                                     />
                                 }
 
-                                {ModalReplyCommentOnOff ? <GameInformationViewReplyModal
+                                {ModalReplyCommentOnOff ? <CpGdShopReplyModal
                                     setModalReplyCommentOnOff={setModalReplyCommentOnOff}
                                     ModalReplyCommentOnOff={ModalReplyCommentOnOff}
                                 /> : <></>}
@@ -728,7 +541,7 @@ const GameInformationView = () => {
                                     UserNicknameCheck={user.nickname}
                                     UserNickname={userInfo == null ?
                                         null : userInfo.nickName}
-                                    Writer={developer}
+                                    //Writer={developer}
                                     onSubmit={registerReply}>
                                     <CommentArea>
                                         <CommentProfile>
@@ -763,17 +576,19 @@ const GameInformationView = () => {
                                 </GameIntroduceTextBox>
                                 <GameIntroduceSubTextAllBox>
                                     <GameIntroduceSubText>
-                                        장르 : {genre}
-                                    </GameIntroduceSubText>
-                                    <GameIntroduceSubText>
-                                        창작자 : {developer}
+                                        상품 : {GoodsInformation[0].content}
                                     </GameIntroduceSubText>
 
                                     <GameIntroduceSubText>
-                                        출시일 : {dayjs(GameInformaion[0].regdate).format("YY.MM.DD")}
+                                        가격 : ₩{GoodsInformation[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                                     </GameIntroduceSubText>
+
                                     <GameIntroduceSubText>
-                                        추천수 : {likecount}
+                                        출시일 : {dayjs(GoodsInformation[0].regdate).format("YY.MM.DD")}
+                                    </GameIntroduceSubText>
+
+                                    <GameIntroduceSubText>
+                                        추천수 : {GoodsInformation[0].likecount}
                                     </GameIntroduceSubText>
 
                                     <LikeCheckBtn
@@ -788,45 +603,28 @@ const GameInformationView = () => {
 
                                 <ButtonAllBox>
 
-                                    {PCGameCount === 0 ? <></> :
-                                        <DownloadBtn>
-                                            <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
-                                                <DownloadImg src={DownloadImgBtn} />
-                                            </DownloadLink>
-                                        </DownloadBtn>}
+                                    <PurchaseBtn>
+                                        <PuschaseIcon>
+                                            <AiFillCreditCard />
+                                        </PuschaseIcon>
+                                        <PurchaseBtnText>
+                                            즉시구매
+                                        </PurchaseBtnText>
+                                    </PurchaseBtn>
 
-
-                                    {MobileGameCount === 0 ? <></> :
-                                        <MoblieBtn>
-                                            <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
-                                                <MobileImg src={MobileImgBtn} />
-                                            </DownloadLink>
-                                        </MoblieBtn>}
-
-
-                                    {URL === "" ? <></> :
-                                        <PlayStorekBtn>
-                                            <DownloadLink href={URL}>
-                                                <PlayStoreImg src={PlayStore} />
-                                            </DownloadLink>
-                                        </PlayStorekBtn>}
+                                    <BasketBtn>
+                                        <BasketIcon>
+                                            <BsBasket2Fill />
+                                        </BasketIcon>
+                                        <BasketBtnText>
+                                            장바구니
+                                        </BasketBtnText>
+                                    </BasketBtn>
 
                                 </ButtonAllBox>
                             </GameIntroduceSubTextBox>
 
                         </GameInformaionTextBox>
-
-                        <DeveloperInformationBox>
-                            <DeveloperInformationText>개발자 연락처</DeveloperInformationText>
-                            <DeveloperInformationTextBox>
-                                <DeveloperText>
-                                    업로더 : {developer}
-                                </DeveloperText>
-                                <DeveloperText>
-                                    이메일 : {email}
-                                </DeveloperText>
-                            </DeveloperInformationTextBox>
-                        </DeveloperInformationBox>
 
                     </GameInformaionBox>
                 </GameInformaionAllBox>
@@ -836,7 +634,7 @@ const GameInformationView = () => {
     );
 }
 
-export default GameInformationView;
+export default CpGdShopView;
 
 const DefaultBackground = styled.div
     `
@@ -1200,22 +998,53 @@ const LikeBtn = styled.div
     `
     display: ${props => props.LoginMaintain == null ? "none" : (props.LoginMaintain == "true" ? (props.UserInfo === "allok" ? "block" : "none") : (props.User === "allok" ? "block" : "none"))};
 `
-const DownloadBtn = styled.div
+const PurchaseBtn = styled.div
     `
     display: flex;
     box-sizing: border-box;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    align-items: center;
+    cursor: pointer;
+    background: #6A99DA;
+    padding: 15px 0px 15px 0px;
+    border-radius: 8px;
     &:not(:last-child){
         margin: 0px 0px 20px 0px;
     }
 `
 
-const LikeCheckBtn = styled(DownloadBtn)
+const PuschaseIcon = styled.i
+    `
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+`
+
+const BasketIcon = styled.i
+    `
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+`
+
+const PurchaseBtnText = styled.span
+    `
+    font-size: 30px;
+    margin: 0px 0px 0px 10px;
+`
+
+const LikeCheckBtn = styled(PurchaseBtn)
     `
     display: ${props => props.LoginMaintain == null ? "none" : (props.LoginMaintain == "true" ? (props.UserInfo === "allok" ? "flex" : "none") : (props.User === "allok" ? "flex" : "none"))};
     cursor: pointer;
+    background: none;
+    padding: 0px;
 `
 
-const PlayStorekBtn = styled(DownloadBtn)
+const PlayStorekBtn = styled(PurchaseBtn)
     `
 
 `
@@ -1239,9 +1068,15 @@ const PlayStoreImg = styled(DownloadImg)
 
 `
 
-const MoblieBtn = styled(DownloadBtn)
+const BasketBtn = styled(PurchaseBtn)
     `
     margin: 0px 0px 0px 0px;
+`
+
+const BasketBtnText = styled.span
+    `
+    font-size: 30px;
+    margin: 0px 0px 0px 10px;
 `
 
 const DownloadLink = styled.a
@@ -1264,6 +1099,7 @@ const GameIntroduceSubTextBox = styled.div
 
 const GameIntroduceSubText = styled.span
     `
+    font-weight: bold;
     &:not(:last-child)
     {
         margin: 0px 0px 20px 0px;

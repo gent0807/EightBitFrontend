@@ -190,6 +190,10 @@ const HeaderBox = () => {
         window.addEventListener('scroll', updateScroll);
     });
 
+    console.log(userInfo);
+    console.log(user);
+
+
     return (
         <>
             <ALLNavBox>
@@ -211,6 +215,7 @@ const HeaderBox = () => {
                                 <ModalUserMenu>
 
                                     {loginMaintain == null ?
+
                                         <LoginCheckBox>
                                             <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
                                         </LoginCheckBox> :
@@ -252,12 +257,56 @@ const HeaderBox = () => {
                                                             </ShopBtnBox>
                                                         </MyPageShopBox>
 
+                                                        <ContentBoxAllBox>
+
+                                                            <ServiceBox>
+                                                                <ServiceText>
+                                                                    ■ 8bit 서비스
+                                                                </ServiceText>
+                                                                <ServiceSubText>
+                                                                    - {loginMaintain == null ?
+                                                                        <></> :
+                                                                        loginMaintain == "true" ?
+                                                                            userInfo == null ?
+                                                                                <></> :
+                                                                                userInfo.loginState === "allok" ?
+                                                                                    user.role === "DEVELOPER" ?
+                                                                                        <Link to="/GameUploadPage/indie">
+                                                                                            <SubText MediaLeft={"17px"}>게임 업로드</SubText>
+                                                                                        </Link> :
+                                                                                        <></> :
+                                                                                    <></> :
+                                                                            user.login_state === "allok" ?
+                                                                                user.role === "DEVELOPER" ?
+                                                                                    <Link to="/GameUploadPage/indie">
+                                                                                        <SubText MediaLeft={"17px"}>게임 업로드</SubText>
+                                                                                    </Link> :
+                                                                                    <></> :
+                                                                                <></>
+                                                                    }
+                                                                </ServiceSubText>
+                                                            </ServiceBox>
+
+                                                            <GameDownloadBox>
+                                                                <GameDownloadText>
+                                                                    ■ 게임 다운로드
+                                                                </GameDownloadText>
+                                                            </GameDownloadBox>
+
+                                                            <WriteBoardBox>
+                                                                <WriteBoardText>
+                                                                    ■ 글쓰기
+                                                                </WriteBoardText>
+                                                            </WriteBoardBox>
+
+                                                        </ContentBoxAllBox>
+
                                                     </ModalProfileImgBox> :
 
                                                     <LoginCheckBox>
                                                         <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
                                                     </LoginCheckBox> :
-
+                                            
                                             user.login_state === "allok" ?
 
                                                 <ModalProfileImgBox>
@@ -295,27 +344,33 @@ const HeaderBox = () => {
                                                 </LoginCheckBox>
                                     }
 
-                                    {loginMaintain == null ?
-                                        <></> :
-                                        loginMaintain == "true" ?
-                                            userInfo == null ?
-                                                <></> :
-                                                userInfo.loginState === "allok" ?
-                                                    user.role === "DEVELOPER" ?
-                                                        <Link to="/GameUploadPage/indie">
-                                                            <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
-                                                        </Link> :
-                                                        <></> :
-                                                    <></> :
-                                            user.login_state === "allok" ?
-                                                user.role === "DEVELOPER" ?
-                                                    <Link to="/GameUploadPage/indie">
-                                                        <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
-                                                    </Link> :
-                                                    <></> :
-                                                <></>}
-
                                 </ModalUserMenu>
+
+                                {loginMaintain == null ?
+                                    <></> :
+                                    loginMaintain == "true" ?
+                                        userInfo == null ?
+                                            <></> :
+                                            userInfo.loginState === "allok" ?
+                                                <LogoutBtnBox>
+                                                    <LogoutBtn onClick={() => LogoutFunc()}>
+                                                        <LogoutBtnText>로그아웃</LogoutBtnText>
+                                                    </LogoutBtn>
+                                                </LogoutBtnBox> :
+
+                                                <></> :
+
+                                        user.login_state === "allok" ?
+
+                                            <LogoutBtnBox>
+                                                <LogoutBtn onClick={() => LogoutFunc()}>
+                                                    <LogoutBtnText>로그아웃</LogoutBtnText>
+                                                </LogoutBtn>
+                                            </LogoutBtnBox> :
+
+                                            <></>
+                                }
+
                             </ModalFastMenuBox>
                         </ModalFast>
 
@@ -384,61 +439,6 @@ const HeaderBox = () => {
                                         <ShoppingMenuIcon><AiOutlineShopping /></ShoppingMenuIcon>
                                     </ShoppingBox>
 
-                                    <WriteListBox
-                                        default={isDefaultWriteScene}
-                                        show={WriteMenuShow}
-                                        size={user.role}
-                                    >
-                                        <ProfileUl>
-                                            <Link to='/WriteBoard/free'>
-                                                <Profileli
-                                                    padding="15px 0px 15px 13px"
-                                                    onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                                >
-                                                    <DropdownImg src={Essay} />
-                                                    <ProfileliText MediaLeft={"17px"}>자유게시판</ProfileliText>
-                                                </Profileli>
-                                            </Link>
-
-                                            <Link to="/WriteBoard/strategy">
-                                                <Profileli
-                                                    padding="15px 0px 15px 13px"
-                                                    onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                                >
-                                                    <DropdownImg src={Strategy} />
-                                                    <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
-                                                </Profileli>
-                                            </Link>
-
-                                            <Link to="/WriteBoard/question">
-                                                <Profileli
-                                                    padding="15px 0px 15px 13px"
-                                                    onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                                >
-                                                    <DropdownImg src={Discussion} />
-                                                    <ProfileliText MediaLeft={"17px"}>질문게시판</ProfileliText>
-                                                </Profileli>
-                                            </Link>
-
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Rating} />
-                                                <ProfileliText MediaLeft={"17px"}>상품 리뷰</ProfileliText>
-                                            </Profileli>
-
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Console} />
-                                                <ProfileliText MediaLeft={"17px"}>게임 리뷰</ProfileliText>
-                                            </Profileli>
-
-                                        </ProfileUl>
-                                    </WriteListBox>
-
                                     <ModalFastMenu
                                         onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
                                     >
@@ -462,9 +462,8 @@ const HeaderBox = () => {
                                 <Link to='/AllGamePage/indie'><SubNavText>전체게임</SubNavText></Link>
                             </GameSubNav>
                             <ShopSubNav display={isShopTabCheck} TopBack={scrollPosition}>
-                                <Link to='/'><SubNavText>홈</SubNavText></Link>
-                                <Link to='/'><SubNavText>쿠폰샵</SubNavText></Link>
-                                <Link to='/'><SubNavText>굿즈샵</SubNavText></Link>
+                                <Link to="/CpGdShop/Coupon"><SubNavText>쿠폰샵</SubNavText></Link>
+                                <Link to="/CpGdShop/Goods"><SubNavText>굿즈샵</SubNavText></Link>
                                 <Link to='/'><SubNavText>장바구니</SubNavText></Link>
                             </ShopSubNav>
                             <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
@@ -543,6 +542,25 @@ const ModalUserMenu = styled.div
     flex-direction: column;
     width: 100%;
     height: 100%;
+`
+
+const LogoutBtnBox = styled.div
+    `
+    display: flex;
+    justify-content: end;
+    padding: 12px;
+    font-size: 18px;
+    color: #EDEDEF;
+    `
+
+const LogoutBtn = styled.div
+    `
+
+`
+
+const LogoutBtnText = styled.span
+    `
+
 `
 
 const ModalFast = styled.div
@@ -1101,6 +1119,7 @@ const ModalProfileImgBox = styled.div
     align-items: center;
     color: #ededed;
     margin: 14px 0px 0px 0px;
+    padding: 0px 26px 26px 26px;
 `
 
 const ModalNickNameBox = styled.div
@@ -1127,6 +1146,66 @@ const MyPageShopBox = styled.div
     a{
         color: #ededed;
     }
+`
+
+const ContentBoxAllBox = styled.div
+    `
+    display: flex;
+    overflow: scroll;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin: 100px 0px 0px 0px;
+
+    div:not(:last-child)
+    {
+        margin: 0px 0px 20px 0px;
+    }
+    
+   &::-webkit-scrollbar{
+        display:none;
+    }   
+`
+
+const ServiceBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    a{
+        text-decoraction: none;
+    }
+`
+
+const ServiceText = styled.span
+    `
+
+`
+
+const ServiceSubText = styled.span
+    `
+
+`
+
+const GameDownloadBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+`
+
+const GameDownloadText = styled.span
+    `
+
+`
+
+const WriteBoardBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+`
+
+const WriteBoardText = styled.span
+    `
+
 `
 
 const MyPageBtnBox = styled.div
@@ -1289,11 +1368,9 @@ const Profileli = styled.li
         margin: 48px 0px 0px -1px;
     }
 `
-const ProfileliText = styled.span
+const SubText = styled.span
     `
-        margin-left: ${props => props.MediaLeft};
-        margin-top: 2.5px; 
-        font-size: 25px;
+        
 `
 
 const ProfileliIcon = styled.i

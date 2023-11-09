@@ -9,9 +9,11 @@ const OfficialGamePage = () => {
     const [GameInformaion, setGameInformation] = useState(Slide)
     const { id } = useParams();
 
+    console.log(GameInformaion);
+
     useEffect(() => {
         setGameInformation(Slide.filter((Game) => Game.game === "공식게임"))
-    }, [GameInformaion]);
+    }, [Slide]);
 
     const ScrollTop = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });

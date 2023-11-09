@@ -7,39 +7,67 @@ import Pagination from "./Pagination";
 import DOMPurify from "dompurify";
 import { useRecoilState } from "recoil";
 import { firstReset } from "../../Recoil/Darkmode/Darkmode";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useMatch } from "react-router-dom";
 import NotPage from "./NotPage";
 import { useSelector } from "react-redux";
 
-import GameMainImg from "./GameMainImg";
+import CpGdShopMainImg from "./CpGdShopMainImg";
 import axios from "axios";
 
-const AllGamePage = () => {
+import { Goods } from "../CpGdShop/CpGdData";
+
+const CpGdShopPage = () => {
     const { contentType } = useParams();
-    const [posts, setPosts] = useState([]);
+    const { View } = useParams();
+    const Viewchange = View;
+
+    const [posts, setPosts] = useState(
+        View == "Coupon" ?
+            Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "coupon") :
+            Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "Goods")
+    );
+
+    const [SearchList, setSearchList] = useState(posts);
+
     const [Search, setSearch] = useState("");
-    const [SearchFillText, setSearchFillText] = useState("제목");
+    const [SearchFillText, setSearchFillText] = useState("상품명");
     const [Fitter, setFitter] = useState("최신순");
     const [LimtText, setLimtText] = useState("10개");
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
+
     const [FitterDropdown, setFitterDropdown] = useState(false);
     const [LimitDropdown, setLimitDropdown] = useState(false);
     const [SearchFillDropdown, setSearchFillDropdown] = useState(false);
     const [FirstReset, setFirstReset] = useRecoilState(firstReset);
+
     const FillterRef = useRef("");
     const LimitRef = useRef("");
     const SearchFillRef = useRef("");
+
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
-    const [SearchList, setSearchList] = useState([]);
     const PostsSize = posts.slice(offset, offset + limit);
 
     const [FillterState, setFillerState] = useState("title");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
+
+    useEffect(() => {
+        if (Viewchange == "Coupon") {
+            setPosts(Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "coupon"));
+            setSearchList(Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "coupon"));
+            setPage(1);
+        } else if (Viewchange == "Goods") {
+            setPosts(Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "Goods"));
+            setSearchList(Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "Goods"));
+            setPage(1);
+        }
+    }, [Viewchange]);
+
+    console.log(View);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -87,49 +115,23 @@ const AllGamePage = () => {
         };
     }, [LimitRef]);
 
-    useEffect(() => {
-        axios.get(`${ip}/Games/games?contentType=${contentType}`, {
-
-        },
-            {
-
-            })
-            .then(res => res.data
-            )
-            .then(data => {
-                console.log(data);
-                setPosts(data);
-                setSearchList(data);
-            })
-    }, [contentType]);
 
     const SearchSubmit = (e) => {
         e.preventDefault();
         if (Search === "") {
-            axios.get(`${ip}/Games/games?contentType=${contentType}`, {
-
-            },
-                {
-
-                })
-                .then(res => res.data
-                )
-                .then(data => {
-                    console.log(data);
-                    setPosts(data);
-                    setSearchList(posts);
-                    setPage(1);
-                })
+            setPosts(Viewchange == "Coupon" ?
+                Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "coupon") :
+                Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "Goods"))
+            setSearchList(posts);
+            setPage(1);
         } else {
             const SearchResult = posts.filter((board) =>
-            SearchFillText === "제목" ?
-                board.title.toUpperCase().includes(Search.toUpperCase()) :
-                SearchFillText === "개발자" ?
-                    board.developer.toUpperCase().includes(Search.toUpperCase()) :
-                    SearchFillText === "내용" ?
+                SearchFillText === "상품명" ?
+                    board.title.toUpperCase().includes(Search.toUpperCase()) :
+                    SearchFillText === "종류" ?
                         board.content.toUpperCase().includes(Search.toUpperCase()) :
                         board.title.toUpperCase().includes(Search.toUpperCase())
-        );
+            );
 
             setSearchList(SearchResult);
             setSearch("");
@@ -142,9 +144,6 @@ const AllGamePage = () => {
             setPage(page - 1);
         }
     }, [PostsSize.length, posts.length]);
-
-
-    
 
     const OnSearch = (e) => {
         const currentSearch = e.target.value;
@@ -172,6 +171,20 @@ const AllGamePage = () => {
         setSearchList(FillerState);
     }
 
+    const setPriceUpValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+        const FillerState = SearchList.sort((a, b) => b.price - a.price);
+        setSearchList(FillerState);
+    }
+
+    const setPriceDownValue = (e) => {
+        const { innerText } = e.target;
+        setFitter(innerText);
+        const FillerState = SearchList.sort((a, b) => a.price - b.price);
+        setSearchList(FillerState);
+    }
+
     const setTitleValue = (e) => {
         const { innerText } = e.target;
         setSearchFillText(innerText);
@@ -191,13 +204,8 @@ const AllGamePage = () => {
         setFirstReset(false);
     }
 
-    
-
-
-    
-
     const ScrollTop = () => {
-        window.scrollTo({ top: 835, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     return (
@@ -219,8 +227,8 @@ const AllGamePage = () => {
                     </SearchForm>
                     <SearchFillSelectAllBox ref={SearchFillRef} onClick={() => setSearchFillDropdown(!SearchFillDropdown)}>
                         <SearchFillSelectBox show={SearchFillDropdown}>
-                            <FitterSelectList onClick={(e) => setTitleValue(e)}>제목</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setContentValue(e)}>내용</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setTitleValue(e)}>상품명</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setContentValue(e)}>종류</FitterSelectList>
                         </SearchFillSelectBox>
                         <SearchFillValue writerText={SearchFillText}><FitterSelectText>{SearchFillText}</FitterSelectText></SearchFillValue>
                         <SearchFillArrowBox direction={SearchFillDropdown}>{SearchFillDropdown ? "▲" : "▼"}</SearchFillArrowBox>
@@ -234,6 +242,8 @@ const AllGamePage = () => {
                             <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
                             <FitterSelectList onClick={(e) => setPastValue(e)}>과거순</FitterSelectList>
                             <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setPriceUpValue(e)}>가격▲</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setPriceDownValue(e)}>가격▼</FitterSelectList>
                         </FitterSelectBox>
                         <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
                         <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
@@ -253,30 +263,29 @@ const AllGamePage = () => {
             <BoardBox>
                 {SearchList.length === 0 && <NotPage />}
                 <BoardContentAllBox View={SearchList.length}>
-                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, content, developer, regdate, updatedate, genre, url, visitcnt, reply_count, likecount, pcGameCount, mobileGameCount, contentType, depth}) => (
-                       <BoardContentBox key={id}>
-                           <Link to={`/GameInformationView/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
-                               <SlideAllBox>
-                                   <SlideBox>
-                                      <GameMainImg 
-                                        uploader={developer} 
-                                        regdate={regdate}
-                                        contentType={contentType}
-                                        storeType="gameImage"
-                                        depth={depth}
-                                      ></GameMainImg>
-                                   </SlideBox>
+                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, src, title, content, price }) => (
+                        <BoardContentBox key={id}>
+                            <Link to={`/CpGdShopView/${id}`} onClick={() => ScrollTop()}>
+                                <SlideAllBox>
+                                    <SlideBox>
+                                        <CpGdShopMainImg
+                                            id={id}
+                                            src={src}
+                                        />
+                                    </SlideBox>
 
-                                   <AllBox>
-                                       <InformaionBoxTextBox>
-                                           <TitleBox>{title}</TitleBox>
-                                           <InformaionBox dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}></InformaionBox>
-                                       </InformaionBoxTextBox>
-                                   </AllBox>
-                               </SlideAllBox>
-                           </Link>
-                       </BoardContentBox>
-                   ))}
+                                    <AllBox>
+                                        <InformaionBoxTextBox>
+                                            <TitleBox>{title}</TitleBox>
+                                            <InformaionBox dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}></InformaionBox>
+                                            <PriceBox>₩{price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</PriceBox>
+                                        </InformaionBoxTextBox>
+                                    </AllBox>
+                                </SlideAllBox>
+
+                            </Link>
+                        </BoardContentBox>
+                    ))}
                 </BoardContentAllBox>
             </BoardBox>
 
@@ -296,22 +305,18 @@ const AllGamePage = () => {
     );
 }
 
-export default AllGamePage;
+export default CpGdShopPage;
 
 const AllBox = styled.div
     `
-    position: absolute;
-    display: none;
+    display:flex;
     flex-direction: column;
     justify-content: end;
-    background: rgba(0,0,0,0.3);
-    top: 0%;
     height: 100%;
-    left: 0%;
     border-radius: 8px;
     width: 100%;
     overflow: hidden;
-     @media (min-width:250px) and (max-width:560px)
+    @media (min-width:250px) and (max-width:560px)
     {
         width: 100%;
     }
@@ -320,13 +325,6 @@ const AllBox = styled.div
 const SlideAllBox = styled.div
     `
     position: relative;
-    &:hover
-    {
-        ${AllBox}
-        {
-            display: flex;
-        }
-    }
     `
 
 const SlideBox = styled.div
@@ -334,7 +332,7 @@ const SlideBox = styled.div
     border-radius: 10px;
     overflow: hidden;
     transition: border 0.5s;
-    height: 214px;
+    height: 260px;
 `
 
 const ImgBox = styled.img
@@ -347,8 +345,8 @@ const InformaionBoxTextBox = styled.div
     `
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    background: rgba(41,41,41,0.8);
+    padding: 12px;
+    color: ${props => props.theme.textColor};
 `
 
 const TitleBox = styled.div
@@ -356,9 +354,15 @@ const TitleBox = styled.div
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
-    font-size: 30px;
-    color: white;
-    margin: 0px 0px 10px 0px;
+    font-size: 23px;
+    font-weight: bold;
+    margin: 0px 0px 5px 0px;
+`
+
+const PriceBox = styled.div
+`
+    font-weight: bold;
+    font-size: 19px;
 `
 
 const InformaionBox = styled.div
@@ -369,6 +373,7 @@ const InformaionBox = styled.div
     -webkit-box-orient: vertical;
     overflow: hidden;
     white-space: normal;
+    margin: 0px 0px 5px 0px;
     p{
         margin: 0;
         text-decoration: none;
@@ -405,10 +410,10 @@ const BoardContentNumber = styled.div
 
 const BoardContentAllBox = styled.div
     `
-    display: ${ props => props.View === 0 ? "none" : "grid"};
-    grid-template-columns: repeat(auto-fill,386px);
+    display: ${props => props.View === 0 ? "none" : "grid"};
+    grid-template-columns: repeat(auto-fill,260px);
+    grid-gap: 60px;
     justify-content: center;
-    grid-gap: 30px;
 `
 
 const BoardContentBox = styled.div
@@ -467,7 +472,7 @@ const FillterSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 120px;
     }
 `
 
@@ -487,7 +492,7 @@ const LimitSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 72px;
     }
 `
 
@@ -500,7 +505,7 @@ const FitterSelectBox = styled.ul
     border: solid 2px ${props => props.theme.borderColor};
     background: #dee2e6;
     width: 100px;
-    height: 78px;
+    height: 120px;
     padding: 0px;
     overflow: hidden;
     text-align: center;
@@ -517,7 +522,7 @@ const SearchFillSelectBox = styled(FitterSelectBox)
 
 const LimmitSelectBox = styled(FitterSelectBox)
     `
-    height: 78px;
+    height: 72px;
     animation: ${LimitSlideDown} 0.5s;
 `
 
