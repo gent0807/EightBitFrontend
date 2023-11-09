@@ -214,24 +214,106 @@ const HeaderBox = () => {
 
                                 <ModalUserMenu>
 
-                                    {loginMaintain == null ?
+                                    <>
+                                        {loginMaintain == null ?
 
-                                        <LoginCheckBox>
-                                            <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
-                                        </LoginCheckBox> :
+                                            <LoginCheckBox>
+                                                <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
+                                            </LoginCheckBox> :
 
-                                        loginMaintain == "true" ?
-                                            userInfo == null ?
+                                            loginMaintain == "true" ?
+                                                userInfo == null ?
 
-                                                <LoginCheckBox>
-                                                    <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
+                                                    <LoginCheckBox>
+                                                        <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
                                                 </LoginCheckBox> :
 
-                                                userInfo.loginState === "allok" ?
+                                                    userInfo.loginState === "allok" ?
+
+                                                        <ModalProfileImgBox>
+                                                            <Profile>
+                                                                <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
+                                                            </Profile>
+
+                                                            <ModalNickNameBox>
+                                                                <ModalNickNameText>
+                                                                    <ModalNickNamePointText>
+                                                                        {userInfo.nickName}
+                                                                    </ModalNickNamePointText>
+                                                                님, 환영합니다!
+                                                            </ModalNickNameText>
+                                                            </ModalNickNameBox>
+
+                                                            <MyPageShopBox>
+                                                                <MyPageBtnBox>
+                                                                    <Link to={"/"}>
+                                                                        <MyPageBtnText>마이페이지</MyPageBtnText>
+                                                                    </Link>
+                                                                </MyPageBtnBox>
+
+                                                                <ShopBtnBox>
+                                                                    <Link to={"/"}>
+                                                                        <ShopBtnText>장바구니</ShopBtnText>
+                                                                    </Link>
+                                                                </ShopBtnBox>
+                                                            </MyPageShopBox>
+
+                                                            <ContentBoxAllBox>
+
+                                                                <ServiceBox>
+                                                                    <ServiceText>
+                                                                        ■ 8bit 서비스
+                                                                </ServiceText>
+                                                                    <ServiceSubText>
+                                                                        - {loginMaintain == null ?
+                                                                            <></> :
+                                                                            loginMaintain == "true" ?
+                                                                                userInfo == null ?
+                                                                                    <></> :
+                                                                                    userInfo.loginState === "allok" ?
+                                                                                        userInfo.role === "DEVELOPER" ?
+                                                                                            <Link to="/GameUploadPage/indie">
+                                                                                                <SubText MediaLeft={"17px"}>게임 업로드</SubText>
+                                                                                            </Link> :
+                                                                                            <></> :
+                                                                                        <></> :
+                                                                                user.login_state === "allok" ?
+                                                                                    user.role === "DEVELOPER" ?
+                                                                                        <Link to="/GameUploadPage/indie">
+                                                                                            <SubText MediaLeft={"17px"}>게임 업로드</SubText>
+                                                                                        </Link> :
+                                                                                        <></> :
+                                                                                    <></>
+                                                                        }
+                                                                    </ServiceSubText>
+                                                                </ServiceBox>
+
+                                                                <GameDownloadBox>
+                                                                    <GameDownloadText>
+                                                                        ■ 게임 다운로드
+                                                                </GameDownloadText>
+                                                                </GameDownloadBox>
+
+                                                                <WriteBoardBox>
+                                                                    <WriteBoardText>
+                                                                        ■ 글쓰기
+                                                                </WriteBoardText>
+                                                                </WriteBoardBox>
+
+                                                            </ContentBoxAllBox>
+
+                                                        </ModalProfileImgBox> :
+
+                                                        <LoginCheckBox>
+                                                            <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
+                                                        </LoginCheckBox> :
+
+                                                user.login_state === "allok" ?
 
                                                     <ModalProfileImgBox>
+
                                                         <Profile>
-                                                            <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
+                                                            <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
                                                         </Profile>
 
                                                         <ModalNickNameBox>
@@ -239,8 +321,8 @@ const HeaderBox = () => {
                                                                 <ModalNickNamePointText>
                                                                     {user.nickname}
                                                                 </ModalNickNamePointText>
-                                                                님, 환영합니다!
-                                                            </ModalNickNameText>
+                                                        님, 환영합니다!
+                                                    </ModalNickNameText>
                                                         </ModalNickNameBox>
 
                                                         <MyPageShopBox>
@@ -262,7 +344,7 @@ const HeaderBox = () => {
                                                             <ServiceBox>
                                                                 <ServiceText>
                                                                     ■ 8bit 서비스
-                                                                </ServiceText>
+                                                        </ServiceText>
                                                                 <ServiceSubText>
                                                                     - {loginMaintain == null ?
                                                                         <></> :
@@ -270,7 +352,7 @@ const HeaderBox = () => {
                                                                             userInfo == null ?
                                                                                 <></> :
                                                                                 userInfo.loginState === "allok" ?
-                                                                                    user.role === "DEVELOPER" ?
+                                                                                    userInfo.role === "DEVELOPER" ?
                                                                                         <Link to="/GameUploadPage/indie">
                                                                                             <SubText MediaLeft={"17px"}>게임 업로드</SubText>
                                                                                         </Link> :
@@ -290,13 +372,13 @@ const HeaderBox = () => {
                                                             <GameDownloadBox>
                                                                 <GameDownloadText>
                                                                     ■ 게임 다운로드
-                                                                </GameDownloadText>
+                                                        </GameDownloadText>
                                                             </GameDownloadBox>
 
                                                             <WriteBoardBox>
                                                                 <WriteBoardText>
                                                                     ■ 글쓰기
-                                                                </WriteBoardText>
+                                                        </WriteBoardText>
                                                             </WriteBoardBox>
 
                                                         </ContentBoxAllBox>
@@ -305,44 +387,9 @@ const HeaderBox = () => {
 
                                                     <LoginCheckBox>
                                                         <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
-                                                    </LoginCheckBox> :
-                                            
-                                            user.login_state === "allok" ?
-
-                                                <ModalProfileImgBox>
-                                                    <Profile>
-                                                        <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
-                                                    </Profile>
-
-                                                    <ModalNickNameBox>
-                                                        <ModalNickNameText>
-                                                            <ModalNickNamePointText>
-                                                                {user.nickname}
-                                                            </ModalNickNamePointText>
-                                                            님, 환영합니다!
-                                                        </ModalNickNameText>
-                                                    </ModalNickNameBox>
-
-                                                    <MyPageShopBox>
-                                                        <MyPageBtnBox>
-                                                            <Link to={"/"}>
-                                                                <MyPageBtnText>마이페이지</MyPageBtnText>
-                                                            </Link>
-                                                        </MyPageBtnBox>
-
-                                                        <ShopBtnBox>
-                                                            <Link to={"/"}>
-                                                                <ShopBtnText>장바구니</ShopBtnText>
-                                                            </Link>
-                                                        </ShopBtnBox>
-                                                    </MyPageShopBox>
-
-                                                </ModalProfileImgBox> :
-
-                                                <LoginCheckBox>
-                                                    <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
-                                                </LoginCheckBox>
-                                    }
+                                                </LoginCheckBox> 
+                                        }
+                                    </>
 
                                 </ModalUserMenu>
 
