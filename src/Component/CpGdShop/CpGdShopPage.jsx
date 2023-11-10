@@ -212,7 +212,7 @@ const CpGdShopPage = () => {
         <FreeBoardBox>
             <InformationAllBox>
                 <FreeBoardInformation>
-                    <FreeBoardInformationText>전체게임</FreeBoardInformationText>
+                    <FreeBoardInformationText>{View == "Coupon" ? "쿠폰샵" : "굿즈샵"}</FreeBoardInformationText>
                 </FreeBoardInformation>
             </InformationAllBox>
             <SearchBox>

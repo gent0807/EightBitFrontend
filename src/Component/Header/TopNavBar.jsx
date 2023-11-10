@@ -221,6 +221,7 @@ const HeaderBox = () => {
                                                 <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
                                             </LoginCheckBox> :
 
+                                            // 로그인유지 상태
                                             loginMaintain == "true" ?
                                                 userInfo == null ?
 
@@ -261,43 +262,76 @@ const HeaderBox = () => {
                                                             <ContentBoxAllBox>
 
                                                                 <ServiceBox>
+
                                                                     <ServiceText>
                                                                         ■ 8bit 서비스
-                                                                </ServiceText>
-                                                                    <ServiceSubText>
-                                                                        - {loginMaintain == null ?
-                                                                            <></> :
+                                                                    </ServiceText>
+
+                                                                    <GameServiceSubBox>
+                                                                        <GameDotText role={userInfo.role}>-</GameDotText>
+                                                                        {loginMaintain == null ?
+                                                                            <GameSubText>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
+                                                                            :
                                                                             loginMaintain == "true" ?
                                                                                 userInfo == null ?
-                                                                                    <></> :
+                                                                                    <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
                                                                                     userInfo.loginState === "allok" ?
                                                                                         userInfo.role === "DEVELOPER" ?
                                                                                             <Link to="/GameUploadPage/indie">
-                                                                                                <SubText MediaLeft={"17px"}>게임 업로드</SubText>
+                                                                                                <GameSubText role={userInfo.role}>게임 업로드</GameSubText>
+                                                                                                <Underline />
                                                                                             </Link> :
-                                                                                            <></> :
-                                                                                        <></> :
+                                                                                            <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+                                                                                        <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
                                                                                 user.login_state === "allok" ?
                                                                                     user.role === "DEVELOPER" ?
                                                                                         <Link to="/GameUploadPage/indie">
-                                                                                            <SubText MediaLeft={"17px"}>게임 업로드</SubText>
+                                                                                            <GameSubText role={user.role}>게임 업로드</GameSubText>
+                                                                                            <Underline />
                                                                                         </Link> :
-                                                                                        <></> :
-                                                                                    <></>
+                                                                                        <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+                                                                                    <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
                                                                         }
-                                                                    </ServiceSubText>
+                                                                    </GameServiceSubBox>
+
+                                                                    <ShopServiceSubBox>
+                                                                        <ShopDotText role={userInfo.role}>-</ShopDotText>
+                                                                        {loginMaintain == null ?
+                                                                            <ShopSubText>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                            loginMaintain == "true" ?
+                                                                                userInfo == null ?
+                                                                                    <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                                    userInfo.loginState === "allok" ?
+                                                                                        userInfo.role === "SELLER" ?
+                                                                                            <Link to="/GameUploadPage/indie">
+                                                                                                <ShopSubText role={userInfo.role}>굿즈 판매</ShopSubText>
+                                                                                                <Underline />
+                                                                                            </Link> :
+                                                                                            <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                                        <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                                user.login_state === "allok" ?
+                                                                                    user.role === "SELLER" ?
+                                                                                        <Link to="/GameUploadPage/indie">
+                                                                                            <ShopSubText role={user.role}>굿즈 판매</ShopSubText>
+                                                                                            <Underline />
+                                                                                        </Link> :
+                                                                                        <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                                    <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText>
+                                                                        }
+                                                                    </ShopServiceSubBox>
+
                                                                 </ServiceBox>
 
                                                                 <GameDownloadBox>
                                                                     <GameDownloadText>
                                                                         ■ 게임 다운로드
-                                                                </GameDownloadText>
+                                                                    </GameDownloadText>
                                                                 </GameDownloadBox>
 
                                                                 <WriteBoardBox>
                                                                     <WriteBoardText>
                                                                         ■ 글쓰기
-                                                                </WriteBoardText>
+                                                                    </WriteBoardText>
                                                                 </WriteBoardBox>
 
                                                             </ContentBoxAllBox>
@@ -308,10 +342,10 @@ const HeaderBox = () => {
                                                             <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
                                                         </LoginCheckBox> :
 
-                                                user.login_state === "allok" ?
+                                            // 로그인유지 안한 상태
+                                            user.login_state === "allok" ?
 
                                                     <ModalProfileImgBox>
-
                                                         <Profile>
                                                             <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
                                                         </Profile>
@@ -321,8 +355,8 @@ const HeaderBox = () => {
                                                                 <ModalNickNamePointText>
                                                                     {user.nickname}
                                                                 </ModalNickNamePointText>
-                                                        님, 환영합니다!
-                                                    </ModalNickNameText>
+                                                                    님, 환영합니다!
+                                                                </ModalNickNameText>
                                                         </ModalNickNameBox>
 
                                                         <MyPageShopBox>
@@ -342,31 +376,64 @@ const HeaderBox = () => {
                                                         <ContentBoxAllBox>
 
                                                             <ServiceBox>
+
                                                                 <ServiceText>
                                                                     ■ 8bit 서비스
                                                         </ServiceText>
-                                                                <ServiceSubText>
-                                                                    - {loginMaintain == null ?
-                                                                        <></> :
+
+                                                                <GameServiceSubBox>
+                                                                    <GameDotText role={user.role}>-</GameDotText>
+                                                                    {loginMaintain == null ?
+                                                                        <GameSubText>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
+                                                                        :
                                                                         loginMaintain == "true" ?
                                                                             userInfo == null ?
-                                                                                <></> :
+                                                                                <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
                                                                                 userInfo.loginState === "allok" ?
                                                                                     userInfo.role === "DEVELOPER" ?
                                                                                         <Link to="/GameUploadPage/indie">
-                                                                                            <SubText MediaLeft={"17px"}>게임 업로드</SubText>
+                                                                                            <GameSubText role={userInfo.role}>게임 업로드</GameSubText>
+                                                                                            <Underline />
                                                                                         </Link> :
-                                                                                        <></> :
-                                                                                    <></> :
+                                                                                        <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+                                                                                    <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
                                                                             user.login_state === "allok" ?
                                                                                 user.role === "DEVELOPER" ?
                                                                                     <Link to="/GameUploadPage/indie">
-                                                                                        <SubText MediaLeft={"17px"}>게임 업로드</SubText>
+                                                                                        <GameSubText role={user.role}>게임 업로드</GameSubText>
+                                                                                        <Underline />
                                                                                     </Link> :
-                                                                                    <></> :
-                                                                                <></>
+                                                                                    <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+                                                                                <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
                                                                     }
-                                                                </ServiceSubText>
+                                                                </GameServiceSubBox>
+
+                                                                <ShopServiceSubBox>
+                                                                    <ShopDotText role={user.role}>-</ShopDotText>
+                                                                    {loginMaintain == null ?
+                                                                        <ShopSubText>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                        loginMaintain == "true" ?
+                                                                            userInfo == null ?
+                                                                                <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                                userInfo.loginState === "allok" ?
+                                                                                userInfo.role === "SELLER" ?
+                                                                                        <Link to="/GameUploadPage/indie">
+                                                                                            <ShopSubText role={userInfo.role}>굿즈 판매</ShopSubText>
+                                                                                            <Underline />
+                                                                                        </Link> :
+                                                                                        <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                                    <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                            user.login_state === "allok" ?
+                                                                                user.role === "SELLER" ?
+                                                                                    <Link to="/GameUploadPage/indie">
+                                                                                        <ShopSubText role={user.role}>굿즈 판매</ShopSubText>
+                                                                                        <Underline />
+                                                                                    </Link> :
+                                                                                    <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+                                                                                <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText>
+                                                                    }
+                                                                </ShopServiceSubBox>
+
                                                             </ServiceBox>
 
                                                             <GameDownloadBox>
@@ -387,7 +454,7 @@ const HeaderBox = () => {
 
                                                     <LoginCheckBox>
                                                         <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
-                                                </LoginCheckBox> 
+                                                    </LoginCheckBox>
                                         }
                                     </>
 
@@ -602,7 +669,7 @@ const LogoutBtnBox = styled.div
 
 const LogoutBtn = styled.div
     `
-
+    cursor: pointer;
 `
 
 const LogoutBtnText = styled.span
@@ -1206,7 +1273,7 @@ const ContentBoxAllBox = styled.div
 
     div:not(:last-child)
     {
-        margin: 0px 0px 20px 0px;
+        margin: 0px 0px 40px 0px;
     }
     
    &::-webkit-scrollbar{
@@ -1228,9 +1295,80 @@ const ServiceText = styled.span
 
 `
 
-const ServiceSubText = styled.span
+const Underline = styled.div
     `
+    &::after{
+        content: ""; 
+        display: block; 
+        width: 0%;
+        height: 0.08px; 
+        background: #ededed; 
+        transition: all 0.5s;
+    }
+`
 
+const GameDotText = styled.span
+    `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: ${props => props.role == "DEVELOPER" ? "#ededed" : "gray"};
+`
+
+const ShopDotText = styled.span
+    `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: ${props => props.role == "SELLER" ? "#ededed" : "gray"};
+`
+
+const GameServiceSubBox = styled.div
+    `
+    display: flex;
+    margin: 5px 0px 0px 0px!important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const ShopServiceSubBox = styled.div
+    `
+    display: flex;
+    margin: 5px 0px 0px 0px !important;
+    line-height: 21px;
+
+     a{  
+        text-decoration: none;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
 `
 
 const GameDownloadBox = styled.div
@@ -1415,10 +1553,23 @@ const Profileli = styled.li
         margin: 48px 0px 0px -1px;
     }
 `
-const SubText = styled.span
+
+const GameSubText = styled.span
     `
-        
+        font-size: 17.7px;
+        margin: 0px 0px 0px 5px;
+        padding: 3px 0px 2px 0px;
+        color: ${props => props.role == "DEVELOPER" ? "#ededed" : "gray"};
 `
+
+const ShopSubText = styled.span
+    `
+        font-size: 17.7px;
+        margin: 0px 0px 0px 5px;
+        padding: 3px 0px 2px 0px;
+        color: ${props => props.role == "SELLER" ? "#ededed" : "gray"};
+`
+
 
 const ProfileliIcon = styled.i
     `
