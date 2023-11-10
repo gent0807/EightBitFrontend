@@ -218,7 +218,7 @@ const HeaderBox = () => {
 
                                         <LoginCheckBox>
                                             <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
-                                        </LoginCheckBox> 
+                                        </LoginCheckBox>
                                     </> :
 
                                     // 로그인유지 상태
@@ -236,7 +236,7 @@ const HeaderBox = () => {
 
                                                 <LoginCheckBox>
                                                     <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
-                                                </LoginCheckBox> 
+                                                </LoginCheckBox>
                                             </> :
 
                                             userInfo.loginState === "allok" ?
@@ -480,7 +480,7 @@ const HeaderBox = () => {
 
                                                     <LoginCheckBox>
                                                         <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
-                                                    </LoginCheckBox> 
+                                                    </LoginCheckBox>
                                                 </> :
 
                                         // 로그인유지 안한 상태
@@ -671,10 +671,41 @@ const HeaderBox = () => {
                                                         </GameDownloadBox>
 
                                                         <WriteBoardBox>
+
                                                             <WriteBoardText>
                                                                 ■ 글쓰기
-                                                        </WriteBoardText>
+                                                            </WriteBoardText>
+
+                                                            <WriteBoardAllBox>
+
+                                                                <StrategyBoardBox>
+                                                                    <WriteBoardDotText>-</WriteBoardDotText>
+                                                                    <Link to='/Board/strategy' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <BoardText>공략 게시판</BoardText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </StrategyBoardBox>
+
+                                                                <QuestionBoardBox>
+                                                                    <WriteBoardDotText>-</WriteBoardDotText>
+                                                                    <Link to='/Board/question' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <BoardText>질문 게시판</BoardText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </QuestionBoardBox>
+
+                                                                <FreeBoardBox>
+                                                                    <WriteBoardDotText>-</WriteBoardDotText>
+                                                                    <Link to='/Board/free' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <BoardText>자유 게시판</BoardText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </FreeBoardBox>
+
+                                                            </WriteBoardAllBox>
+
                                                         </WriteBoardBox>
+
                                                     </ContentBox>
 
                                                 </ContentBoxAllBox>
@@ -691,7 +722,7 @@ const HeaderBox = () => {
 
                                                 <LoginCheckBox>
                                                     <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
-                                                </LoginCheckBox> 
+                                                </LoginCheckBox>
                                             </>
                                 }
 
