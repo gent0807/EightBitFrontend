@@ -207,17 +207,37 @@ const HeaderBox = () => {
 
                                 {loginMaintain == null ?
 
-                                    <LoginCheckBox>
-                                        <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
-                                            </LoginCheckBox> :
+                                    <>
+                                        <ModalAllOffBtn>
+                                            <ModalAllOffBtnText
+                                                onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                            >
+                                                x
+                                        </ModalAllOffBtnText>
+                                        </ModalAllOffBtn>
+
+                                        <LoginCheckBox>
+                                            <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                        </LoginCheckBox> 
+                                    </> :
 
                                     // 로그인유지 상태
                                     loginMaintain == "true" ?
                                         userInfo == null ?
 
-                                            <LoginCheckBox>
-                                                <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
-                                                    </LoginCheckBox> :
+                                            <>
+                                                <ModalAllOffBtn>
+                                                    <ModalAllOffBtnText
+                                                        onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                                    >
+                                                        x
+                                                    </ModalAllOffBtnText>
+                                                </ModalAllOffBtn>
+
+                                                <LoginCheckBox>
+                                                    <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                                </LoginCheckBox> 
+                                            </> :
 
                                             userInfo.loginState === "allok" ?
 
@@ -449,9 +469,19 @@ const HeaderBox = () => {
 
                                                 </> :
 
-                                                <LoginCheckBox>
-                                                    <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
-                                                </LoginCheckBox> :
+                                                <>
+                                                    <ModalAllOffBtn>
+                                                        <ModalAllOffBtnText
+                                                            onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                                        >
+                                                            x
+                                                        </ModalAllOffBtnText>
+                                                    </ModalAllOffBtn>
+
+                                                    <LoginCheckBox>
+                                                        <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                                    </LoginCheckBox> 
+                                                </> :
 
                                         // 로그인유지 안한 상태
                                         user.login_state === "allok" ?
@@ -650,9 +680,19 @@ const HeaderBox = () => {
                                                 </ContentBoxAllBox>
                                             </> :
 
-                                            <LoginCheckBox>
-                                                <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
-                                            </LoginCheckBox>
+                                            <>
+                                                <ModalAllOffBtn>
+                                                    <ModalAllOffBtnText
+                                                        onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                                    >
+                                                        x
+                                                    </ModalAllOffBtnText>
+                                                </ModalAllOffBtn>
+
+                                                <LoginCheckBox>
+                                                    <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                                </LoginCheckBox> 
+                                            </>
                                 }
 
                                 {loginMaintain == null ?
