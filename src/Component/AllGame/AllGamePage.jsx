@@ -463,7 +463,7 @@ const FillterSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 72px;
     }
 `
 
@@ -473,7 +473,7 @@ const SearchFillSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 52px;
+        height: 48px;
     }
 `
 
@@ -483,7 +483,7 @@ const LimitSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 72px;
     }
 `
 
@@ -496,7 +496,7 @@ const FitterSelectBox = styled.ul
     border: solid 2px ${props => props.theme.borderColor};
     background: #dee2e6;
     width: 100px;
-    height: 78px;
+    height: 72px;
     padding: 0px;
     overflow: hidden;
     text-align: center;
@@ -507,13 +507,13 @@ const FitterSelectBox = styled.ul
 const SearchFillSelectBox = styled(FitterSelectBox)
     `
     width: 83px;
-    height: 52px;
+    height: 48px;
     animation: ${SearchFillSlideDown} 0.5s;
 `
 
 const LimmitSelectBox = styled(FitterSelectBox)
     `
-    height: 78px;
+    height: 72px;
     animation: ${LimitSlideDown} 0.5s;
 `
 

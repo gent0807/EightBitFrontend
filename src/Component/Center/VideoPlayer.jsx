@@ -235,7 +235,7 @@ const MuteBtnIcon = styled.i
     `
     font-size: 30px;
     text-align: center;
-    margin: 17px 0px 7px 0px;
+    margin: 13px 0px 7px 0px;
 `
 
 const VideoInformationDownLoadBtnBox = styled.div

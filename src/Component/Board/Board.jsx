@@ -679,7 +679,7 @@ const FillterSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 130px;
+        height: 120px;
     }
 `
 
@@ -689,7 +689,7 @@ const SearchFillSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 72px;
     }
 `
 
@@ -699,7 +699,7 @@ const LimitSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 72px;
     }
 `
 
@@ -713,6 +713,7 @@ const FitterSelectBox = styled.ul
     background: #dee2e6;
     width: 100px;
     padding: 0px;
+    height: 120px;
     overflow: hidden;
     text-align: center;
     border-radius: 5px;
@@ -722,13 +723,13 @@ const FitterSelectBox = styled.ul
 const SearchFillSelectBox = styled(FitterSelectBox)
     `
     width: 83px;
-    height: 78px;
+    height: 72px;
     animation: ${SearchFillSlideDown} 0.5s;
 `
 
 const LimmitSelectBox = styled(FitterSelectBox)
     `
-    height: 78px;
+    height: 72px;
     animation: ${LimitSlideDown} 0.5s;
 `
 

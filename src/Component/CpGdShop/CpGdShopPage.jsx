@@ -242,8 +242,8 @@ const CpGdShopPage = () => {
                             <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
                             <FitterSelectList onClick={(e) => setPastValue(e)}>과거순</FitterSelectList>
                             <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setPriceUpValue(e)}>가격▲</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setPriceDownValue(e)}>가격▼</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setPriceUpValue(e)}>가격 ▲</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setPriceDownValue(e)}>가격 ▼</FitterSelectList>
                         </FitterSelectBox>
                         <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
                         <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
@@ -483,7 +483,7 @@ const SearchFillSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 52px;
+        height: 48px;
     }
 `
 
@@ -517,7 +517,7 @@ const FitterSelectBox = styled.ul
 const SearchFillSelectBox = styled(FitterSelectBox)
     `
     width: 83px;
-    height: 52px;
+    height: 48px;
     animation: ${SearchFillSlideDown} 0.5s;
 `
 
@@ -542,7 +542,7 @@ const FitterSelectValue = styled.div
 
 const SearchFillValue = styled(FitterSelectValue)
     `
-    margin: ${props => props.writerText === "작성자" ? "11px 0px 11px 14px" : "11px 0px 11px 20px"};
+    margin: ${props => props.writerText === "상품명" ? "11px 0px 11px 14px" : "11px 0px 11px 20px"};
 `
 
 const LimitSelectValue = styled(FitterSelectValue)
