@@ -51,7 +51,7 @@ export const Goods = [
     },
     {
         id: 3,
-        title: "사운트 트랙 모음",
+        title: "사운트 트랙 패키지",
         Goods: "Goods",
         content: "사운트 트랙",
         information: "사운드 트랙",
@@ -62,7 +62,7 @@ export const Goods = [
     },
     {
         id: 4,
-        title: "로즈 오브 토파즈 앨범",
+        title: "로드 오브 토파즈 앨범",
         Goods: "Goods",
         content: "사운트 트랙",
         information: "사운드 트랙",
@@ -84,7 +84,7 @@ export const Goods = [
     },
     {
         id: 6,
-        title: "로즈 오브 토파즈 포스터",
+        title: "로드 오브 토파즈 포스터",
         Goods: "Goods",
         content: "포스터",
         information: "포스터",
@@ -106,7 +106,7 @@ export const Goods = [
     },
     {
         id: 8,
-        title: "이라아 캔뱃지 A",
+        title: "이리아 캔뱃지 A",
         Goods: "Goods",
         content: "정식 굿즈",
         information: "캔뱃지",
@@ -117,7 +117,7 @@ export const Goods = [
     },
     {
         id: 9,
-        title: "이라아 캔뱃지 B",
+        title: "이리아 캔뱃지 B",
         Goods: "Goods",
         content: "정식 굿즈",
         information: "캔뱃지",
@@ -128,7 +128,7 @@ export const Goods = [
     },
     {
         id: 10,
-        title: "이라아 캔뱃지 C",
+        title: "이리아 캔뱃지 C",
         Goods: "Goods",
         content: "정식 굿즈",
         information: "캔뱃지",
@@ -139,7 +139,7 @@ export const Goods = [
     },
     {
         id: 11,
-        title: "이라아 캔뱃지 D",
+        title: "이리아 캔뱃지 D",
         Goods: "Goods",
         content: "정식 굿즈",
         information: "캔뱃지",
@@ -150,7 +150,7 @@ export const Goods = [
     },
     {
         id: 12,
-        title: "이라아 캔뱃지 E",
+        title: "유유나 캔뱃지 A",
         Goods: "Goods",
         content: "정식 굿즈",
         information: "캔뱃지",
@@ -161,7 +161,7 @@ export const Goods = [
     },
     {
         id: 13,
-        title: "이라아 캔뱃지 F",
+        title: "유유나 캔뱃지 B",
         Goods: "Goods",
         content: "정식 굿즈",
         information: "캔뱃지",
@@ -172,7 +172,7 @@ export const Goods = [
     },
     {
         id: 14,
-        title: "이라아 캔뱃지 G",
+        title: "캔뱃지 세트",
         Goods: "Goods",
         content: "정식 굿즈",
         information: "캔뱃지",

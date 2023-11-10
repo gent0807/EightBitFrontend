@@ -219,7 +219,7 @@ const CpGdShopPage = () => {
                 <SearchAllBox>
                     <SearchForm onSubmit={(e) => SearchSubmit(e)}>
                         <FreeBoardSearchInputBox>
-                            <FreeBoardSearchInput placeholder="게임을 검색해 주세요!" value={Search} onChange={OnSearch} />
+                            <FreeBoardSearchInput placeholder="상품을 검색해 주세요!" value={Search} onChange={OnSearch} />
                             <FreeBoardSearchIconBox>
                                 <FreeBoardSearchBtn><HiOutlineSearch /></FreeBoardSearchBtn>
                             </FreeBoardSearchIconBox>

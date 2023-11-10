@@ -190,9 +190,9 @@ const HeaderBox = () => {
         window.addEventListener('scroll', updateScroll);
     });
 
-    console.log(userInfo);
-    console.log(user);
-
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
     return (
         <>
@@ -202,36 +202,39 @@ const HeaderBox = () => {
                     <BackgroudTopNav TopBack={scrollPosition}>
 
                         <ModalFast OnOff={modalOnOffBtn}>
+
                             <ModalFastMenuBox OnOff={modalOnOffBtn}>
 
-                                <ModalAllOffBtn>
-                                    <ModalAllOffBtnText
-                                        onClick={() => setModalOnOffBtn(false)}
-                                    >
-                                        x
-                                    </ModalAllOffBtnText>
-                                </ModalAllOffBtn>
+                                {loginMaintain == null ?
 
-                                <ModalUserMenu>
-
-                                    <>
-                                        {loginMaintain == null ?
-
-                                            <LoginCheckBox>
-                                                <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
+                                    <LoginCheckBox>
+                                        <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
                                             </LoginCheckBox> :
 
-                                            // 로그인유지 상태
-                                            loginMaintain == "true" ?
-                                                userInfo == null ?
+                                    // 로그인유지 상태
+                                    loginMaintain == "true" ?
+                                        userInfo == null ?
 
-                                                    <LoginCheckBox>
-                                                        <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
-                                                </LoginCheckBox> :
+                                            <LoginCheckBox>
+                                                <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                                    </LoginCheckBox> :
 
-                                                    userInfo.loginState === "allok" ?
+                                            userInfo.loginState === "allok" ?
 
-                                                        <ModalProfileImgBox>
+                                                <>
+
+                                                    <ModalProfileImgBox>
+
+                                                        <ModalAllOffBtn>
+                                                            <ModalAllOffBtnText
+                                                                onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                                            >
+                                                                x
+                                                            </ModalAllOffBtnText>
+                                                        </ModalAllOffBtn>
+
+                                                        <ProfileAllBox>
+
                                                             <Profile>
                                                                 <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
                                                             </Profile>
@@ -241,111 +244,232 @@ const HeaderBox = () => {
                                                                     <ModalNickNamePointText>
                                                                         {userInfo.nickName}
                                                                     </ModalNickNamePointText>
-                                                                님, 환영합니다!
-                                                            </ModalNickNameText>
+                                                                        님, 환영합니다!
+                                                                </ModalNickNameText>
                                                             </ModalNickNameBox>
 
                                                             <MyPageShopBox>
                                                                 <MyPageBtnBox>
-                                                                    <Link to={"/"}>
+                                                                    <Link to={"/"} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
                                                                         <MyPageBtnText>마이페이지</MyPageBtnText>
                                                                     </Link>
                                                                 </MyPageBtnBox>
 
                                                                 <ShopBtnBox>
-                                                                    <Link to={"/"}>
+                                                                    <Link to={"/"} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
                                                                         <ShopBtnText>장바구니</ShopBtnText>
                                                                     </Link>
                                                                 </ShopBtnBox>
                                                             </MyPageShopBox>
 
-                                                            <ContentBoxAllBox>
+                                                        </ProfileAllBox>
 
-                                                                <ServiceBox>
+                                                    </ModalProfileImgBox>
 
-                                                                    <ServiceText>
-                                                                        ■ 8bit 서비스
+                                                    <ContentBoxAllBox>
+
+                                                        <ContentBox>
+
+                                                            <ServiceBox>
+
+                                                                <ServiceText>
+                                                                    ■ 8bit 서비스
                                                                     </ServiceText>
 
-                                                                    <GameServiceSubBox>
-                                                                        <GameDotText role={userInfo.role}>-</GameDotText>
-                                                                        {loginMaintain == null ?
-                                                                            <GameSubText>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
-                                                                            :
-                                                                            loginMaintain == "true" ?
-                                                                                userInfo == null ?
-                                                                                    <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
-                                                                                    userInfo.loginState === "allok" ?
-                                                                                        userInfo.role === "DEVELOPER" ?
-                                                                                            <Link to="/GameUploadPage/indie">
-                                                                                                <GameSubText role={userInfo.role}>게임 업로드</GameSubText>
-                                                                                                <Underline />
-                                                                                            </Link> :
-                                                                                            <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+                                                                <GameServiceSubBox>
+
+                                                                    <GameDotText role={userInfo.role}>-</GameDotText>
+
+                                                                    {loginMaintain == null ?
+                                                                        <GameSubText>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                        loginMaintain == "true" ?
+
+                                                                            userInfo == null ?
+
+                                                                                <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                                userInfo.loginState === "allok" ?
+
+                                                                                    userInfo.role === "DEVELOPER" ?
+
+                                                                                        <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                            <GameSubText role={userInfo.role}>게임 업로드</GameSubText>
+                                                                                            <Underline />
+                                                                                        </Link> :
+
                                                                                         <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
-                                                                                user.login_state === "allok" ?
-                                                                                    user.role === "DEVELOPER" ?
-                                                                                        <Link to="/GameUploadPage/indie">
-                                                                                            <GameSubText role={user.role}>게임 업로드</GameSubText>
+
+                                                                                    <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                            user.login_state === "allok" ?
+
+                                                                                user.role === "DEVELOPER" ?
+
+                                                                                    <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                        <GameSubText role={user.role}>게임 업로드</GameSubText>
+                                                                                        <Underline />
+                                                                                    </Link> :
+
+                                                                                    <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                                <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
+
+                                                                    }
+
+                                                                </GameServiceSubBox>
+
+                                                                <ShopServiceSubBox>
+                                                                    <ShopDotText role={userInfo.role}>-</ShopDotText>
+
+                                                                    {loginMaintain == null ?
+
+                                                                        <ShopSubText>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                        loginMaintain == "true" ?
+
+                                                                            userInfo == null ?
+
+                                                                                <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                                userInfo.loginState === "allok" ?
+
+                                                                                    userInfo.role === "SELLER" ?
+
+                                                                                        <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                            <ShopSubText role={userInfo.role}>굿즈 판매</ShopSubText>
                                                                                             <Underline />
                                                                                         </Link> :
-                                                                                        <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
-                                                                                    <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
-                                                                        }
-                                                                    </GameServiceSubBox>
 
-                                                                    <ShopServiceSubBox>
-                                                                        <ShopDotText role={userInfo.role}>-</ShopDotText>
-                                                                        {loginMaintain == null ?
-                                                                            <ShopSubText>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                            loginMaintain == "true" ?
-                                                                                userInfo == null ?
-                                                                                    <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                                    userInfo.loginState === "allok" ?
-                                                                                        userInfo.role === "SELLER" ?
-                                                                                            <Link to="/GameUploadPage/indie">
-                                                                                                <ShopSubText role={userInfo.role}>굿즈 판매</ShopSubText>
-                                                                                                <Underline />
-                                                                                            </Link> :
-                                                                                            <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
                                                                                         <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                                user.login_state === "allok" ?
-                                                                                    user.role === "SELLER" ?
-                                                                                        <Link to="/GameUploadPage/indie">
-                                                                                            <ShopSubText role={user.role}>굿즈 판매</ShopSubText>
-                                                                                            <Underline />
-                                                                                        </Link> :
-                                                                                        <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                                    <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText>
-                                                                        }
-                                                                    </ShopServiceSubBox>
 
-                                                                </ServiceBox>
+                                                                                    <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
 
-                                                                <GameDownloadBox>
-                                                                    <GameDownloadText>
-                                                                        ■ 게임 다운로드
-                                                                    </GameDownloadText>
-                                                                </GameDownloadBox>
+                                                                            user.login_state === "allok" ?
 
-                                                                <WriteBoardBox>
-                                                                    <WriteBoardText>
-                                                                        ■ 글쓰기
-                                                                    </WriteBoardText>
-                                                                </WriteBoardBox>
+                                                                                user.role === "SELLER" ?
 
-                                                            </ContentBoxAllBox>
+                                                                                    <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                        <ShopSubText role={user.role}>굿즈 판매</ShopSubText>
+                                                                                        <Underline />
+                                                                                    </Link> :
 
-                                                        </ModalProfileImgBox> :
+                                                                                    <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
 
-                                                        <LoginCheckBox>
-                                                            <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
-                                                        </LoginCheckBox> :
+                                                                                <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText>
+                                                                    }
 
-                                            // 로그인유지 안한 상태
-                                            user.login_state === "allok" ?
+                                                                </ShopServiceSubBox>
 
-                                                    <ModalProfileImgBox>
+                                                            </ServiceBox>
+
+                                                            <GameDownloadBox>
+
+                                                                <GameDownloadText>
+                                                                    ■ 게임 다운로드
+                                                                </GameDownloadText>
+
+                                                                <GameDownloadAllBox>
+
+                                                                    <OfficialGameBox1>
+                                                                        <OfficialDot>-</OfficialDot>
+                                                                        <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <GameText>방치 모험가</GameText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </OfficialGameBox1>
+
+                                                                    <OfficialGameBox2>
+                                                                        <OfficialDot>-</OfficialDot>
+                                                                        <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <GameText>로드 오브 토파즈</GameText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </OfficialGameBox2>
+
+                                                                    <OfficialGameBox3>
+                                                                        <OfficialDot>-</OfficialDot>
+                                                                        <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <GameText>럭키 웨폰</GameText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </OfficialGameBox3>
+
+                                                                    <OthersGameBox>
+                                                                        <OfficialDot>-</OfficialDot>
+                                                                        <Link to='/AllGamePage/indie' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <GameText>그 외 인디 게임</GameText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </OthersGameBox>
+
+                                                                </GameDownloadAllBox>
+
+                                                            </GameDownloadBox>
+
+                                                            <WriteBoardBox>
+
+                                                                <WriteBoardText>
+                                                                    ■ 글쓰기
+                                                                </WriteBoardText>
+
+                                                                <WriteBoardAllBox>
+
+                                                                    <StrategyBoardBox>
+                                                                        <WriteBoardDotText>-</WriteBoardDotText>
+                                                                        <Link to='/Board/strategy' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <BoardText>공략 게시판</BoardText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </StrategyBoardBox>
+
+                                                                    <QuestionBoardBox>
+                                                                        <WriteBoardDotText>-</WriteBoardDotText>
+                                                                        <Link to='/Board/question' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <BoardText>질문 게시판</BoardText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </QuestionBoardBox>
+
+                                                                    <FreeBoardBox>
+                                                                        <WriteBoardDotText>-</WriteBoardDotText>
+                                                                        <Link to='/Board/free' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <BoardText>자유 게시판</BoardText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </FreeBoardBox>
+
+                                                                </WriteBoardAllBox>
+
+                                                            </WriteBoardBox>
+
+                                                        </ContentBox>
+
+                                                    </ContentBoxAllBox>
+
+                                                </> :
+
+                                                <LoginCheckBox>
+                                                    <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                                </LoginCheckBox> :
+
+                                        // 로그인유지 안한 상태
+                                        user.login_state === "allok" ?
+
+                                            <>
+
+                                                <ModalProfileImgBox>
+
+                                                    <ModalAllOffBtn>
+                                                        <ModalAllOffBtnText
+                                                            onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                                        >
+                                                            x
+                                                        </ModalAllOffBtnText>
+                                                    </ModalAllOffBtn>
+
+                                                    <ProfileAllBox>
+
                                                         <Profile>
                                                             <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
                                                         </Profile>
@@ -356,109 +480,180 @@ const HeaderBox = () => {
                                                                     {user.nickname}
                                                                 </ModalNickNamePointText>
                                                                     님, 환영합니다!
-                                                                </ModalNickNameText>
+                                                            </ModalNickNameText>
                                                         </ModalNickNameBox>
 
                                                         <MyPageShopBox>
+
                                                             <MyPageBtnBox>
-                                                                <Link to={"/"}>
+                                                                <Link to={"/"} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
                                                                     <MyPageBtnText>마이페이지</MyPageBtnText>
                                                                 </Link>
                                                             </MyPageBtnBox>
 
                                                             <ShopBtnBox>
-                                                                <Link to={"/"}>
+                                                                <Link to={"/"} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
                                                                     <ShopBtnText>장바구니</ShopBtnText>
                                                                 </Link>
                                                             </ShopBtnBox>
+
                                                         </MyPageShopBox>
 
-                                                        <ContentBoxAllBox>
+                                                    </ProfileAllBox>
 
-                                                            <ServiceBox>
+                                                </ModalProfileImgBox>
 
-                                                                <ServiceText>
-                                                                    ■ 8bit 서비스
-                                                        </ServiceText>
+                                                <ContentBoxAllBox>
+                                                    <ContentBox>
+                                                        <ServiceBox>
 
-                                                                <GameServiceSubBox>
-                                                                    <GameDotText role={user.role}>-</GameDotText>
-                                                                    {loginMaintain == null ?
-                                                                        <GameSubText>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
-                                                                        :
-                                                                        loginMaintain == "true" ?
-                                                                            userInfo == null ?
-                                                                                <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
-                                                                                userInfo.loginState === "allok" ?
-                                                                                    userInfo.role === "DEVELOPER" ?
-                                                                                        <Link to="/GameUploadPage/indie">
-                                                                                            <GameSubText role={userInfo.role}>게임 업로드</GameSubText>
-                                                                                            <Underline />
-                                                                                        </Link> :
-                                                                                        <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+                                                            <ServiceText>
+                                                                ■ 8bit 서비스
+                                                            </ServiceText>
+
+                                                            <GameServiceSubBox>
+                                                                <GameDotText role={user.role}>-</GameDotText>
+
+                                                                {loginMaintain == null ?
+
+                                                                    <GameSubText>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                    loginMaintain == "true" ?
+
+                                                                        userInfo == null ?
+
+                                                                            <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                            userInfo.loginState === "allok" ?
+
+                                                                                userInfo.role === "DEVELOPER" ?
+
+                                                                                    <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                        <GameSubText role={userInfo.role}>게임 업로드</GameSubText>
+                                                                                        <Underline />
+                                                                                    </Link> :
+
                                                                                     <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
-                                                                            user.login_state === "allok" ?
-                                                                                user.role === "DEVELOPER" ?
-                                                                                    <Link to="/GameUploadPage/indie">
-                                                                                        <GameSubText role={user.role}>게임 업로드</GameSubText>
-                                                                                        <Underline />
-                                                                                    </Link> :
-                                                                                    <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
-                                                                                <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
-                                                                    }
-                                                                </GameServiceSubBox>
 
-                                                                <ShopServiceSubBox>
-                                                                    <ShopDotText role={user.role}>-</ShopDotText>
-                                                                    {loginMaintain == null ?
-                                                                        <ShopSubText>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                        loginMaintain == "true" ?
-                                                                            userInfo == null ?
-                                                                                <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                                userInfo.loginState === "allok" ?
+                                                                                <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                        user.login_state === "allok" ?
+
+                                                                            user.role === "DEVELOPER" ?
+
+                                                                                <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                    <GameSubText role={user.role}>게임 업로드</GameSubText>
+                                                                                    <Underline />
+                                                                                </Link> :
+
+                                                                                <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                            <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
+                                                                }
+
+                                                            </GameServiceSubBox>
+
+                                                            <ShopServiceSubBox>
+
+                                                                <ShopDotText role={user.role}>-</ShopDotText>
+
+                                                                {loginMaintain == null ?
+
+                                                                    <ShopSubText>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                    loginMaintain == "true" ?
+
+                                                                        userInfo == null ?
+
+                                                                            <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                            userInfo.loginState === "allok" ?
+
                                                                                 userInfo.role === "SELLER" ?
-                                                                                        <Link to="/GameUploadPage/indie">
-                                                                                            <ShopSubText role={userInfo.role}>굿즈 판매</ShopSubText>
-                                                                                            <Underline />
-                                                                                        </Link> :
-                                                                                        <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                                    <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                            user.login_state === "allok" ?
-                                                                                user.role === "SELLER" ?
-                                                                                    <Link to="/GameUploadPage/indie">
-                                                                                        <ShopSubText role={user.role}>굿즈 판매</ShopSubText>
+
+                                                                                    <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                        <ShopSubText role={userInfo.role}>굿즈 판매</ShopSubText>
                                                                                         <Underline />
                                                                                     </Link> :
-                                                                                    <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
-                                                                                <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText>
-                                                                    }
-                                                                </ShopServiceSubBox>
 
-                                                            </ServiceBox>
+                                                                                    <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
 
-                                                            <GameDownloadBox>
-                                                                <GameDownloadText>
-                                                                    ■ 게임 다운로드
-                                                        </GameDownloadText>
-                                                            </GameDownloadBox>
+                                                                                <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
 
-                                                            <WriteBoardBox>
-                                                                <WriteBoardText>
-                                                                    ■ 글쓰기
+                                                                        user.login_state === "allok" ?
+
+                                                                            user.role === "SELLER" ?
+
+                                                                                <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                    <ShopSubText role={user.role}>굿즈 판매</ShopSubText>
+                                                                                    <Underline />
+                                                                                </Link> :
+
+                                                                                <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                            <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText>
+                                                                }
+
+                                                            </ShopServiceSubBox>
+
+                                                        </ServiceBox>
+
+                                                        <GameDownloadBox>
+
+                                                            <GameDownloadText>
+                                                                ■ 게임 다운로드
+                                                                </GameDownloadText>
+
+                                                            <GameDownloadAllBox>
+                                                                <OfficialGameBox1>
+                                                                    <OfficialDot>-</OfficialDot>
+                                                                    <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <GameText>방치 모험가</GameText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </OfficialGameBox1>
+
+                                                                <OfficialGameBox2>
+                                                                    <OfficialDot>-</OfficialDot>
+                                                                    <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <GameText>로드 오브 토파즈</GameText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </OfficialGameBox2>
+
+                                                                <OfficialGameBox3>
+                                                                    <OfficialDot>-</OfficialDot>
+                                                                    <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <GameText>럭키 웨폰</GameText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </OfficialGameBox3>
+
+                                                                <OthersGameBox>
+                                                                    <OfficialDot>-</OfficialDot>
+                                                                    <Link to='/AllGamePage/indie' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <GameText>그 외 인디 게임</GameText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </OthersGameBox>
+                                                            </GameDownloadAllBox>
+
+                                                        </GameDownloadBox>
+
+                                                        <WriteBoardBox>
+                                                            <WriteBoardText>
+                                                                ■ 글쓰기
                                                         </WriteBoardText>
-                                                            </WriteBoardBox>
+                                                        </WriteBoardBox>
+                                                    </ContentBox>
 
-                                                        </ContentBoxAllBox>
+                                                </ContentBoxAllBox>
+                                            </> :
 
-                                                    </ModalProfileImgBox> :
-
-                                                    <LoginCheckBox>
-                                                        <Link to='/Login' onClick={() => setModalOnOffBtn()}>로그인</Link> 후 이용해주세요.
-                                                    </LoginCheckBox>
-                                        }
-                                    </>
-
-                                </ModalUserMenu>
+                                            <LoginCheckBox>
+                                                <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                            </LoginCheckBox>
+                                }
 
                                 {loginMaintain == null ?
                                     <></> :
@@ -486,6 +681,7 @@ const HeaderBox = () => {
                                 }
 
                             </ModalFastMenuBox>
+
                         </ModalFast>
 
                         <SearchModal OnOff={searchmodalOnOffBtn}>
@@ -647,15 +843,11 @@ const ModalAllOffBtn = styled.div
 
 const ModalAllOffBtnText = styled.span
     `
-    margin: 14px 23px 0px 0px;
+    margin: 5px 15px 0px 0px;
 `
 
 const ModalUserMenu = styled.div
     `
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
 `
 
 const LogoutBtnBox = styled.div
@@ -679,16 +871,15 @@ const LogoutBtnText = styled.span
 
 const ModalFast = styled.div
     `
-    display: ${props => props.OnOff ? "flex" : "none"};
-    justify-content: end;
+    display: ${props => props.OnOff ? "block" : "none"};
     position: fixed;
     white-space: nowrap;
     top: 0;
-    bottom: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background: rgba(25,25,25,0.3);
-    z-index:99999;
+    z-index: 99999;
 `
 
 const ModalAnimateOpen = keyframes
@@ -697,7 +888,7 @@ const ModalAnimateOpen = keyframes
         width: 0px;
     },
     100%{
-        width: 375px;
+        width: 366px;
     }
 
 `
@@ -705,7 +896,7 @@ const ModalAnimateOpen = keyframes
 const ModalAnimateClose = keyframes
     `
     0%{
-        width: 375px;
+        width: 366px;
     },
     100%{
         width: 0px;
@@ -713,18 +904,45 @@ const ModalAnimateClose = keyframes
 
 `
 
+const ModalMobileAnimateOpen = keyframes
+    `
+    0%{
+        width: 0%;
+    },
+    100%{
+        width: 100%;
+    }
+
+`
+
+const ModalMobileAnimateClose = keyframes
+    `
+    0%{
+        width: 100%;
+    },
+    100%{
+        width: 0%;
+    }
+
+`
+
 const ModalFastMenuBox = styled.div
     `
-    display: flex;
-    flex-direction: column;
-    width: ${props => props.OnOff ? "375px" : "0px"};
     height: 100%;
+    position: relative;
+    width: 366px;
+    overflow: hidden;
+    margin-left: auto;
+    display: flex;
+    color: #ededed;
+    flex-direction: column;
     background: rgba(25,25,25,1);
     animation: ${props => props.OnOff ? ModalAnimateOpen : ModalAnimateClose} 0.5s;
-    overflow: hidden;
+
     @media (min-width:250px) and (max-width:622px)
     {
          width: 100%;
+         animation: ${props => props.OnOff ? ModalMobileAnimateOpen : ModalMobileAnimateClose} 0.5s;
     }
 
 `
@@ -1226,14 +1444,14 @@ export const SearchButton = styled.button
 
 `
 
+const ModalAllBox = styled.div
+    `
+     color: #ededed;
+     height: 100%;
+`
+
 const ModalProfileImgBox = styled.div
     `
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #ededed;
-    margin: 14px 0px 0px 0px;
-    padding: 0px 26px 26px 26px;
 `
 
 const ModalNickNameBox = styled.div
@@ -1264,27 +1482,48 @@ const MyPageShopBox = styled.div
 
 const ContentBoxAllBox = styled.div
     `
-    display: flex;
-    overflow: scroll;
-    flex-direction: column;
-    justify-content: center;
     width: 100%;
+    height: 100%;
     margin: 100px 0px 0px 0px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
     div:not(:last-child)
     {
         margin: 0px 0px 40px 0px;
     }
+
+    &::-webkit-scrollbar{
+        background: rgba(25,25,25,1);
+      }
+      &::-webkit-scrollbar-thumb
+      {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+      }
+      &::-webkit-scrollbar-track
+      {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
     
-   &::-webkit-scrollbar{
-        display:none;
-    }   
+`
+
+const ContentBox = styled.div
+    `
+    padding: 0px 26px 0px 26px;
 `
 
 const ServiceBox = styled.div
     `
     display: flex;
     flex-direction: column;
+    padding : 5px;
     a{
         text-decoraction: none;
     }
@@ -1303,7 +1542,7 @@ const Underline = styled.div
         width: 0%;
         height: 0.08px; 
         background: #ededed; 
-        transition: all 0.5s;
+        transition: all 0.3s;
     }
 `
 
@@ -1382,10 +1621,201 @@ const GameDownloadText = styled.span
 
 `
 
+const GameDownloadAllBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0px 0px 0px;
+`
+
+const OfficialDot = styled.span
+    `
+
+`
+
+const OfficialGameBox1 = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const OfficialGameBox2 = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const OfficialGameBox3 = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const OthersGameBox = styled.div
+    `
+    display: flex;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
 const WriteBoardBox = styled.div
     `
     display: flex;
     flex-direction: column;
+`
+
+const WriteBoardDotText = styled.span
+    `
+
+`
+
+const WriteBoardAllBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0px 0px 0px;
+`
+
+const StrategyBoardBox = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const QuestionBoardBox = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const FreeBoardBox = styled.div
+    `
+    display: flex;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+
 `
 
 const WriteBoardText = styled.span
@@ -1411,6 +1841,15 @@ const ShopBtnBox = styled.div
 const ShopBtnText = styled.span
     `
 
+`
+const ProfileAllBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 60px 0px 0px 0px;
+    width: 100%;
 `
 
 const Profile = styled.div
@@ -1568,6 +2007,22 @@ const ShopSubText = styled.span
         margin: 0px 0px 0px 5px;
         padding: 3px 0px 2px 0px;
         color: ${props => props.role == "SELLER" ? "#ededed" : "gray"};
+`
+
+const GameText = styled.span
+    `
+        font-size: 17.7px;
+        margin: 0px 0px 0px 5px;
+        padding: 3px 0px 2px 0px;
+        color: #ededed;
+`
+
+const BoardText = styled.span
+    `
+        font-size: 17.7px;
+        margin: 0px 0px 0px 5px;
+        padding: 3px 0px 2px 0px;
+        color: #ededed;
 `
 
 

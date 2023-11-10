@@ -191,13 +191,8 @@ const AllGamePage = () => {
         setFirstReset(false);
     }
 
-    
-
-
-    
-
     const ScrollTop = () => {
-        window.scrollTo({ top: 835, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     return (
