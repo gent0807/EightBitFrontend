@@ -486,6 +486,7 @@ const SearchAllBox = styled.div
     `
     display: flex;
     margin: 0px 0px 0px 0px;
+    align-items: center;
 
     @media (min-width:250px) and (max-width:607px)
     {
@@ -771,7 +772,7 @@ const LimitSelectList = styled(FitterSelectList)
 const FreeBoardSearchInputBox = styled(SearchInputBox)
     `
     display: flex;
-    border: solid 2px ${(props) => props.theme.borderColor};
+    border: none;
     height: 39px;
     width: 227px;
 `
@@ -795,7 +796,7 @@ const FreeBoardSearchIconBox = styled(SearchInputIconBox)
 const FreeBoardSearchBtn = styled(SearchButton)
     `
     display: block;
-    color: black;
+    color: ${props => props.theme.textColor};
     padding: 5px 8px 0px 0px;
 `
 

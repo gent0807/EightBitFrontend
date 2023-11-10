@@ -375,6 +375,7 @@ const SearchAllBox = styled.div
     `
     display: flex;
     margin: 0px 0px 0px 0px;
+    align-items: center;
 
     @media (min-width:250px) and (max-width:607px)
     {
@@ -566,6 +567,7 @@ const FreeBoardSearchInput = styled(SearchInput)
     display: block;
     margin: 0px 0px 0px 0px;
     padding: 0px 8px 0px 12px;
+    font-size: 18px;
     height: 39px;
 `
 
