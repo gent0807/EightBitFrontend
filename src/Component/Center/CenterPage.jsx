@@ -10,8 +10,10 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import VideoPlayler from './VideoPlayer';
 import { Slide } from "../Game";
+import DOMPurify from "dompurify";
 import Banner1 from "../../Item/img/mainSlide/banner/banner1.png";
 import Banner2 from "../../Item/img/mainSlide/banner/banner2.png";
+import { Goods } from "../CpGdShop/CpGdData";
 
 SwiperCore.use([Navigation, Pagination, EffectCoverflow]);
 
@@ -33,6 +35,7 @@ const CenterPage = () => {
 
     const [swiper, setSwiper] = useState(null);
     const [mainImageIndex, setMainImageIndex] = useState(0);
+    const [GoodsList, setGoodsList] = useState(Goods);
     const offset = 0;
     const limit = 5;
 
@@ -134,7 +137,7 @@ const CenterPage = () => {
             swiper.navigation.update();
         },
         spaceBetween: 30,
-        slidesPerView: 3,
+        slidesPerView: 4,
         loop: true,
         loopAdditionalSlides: 1,
         onSwiper: setSwiper,
@@ -146,11 +149,11 @@ const CenterPage = () => {
             },
             561: {
                 spaceBetween: 30,
-                slidesPerView: 2,
-            },
-            794: {
-                spaceBetween: 30,
                 slidesPerView: 3,
+            },
+            980: {
+                spaceBetween: 30,
+                slidesPerView: 4,
             },
         },
     }
@@ -182,6 +185,12 @@ const CenterPage = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    useEffect(() => {
+        setGoodsList(Goods.sort((a, b) => b.likecount - a.likecount).filter((Goods) => Goods.Goods === "Goods"));
+    }, [Goods])
+
+    console.log(GoodsList)
+
     return (
         <SwiperBox>
 
@@ -195,11 +204,13 @@ const CenterPage = () => {
                             {AdSlide2.length !== 0 && AdSlide2.map(({ id, banner }) => (
                                 <SwiperSlide key={id}>
                                     <ImgAllBox>
-                                        <GradiBox>
-                                            <GradiLeft/>
-                                            <GradiRight/>
-                                        </GradiBox>
-                                        <ImgAdBox src={banner} />
+
+                                        <AdImgSlideBox>
+                                            <SlideImgBox>
+                                                <ImgAdBox src={banner} />
+                                            </SlideImgBox>
+                                        </AdImgSlideBox>
+
                                     </ImgAllBox>
                                 </SwiperSlide>
                             ))}
@@ -218,12 +229,14 @@ const CenterPage = () => {
                     <PopTitleBox>Best of 8bit</PopTitleBox>
 
                     <Slider {...swiperParams} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate }) => (
+                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title, developer, regdate }) => (
                             <SwiperSlide key={id}>
                                 <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
-                                            <ImgBox src={mainImg} />
+                                            <SlideImgBox>
+                                                <ImgBox src={mainImg} />
+                                            </SlideImgBox>
                                         </SlideBox>
 
                                         <AllBox>
@@ -248,27 +261,29 @@ const CenterPage = () => {
 
                     <Slider {...swiperParams2} ref={setSwiper}>
                         {Slide.length !== 0 && Slide
-                        .filter((game) => game.game === "인디게임")
-                        .sort((a, b) => new Date(b.regdate) - new Date(a.regdate))
-                        .slice(offset, limit)
-                        .map(({ id, mainImg, information, title, developer, regdate }) => (
-                            <SwiperSlide key={id}>
-                                <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
-                                    <SlideAllBox>
-                                        <SlideBox>
-                                            <ImgBox src={mainImg} />
-                                        </SlideBox>
+                            .filter((game) => game.game === "인디게임")
+                            .sort((a, b) => new Date(b.regdate) - new Date(a.regdate))
+                            .slice(offset, limit)
+                            .map(({ id, mainImg, information, title, developer, regdate }) => (
+                                <SwiperSlide key={id}>
+                                    <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
+                                        <SlideAllBox>
+                                            <SlideBox>
+                                                <SlideImgBox>
+                                                    <ImgBox src={mainImg} />
+                                                </SlideImgBox>
+                                            </SlideBox>
 
-                                        <AllBox>
-                                            <InformaionBoxTextBox>
-                                                <TitleBox>{title}</TitleBox>
-                                                <InformaionBox>{information}</InformaionBox>
-                                            </InformaionBoxTextBox>
-                                        </AllBox>
-                                    </SlideAllBox>
-                                </Link>
-                            </SwiperSlide>
-                        ))}
+                                            <AllBox>
+                                                <InformaionBoxTextBox>
+                                                    <TitleBox>{title}</TitleBox>
+                                                    <InformaionBox>{information}</InformaionBox>
+                                                </InformaionBoxTextBox>
+                                            </AllBox>
+                                        </SlideAllBox>
+                                    </Link>
+                                </SwiperSlide>
+                            ))}
                     </Slider>
 
                     <ButtonBox>
@@ -283,32 +298,37 @@ const CenterPage = () => {
 
                     <PopTitleBox>인기판매 굿즈</PopTitleBox>
 
-                    <Slider {...swiperParams3} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate}) => (
+                    <GoodsSlider {...swiperParams3} ref={setSwiper}>
+                        {GoodsList.length !== 0 && GoodsList.slice(offset, limit).map(({ id, src, title, content, price }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
-                                    <SlideAllBox>
-                                        <SlideBox>
-                                            <ImgBox src={mainImg} />
-                                        </SlideBox>
+                                <BoardContentBox>
+                                    <Link to={`/CpGdShopView/${id}`} onClick={() => ScrollTop()}>
+                                        <GoodsBox>
+                                            <GoodsSlideBox>
+                                                <GoodsImgBox>
+                                                    <CpGdShopMainImg src={src} />
+                                                </GoodsImgBox>
+                                            </GoodsSlideBox>
 
-                                        <AllBox>
-                                            <InformaionBoxTextBox>
-                                                <TitleBox>{title}</TitleBox>
-                                                <InformaionBox>{information}</InformaionBox>
-                                            </InformaionBoxTextBox>
-                                        </AllBox>
-                                    </SlideAllBox>
-                                </Link>
+                                            <GoodsAllBox>
+                                                <GoodsInformaionBoxTextBox>
+                                                    <GoodsTitleBox>{title}</GoodsTitleBox>
+                                                    <GoodsInformaionBox dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}></GoodsInformaionBox>
+                                                    <PriceBox>₩{price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</PriceBox>
+                                                </GoodsInformaionBoxTextBox>
+                                            </GoodsAllBox>
+                                        </GoodsBox>
+                                    </Link>
+                                </BoardContentBox>
                             </SwiperSlide>
                         ))}
-                    </Slider>
+                    </GoodsSlider>
 
-                    <ButtonBox>
+                    <GoodsButtonBox>
                         <PrevBtn ref={navPrevRef4}><IoIosArrowBack /></PrevBtn>
                         <PaginationBtn ref={PaginatonRef4}></PaginationBtn>
                         <NextBtn ref={navNextRef4}><IoIosArrowForward /></NextBtn>
-                    </ButtonBox>
+                    </GoodsButtonBox>
 
                 </GameSlideBox>
 
@@ -316,6 +336,25 @@ const CenterPage = () => {
         </SwiperBox>
     );
 }
+
+const CpGdShopMainImg = styled.img
+    `
+    width: 100%;
+    height: 100%;
+`
+
+const PriceBox = styled.div
+    `
+    font-weight: bold;
+    font-size: 19px;
+`
+
+const BoardContentBox = styled.div
+    `
+        a{
+            text-decoration: none;
+        }
+`
 
 const GradiBox = styled.div
     `
@@ -352,8 +391,7 @@ const GradiRight = styled.div
 
 const ImgAllBox = styled.div
     `
-    height: 21.1rem;
-    padding-top: 2.8rem;
+    
 `
 
 const AllContentBox = styled.div
@@ -377,7 +415,6 @@ const Slider = styled(Swiper)
     padding: 0;
     z-index: 1;
     margin-bottom: 20px;
-    height: 382px;
 
     a{
         text-decoration: none;
@@ -421,6 +458,11 @@ const Slider = styled(Swiper)
 }
 `
 
+const GoodsSlider = styled(Slider)
+    `
+    height: 100%;
+`
+
 const PaginationBtn = styled.div
     `
     display: flex;
@@ -452,6 +494,14 @@ const InformaionBoxTextBox = styled.div
     background: rgba(41,41,41,0.8);
 `
 
+const GoodsInformaionBoxTextBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    color: white;
+`
+
 const AllBox = styled.div
     `
     position: absolute;
@@ -460,12 +510,27 @@ const AllBox = styled.div
     justify-content: end;
     background: rgba(0,0,0,0.3);
     top: 0%;
-    height: 60%;
+    height: 100%;
     left: 0%;
     border-radius: 8px;
     width: 100%;
     overflow: hidden;
-     @media (min-width:250px) and (max-width:560px)
+    @media (min-width:250px) and (max-width:560px)
+    {
+        width: 100%;
+    }
+`
+
+const GoodsBox = styled.div
+    `
+    display:flex;
+    flex-direction: column;
+    justify-content: end;
+    height: 100%;
+    border-radius: 8px;
+    width: 100%;
+    overflow: hidden;
+    @media (min-width:250px) and (max-width:560px)
     {
         width: 100%;
     }
@@ -482,6 +547,11 @@ const SlideAllBox = styled.div
     }
 `
 
+const GoodsAllBox = styled.div
+    `
+    position: relative;
+`
+
 
 const AdSlider = styled(Slider)
     `
@@ -493,7 +563,12 @@ const ButtonBox = styled.div
     `
     display: flex;
     justify-content: center;
-    margin: -133px 0px 0px 0px;
+`
+
+const GoodsButtonBox = styled.div
+    `
+    display: flex;
+    justify-content: center;
 `
 
 const AdButtonBox = styled(ButtonBox)
@@ -522,9 +597,6 @@ const NextBtn = styled.div
     transition: color 0.5s;
     color: ${props => props.theme.CenterTextColor};
     font-size: 34px;
-`
-const AdSlideBox = styled.div
-    `
 `
 
 const GameSlideBox = styled.div
@@ -556,12 +628,8 @@ const ImgBox = styled.img
 
 const ImgAdBox = styled.img
     `
-    position: absolute;
-    top: 0;
-    left: 50%;
+    width: 100%;
     height: 100%;
-    max-width: none;
-    transform: translate(-50%) scaleX(1) scaleY(1);
 `
 
 const TitleBox = styled.div
@@ -572,6 +640,16 @@ const TitleBox = styled.div
     font-size: 30px;
     color: white;
     margin: 0px 0px 10px 0px;
+`
+
+const GoodsTitleBox = styled.div
+    `
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size: 23px;
+    font-weight: bold;
+    margin: 0px 0px 5px 0px;
 `
 
 const AdTitleBox = styled.span
@@ -601,6 +679,22 @@ const InformaionBox = styled.div
     color: white;
 `
 
+const GoodsInformaionBox = styled.div
+    `
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    margin: 0px 0px 5px 0px;
+    p{
+        margin: 0;
+        text-decoration: none;
+        color: white;
+    }
+`
+
 const AdAllBox = styled.div
     `
     display: flex;
@@ -614,9 +708,50 @@ const AdAllBox = styled.div
 const SlideBox = styled.div
     `
     border-radius: 10px;
+    position:relative; 
+    width:100%; 
+    height:0;
     overflow: hidden;
-    transition: border 0.5s;
-    height: 229px;
+    padding-bottom: 56%;
+`
+
+const AdSlideBox = styled.div
+`
+
+`
+
+const AdImgSlideBox = styled(SlideBox)
+`
+    padding-bottom: 24%;
+`
+
+const SlideImgBox = styled.div
+    `
+    position:absolute; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+`
+
+const GoodsSlideBox = styled.div
+    `
+    border-radius: 10px;
+    position:relative; 
+    width:100%; 
+    height:0;
+    overflow: hidden;
+    padding-bottom: 100%; 
+`
+
+
+const GoodsImgBox = styled.div
+    `
+    position:absolute; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
 `
 
 export default CenterPage;
