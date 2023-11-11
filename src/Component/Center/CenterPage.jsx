@@ -261,16 +261,18 @@ const CenterPage = () => {
 
                     <Slider {...swiperParams2} ref={setSwiper}>
                         {Slide.length !== 0 && Slide
-                        .filter((game) => game.game === "인디게임")
-                        .sort((a, b) => new Date(b.regdate) - new Date(a.regdate))
-                        .slice(offset, limit)
-                        .map(({ id, mainImg, information, title, developer, regdate, contentType }) => (
-                            <SwiperSlide key={id}>
-                                <Link to={`/Game/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
-                                    <SlideAllBox>
-                                        <SlideBox>
-                                            <ImgBox src={mainImg} />
-                                        </SlideBox>
+                            .filter((game) => game.game === "인디게임")
+                            .sort((a, b) => new Date(b.regdate) - new Date(a.regdate))
+                            .slice(offset, limit)
+                            .map(({ id, mainImg, information, title, developer, regdate, contentType }) => (
+                                <SwiperSlide key={id}>
+                                    <Link to={`/Game/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
+                                        <SlideAllBox>
+                                            <SlideBox>
+                                                <SlideImgBox>
+                                                    <ImgBox src={mainImg} />
+                                                </SlideImgBox>
+                                            </SlideBox>
 
                                             <AllBox>
                                                 <InformaionBoxTextBox>
