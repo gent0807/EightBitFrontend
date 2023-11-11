@@ -874,7 +874,7 @@ export default Game;
 const DefaultBackground = styled.div
     `
     width: 100%;
-    height: 40vw;
+    height: 50vw;
 `
 
 const Editer = styled(ReactQuill)
@@ -1408,7 +1408,7 @@ const GameText = styled(GameTitleText)
 const GameViewAllBox = styled.div
     `
     max-width: 1280px;
-    margin: -30vw auto 0 auto;
+    margin: -38vw auto 0 auto;
     position: relative;
     z-index: 2;
     padding: 20px 20px 300px 20px;
@@ -1422,7 +1422,7 @@ const GameViewBackground = styled.div
 const GameViewBackgroundImg = styled.img
     `
     width: 100%;
-    height: 40vw;
+    height: 100%;
 `
 
 const BackgroundEffect = styled.div
@@ -1432,7 +1432,7 @@ const BackgroundEffect = styled.div
     bottom: 0;
     left: 0;
     right: 0;
-    height: 40vw;
+    height: 56vw;
     background-image: linear-gradient(to top, rgba(25,25,25,1), transparent);
 }
 `
