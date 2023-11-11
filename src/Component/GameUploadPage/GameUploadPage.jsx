@@ -30,6 +30,7 @@ const GameUploadPage = () => {
     const [TitleChangeValue, setTitleChangeValue] = useState("");
     const [URLChangeValue, setURLChangeValue] = useState("");
     const [GenreChangeValue, setGenreChangeValue] = useState("");
+    const [Contact, setContact] = useState("");
     const [ExplanationValue, setExplanationValue] = useState('<p><br></p>');
     const [WordCountValue, setWordCountValue] = useState(0);
     const [MainImgURL, setMainImgURL] = useState("");
@@ -113,6 +114,11 @@ const GameUploadPage = () => {
     const GenreChange = (e) => {
         const currentGenre = e.target.value;
         setGenreChangeValue(currentGenre);
+    }
+
+    const ContactChange = (e) => {
+        const currentContact = e.target.value;
+        setContact(currentContact);
     }
 
     const URLChange = (e) => {
@@ -991,6 +997,14 @@ const GameUploadPage = () => {
                     <WriterInput placeholder='장르를 입력해 주세요!' maxLength={50} onChange={GenreChange} value={GenreChangeValue} />
                 </GenreBox>
 
+                <ContactBox>
+                    <TagTextBox>
+                        <TagText>개발자 연락처</TagText>
+                        <SubText>이메일, 전화번호 혹은 홈페이지 주소 등</SubText>
+                    </TagTextBox>
+                    <WriterInput placeholder='비워둘 시 미등록으로 게재 됩니다.' maxLength={50} onChange={ContactChange} value={Contact} />
+                </ContactBox>
+
                 <MainImgBox>
 
                     <TagTextBox>
@@ -1321,6 +1335,11 @@ const TitleBox = styled.div
 `
 
 const GenreBox = styled(TitleBox)
+    `
+
+`
+
+const ContactBox = styled(TitleBox)
     `
 
 `
