@@ -609,7 +609,7 @@ const GameInformationView = () => {
                         <GameText> {type} 게임</GameText>
                         <GameTitleText>{title}</GameTitleText>
                     </GameTitleTextBox>
-                    <Link
+                    {/* <Link
                     to={`/GameUpdatePage/${contentType}`} state={{ developer: developer, regdate: regdate, title: title, content: content, genre: genre, URL: URL, PCGame: PCGame, mobileGame: mobileGame, mainImg: mainImg, banner: banner}}
                     style={{
                         display: loginMaintain == null ? "none" : loginMaintain == "true" ?
@@ -624,7 +624,7 @@ const GameInformationView = () => {
                         cursor: "pointer",
                         }}>
                     수정
-                    </Link>
+                    </Link> */}
                     <Delete
                         LoginMaintain={loginMaintain}
                         User={user.login_state}
