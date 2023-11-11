@@ -191,13 +191,8 @@ const AllGamePage = () => {
         setFirstReset(false);
     }
 
-    
-
-
-    
-
     const ScrollTop = () => {
-        window.scrollTo({ top: 835, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     return (
@@ -380,6 +375,7 @@ const SearchAllBox = styled.div
     `
     display: flex;
     margin: 0px 0px 0px 0px;
+    align-items: center;
 
     @media (min-width:250px) and (max-width:607px)
     {
@@ -406,7 +402,8 @@ const BoardContentNumber = styled.div
 const BoardContentAllBox = styled.div
     `
     display: ${ props => props.View === 0 ? "none" : "grid"};
-    grid-template-columns: repeat(auto-fill,minmax(380px,1fr));
+    grid-template-columns: repeat(auto-fill,386px);
+    justify-content: center;
     grid-gap: 30px;
 `
 
@@ -466,7 +463,7 @@ const FillterSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 72px;
     }
 `
 
@@ -476,7 +473,7 @@ const SearchFillSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 52px;
+        height: 48px;
     }
 `
 
@@ -486,7 +483,7 @@ const LimitSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 78px;
+        height: 72px;
     }
 `
 
@@ -499,7 +496,7 @@ const FitterSelectBox = styled.ul
     border: solid 2px ${props => props.theme.borderColor};
     background: #dee2e6;
     width: 100px;
-    height: 78px;
+    height: 72px;
     padding: 0px;
     overflow: hidden;
     text-align: center;
@@ -510,13 +507,13 @@ const FitterSelectBox = styled.ul
 const SearchFillSelectBox = styled(FitterSelectBox)
     `
     width: 83px;
-    height: 52px;
+    height: 48px;
     animation: ${SearchFillSlideDown} 0.5s;
 `
 
 const LimmitSelectBox = styled(FitterSelectBox)
     `
-    height: 78px;
+    height: 72px;
     animation: ${LimitSlideDown} 0.5s;
 `
 
@@ -560,16 +557,17 @@ const LimitSelectList = styled(FitterSelectList)
 const FreeBoardSearchInputBox = styled(SearchInputBox)
     `
     display: flex;
-    border: solid 2px ${(props) => props.theme.borderColor};
+    border: none;
     height: 39px;
-    width: 248px;
+    width: 227px;
 `
 
 const FreeBoardSearchInput = styled(SearchInput)
     `
     display: block;
     margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 11px;
+    padding: 0px 8px 0px 12px;
+    font-size: 18px;
     height: 39px;
 `
 
@@ -583,7 +581,7 @@ const FreeBoardSearchIconBox = styled(SearchInputIconBox)
 const FreeBoardSearchBtn = styled(SearchButton)
     `
     display: block;
-    color: black;
+    color: ${props => props.theme.textColor};
     padding: 5px 8px 0px 0px;
 `
 

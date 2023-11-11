@@ -144,7 +144,7 @@ const CompleteModalBox = styled.div
     display: block;
     width: 560px;
     height: 240px;
-    background: ${props => props.theme.backgroundColor};
+    background: white;
     border-radius: 10px;
 `
 
@@ -159,6 +159,7 @@ const CompleteText = styled.span
     `
     font-size: 37px;
     font-weight: bold;
+    color: black;
 `
 
 const DeleteTextBox = styled(CompleteTextBox)
@@ -168,7 +169,6 @@ const DeleteTextBox = styled(CompleteTextBox)
 
 const DeleteText = styled(CompleteText)
     `
-    color: black;
 
 `
 

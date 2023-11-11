@@ -251,9 +251,9 @@ const CenterPage = () => {
                         .filter((game) => game.game === "인디게임")
                         .sort((a, b) => new Date(b.regdate) - new Date(a.regdate))
                         .slice(offset, limit)
-                        .map(({ id, mainImg, information, title }) => (
+                        .map(({ id, mainImg, information, title, developer, regdate }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
+                                <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={mainImg} />

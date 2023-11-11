@@ -16,6 +16,8 @@ import OfficialGame from "./Component/OfficialGame/OfficialGameContainer";
 import AllGamePage from "./Component/AllGame/AllGamePageContainer";
 import GameInformationView from "./Component/GameInformationView/GameInformationViewContainer";
 import GameUploadPage from "./Component/GameUploadPage/GameUploadPageContainer";
+import CpGdShopView from "./Component/CpGdShopView/CpGdShopViewContainer";
+import CpGdShop from "./Component/CpGdShop/CpGdShopPageContainer";
 
 const Router = () => {
 
@@ -28,10 +30,12 @@ const Router = () => {
                     <Route path="/" element={<Center />} />
                     <Route path="/Article/:writer/:regdate/:contentType" element={<Article />} />
                     <Route path="/GameInformationView/:developer/:regdate/:contentType" element={<GameInformationView />} />
+                    <Route path="/CpGdShopView/:id" element={<CpGdShopView />} />
                     <Route path="/GameUploadPage/:contentType" element={<GameUploadPage />} />
                 </Route>
                     <Route path="/OfficialGame" element={<OfficialGame />} />
                     <Route path="/AllGamePage/:contentType" element={<AllGamePage />} />
+                    <Route path="/CpGdShop/:View" element={<CpGdShop />} />
                     <Route path="/WriteBoard/:contentType" element={<WriteBoard />} />
                     <Route path="/UpdateBoard/:contentType" element={<UpdateBoard />} />
                     <Route path="/Login" element={<Login />} />

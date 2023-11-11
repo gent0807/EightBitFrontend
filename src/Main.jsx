@@ -29,7 +29,7 @@ const darkTheme =
 {
   CenterBorderColor: "#007aff",
   CenterTextColor: "#007aff",
-  backgroundColor: "rgba(25,25,25,1)",
+  backgroundColor: "#1e1e1e",
   textColor: "white",
   successColor: "#6a9dda",
   errorColor: "orange",

@@ -183,7 +183,7 @@ const DeleteTextBox = styled(CompleteTextBox)
 
 const DeleteText = styled(CompleteText)
     `
-    color: ${props => props.theme.textColor};
+    color: black;
 `
 
 
@@ -197,8 +197,9 @@ const ReportModalAllBox = styled.div
     display: ${props => props.ModalChange ? "block" : "none"};
     width: 560px;
     height: 240px;
-    background: ${props => props.theme.backgroundColor};
+    background: white;
     border-radius: 10px;
+    color: black;
 `
 
 const DeleteModalBackground = styled.div

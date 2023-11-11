@@ -8,15 +8,12 @@ import Darkmode from "../../Recoil/Darkmode/DarkmodeChangeBtn";
 import { AiOutlineShopping } from "react-icons/ai";
 import { clearLoginState } from "../../Redux/User";
 import { Outlet } from "react-router-dom"
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper.scss";
+import "swiper/components/navigation/navigation.scss";
+import "swiper/components/pagination/pagination.scss";
+import SwiperCore, { FreeMode, Navigation, Pagination, EffectCoverflow } from "swiper";
 import LogoLight from "../../Item/img/LOGO/8bitLight.png";
-
-import Korean from "../../Item/img/Lang/korea.png";
-import Japan from "../../Item/img/Lang/japan.png";
-import Germany from "../../Item/img/Lang/germany.png";
-import China from "../../Item/img/Lang/china.png";
-import Spain from "../../Item/img/Lang/spain.png";
-import UK from "../../Item/img/Lang/uk.png";
 
 import User from "../../Item/img/MySlide/user.png";
 import Bell from "../../Item/img/MySlide/bell.png";
@@ -36,6 +33,9 @@ import Digital from "../../Item/img/BoardSlide/digital.png";
 import axios from 'axios';
 import Store from "../../Redux/Store";
 import { contextType } from "react-quill";
+
+SwiperCore.use([Navigation, Pagination, EffectCoverflow]);
+
 
 const HeaderBox = () => {
     const [Search, setSearch] = useState("");
@@ -61,8 +61,7 @@ const HeaderBox = () => {
     const [BackgroundLine, setBackgroundLine] = useState(false)
     const [modalOnOffBtn, setModalOnOffBtn] = useState(false);
     const [searchmodalOnOffBtn, setSearchModalOnOffBtn] = useState(false);
-
-
+    const [swiper, setSwiper] = useState(null);
 
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
@@ -72,14 +71,14 @@ const HeaderBox = () => {
     const loginMaintain = localStorage.getItem("loginMaintain");
     const ip = localStorage.getItem("ip");
 
+    let BtnLeaveRef = useRef("");
 
-    let fastMenuTopZIndex = useRef(false);
-    let profileMenuTopZIndex = useRef(false);
-    let writeMemuTopZIndex = useRef(false);
-    let ProfileRef = useRef(null);
-    let FastRef = useRef(null);
-    let WriteRef = useRef(null);
-    let BtnLeaveRef = useRef(null);
+    const swiperParams =
+    {
+        onSwiper: setSwiper,
+        spaceBetween: 4,
+        slidesPerView: "auto",
+    }
 
     const [WindowLength, setWindowLength] = useState(window.innerWidth);
 
@@ -116,73 +115,6 @@ const HeaderBox = () => {
             document.removeEventListener("mouseover", handleOuside);
         };
     }, [BtnLeaveRef]);
-
-    useEffect(() => {
-        function handleOuside(e) {
-            if (FastRef.current && !FastRef.current.contains(e.target)) {
-                setFastClickCheck(false);
-                setIsFastMenuShow(false);
-            }
-        };
-
-        if (WindowLength <= 1342) {
-            setFastClickCheck(false);
-            setIsFastMenuShow(false);
-        }
-
-        if (!FastMenuShow) {
-            document.addEventListener("click", handleOuside);
-        }
-        return () => {
-            document.removeEventListener("click", handleOuside);
-        };
-    }, [FastRef, WindowLength]);
-
-    useEffect(() => {
-        function handleOuside(e) {
-            if (ProfileRef.current && !ProfileRef.current.contains(e.target)) {
-                setProfileMenuShow(false);
-                setProfileClickCheck(false);
-            }
-        };
-
-        if (WindowLength <= 1342) {
-            setProfileMenuShow(false);
-            setProfileClickCheck(false);
-        }
-
-        if (!ProfileMenuShow) {
-            document.addEventListener("click", handleOuside);
-        }
-        return () => {
-            document.removeEventListener("click", handleOuside);
-        };
-    }, [ProfileRef, WindowLength]);
-
-    useEffect(() => {
-        function handleOuside(e) {
-            if (WriteRef.current && !WriteRef.current.contains(e.target)) {
-                setIsWriteMenuShow(false);
-                setIsWriteMenuClickCheck(false);
-                setWriteClickCheck(false);
-            }
-        };
-
-        if (WindowLength <= 1342) {
-            setIsWriteMenuShow(false);
-            setIsWriteMenuClickCheck(false);
-            setWriteClickCheck(false);
-        }
-
-        if (!WriteMenuShow) {
-            document.addEventListener("click", handleOuside);
-        }
-        return () => {
-            document.removeEventListener("click", handleOuside);
-        };
-    }, [WriteRef, WindowLength]);
-
-
 
     const OnSearch = (e) => {
         const currentSearch = e.target.value;
@@ -247,48 +179,6 @@ const HeaderBox = () => {
         setBackgroundLine(true);
     }
 
-    const FastMenuCheck = () => {
-        fastMenuTopZIndex.current = true;
-        profileMenuTopZIndex.current = false;
-        writeMemuTopZIndex.current = false;
-        setIsFastMenuShow(!FastMenuShow);
-        setFastClickCheck(!FastClickCheck);
-        setIsDefaultFastScene(true);
-        setProfileMenuShow(false);
-        setProfileClickCheck(false);
-        setWriteClickCheck(false);
-        setIsWriteMenuShow(false);
-        setIsWriteMenuClickCheck(false);
-    }
-
-    const ProfileMenuCheck = () => {
-        fastMenuTopZIndex.current = false;
-        profileMenuTopZIndex.current = true;
-        writeMemuTopZIndex.current = false;
-        setIsProfileLogoutCheck(false);
-        setProfileMenuShow(!ProfileMenuShow);
-        setProfileClickCheck(!ProfileClickCheck);
-        setIsDefaultProfileScene(true);
-        setIsFastMenuShow(false);
-        setFastClickCheck(false);
-        setWriteClickCheck(false);
-        setIsWriteMenuShow(false);
-        setIsWriteMenuClickCheck(false);
-    }
-
-    const WriteMenuCheck = () => {
-        fastMenuTopZIndex.current = false;
-        profileMenuTopZIndex.current = false;
-        writeMemuTopZIndex.current = true;
-        setIsWriteMenuShow(!WriteMenuShow);
-        setIsWriteMenuClickCheck(!WriteMenuClickCheck);
-        setWriteClickCheck(!WriteClickCheck);
-        setDefaultWriteScene(true);
-        setProfileMenuShow(false);
-        setProfileClickCheck(false);
-        setIsFastMenuShow(false);
-        setFastClickCheck(false);
-    }
 
     const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -300,12 +190,9 @@ const HeaderBox = () => {
         window.addEventListener('scroll', updateScroll);
     });
 
-    useEffect(() => {
-        if (WindowLength >= 1342) {
-            setModalOnOffBtn(false);
-            setSearchModalOnOffBtn(false);
-        }
-    }, [WindowLength])
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
     return (
         <>
@@ -315,150 +202,557 @@ const HeaderBox = () => {
                     <BackgroudTopNav TopBack={scrollPosition}>
 
                         <ModalFast OnOff={modalOnOffBtn}>
-                            <ModalFastMenuBox>
-                                <ModalAllOffBtn>
-                                    <ModalAllOffBtnText
-                                        onClick={() => setModalOnOffBtn(false)}
-                                    >
-                                        x
-                                </ModalAllOffBtnText>
-                                </ModalAllOffBtn>
-                                <ModalUserMenu>
-                                    {loginMaintain == null ?
-                                        [<LineBox
-                                            onClick={() => [
-                                                ScrollTop(),
-                                                setModalOnOffBtn(false),
-                                                setSearchModalOnOffBtn(false)
-                                            ]}
-                                            left={"20px"}
-                                            top={"7px"}
-                                            size={"15px"}
-                                            padding={"10px 0px 10px 0px"}
-                                        >
-                                            <Link to='/Login'>로그인</Link>
-                                        </LineBox>,
-                                        <MenuBox
-                                            onClick={() => [
-                                                ScrollTop(),
-                                                setModalOnOffBtn(false),
-                                                setSearchModalOnOffBtn(false)
-                                            ]}
-                                            left={"9px"}
-                                            top={"7px"}
-                                            size={"15px"}
-                                            padding={"10px 0px 10px 0px"}
-                                        >
-                                            <Link to='/SelectSign'>회원가입</Link>
-                                        </MenuBox>] :
 
-                                        loginMaintain == "true" ?
-                                            (userInfo == null ?
-                                                [<LineBox
-                                                    onClick={() => [
-                                                        ScrollTop(),
-                                                        setModalOnOffBtn(false),
-                                                        setSearchModalOnOffBtn(false)
-                                                    ]}
-                                                    left={"20px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
-                                                >
-                                                    <Link to='/Login'>로그인</Link>
-                                                </LineBox>,
+                            <ModalFastMenuBox OnOff={modalOnOffBtn}>
 
-                                                <MenuBox
-                                                    onClick={() => [
-                                                        ScrollTop(),
-                                                        setModalOnOffBtn(false),
-                                                        setSearchModalOnOffBtn(false)
-                                                    ]}
-                                                    left={"9px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
-                                                >
-                                                    <Link to='/SelectSign'>회원가입</Link>
-                                                </MenuBox>] :
+                                {loginMaintain == null ?
 
-                                                userInfo.loginState === "allok" ?
-                                                    [<Profile
-                                                        click={ProfileClickCheck}
-                                                        ref={ProfileRef}
-                                                        onClick={() => ProfileMenuCheck()}
+                                    <>
+                                        <ModalAllOffBtn>
+                                            <ModalAllOffBtnText
+                                                onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                            >
+                                                x
+                                        </ModalAllOffBtnText>
+                                        </ModalAllOffBtn>
+
+                                        <LoginCheckBox>
+                                            <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                        </LoginCheckBox>
+                                    </> :
+
+                                    // 로그인유지 상태
+                                    loginMaintain == "true" ?
+                                        userInfo == null ?
+
+                                            <>
+                                                <ModalAllOffBtn>
+                                                    <ModalAllOffBtnText
+                                                        onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
                                                     >
-                                                        <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
-                                                    </Profile>,
-                                                    ] :
+                                                        x
+                                                    </ModalAllOffBtnText>
+                                                </ModalAllOffBtn>
 
-                                                    [<LineBox
-                                                        onClick={() => [
-                                                            ScrollTop(),
-                                                            setModalOnOffBtn(false),
-                                                            setSearchModalOnOffBtn(false)
-                                                        ]}
-                                                        left={"20px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
+                                                <LoginCheckBox>
+                                                    <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                                </LoginCheckBox>
+                                            </> :
+
+                                            userInfo.loginState === "allok" ?
+
+                                                <>
+
+                                                    <ModalProfileImgBox>
+
+                                                        <ModalAllOffBtn>
+                                                            <ModalAllOffBtnText
+                                                                onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                                            >
+                                                                x
+                                                            </ModalAllOffBtnText>
+                                                        </ModalAllOffBtn>
+
+                                                        <ProfileAllBox>
+
+                                                            <Profile>
+                                                                <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
+                                                            </Profile>
+
+                                                            <ModalNickNameBox>
+                                                                <ModalNickNameText>
+                                                                    <ModalNickNamePointText>
+                                                                        {userInfo.nickName}
+                                                                    </ModalNickNamePointText>
+                                                                        님, 환영합니다!
+                                                                </ModalNickNameText>
+                                                            </ModalNickNameBox>
+
+                                                            <MyPageShopBox>
+                                                                <MyPageBtnBox>
+                                                                    <Link to={"/"} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <MyPageBtnText>마이페이지</MyPageBtnText>
+                                                                    </Link>
+                                                                </MyPageBtnBox>
+
+                                                                <ShopBtnBox>
+                                                                    <Link to={"/"} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <ShopBtnText>장바구니</ShopBtnText>
+                                                                    </Link>
+                                                                </ShopBtnBox>
+                                                            </MyPageShopBox>
+
+                                                        </ProfileAllBox>
+
+                                                    </ModalProfileImgBox>
+
+                                                    <ContentBoxAllBox>
+
+                                                        <ContentBox>
+
+                                                            <ServiceBox>
+
+                                                                <ServiceText>
+                                                                    ■ 8bit 서비스
+                                                                    </ServiceText>
+
+                                                                <GameServiceSubBox>
+
+                                                                    <GameDotText role={userInfo.role}>-</GameDotText>
+
+                                                                    {loginMaintain == null ?
+                                                                        <GameSubText>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                        loginMaintain == "true" ?
+
+                                                                            userInfo == null ?
+
+                                                                                <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                                userInfo.loginState === "allok" ?
+
+                                                                                    userInfo.role === "DEVELOPER" ?
+
+                                                                                        <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                            <GameSubText role={userInfo.role}>게임 업로드</GameSubText>
+                                                                                            <Underline />
+                                                                                        </Link> :
+
+                                                                                        <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                                    <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                            user.login_state === "allok" ?
+
+                                                                                user.role === "DEVELOPER" ?
+
+                                                                                    <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                        <GameSubText role={user.role}>게임 업로드</GameSubText>
+                                                                                        <Underline />
+                                                                                    </Link> :
+
+                                                                                    <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                                <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
+
+                                                                    }
+
+                                                                </GameServiceSubBox>
+
+                                                                <ShopServiceSubBox>
+                                                                    <ShopDotText role={userInfo.role}>-</ShopDotText>
+
+                                                                    {loginMaintain == null ?
+
+                                                                        <ShopSubText>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                        loginMaintain == "true" ?
+
+                                                                            userInfo == null ?
+
+                                                                                <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                                userInfo.loginState === "allok" ?
+
+                                                                                    userInfo.role === "SELLER" ?
+
+                                                                                        <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                            <ShopSubText role={userInfo.role}>굿즈 판매</ShopSubText>
+                                                                                            <Underline />
+                                                                                        </Link> :
+
+                                                                                        <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                                    <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                            user.login_state === "allok" ?
+
+                                                                                user.role === "SELLER" ?
+
+                                                                                    <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                        <ShopSubText role={user.role}>굿즈 판매</ShopSubText>
+                                                                                        <Underline />
+                                                                                    </Link> :
+
+                                                                                    <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                                <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText>
+                                                                    }
+
+                                                                </ShopServiceSubBox>
+
+                                                            </ServiceBox>
+
+                                                            <GameDownloadBox>
+
+                                                                <GameDownloadText>
+                                                                    ■ 게임 다운로드
+                                                                </GameDownloadText>
+
+                                                                <GameDownloadAllBox>
+
+                                                                    <OfficialGameBox1>
+                                                                        <OfficialDot>-</OfficialDot>
+                                                                        <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <GameText>방치 모험가</GameText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </OfficialGameBox1>
+
+                                                                    <OfficialGameBox2>
+                                                                        <OfficialDot>-</OfficialDot>
+                                                                        <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <GameText>로드 오브 토파즈</GameText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </OfficialGameBox2>
+
+                                                                    <OfficialGameBox3>
+                                                                        <OfficialDot>-</OfficialDot>
+                                                                        <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <GameText>럭키 웨폰</GameText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </OfficialGameBox3>
+
+                                                                    <OthersGameBox>
+                                                                        <OfficialDot>-</OfficialDot>
+                                                                        <Link to='/AllGamePage/indie' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <GameText>그 외 인디 게임</GameText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </OthersGameBox>
+
+                                                                </GameDownloadAllBox>
+
+                                                            </GameDownloadBox>
+
+                                                            <WriteBoardBox>
+
+                                                                <WriteBoardText>
+                                                                    ■ 글쓰기
+                                                                </WriteBoardText>
+
+                                                                <WriteBoardAllBox>
+
+                                                                    <StrategyBoardBox>
+                                                                        <WriteBoardDotText>-</WriteBoardDotText>
+                                                                        <Link to='/Board/strategy' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <BoardText>공략 게시판</BoardText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </StrategyBoardBox>
+
+                                                                    <QuestionBoardBox>
+                                                                        <WriteBoardDotText>-</WriteBoardDotText>
+                                                                        <Link to='/Board/question' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <BoardText>질문 게시판</BoardText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </QuestionBoardBox>
+
+                                                                    <FreeBoardBox>
+                                                                        <WriteBoardDotText>-</WriteBoardDotText>
+                                                                        <Link to='/Board/free' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                            <BoardText>자유 게시판</BoardText>
+                                                                            <Underline />
+                                                                        </Link>
+                                                                    </FreeBoardBox>
+
+                                                                </WriteBoardAllBox>
+
+                                                            </WriteBoardBox>
+
+                                                        </ContentBox>
+
+                                                    </ContentBoxAllBox>
+
+                                                </> :
+
+                                                <>
+                                                    <ModalAllOffBtn>
+                                                        <ModalAllOffBtnText
+                                                            onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                                        >
+                                                            x
+                                                        </ModalAllOffBtnText>
+                                                    </ModalAllOffBtn>
+
+                                                    <LoginCheckBox>
+                                                        <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                                    </LoginCheckBox>
+                                                </> :
+
+                                        // 로그인유지 안한 상태
+                                        user.login_state === "allok" ?
+
+                                            <>
+
+                                                <ModalProfileImgBox>
+
+                                                    <ModalAllOffBtn>
+                                                        <ModalAllOffBtnText
+                                                            onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                                        >
+                                                            x
+                                                        </ModalAllOffBtnText>
+                                                    </ModalAllOffBtn>
+
+                                                    <ProfileAllBox>
+
+                                                        <Profile>
+                                                            <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
+                                                        </Profile>
+
+                                                        <ModalNickNameBox>
+                                                            <ModalNickNameText>
+                                                                <ModalNickNamePointText>
+                                                                    {user.nickname}
+                                                                </ModalNickNamePointText>
+                                                                    님, 환영합니다!
+                                                            </ModalNickNameText>
+                                                        </ModalNickNameBox>
+
+                                                        <MyPageShopBox>
+
+                                                            <MyPageBtnBox>
+                                                                <Link to={"/"} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                    <MyPageBtnText>마이페이지</MyPageBtnText>
+                                                                </Link>
+                                                            </MyPageBtnBox>
+
+                                                            <ShopBtnBox>
+                                                                <Link to={"/"} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                    <ShopBtnText>장바구니</ShopBtnText>
+                                                                </Link>
+                                                            </ShopBtnBox>
+
+                                                        </MyPageShopBox>
+
+                                                    </ProfileAllBox>
+
+                                                </ModalProfileImgBox>
+
+                                                <ContentBoxAllBox>
+                                                    <ContentBox>
+                                                        <ServiceBox>
+
+                                                            <ServiceText>
+                                                                ■ 8bit 서비스
+                                                            </ServiceText>
+
+                                                            <GameServiceSubBox>
+                                                                <GameDotText role={user.role}>-</GameDotText>
+
+                                                                {loginMaintain == null ?
+
+                                                                    <GameSubText>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                    loginMaintain == "true" ?
+
+                                                                        userInfo == null ?
+
+                                                                            <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                            userInfo.loginState === "allok" ?
+
+                                                                                userInfo.role === "DEVELOPER" ?
+
+                                                                                    <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                        <GameSubText role={userInfo.role}>게임 업로드</GameSubText>
+                                                                                        <Underline />
+                                                                                    </Link> :
+
+                                                                                    <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                                <GameSubText role={userInfo.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                        user.login_state === "allok" ?
+
+                                                                            user.role === "DEVELOPER" ?
+
+                                                                                <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                    <GameSubText role={user.role}>게임 업로드</GameSubText>
+                                                                                    <Underline />
+                                                                                </Link> :
+
+                                                                                <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText> :
+
+                                                                            <GameSubText role={user.role}>게임 업로드 (개발자 인증우 후 사용 가능)</GameSubText>
+                                                                }
+
+                                                            </GameServiceSubBox>
+
+                                                            <ShopServiceSubBox>
+
+                                                                <ShopDotText role={user.role}>-</ShopDotText>
+
+                                                                {loginMaintain == null ?
+
+                                                                    <ShopSubText>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                    loginMaintain == "true" ?
+
+                                                                        userInfo == null ?
+
+                                                                            <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                            userInfo.loginState === "allok" ?
+
+                                                                                userInfo.role === "SELLER" ?
+
+                                                                                    <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                        <ShopSubText role={userInfo.role}>굿즈 판매</ShopSubText>
+                                                                                        <Underline />
+                                                                                    </Link> :
+
+                                                                                    <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                                <ShopSubText role={userInfo.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                        user.login_state === "allok" ?
+
+                                                                            user.role === "SELLER" ?
+
+                                                                                <Link to="/GameUploadPage/indie" onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                                    <ShopSubText role={user.role}>굿즈 판매</ShopSubText>
+                                                                                    <Underline />
+                                                                                </Link> :
+
+                                                                                <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText> :
+
+                                                                            <ShopSubText role={user.role}>굿즈 판매 (판매자 인증우 후 사용 가능)</ShopSubText>
+                                                                }
+
+                                                            </ShopServiceSubBox>
+
+                                                        </ServiceBox>
+
+                                                        <GameDownloadBox>
+
+                                                            <GameDownloadText>
+                                                                ■ 게임 다운로드
+                                                                </GameDownloadText>
+
+                                                            <GameDownloadAllBox>
+                                                                <OfficialGameBox1>
+                                                                    <OfficialDot>-</OfficialDot>
+                                                                    <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <GameText>방치 모험가</GameText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </OfficialGameBox1>
+
+                                                                <OfficialGameBox2>
+                                                                    <OfficialDot>-</OfficialDot>
+                                                                    <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <GameText>로드 오브 토파즈</GameText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </OfficialGameBox2>
+
+                                                                <OfficialGameBox3>
+                                                                    <OfficialDot>-</OfficialDot>
+                                                                    <Link /*to={`/GameInformationView/${developer}/${regdate}/${contentType}`}*/ onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <GameText>럭키 웨폰</GameText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </OfficialGameBox3>
+
+                                                                <OthersGameBox>
+                                                                    <OfficialDot>-</OfficialDot>
+                                                                    <Link to='/AllGamePage/indie' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <GameText>그 외 인디 게임</GameText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </OthersGameBox>
+                                                            </GameDownloadAllBox>
+
+                                                        </GameDownloadBox>
+
+                                                        <WriteBoardBox>
+
+                                                            <WriteBoardText>
+                                                                ■ 글쓰기
+                                                            </WriteBoardText>
+
+                                                            <WriteBoardAllBox>
+
+                                                                <StrategyBoardBox>
+                                                                    <WriteBoardDotText>-</WriteBoardDotText>
+                                                                    <Link to='/Board/strategy' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <BoardText>공략 게시판</BoardText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </StrategyBoardBox>
+
+                                                                <QuestionBoardBox>
+                                                                    <WriteBoardDotText>-</WriteBoardDotText>
+                                                                    <Link to='/Board/question' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <BoardText>질문 게시판</BoardText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </QuestionBoardBox>
+
+                                                                <FreeBoardBox>
+                                                                    <WriteBoardDotText>-</WriteBoardDotText>
+                                                                    <Link to='/Board/free' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <BoardText>자유 게시판</BoardText>
+                                                                        <Underline />
+                                                                    </Link>
+                                                                </FreeBoardBox>
+
+                                                            </WriteBoardAllBox>
+
+                                                        </WriteBoardBox>
+
+                                                    </ContentBox>
+
+                                                </ContentBoxAllBox>
+                                            </> :
+
+                                            <>
+                                                <ModalAllOffBtn>
+                                                    <ModalAllOffBtnText
+                                                        onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
                                                     >
-                                                        <Link to='/Login'>로그인</Link>
-                                                    </LineBox>,
+                                                        x
+                                                    </ModalAllOffBtnText>
+                                                </ModalAllOffBtn>
 
-                                                    <MenuBox
-                                                        onClick={() => [
-                                                            ScrollTop(),
-                                                            setModalOnOffBtn(false),
-                                                            setSearchModalOnOffBtn(false)
-                                                        ]}
-                                                        left={"9px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/SelectSign'>회원가입</Link>
-                                                    </MenuBox>]) :
+                                                <LoginCheckBox>
+                                                    <Link to='/Login' onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>로그인</Link> 후 이용해주세요.
+                                                </LoginCheckBox>
+                                            </>
+                                }
 
-                                            (user.login_state === "allok" ?
-                                                [<Profile
-                                                    click={ProfileClickCheck}
-                                                    ref={ProfileRef}
-                                                    onClick={() => ProfileMenuCheck()}
-                                                >
-                                                    <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
-                                                </Profile>,
-                                                ] :
+                                {loginMaintain == null ?
+                                    <></> :
+                                    loginMaintain == "true" ?
+                                        userInfo == null ?
+                                            <></> :
+                                            userInfo.loginState === "allok" ?
+                                                <LogoutBtnBox>
+                                                    <LogoutBtn onClick={() => LogoutFunc()}>
+                                                        <LogoutBtnText>로그아웃</LogoutBtnText>
+                                                    </LogoutBtn>
+                                                </LogoutBtnBox> :
 
-                                                [<LineBox
-                                                    onClick={() => [
-                                                        ScrollTop(),
-                                                        setModalOnOffBtn(false),
-                                                        setSearchModalOnOffBtn(false)
-                                                    ]}
-                                                    left={"20px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
-                                                >
-                                                    <Link to='/Login'>로그인</Link>
-                                                </LineBox>,
+                                                <></> :
 
-                                                <MenuBox
-                                                    onClick={() => [
-                                                        ScrollTop(),
-                                                        setModalOnOffBtn(false),
-                                                        setSearchModalOnOffBtn(false)
-                                                    ]}
-                                                    left={"9px"}
-                                                    top={"7px"}
-                                                    size={"15px"}
-                                                    padding={"10px 0px 10px 0px"}
-                                                >
-                                                    <Link to='/SelectSign'>회원가입</Link>
-                                                </MenuBox>])}
-                                </ModalUserMenu>
+                                        user.login_state === "allok" ?
+
+                                            <LogoutBtnBox>
+                                                <LogoutBtn onClick={() => LogoutFunc()}>
+                                                    <LogoutBtnText>로그아웃</LogoutBtnText>
+                                                </LogoutBtn>
+                                            </LogoutBtnBox> :
+
+                                            <></>
+                                }
+
                             </ModalFastMenuBox>
+
                         </ModalFast>
 
                         <SearchModal OnOff={searchmodalOnOffBtn}>
@@ -467,367 +761,76 @@ const HeaderBox = () => {
 
                         <Topnav>
 
-                            <NavBox>
+                            <NavBox TopBack={scrollPosition}>
                                 <NavMenuAllBox>
                                     <LogoBox>
                                         <Link to='/'><Logo src={LogoLight} alt='로고' /></Link>
                                     </LogoBox>
+
                                     <NavUl>
                                         <GameLi onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
                                         <ShopLi onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
                                         <ComunityLi onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
                                         <SupportLi onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
                                     </NavUl>
+
                                 </NavMenuAllBox>
 
-                                <ModatAllBox>
+                                <SlideNav {...swiperParams} ref={setSwiper}>
+                                    <SwiperSlide>
+                                        <GameLi as={"div"} onClick={() => ScrollTop()} active={isGameIconCheck}><Link to='/' onMouseOver={GameliHover}>게임</Link></GameLi>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <ShopLi as={"div"} onClick={() => ScrollTop()} active={isShopIconCheck}><Link to='/' onMouseOver={ShopliHover}>쇼핑</Link></ShopLi>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <ComunityLi as={"div"} onClick={() => ScrollTop()} active={isComunityIconCheck}><Link to='/' onMouseOver={ComunityliHover}>커뮤니티</Link></ComunityLi>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <SupportLi as={"div"} onClick={() => ScrollTop()} active={isSupprotIconCheck}><Link to='/' onMouseOver={SupportliHover}>서포트</Link></SupportLi>
+                                    </SwiperSlide>
+                                </SlideNav>
+
+                            </NavBox>
+
+
+
+                            <AllButtonBox>
+
+
+                                <ButtonBox>
+
+                                    <SearchInputBox>
+                                        <SearchInput TopBack={scrollPosition} placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
+                                        <SearchInputIconBox TopBack={scrollPosition}>
+                                            <SearchButton><HiOutlineSearch /></SearchButton>
+                                        </SearchInputIconBox>
+                                    </SearchInputBox>
+
                                     <SearchModalMenu
                                         onClick={() => setSearchModalOnOffBtn(!searchmodalOnOffBtn)}
                                     >
                                         <ModalSearchMenuIcon><HiOutlineSearch /></ModalSearchMenuIcon>
                                     </SearchModalMenu>
+
+
+                                    <ShoppingBox
+                                        onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
+                                    >
+                                        <ShoppingMenuIcon><AiOutlineShopping /></ShoppingMenuIcon>
+                                    </ShoppingBox>
+
                                     <ModalFastMenu
                                         onClick={() => setModalOnOffBtn(!modalOnOffBtn)}
                                     >
                                         <ModalFastMenuIcon><CgMenuGridR /></ModalFastMenuIcon>
                                     </ModalFastMenu>
-                                </ModatAllBox>
-                            </NavBox>
-
-                            <AllButtonBox>
-                                <SearchInputBox>
-                                    <SearchInput placeholder="게임 검색하기" value={Search} onChange={OnSearch} />
-                                    <SearchInputIconBox>
-                                        <SearchButton><HiOutlineSearch /></SearchButton>
-                                    </SearchInputIconBox>
-                                </SearchInputBox>
-
-                                <ButtonBox
-                                    menucheck={loginMaintain == null ?
-                                        false : loginMaintain === "true" ?
-                                            (userInfo == null ? false : userInfo.loginState === "allok" ? true : false) : (user.login_state === "allok" ? true : false)}
-                                >
-
-                                    {loginMaintain == null ? [] : loginMaintain == "true" ?
-                                        (userInfo == null ? [] : userInfo.loginState === "allok" ?
-                                            [<MenuBox
-                                                left={"19px"}
-                                                top={"8.3px"}
-                                                size={"33px"}
-                                                padding={"5.4px 0px 0px 0px"}
-                                            >
-                                                <AiOutlineShopping />
-                                            </MenuBox>] : []) :
-
-                                        (user.login_state === "allok" ?
-                                            [<MenuBox
-                                                left={"19px"}
-                                                top={"8.3px"}
-                                                size={"33px"}
-                                                padding={"5.4px 0px 0px 0px"}
-                                            >
-                                                <AiOutlineShopping />
-                                            </MenuBox>] : [])}
 
                                     <Darkmode />
 
-                                    <MenuBox
-                                        click={FastClickCheck}
-                                        left={"24px"}
-                                        top={"9px"}
-                                        size={"33px"}
-                                        ref={FastRef}
-                                        padding={"4.8px 0px 0px 0px"}
-                                        onClick={() => FastMenuCheck()}
-                                    >
-                                        <CgMenuGridR />
-                                    </MenuBox>
-
-                                    <>
-                                        {loginMaintain == null ?
-                                            [<LineBox
-                                                onClick={() => ScrollTop()}
-                                                left={"20px"}
-                                                top={"7px"}
-                                                size={"15px"}
-                                                padding={"10px 0px 10px 0px"}
-                                            >
-                                                <Link to='/Login'>로그인</Link>
-                                            </LineBox>,
-                                            <MenuBox
-                                                onClick={() => ScrollTop()}
-                                                left={"9px"}
-                                                top={"7px"}
-                                                size={"15px"}
-                                                padding={"10px 0px 10px 0px"}
-                                            >
-                                                <Link to='/SelectSign'>회원가입</Link>
-                                            </MenuBox>] :
-
-                                            loginMaintain == "true" ?
-                                                (userInfo == null ?
-                                                    [<LineBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"20px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/Login'>로그인</Link>
-                                                    </LineBox>,
-
-                                                    <MenuBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"9px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/SelectSign'>회원가입</Link>
-                                                    </MenuBox>] :
-
-                                                    userInfo.loginState === "allok" ?
-                                                        [<Profile
-                                                            click={ProfileClickCheck}
-                                                            ref={ProfileRef}
-                                                            onClick={() => ProfileMenuCheck()}
-                                                        >
-                                                            <Profileimg src={`${ip}/Users/profileImg/${userInfo.nickName}`} />
-                                                        </Profile>,
-
-                                                        <WriteBox
-                                                            click={WriteClickCheck}
-                                                            onClick={() => WriteMenuCheck()}
-                                                            ref={WriteRef}
-                                                        >
-                                                            <WriteBoxText >글쓰기</WriteBoxText>
-                                                        </WriteBox>] :
-
-                                                        [<LineBox
-                                                            onClick={() => ScrollTop()}
-                                                            left={"20px"}
-                                                            top={"7px"}
-                                                            size={"15px"}
-                                                            padding={"10px 0px 10px 0px"}
-                                                        >
-                                                            <Link to='/Login'>로그인</Link>
-                                                        </LineBox>,
-
-                                                        <MenuBox
-                                                            onClick={() => ScrollTop()}
-                                                            left={"9px"}
-                                                            top={"7px"}
-                                                            size={"15px"}
-                                                            padding={"10px 0px 10px 0px"}
-                                                        >
-                                                            <Link to='/SelectSign'>회원가입</Link>
-                                                        </MenuBox>]) :
-
-                                                (user.login_state === "allok" ?
-                                                    [<Profile
-                                                        click={ProfileClickCheck}
-                                                        ref={ProfileRef}
-                                                        onClick={() => ProfileMenuCheck()}
-                                                    >
-                                                        <Profileimg src={`${ip}/Users/profileImg/${user.nickname}`} />
-                                                    </Profile>,
-
-                                                    <WriteBox
-                                                        click={WriteClickCheck}
-                                                        onClick={() => WriteMenuCheck()}
-                                                        ref={WriteRef}
-                                                    >
-                                                        <WriteBoxText >글쓰기</WriteBoxText>
-                                                    </WriteBox>]
-                                                     :
-                                                    [<LineBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"20px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/Login'>로그인</Link>
-                                                    </LineBox>,
-
-                                                    <MenuBox
-                                                        onClick={() => ScrollTop()}
-                                                        left={"9px"}
-                                                        top={"7px"}
-                                                        size={"15px"}
-                                                        padding={"10px 0px 10px 0px"}
-                                                    >
-                                                        <Link to='/SelectSign'>회원가입</Link>
-                                                    </MenuBox>])}
-                                    </>
-
-                                    <FastListBox zindex={fastMenuTopZIndex.current} default={isDefaultFastScene} show={FastMenuShow}>
-                                        <ProfileUl>
-
-                                        </ProfileUl>
-                                    </FastListBox>
-
-                                    <ProfileListBox
-                                        zindex={profileMenuTopZIndex.current}
-                                        default={isDefaultProfileScene}
-                                        logout={isProfileLogoutCheck}
-                                        show={ProfileMenuShow}
-                                        mediaCheck={WindowLength}
-                                    >
-                                        <ProfileUl>
-                                            <Link to='/'>
-                                                <Profileli
-                                                    padding="15px 0px 15px 13px"
-                                                    onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                                    setProfileClickCheck(!ProfileClickCheck)]}
-                                                >
-                                                    <DropdownImg src={loginMaintain == null ? User : loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : user == null ? User : user.login_state == null ? User : `${ip}/Users/profileImg/${user.nickname}`} />
-                                                    <ProfileliText MediaLeft={"17px"}>마이페이지</ProfileliText>
-                                                </Profileli>
-                                            </Link>
-
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                                setProfileClickCheck(!ProfileClickCheck)]}
-                                            >
-                                                <DropdownImg src={Bell} />
-                                                <ProfileliText MediaLeft={"17px"}>소식 알람</ProfileliText>
-                                            </Profileli>
-
-                                            <Link to='/'>
-                                                <Profileli
-                                                    padding="15px 0px 15px 13px"
-                                                    onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                                    setProfileClickCheck(!ProfileClickCheck)]}
-                                                >
-                                                    <DropdownImg src={Coding} />
-                                                    <ProfileliText MediaLeft={"17px"}>개발자등록</ProfileliText>
-                                                </Profileli>
-                                            </Link>
-
-                                            <Link to='/'>
-                                                <Profileli
-                                                    padding="15px 0px 15px 13px"
-                                                    onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                                    setProfileClickCheck(!ProfileClickCheck)]}
-                                                >
-                                                    <DropdownImg src={Shop} />
-                                                    <ProfileliText MediaLeft={"17px"}>굿즈샵 입점</ProfileliText>
-                                                </Profileli>
-                                            </Link>
-
-                                            <Link to='/'>
-                                                <Profileli
-                                                    padding="15px 0px 15px 13px"
-                                                    onClick={() => [setProfileMenuShow(!ProfileMenuShow),
-                                                    setProfileClickCheck(!ProfileClickCheck)]}
-                                                >
-                                                    <DropdownImg src={Update} />
-                                                    <ProfileliText MediaLeft={"17px"}>회원정보수정</ProfileliText>
-                                                </Profileli>
-                                            </Link>
-
-                                            <Profileli
-                                                line="none"
-                                                padding="15px 0px 15px 13px"
-                                                onClick={LogoutFunc}
-                                            >
-                                                <DropdownImg src={Logout} />
-                                                <ProfileliText MediaLeft={"16px"}>로그아웃</ProfileliText>
-                                            </Profileli>
-                                        </ProfileUl>
-
-                                    </ProfileListBox>
-
-                                    <WriteListBox
-                                        zindex={writeMemuTopZIndex.current}
-                                        default={isDefaultWriteScene}
-                                        show={WriteMenuShow}
-                                        size={user.role}
-                                    >
-                                        <ProfileUl>
-                                            <Link to='/WriteBoard/free'>
-                                                <Profileli
-                                                    padding="15px 0px 15px 13px"
-                                                    onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                                >
-                                                    <DropdownImg src={Essay} />
-                                                    <ProfileliText MediaLeft={"17px"}>자유게시판</ProfileliText>
-                                                </Profileli>
-                                            </Link>
-                                            
-                                            <Link to="/WriteBoard/strategy">
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Strategy} />
-                                                <ProfileliText MediaLeft={"17px"}>공략게시판</ProfileliText>
-                                            </Profileli>
-                                            </Link>
-
-                                            <Link to="/WriteBoard/question">
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Discussion} />
-                                                <ProfileliText MediaLeft={"17px"}>질문게시판</ProfileliText>
-                                            </Profileli>
-                                            </Link>
-                                            
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Rating} />
-                                                <ProfileliText MediaLeft={"17px"}>상품 리뷰</ProfileliText>
-                                            </Profileli>
-
-                                            <Profileli
-                                                padding="15px 0px 15px 13px"
-                                                onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                            >
-                                                <DropdownImg src={Console} />
-                                                <ProfileliText MediaLeft={"17px"}>게임 리뷰</ProfileliText>
-                                            </Profileli>
-
-                                            {loginMaintain == null ?
-                                                <></> :
-                                                loginMaintain == "true" ?
-                                                    userInfo == null ?
-                                                        <></> :
-
-                                                        userInfo.loginState === "allok" ?
-                                                            user.role === "DEVELOPER" ?
-                                                                <Link to="/GameUploadPage/indie">
-                                                                    <Profileli
-                                                                        padding="15px 0px 15px 13px"
-                                                                        onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                                                    >
-                                                                        <DropdownImg src={Upload} />
-                                                                        <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
-                                                                    </Profileli>
-                                                                </Link> :
-                                                                <></> :
-                                                            <></> :
-                                                    user.login_state === "allok" ?
-                                                        user.role === "DEVELOPER" ?
-                                                            <Link to="/GameUploadPage/indie">
-                                                                <Profileli
-                                                                    padding="15px 0px 15px 13px"
-                                                                    onClick={() => setIsWriteMenuShow(!WriteMenuShow)}
-                                                                >
-                                                                    <DropdownImg src={Upload} />
-                                                                    <ProfileliText MediaLeft={"17px"}>게임 업로드</ProfileliText>
-                                                                </Profileli>
-                                                            </Link> :
-                                                            <></> :
-                                                        <></>}
-                                        </ProfileUl>
-                                    </WriteListBox>
                                 </ButtonBox>
+
+
                             </AllButtonBox>
                         </Topnav>
                     </BackgroudTopNav>
@@ -840,9 +843,8 @@ const HeaderBox = () => {
                                 <Link to='/AllGamePage/indie'><SubNavText>인디게임</SubNavText></Link>
                             </GameSubNav>
                             <ShopSubNav display={isShopTabCheck} TopBack={scrollPosition}>
-                                <Link to='/'><SubNavText>홈</SubNavText></Link>
-                                <Link to='/'><SubNavText>쿠폰샵</SubNavText></Link>
-                                <Link to='/'><SubNavText>굿즈샵</SubNavText></Link>
+                                <Link to="/CpGdShop/Coupon"><SubNavText>쿠폰샵</SubNavText></Link>
+                                <Link to="/CpGdShop/Goods"><SubNavText>굿즈샵</SubNavText></Link>
                                 <Link to='/'><SubNavText>장바구니</SubNavText></Link>
                             </ShopSubNav>
                             <ComunitySubNav display={isComunityTabCheck} TopBack={scrollPosition}>
@@ -869,6 +871,38 @@ export const ScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+const LoginCheckBox = styled.div
+    `
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    color: #ededed;
+    font-size: 20px;
+    a{
+        color: #ededed;
+        margin: 0px 8px 0px 0px;
+    }
+`
+
+const SlideNav = styled(Swiper)
+    `
+    display: none;
+    -webkit-tap-highlight-color: transparent;
+
+    .swiper-slide {
+        display: inline-flex;
+        width: auto;
+    }
+
+    @media (min-width:250px) and (max-width:891px)
+    {
+        display: flex;
+    }
+
+`
+
 const ModalAllOffBtn = styled.div
     `
     display: flex;
@@ -880,44 +914,106 @@ const ModalAllOffBtn = styled.div
 
 const ModalAllOffBtnText = styled.span
     `
-    margin: 14px 23px 0px 0px;
-`
-
-const ModatAllBox = styled.div
-    `
-    display: flex;
+    margin: 5px 15px 0px 0px;
 `
 
 const ModalUserMenu = styled.div
     `
+`
+
+const LogoutBtnBox = styled.div
+    `
     display: flex;
-    justify-content: center;
+    justify-content: end;
+    padding: 12px;
+    font-size: 18px;
+    color: #EDEDEF;
+    `
+
+const LogoutBtn = styled.div
+    `
+    cursor: pointer;
+`
+
+const LogoutBtnText = styled.span
+    `
+
 `
 
 const ModalFast = styled.div
     `
-    display: ${props => props.OnOff ? "flex" : "none"};
-    justify-content: end;
+    display: ${props => props.OnOff ? "block" : "none"};
     position: fixed;
+    white-space: nowrap;
     top: 0;
-    bottom: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background: rgba(25,25,25,0.3);
-    z-index:99999;
+    z-index: 99999;
+`
+
+const ModalAnimateOpen = keyframes
+    `
+    0%{
+        width: 0px;
+    },
+    100%{
+        width: 366px;
+    }
+
+`
+
+const ModalAnimateClose = keyframes
+    `
+    0%{
+        width: 366px;
+    },
+    100%{
+        width: 0px;
+    }
+
+`
+
+const ModalMobileAnimateOpen = keyframes
+    `
+    0%{
+        width: 0%;
+    },
+    100%{
+        width: 100%;
+    }
+
+`
+
+const ModalMobileAnimateClose = keyframes
+    `
+    0%{
+        width: 100%;
+    },
+    100%{
+        width: 0%;
+    }
+
 `
 
 const ModalFastMenuBox = styled.div
     `
-    display: flex;
-    flex-direction: column;
-    width: 375px;
     height: 100%;
+    position: relative;
+    width: 366px;
+    overflow: hidden;
+    margin-left: auto;
+    display: flex;
+    color: #ededed;
+    flex-direction: column;
     background: rgba(25,25,25,1);
+    animation: ${props => props.OnOff ? ModalAnimateOpen : ModalAnimateClose} 0.5s;
 
-    @media (min-width:250px) and (max-width:768px)
+    @media (min-width:250px) and (max-width:622px)
     {
          width: 100%;
+         animation: ${props => props.OnOff ? ModalMobileAnimateOpen : ModalMobileAnimateClose} 0.5s;
     }
 
 `
@@ -935,17 +1031,15 @@ const SearchModal = styled.div
 
 const ModalFastMenu = styled.div
     `
-    display: none;
-
-    @media (min-width:250px) and (max-width:1342px)
-    {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         font-size: 35px;
         cursor: pointer;
-        margin: -10px 0px 0px 10px;
+        margin: 0px 10px 0px 0px;
+        &:hover{
+        color: #55aaff;
     }
 `
 
@@ -953,7 +1047,7 @@ const SearchModalMenu = styled.div
     `
     display: none;
 
-    @media (min-width:250px) and (max-width:1342px)
+    @media (min-width:250px) and (max-width:1156px)
     {
         display: flex;
         flex-direction: column;
@@ -961,8 +1055,11 @@ const SearchModalMenu = styled.div
         justify-content: center;
         font-size: 35px;
         cursor: pointer;
-        margin: -10px 0px 0px 0px;
-    }
+        margin: 0px 10px 0px 0px;
+        &:hover{
+            color: #55aaff;
+        }
+    };
 `
 
 const NavMenuAllBox = styled.div
@@ -972,12 +1069,20 @@ const NavMenuAllBox = styled.div
 
 const ModalFastMenuIcon = styled.i
     `
+    display: flex;
+    align-items: center;
+`
 
+const ShoppingMenuIcon = styled.i
+    `
+    display: flex;
+    align-items: center;
 `
 
 const ModalSearchMenuIcon = styled.i
     `
-
+    display: flex;
+    align-items: center;
 `
 
 const LeaveBox = styled.div
@@ -1017,7 +1122,7 @@ const WriteBoxText = styled.span
 `
 const BackgroudTopNav = styled.div
     `
-    background-color: ${props => props.TopBack === 0 ? "rgba(25,25,25,0.4)" : "#3c3c3c"};
+    background-color: ${props => props.TopBack === 0 ? "rgba(25,25,25,0.6)" : "#2b2b2b"};
     transition: background-color 0.5s;
 
     @media (min-width:250px) and (max-width:666px)
@@ -1170,6 +1275,10 @@ const SubNavText = styled.span
 
 const GameLi = styled.li
     `
+    display: flex;
+    flex-direction: column;
+    -webkit-tap-highlight-color: transparent;
+    justify-content: center;
     padding: 0px 20px 0px 20px;
     list-style: none;
     white-space: nowrap;
@@ -1226,17 +1335,11 @@ const Topnav = styled.header
         -webkit-tap-highlight-color:transparent;
     }
 
-    @media (min-width:667px) and (max-width:1342px)
+    @media (min-width:250px) and (max-width:623px)
     {
         flex-direction: column;
+        padding: 10px;
     }
-
-    @media (min-width:250px) and (max-width:666px)
-    {
-        flex-direction: column;
-        height: 72px;
-    }
-
 `
 
 const Logo = styled.img
@@ -1253,50 +1356,31 @@ const Logo = styled.img
 
 const LogoBox = styled.div
     `
-    margin: -13px 0px 0px 0px;
-
-    @media (min-width:250px) and (max-width:666px)
-    {
-        margin: 0px 0px 0px 0px;
-    }
 `
 
 const NavBox = styled.div
     `
     display: flex;
-    margin: 15px 0px 15px 0px;
+    align-items: center;
+    position: relative;
     color: white;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(270deg,transparent,#000 2.2rem);
+`
+const NavSlideAllBox = styled.div
+    `
 
-    @media (min-width:250px) and (max-width:666px)
-    {
-        margin: 12px 0px 0px 0px;
-        text-align: center;
-    }
-
-    @media (min-width:666px) and (max-width:1342px)
-    {
-        justify-content: space-between;
-    }
 `
 
 const NavUl = styled.ul
     `
     display: flex;
-    margin: 12px 0px 12px 0px;
     white-space: nowrap;
     height: 27px;
-    overflow: scroll;
 
-    &::-webkit-scrollbar
+    @media (min-width:250px) and (max-width:891px)
     {
         display: none;
-    }
-
-    @media (min-width:250px) and (max-width:784px)
-    {
-        width: 48vw;
-        padding: 0px;
-        justify-content: start;
     }
 `
 
@@ -1304,49 +1388,43 @@ export const SearchInput = styled.input
     `
     border: none;
     outline: none;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    padding: 3px 0px 0px 11px;
+    padding: 0px 8px 0px 12px;
     font-size: 20px;
-    width: 200px;
-    height: 43.5px;
-    caret-color: #3c3c3c;
-    background: #dee2e6;
+    width: 170px;
+    height: 35.5px;
+    caret-color: white;
+    background: ${props => props.TopBack === 0 ? "rgba(74, 74, 74, 0.7)" : "#4a4a4a"};
+    transition: background 0.5s;
+    color: #d1d1d1;
+
+    &::placeholder{
+        color: #d1d1d1;
+    }
 `
 
 const AllButtonBox = styled.div
     `
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     color: white;
     -webkit-tap-highlight-color:transparent;
-
-    @media (min-width:250px) and (max-width:666px)
-    {
-        display: none;
-    }
-
-    @media (min-width:666px) and (max-width:1342px)
-    {
-        display: none;
-    }
 `
 
 const ButtonBox = styled.div
     `
     display: flex;
+    align-items: center;
 `
 
 const MenuBox = styled.div
     `
     color: ${props => props.click ? "#6a9dda" : "white"};
-    font-size: ${props => props.size};
-    margin-left: ${props => props.left};
-    margin-top: ${props => props.top};
-    padding: ${props => props.padding};
     cursor: pointer;
     white-space: nowrap;
     a
@@ -1367,6 +1445,20 @@ const MenuBox = styled.div
     }
 `
 
+const ShoppingBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    cursor: pointer;
+    margin: 0px 10px 0px 0px;
+    &:hover{
+        color: #55aaff;
+    }
+`
+
 const LineBox = styled(MenuBox)
     `
     &::after
@@ -1383,10 +1475,11 @@ const LineBox = styled(MenuBox)
 export const SearchInputBox = styled.div
     `
     display: flex;
-    border: solid 3px #3c3c3c;
+    border: none;
     border-radius: 13px;
+    margin: 0px 16px 0px 0px;
 
-    @media (min-width:666px) and (max-width:1342px)
+    @media (min-width:250px) and (max-width:1155px)
     {
         display: none;
     }
@@ -1395,10 +1488,11 @@ export const SearchInputBox = styled.div
 
 export const SearchInputIconBox = styled.div
     `
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    background: #dee2e6;
-    height: 46.5px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    background: ${props => props.TopBack === 0 ? "rgba(74, 74, 74, 0.7)" : "#4a4a4a"};
+    transition: background 0.5s;
+    height: 35.5px;
     -webkit-user-select: none;
 `
 
@@ -1406,10 +1500,10 @@ export const SearchButton = styled.button
     `
     border: none;
     background: transparent;
-    padding: 8px 8px 0px 0px;
+    padding: 2px 8px 0px 0px;
     cursor: pointer;
     font-size: 29px;
-    color: black;
+    color: white;
 
     @media (hover: hover)
     {
@@ -1421,20 +1515,426 @@ export const SearchButton = styled.button
 
 `
 
+const ModalAllBox = styled.div
+    `
+     color: #ededed;
+     height: 100%;
+`
+
+const ModalProfileImgBox = styled.div
+    `
+`
+
+const ModalNickNameBox = styled.div
+    `
+    margin: 37px 0px 25px 0px;
+    font-size: 22px;
+`
+
+const ModalNickNamePointText = styled.span
+    `
+    font-weight: bold;
+`
+
+const ModalNickNameText = styled.span
+    `
+
+`
+
+const MyPageShopBox = styled.div
+    `
+    display: flex;
+    font-size: 18px;
+    color: #ededed;
+    a{
+        color: #ededed;
+    }
+`
+
+const ContentBoxAllBox = styled.div
+    `
+    width: 100%;
+    height: 100%;
+    margin: 100px 0px 0px 0px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    div:not(:last-child)
+    {
+        margin: 0px 0px 40px 0px;
+    }
+
+    &::-webkit-scrollbar{
+        background: rgba(25,25,25,1);
+      }
+      &::-webkit-scrollbar-thumb
+      {
+        background: #55AAFF;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+      }
+      &::-webkit-scrollbar-track
+      {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+    
+`
+
+const ContentBox = styled.div
+    `
+    padding: 0px 26px 0px 26px;
+`
+
+const ServiceBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    padding : 5px;
+    a{
+        text-decoraction: none;
+    }
+`
+
+const ServiceText = styled.span
+    `
+
+`
+
+const Underline = styled.div
+    `
+    &::after{
+        content: ""; 
+        display: block; 
+        width: 0%;
+        height: 0.08px; 
+        background: #ededed; 
+        transition: all 0.3s;
+    }
+`
+
+const GameDotText = styled.span
+    `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: ${props => props.role == "DEVELOPER" ? "#ededed" : "gray"};
+`
+
+const ShopDotText = styled.span
+    `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: ${props => props.role == "SELLER" ? "#ededed" : "gray"};
+`
+
+const GameServiceSubBox = styled.div
+    `
+    display: flex;
+    margin: 5px 0px 0px 0px!important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const ShopServiceSubBox = styled.div
+    `
+    display: flex;
+    margin: 5px 0px 0px 0px !important;
+    line-height: 21px;
+
+     a{  
+        text-decoration: none;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const GameDownloadBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+`
+
+const GameDownloadText = styled.span
+    `
+
+`
+
+const GameDownloadAllBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0px 0px 0px;
+`
+
+const OfficialDot = styled.span
+    `
+
+`
+
+const OfficialGameBox1 = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const OfficialGameBox2 = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const OfficialGameBox3 = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const OthersGameBox = styled.div
+    `
+    display: flex;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const WriteBoardBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+`
+
+const WriteBoardDotText = styled.span
+    `
+
+`
+
+const WriteBoardAllBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0px 0px 0px;
+`
+
+const StrategyBoardBox = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const QuestionBoardBox = styled.div
+    `
+    display: flex;
+    margin: 0px 0px 5px 0px !important;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+`
+
+const FreeBoardBox = styled.div
+    `
+    display: flex;
+    
+    a{  
+        text-decoration: none;
+        line-height: 21px;
+        margin: 0px 0px 0px 5px;
+
+        span{
+            margin: 0px;
+        }
+
+        &:hover{
+            ${Underline}{
+                &::after{ 
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+`
+
+const WriteBoardText = styled.span
+    `
+
+`
+
+const MyPageBtnBox = styled.div
+    `
+    margin: 0px 23px 0px 0px;
+`
+
+const MyPageBtnText = styled.span
+    `
+
+`
+
+const ShopBtnBox = styled.div
+    `
+
+`
+
+const ShopBtnText = styled.span
+    `
+
+`
+const ProfileAllBox = styled.div
+    `
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 60px 0px 0px 0px;
+    width: 100%;
+`
+
 const Profile = styled.div
     `
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 26px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
     box-sizing: border-box;
-    box-shadow: ${props => props.click ? "0px 0px 0px 3px" : "none"} #6a9dda;
     overflow: hidden;
     cursor: pointer;
-    margin: 12px 0px 0px 19px;
     
     @media (hover: hover)
     {
@@ -1448,13 +1948,18 @@ const Profile = styled.div
 
 const Profileimg = styled.img
     `
-    width: 36px;
-    height: 36px;
+    width: 130px;
+    height: 130px;
 `
 const DropdownImg = styled.img
     `
     width: 34px;
     height: 34px;
+`
+
+const ProfileImg = styled(DropdownImg)
+    `
+    border-radius: 50%;
 `
 
 const ProFileSlideDown = keyframes
@@ -1482,7 +1987,7 @@ const ProfileListBox = styled.div
     `
     display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 108.5px;
+    margin: 59px 0px 0px 56.5px;
     box-shadow: 0px 0px 0px ${props => props.show ? "3px" : "0px"} ${props => props.theme.borderColor};
     background: white;  
     height: ${props => props.show ? "384px" : "0px"};
@@ -1506,7 +2011,7 @@ const WriteListBox = styled.div
     `
     display: ${props => props.default ? props.logout ? "none" : "block" : "none"};
     width: 217px;
-    margin: 59px 0px 0px 194.5px;
+    margin: 59px 0px 0px 137px;
     box-shadow: 0px 0px 0px ${props => props.show ? "3px" : "0px"} ${props => props.theme.borderColor};
     background: white;
     border-radius: 10px;
@@ -1558,12 +2063,39 @@ const Profileli = styled.li
         margin: 48px 0px 0px -1px;
     }
 `
-const ProfileliText = styled.span
+
+const GameSubText = styled.span
     `
-        margin-left: ${props => props.MediaLeft};
-        margin-top: 2.5px; 
-        font-size: 25px;
+        font-size: 17.7px;
+        margin: 0px 0px 0px 5px;
+        padding: 3px 0px 2px 0px;
+        color: ${props => props.role == "DEVELOPER" ? "#ededed" : "gray"};
 `
+
+const ShopSubText = styled.span
+    `
+        font-size: 17.7px;
+        margin: 0px 0px 0px 5px;
+        padding: 3px 0px 2px 0px;
+        color: ${props => props.role == "SELLER" ? "#ededed" : "gray"};
+`
+
+const GameText = styled.span
+    `
+        font-size: 17.7px;
+        margin: 0px 0px 0px 5px;
+        padding: 3px 0px 2px 0px;
+        color: #ededed;
+`
+
+const BoardText = styled.span
+    `
+        font-size: 17.7px;
+        margin: 0px 0px 0px 5px;
+        padding: 3px 0px 2px 0px;
+        color: #ededed;
+`
+
 
 const ProfileliIcon = styled.i
     `

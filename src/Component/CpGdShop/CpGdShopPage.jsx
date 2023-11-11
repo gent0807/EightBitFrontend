@@ -1,50 +1,73 @@
 import { styled, keyframes } from "styled-components";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { SearchInputBox, SearchInput, SearchInputIconBox, SearchButton } from "../Header/TopNavBar";
 import { ArrowBox } from "../Sign/Signinput";
 import { HiOutlineSearch } from "react-icons/hi";
-import { AiFillCheckCircle } from "react-icons/ai";
 import Pagination from "./Pagination";
+import DOMPurify from "dompurify";
 import { useRecoilState } from "recoil";
 import { firstReset } from "../../Recoil/Darkmode/Darkmode";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import NotPage from "../Error/NotPage";
-import { BiLogoDevTo } from "react-icons/bi";
+import { Link, useNavigate, useParams, useMatch } from "react-router-dom";
+import NotPage from "./NotPage";
 import { useSelector } from "react-redux";
-import axios from "axios";
-import dayjs from "dayjs";
-import WriterProfile from "./WriterProfile";
-import { AiOutlineEye } from "react-icons/ai";
-import { BsHandThumbsUp } from "react-icons/bs";
-import DOMPurify from "dompurify";
 
-const Board = () => {
+import CpGdShopMainImg from "./CpGdShopMainImg";
+import axios from "axios";
+
+import { Goods } from "../CpGdShop/CpGdData";
+
+const CpGdShopPage = () => {
     const { contentType } = useParams();
-    const [posts, setPosts] = useState([]);
+    const { View } = useParams();
+    const Viewchange = View;
+
+    const [posts, setPosts] = useState(
+        View == "Coupon" ?
+            Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "coupon") :
+            Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "Goods")
+    );
+
+    const [SearchList, setSearchList] = useState(posts);
+
     const [Search, setSearch] = useState("");
-    const [SearchFillText, setSearchFillText] = useState("제목");
+    const [SearchFillText, setSearchFillText] = useState("상품명");
     const [Fitter, setFitter] = useState("최신순");
     const [LimtText, setLimtText] = useState("10개");
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
-    const [boardType, setBoardType] = useState("");
     const offset = (page - 1) * limit;
+
     const [FitterDropdown, setFitterDropdown] = useState(false);
     const [LimitDropdown, setLimitDropdown] = useState(false);
     const [SearchFillDropdown, setSearchFillDropdown] = useState(false);
     const [FirstReset, setFirstReset] = useRecoilState(firstReset);
+
     const FillterRef = useRef("");
     const LimitRef = useRef("");
     const SearchFillRef = useRef("");
+
     const ip = localStorage.getItem("ip");
     const user = useSelector(state => state.user);
     const loginMaintain = localStorage.getItem("loginMaintain");
-    const [SearchList, setSearchList] = useState([]);
     const PostsSize = posts.slice(offset, offset + limit);
+
     const [FillterState, setFillerState] = useState("title");
     let userInfo = localStorage.getItem("userInfo");
     userInfo = JSON.parse(userInfo);
 
+    useEffect(() => {
+        if (Viewchange == "Coupon") {
+            setPosts(Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "coupon"));
+            setSearchList(Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "coupon"));
+            setPage(1);
+        } else if (Viewchange == "Goods") {
+            setPosts(Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "Goods"));
+            setSearchList(Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "Goods"));
+            setPage(1);
+        }
+    }, [Viewchange]);
+
+    console.log(View);
 
     useEffect(() => {
         function handleOuside(e) {
@@ -92,6 +115,36 @@ const Board = () => {
         };
     }, [LimitRef]);
 
+
+    const SearchSubmit = (e) => {
+        e.preventDefault();
+        if (Search === "") {
+            setPosts(Viewchange == "Coupon" ?
+                Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "coupon") :
+                Goods.sort((a, b) => new Date(b.regdate) - new Date(a.regdate)).filter((Views) => Views.Goods === "Goods"))
+            setSearchList(posts);
+            setPage(1);
+        } else {
+            const SearchResult = posts.filter((board) =>
+                SearchFillText === "상품명" ?
+                    board.title.toUpperCase().includes(Search.toUpperCase()) :
+                    SearchFillText === "종류" ?
+                        board.content.toUpperCase().includes(Search.toUpperCase()) :
+                        board.title.toUpperCase().includes(Search.toUpperCase())
+            );
+
+            setSearchList(SearchResult);
+            setSearch("");
+            setPage(1);
+        }
+    }
+
+    useEffect(() => {
+        if (posts.length > 0 && PostsSize.length === 0) {
+            setPage(page - 1);
+        }
+    }, [PostsSize.length, posts.length]);
+
     const OnSearch = (e) => {
         const currentSearch = e.target.value;
         setSearch(currentSearch);
@@ -102,7 +155,6 @@ const Board = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
         setSearchList(FillerState);
-        setPage(1);
     }
 
     const setPastValue = (e) => {
@@ -110,7 +162,6 @@ const Board = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => new Date(a.regdate) - new Date(b.regdate));
         setSearchList(FillerState);
-        setPage(1);
     }
 
     const setLikeValue = (e) => {
@@ -118,32 +169,23 @@ const Board = () => {
         setFitter(innerText);
         const FillerState = SearchList.sort((a, b) => b.likecount - a.likecount);
         setSearchList(FillerState);
-        setPage(1);
     }
 
-    const setViewValue = (e) => {
+    const setPriceUpValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
-        const FillerState = SearchList.sort((a, b) => b.visitcnt - a.visitcnt);
+        const FillerState = SearchList.sort((a, b) => b.price - a.price);
         setSearchList(FillerState);
-        setPage(1);
     }
 
-    const setReplyValue = (e) => {
+    const setPriceDownValue = (e) => {
         const { innerText } = e.target;
         setFitter(innerText);
-        const FillerState = SearchList.sort((a, b) => b.reply_count - a.reply_count);
+        const FillerState = SearchList.sort((a, b) => a.price - b.price);
         setSearchList(FillerState);
-        setPage(1);
     }
-
 
     const setTitleValue = (e) => {
-        const { innerText } = e.target;
-        setSearchFillText(innerText);
-    }
-
-    const setWriterValue = (e) => {
         const { innerText } = e.target;
         setSearchFillText(innerText);
     }
@@ -162,91 +204,22 @@ const Board = () => {
         setFirstReset(false);
     }
 
-    useEffect(() => {
-        if (posts.length > 0 && PostsSize.length === 0) {
-            setPage(page - 1);
-        }
-    }, [PostsSize.length, posts.length]);
-
-    useEffect(() => {
-        axios.get(`${ip}/Articles/articles?contentType=${contentType}`, {
-
-        },
-            {
-
-            })
-            .then(res => res.data
-            )
-            .then(data => {
-                console.log(data);
-                setPosts(data);
-                setSearchList(data);
-            })
-
-            if(contentType=="free"){
-                setBoardType("자유게시판");
-             }
-             else if(contentType=="question"){
-                 setBoardType("질문게시판");
-             }
-             else if(contentType=="notice"){
-                 setBoardType("공지사항");
-             }
-             else if(contentType=="strategy"){
-                 setBoardType("공략게시판");
-             }
-
-    }, [contentType]);
-
-
-
-    const SearchSubmit = (e) => {
-        e.preventDefault();
-
-        if (Search === "") {
-            axios.get(`${ip}/Articles/articles?contentType=${contentType}`, {
-
-            },
-                {
-
-                })
-                .then(res => res.data
-                )
-                .then(data => {
-                    console.log(data);
-                    setPosts(data);
-                    setSearchList(posts);
-                    setPage(1);
-                })
-        } else {
-            const SearchResult = posts.filter((board) =>
-                SearchFillText === "제목" ?
-                    board.title.toUpperCase().includes(Search.toUpperCase()) :
-                    SearchFillText === "작성자" ?
-                        board.writer.toUpperCase().includes(Search.toUpperCase()) :
-                        SearchFillText === "내용" ?
-                            board.content.toUpperCase().includes(Search.toUpperCase()) :
-                            board.title.toUpperCase().includes(Search.toUpperCase())
-            );
-
-            setSearchList(SearchResult);
-            setSearch("");
-            setPage(1);
-        }
+    const ScrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     return (
         <FreeBoardBox>
             <InformationAllBox>
                 <FreeBoardInformation>
-                    <FreeBoardInformationText>{boardType}</FreeBoardInformationText>
+                    <FreeBoardInformationText>{View == "Coupon" ? "쿠폰샵" : "굿즈샵"}</FreeBoardInformationText>
                 </FreeBoardInformation>
             </InformationAllBox>
             <SearchBox>
                 <SearchAllBox>
                     <SearchForm onSubmit={(e) => SearchSubmit(e)}>
                         <FreeBoardSearchInputBox>
-                            <FreeBoardSearchInput placeholder="게시물을 검색해 주세요!" value={Search} onChange={OnSearch} />
+                            <FreeBoardSearchInput placeholder="상품을 검색해 주세요!" value={Search} onChange={OnSearch} />
                             <FreeBoardSearchIconBox>
                                 <FreeBoardSearchBtn><HiOutlineSearch /></FreeBoardSearchBtn>
                             </FreeBoardSearchIconBox>
@@ -254,9 +227,8 @@ const Board = () => {
                     </SearchForm>
                     <SearchFillSelectAllBox ref={SearchFillRef} onClick={() => setSearchFillDropdown(!SearchFillDropdown)}>
                         <SearchFillSelectBox show={SearchFillDropdown}>
-                            <FitterSelectList onClick={(e) => setTitleValue(e)}>제목</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setWriterValue(e)}>작성자</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setContentValue(e)}>내용</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setTitleValue(e)}>상품명</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setContentValue(e)}>종류</FitterSelectList>
                         </SearchFillSelectBox>
                         <SearchFillValue writerText={SearchFillText}><FitterSelectText>{SearchFillText}</FitterSelectText></SearchFillValue>
                         <SearchFillArrowBox direction={SearchFillDropdown}>{SearchFillDropdown ? "▲" : "▼"}</SearchFillArrowBox>
@@ -269,9 +241,9 @@ const Board = () => {
                         <FitterSelectBox show={FitterDropdown}>
                             <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
                             <FitterSelectList onClick={(e) => setPastValue(e)}>과거순</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setReplyValue(e)}>댓글순</FitterSelectList>
-                            <FitterSelectList onClick={(e) => setViewValue(e)}>조회순</FitterSelectList>
                             <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setPriceUpValue(e)}>가격 ▲</FitterSelectList>
+                            <FitterSelectList onClick={(e) => setPriceDownValue(e)}>가격 ▼</FitterSelectList>
                         </FitterSelectBox>
                         <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
                         <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
@@ -286,77 +258,34 @@ const Board = () => {
                         <LimitSelectValue><FitterSelectText>{LimtText}</FitterSelectText></LimitSelectValue>
                         <LimitArrowBox direction={LimitDropdown}>{LimitDropdown ? "▲" : "▼"}</LimitArrowBox>
                     </LimitSelectAllBox>
-
-                    <WriteBtn 
-                        contentType={contentType}
-                        user={user} 
-                    >
-                        {loginMaintain == null ? 
-                            <Link to='/Login'>
-                                <WriteBtnText>글쓰기</WriteBtnText>
-                            </Link> : 
-                            loginMaintain == "true" ? 
-                            userInfo == null ? 
-                            <Link to='/Login'>
-                                <WriteBtnText>글쓰기</WriteBtnText>
-                            </Link> :
-                        (userInfo.loginState === "allok" ? <Link to={`/WriteBoard/${contentType}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>) : (user.login_state === "allok" ? <Link to={`/WriteBoard/${contentType}`}><WriteBtnText>글쓰기</WriteBtnText></Link> : <Link to='/Login'><WriteBtnText>글쓰기</WriteBtnText></Link>)}
-                    </WriteBtn>
                 </FitterBox>
             </SearchBox>
-
             <BoardBox>
                 {SearchList.length === 0 && <NotPage />}
-                <BoardContentAllBox>
-                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, writer, role, regdate, updatedate, visitcnt, reply_count, likecount, content, contentType, depth }) => (
+                <BoardContentAllBox View={SearchList.length}>
+                    {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, src, title, content, price }) => (
                         <BoardContentBox key={id}>
-                            <ReplyCountAllBox>
-                                <ReplyCountBox>
-                                    <ReplyCountText>답변</ReplyCountText>
-                                    {reply_count}
-                                </ReplyCountBox>
-                            </ReplyCountAllBox>
+                            <Link to={`/CpGdShopView/${id}`} onClick={() => ScrollTop()}>
+                                <SlideAllBox>
+                                    <SlideBox>
+                                        <CpGdShopMainImg
+                                            id={id}
+                                            src={src}
+                                        />
+                                    </SlideBox>
 
-                            <FreeBoardViewAllBox>
-                                <ProfileAllBox>
-                                    <WriterProfile writer={writer} />
-                                    <ProfileBox>
-                                        <UpdateBox>
-                                            <BoardContentWriter>{writer}</BoardContentWriter>
-                                            <CorrectionIcon writerRole={role}>
-                                                <BiLogoDevTo />
-                                            </CorrectionIcon>
+                                    <AllBox>
+                                        <InformaionBoxTextBox>
+                                            <TitleBox>{title}</TitleBox>
+                                            <InformaionBox dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}></InformaionBox>
+                                            <PriceBox>₩{price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</PriceBox>
+                                        </InformaionBoxTextBox>
+                                    </AllBox>
+                                </SlideAllBox>
 
-                                            {regdate == updatedate ? "" :
-                                                <CorrectionTextBox>
-                                                    <CorrectionTextBoxIcon>
-                                                        <AiFillCheckCircle />
-                                                    </CorrectionTextBoxIcon>
-                                                    <CorrectionText>
-                                                        수정됨
-                                                    </CorrectionText>
-                                                </CorrectionTextBox>}
-                                        </UpdateBox>
-                                        <BoardContentViewtime>{dayjs(regdate).format("YY.MM.DD")}</BoardContentViewtime>
-                                    </ProfileBox>
-                                </ProfileAllBox>
-
-                                <BoardTitleContentAllBox>
-                                    <BoardContentTitle><Link to={`/Article/${writer}/${regdate}/${contentType}`}>{title}</Link></BoardContentTitle>
-                                    <BoardCotent>
-                                        <Link to={`/Article/${writer}/${regdate}/${contentType}`}><BoardCotentText dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} /></Link>
-                                    </BoardCotent>
-                                </BoardTitleContentAllBox>
-                                <ViewlikeAllBox>
-                                    <ViewIcon><AiOutlineEye /></ViewIcon>
-                                    <BoardContentCounter>{visitcnt}</BoardContentCounter>
-                                    <LikeIcon><BsHandThumbsUp /></LikeIcon>
-                                    <BoardlikeContentCounter>{likecount}</BoardlikeContentCounter>
-                                </ViewlikeAllBox>
-
-                            </FreeBoardViewAllBox>
-
-                        </BoardContentBox>))}
+                            </Link>
+                        </BoardContentBox>
+                    ))}
                 </BoardContentAllBox>
             </BoardBox>
 
@@ -376,117 +305,87 @@ const Board = () => {
     );
 }
 
-export default Board;
+export default CpGdShopPage;
 
-const BoardTitleContentAllBox = styled.div
+const AllBox = styled.div
     `
-
-`
-
-const ProfileBox = styled.div
-    `
-`
-
-const UpdateBox = styled.div
-    `
-    display: flex;
-`
-
-const ViewIcon = styled.i
-    `
-    font-size: 22px;
-    display: flex;
-`
-
-const LikeIcon = styled(ViewIcon)
-    `
-    font-size: 18px;
-    margin: 0px 0px 0px 6px;
-`
-
-const ViewlikeAllBox = styled.div
-    `
-    display: flex;
+    display:flex;
+    flex-direction: column;
     justify-content: end;
-    margin: 30px 0px 0px 0px;
-`
-
-const ProfileAllBox = styled.div
-    `
-    display: flex;
-`
-
-const FreeBoardViewAllBox = styled.div
-    `
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    border-radius: 8px;
     width: 100%;
+    overflow: hidden;
+    @media (min-width:250px) and (max-width:560px)
+    {
+        width: 100%;
+    }
 `
 
-const ReplyCountAllBox = styled.div
+const SlideAllBox = styled.div
+    `
+    position: relative;
     `
 
+const SlideBox = styled.div
+    `
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border 0.5s;
+    height: 260px;
 `
 
-const ReplyCountText = styled.span
+const ImgBox = styled.img
     `
-    margin: 0px 0px 7px 0px;
+    width: 100%;
+    height: 100%;
 `
 
-const ReplyCountBox = styled.div
+const InformaionBoxTextBox = styled.div
     `
-    width: 64px;
-    height: 73px;
-    border: solid 2px ${props => props.theme.textColor};
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    border-radius: 6px;
+    padding: 12px;
+    color: ${props => props.theme.textColor};
 `
 
-const WriteBtnText = styled.span
+const TitleBox = styled.div
     `
-    white-space: nowrap;
-    -webkit-tap-highlight-color:transparent;
-    -webkit-user-select: none;
-`
-
-const WriteBtn = styled.div
-    `
-    display: ${props => props.contentType!="notice" ? "flex": props.contentType=="notice" ? props.user.role=="ADMIN" ? "flex" : "none" : "flex"};
-    justify-content: center;
-    align-items: center;
-    width: 70px;
-    height: 23px;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    background: #6A9DDA;
-    color: white;
-    overflow: hidden;
-    padding: 10px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size: 23px;
     font-weight: bold;
-    -webkit-tap-highlight-color: transparent;
-    &:hover
-    {
-        ${WriteBtnText}{
-            background: rgba(0,0,0,0.2);
-            padding: 30px;
-        }
-    }
+    margin: 0px 0px 5px 0px;
+`
 
-    a
-    {
-            text-decoration: none;
-            color: black;
+const PriceBox = styled.div
+`
+    font-weight: bold;
+    font-size: 19px;
+`
+
+const InformaionBox = styled.div
+    `
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    margin: 0px 0px 5px 0px;
+    p{
+        margin: 0;
+        text-decoration: none;
+        color: white;
     }
 `
 
 const SearchAllBox = styled.div
     `
     display: flex;
-    margin: 0px 0px 0px 0px;
     align-items: center;
+    margin: 0px 0px 0px 0px;
 
     @media (min-width:250px) and (max-width:607px)
     {
@@ -510,123 +409,18 @@ const BoardContentNumber = styled.div
     
 `
 
-const BoardCotent = styled(BoardContentNumber)
-    `
-    margin: 0px 0px 0px 0px;
-    font-size: 14px;
-    a{
-        text-decoration: none;
-    }
-`
-
-const BoardCotentText = styled.div
-    `
-    text-align: start;
-    display: -webkit-box;
-    word-break: break-all;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    cursor: pointer;
-    p, span{
-        color: ${props => props.theme.BoardTextView} !important;
-        background-color: ${props => props.theme.backgroundColor} !important;
-        transition: background-color 0.5s;
-    }
-
-    &:hover{
-        p,span{
-            color: #0090F9 !important;
-        }
-    }
-
-`
-
-const BoardContentTitle = styled(BoardContentNumber)
-    `
-    margin: 15px 0px 6px 0px;
-
-    a{
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        text-decoration: none;
-        font-size: 20px;
-        color: ${props => props.theme.textColor};
-
-        &:hover
-        {
-            color: #0090F9;
-        }
-    }
-`
-const BoardContentViewtime = styled(BoardContentNumber)
-    `
-    font-size: 15px;
-`
-const BoardContentWriter = styled(BoardContentNumber)
-    `
-    font-size: 20px;
-    margin: 0px 0px 6px 10px;
-    cursor: pointer;
-`
-
-const CorrectionIcon = styled.i
-    `
-    display: ${props => props.writerRole === "DEVELOPER" ? "block" : "none"};
-    svg
-    {
-        font-size: 25px;
-        margin: 0px 0px 1px 0px;
-    }
-`
-
-const CorrectionTextBox = styled.div
-    `
-    display: flex;
-    margin: 7.2px 0px 0px 0px;
-`
-const CorrectionTextBoxIcon = styled.i
-    `
-    svg
-    {
-        margin: 0px 1px 0px 3px;
-    }
-`
-const CorrectionText = styled.span
-    `
-    font-size: 13.5px;
-`
-
-const BoardContentCounter = styled(BoardContentNumber)
-    `
-    margin: 0px 0px 0px 5px;
-}
-`
-
-const BoardlikeContentCounter = styled(BoardContentNumber)
-    `
-    margin: 0px 0px 0px 5px;
-`
-
 const BoardContentAllBox = styled.div
     `
-
+    display: ${props => props.View === 0 ? "none" : "grid"};
+    grid-template-columns: repeat(auto-fill,260px);
+    grid-gap: 60px;
+    justify-content: center;
 `
 
 const BoardContentBox = styled.div
     `
-        display: flex;
-        column-gap: 20px;
-        text-align: center;
-        padding: 20px 10px 20px 10px;
-        color: ${(props) => props.theme.BoardTitle};
-        font-weight: bold;
-        &:not(:last-child)
-        {
-            border-bottom: solid 2px ${(props) => props.theme.textColor};
+        a{
+            text-decoration: none;
         }
 `
 
@@ -689,7 +483,7 @@ const SearchFillSlideDown = keyframes
         height: 0px;
     }
     100%{
-        height: 72px;
+        height: 48px;
     }
 `
 
@@ -712,8 +506,8 @@ const FitterSelectBox = styled.ul
     border: solid 2px ${props => props.theme.borderColor};
     background: #dee2e6;
     width: 100px;
-    padding: 0px;
     height: 120px;
+    padding: 0px;
     overflow: hidden;
     text-align: center;
     border-radius: 5px;
@@ -723,7 +517,7 @@ const FitterSelectBox = styled.ul
 const SearchFillSelectBox = styled(FitterSelectBox)
     `
     width: 83px;
-    height: 72px;
+    height: 48px;
     animation: ${SearchFillSlideDown} 0.5s;
 `
 
@@ -748,7 +542,7 @@ const FitterSelectValue = styled.div
 
 const SearchFillValue = styled(FitterSelectValue)
     `
-    margin: ${props => props.writerText === "작성자" ? "11px 0px 11px 14px" : "11px 0px 11px 20px"};
+    margin: ${props => props.writerText === "상품명" ? "11px 0px 11px 14px" : "11px 0px 11px 20px"};
 `
 
 const LimitSelectValue = styled(FitterSelectValue)
@@ -783,8 +577,8 @@ const FreeBoardSearchInput = styled(SearchInput)
     display: block;
     margin: 0px 0px 0px 0px;
     padding: 0px 8px 0px 12px;
-    height: 39px;
     font-size: 18px;
+    height: 39px;
 `
 
 const FreeBoardSearchIconBox = styled(SearchInputIconBox)
@@ -832,11 +626,8 @@ const FreeBoardBox = styled.div
 
 const BoardBox = styled.div
     `
-    display: flex;
-    margin: 10px 0px 10px 0px;
-    flex-direction: column;
+    padding: 30px 30px 30px 30px;
     border-bottom: solid 2px ${(props) => props.theme.BoardTitle};
-
 `
 
 const FitterBox = styled.div
@@ -853,9 +644,11 @@ const FitterBox = styled.div
 const SearchBox = styled.div
     `
     display: flex;
+    position: relative;
     justify-content: space-between;
     border-bottom: solid 2px ${(props) => props.theme.BoardTitle};
     padding: 20px 15px 20px 15px;
+    z-index:1;
 
     @media (min-width:250px) and (max-width:607px)
     {

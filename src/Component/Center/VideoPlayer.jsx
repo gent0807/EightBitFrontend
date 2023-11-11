@@ -100,6 +100,7 @@ const VideoPlayler = () => {
         <VideoAllBox>
             <VideoBox>
                 <VideoBackground />
+
                 <VideoInformation>
                     <VideoInformationLogoBox>
                         <VideoInformationLogo src={Slide[mainImageIndex].Logo} />
@@ -122,6 +123,7 @@ const VideoPlayler = () => {
                     </VideoInformationDownLoadBtnBox>
 
                 </VideoInformation>
+
                 <VideoViewBox ref={setSwiper}>
                     {Slide[mainImageIndex].video === "" ? <VideoImg src={Slide[mainImageIndex].backgroundImg} /> :
                         <VideoPlay
@@ -133,7 +135,6 @@ const VideoPlayler = () => {
                             muted={soundOnOff}
                             playing={play}
                             width={"100%"}
-                            height={"56vw"}
                             onEnded={() => NextSlide()}
                         />
                     }
@@ -204,6 +205,11 @@ const VideoImg = styled.img
     `
     width: 100%;
     height: 56vw;
+
+    @media (min-width:250px) and (max-width:623px)
+    {
+        height: 80vw;
+    }
 `
 
 const MuteBtn = styled.div
@@ -229,7 +235,7 @@ const MuteBtnIcon = styled.i
     `
     font-size: 30px;
     text-align: center;
-    margin: 17px 0px 7px 0px;
+    margin: 13px 0px 7px 0px;
 `
 
 const VideoInformationDownLoadBtnBox = styled.div
@@ -292,11 +298,10 @@ const VideoInformation = styled.div
     border-radius: 18px;
     z-index: 999;
 
-    @media (min-width:250px) and (max-width:666px)
+    @media (min-width:250px) and (max-width:667px)
     {
-        right: 13vw;
+       display: none;
     }
-
     
 `
 
@@ -486,9 +491,16 @@ const SlideBox = styled.div
 const VideoPlay = styled(ReactPlayer)
     `
     width: 100%;
+    height: 56vw !important;
+
+    @media (min-width:250px) and (max-width:623px)
+    {
+        height: 80vw !important;
+    }
+
     video
     {
-        height: initial !important;
+        height: 100% !important;
     }
 `
 
@@ -503,6 +515,11 @@ const VideoBackground = styled.div
     right: 0%;
     z-index: 999;
     pointer-events: none;
+
+    @media (min-width:250px) and (max-width:623px)
+    {
+        height: 80vw;
+    }
 `
 
 const VideoAllBox = styled.div
