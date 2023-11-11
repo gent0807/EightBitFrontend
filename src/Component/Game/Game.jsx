@@ -49,7 +49,7 @@ const Game = () => {
     const [banner, setBanner] = useState({});
     const [role, setRole] = useState("");
     const [likecount, setLikecount] = useState(0);
-    const [email, setEmail] = useState("");
+    const [contact, setContact] = useState("");
     const [type, setType] = useState("");
     const [officialDevelopers, setOfficialDevelopers] = useState([]);
 
@@ -155,21 +155,6 @@ const Game = () => {
     ];
 
     useEffect(() => {
-
-        const getUserEmail = (nickname) => {
-            axios.get(`${ip}/Users/email?nickname=${nickname}`, {
-
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data
-                })
-                .then(data => {
-                    setEmail(data);
-                })
-        }
 
 
         const getRole = (user) => {
@@ -308,16 +293,16 @@ const Game = () => {
                 setTitle(data.title);
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
-                setVisitcnt(data.visitcnt);
+                setVisitcnt(data.visitcnt);  
                 setPCGameCount(data.pcGameCount);
                 setMobileGameCount(data.mobileGameCount);
                 setImgCount(data.imgCount);
                 setBannerCount(data.bannerCount);
                 setURL(data.url);
+                setContact(data.contact); 
                 setGenre(data.genre);
 
                 getRole(data.developer);
-                getUserEmail(data.developer);
                 getComments(data.developer, data.regdate, data.contentType, data.depth);
                 getLikers(data.developer, data.regdate, data.contentType, data.depth);
 
@@ -856,7 +841,7 @@ const Game = () => {
                                     업로더 : {developer}
                                 </DeveloperText>
                                 <DeveloperText>
-                                    이메일 : {email}
+                                    contact : {contact==null ? "미등록" : contact}
                                 </DeveloperText>
                             </DeveloperInformationTextBox>
                         </DeveloperInformationBox>

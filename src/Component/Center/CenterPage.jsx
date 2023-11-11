@@ -218,9 +218,9 @@ const CenterPage = () => {
                     <PopTitleBox>Best of 8bit</PopTitleBox>
 
                     <Slider {...swiperParams} ref={setSwiper}>
-                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate }) => (
+                        {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate, contentType }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`/Game/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
+                                <Link to={`/Game/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={mainImg} />
@@ -235,7 +235,7 @@ const CenterPage = () => {
                                     </SlideAllBox>
                                 </Link>
                             </SwiperSlide>
-                        ))}
+                        ))} 
                     </Slider>
 
                     <ButtonBox>
@@ -251,9 +251,9 @@ const CenterPage = () => {
                         .filter((game) => game.game === "인디게임")
                         .sort((a, b) => new Date(b.regdate) - new Date(a.regdate))
                         .slice(offset, limit)
-                        .map(({ id, mainImg, information, title, developer, regdate }) => (
+                        .map(({ id, mainImg, information, title, developer, regdate, contentType }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
+                                <Link to={`/Game/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={mainImg} />
@@ -286,7 +286,7 @@ const CenterPage = () => {
                     <Slider {...swiperParams3} ref={setSwiper}>
                         {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate}) => (
                             <SwiperSlide key={id}>
-                                <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
+                                <Link to={`/Game/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={mainImg} />

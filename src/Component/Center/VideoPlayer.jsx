@@ -114,7 +114,7 @@ const VideoPlayler = () => {
 
                     <VideoInformationDownLoadBtnBox>
 
-                        <Link to={`GameInformationView/${Slide[mainImageIndex].id}`}>
+                        <Link to={`Game/${Slide[mainImageIndex].developer}/${Slide[mainImageIndex].regdate}/${Slide[mainImageIndex].contentType}`}>
                             <VideoInformationBtn>
                                 <InformaionBoxImg src={InformationImgBtn} /> 
                             </VideoInformationBtn>
@@ -151,10 +151,10 @@ const VideoPlayler = () => {
             </VideoBox>
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, thumbnailImg }) => (
+                    {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate, contentType, thumbnailImg }) => (
                         <SwiperSlide key={id}>
                             <VideoSlideBox>
-                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
+                                <Link to={`/Game/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={thumbnailImg} />

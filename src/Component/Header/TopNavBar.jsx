@@ -428,7 +428,7 @@ const HeaderBox = () => {
 
                                                                     <OfficialGameBox1>
                                                                         <OfficialDot>-</OfficialDot>
-                                                                        <Link to={`/Game/${Slide[0].developer}/${Slide[0].regdate}/official`} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
+                                                                        <Link to={`/Game/${Games[0].developer}/${Games[0].regdate}/official`} onClick={() => [setModalOnOffBtn(!modalOnOffBtn), ScrollTop()]}>
                                                                             <GameText>방치 모험가</GameText>
                                                                             <Underline />
                                                                         </Link>
