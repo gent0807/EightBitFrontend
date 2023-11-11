@@ -79,6 +79,11 @@ const GradientBox = styled.div
     z-index: 999;
     pointer-events: none; 
     background-image: linear-gradient(to top, rgba(25,25,25,1) -1%, transparent 30%);
+
+    @media (min-width:250px) and (max-width:750px)
+    {
+        display: none;
+    }
 `
 
 const OfficialGame1InformaitonBox = styled.div
@@ -91,6 +96,11 @@ const OfficialGame1InformaitonBox = styled.div
     background: rgba(0,0,0,0.5);
     transition: opacity 0.5s ease;
     opacity: 1;
+
+    @media (min-width:250px) and (max-width:750px)
+    {
+        display: none;
+    }
 `
 
 const OfficialGame2InformaitonBox = styled.div
@@ -103,6 +113,11 @@ const OfficialGame2InformaitonBox = styled.div
     background: rgba(0,0,0,0.5);
     transition: opacity 0.5s ease;
     opacity: 1;
+
+    @media (min-width:250px) and (max-width:750px)
+    {
+        display: none;
+    }
 `
 
 const OfficialGame3InformaitonBox = styled.div
@@ -116,6 +131,11 @@ const OfficialGame3InformaitonBox = styled.div
     background: rgba(0,0,0,0.5);
     transition: opacity 0.5s ease;
     opacity: 1;
+
+    @media (min-width:250px) and (max-width:750px)
+    {
+        display: none;
+    }
 `
 const OfficialGame1img = styled.img
     `
@@ -160,18 +180,16 @@ const OfficialGame1 = styled.div
             transition: transform 0.5s;
         }
     }
+
+    @media (min-width:250px) and (max-width:750px)
+    {
+        height: 100%;
+    }
+
     `
 
-const OfficialGame2 = styled.div
+const OfficialGame2 = styled(OfficialGame1)
     `
-    width: 100%;
-    height: 50vw;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    a{
-            text-decoration: none;
-        }
     &:hover{
         ${OfficialGame2InformaitonBox}{
             transition: opacity 0.5s ease;
@@ -183,15 +201,8 @@ const OfficialGame2 = styled.div
     }
     `
 
-const OfficialGame3 = styled.div
+const OfficialGame3 = styled(OfficialGame1)
     `
-    width: 100%;
-    height: 50vw;
-    overflow: hidden;
-    cursor: pointer;
-    a{
-        text-decoration: none;
-    }
     &:hover{
         ${OfficialGame3InformaitonBox}{
             transition: opacity 0.5s ease;
@@ -213,6 +224,11 @@ const OfficialGameBox = styled.div
         display: flex;
         position: relative;
         background: rgba(25,25,25,1);
+
+        @media (min-width:250px) and (max-width:750px)
+        {
+            flex-direction: column;
+        }
     `
 
 
