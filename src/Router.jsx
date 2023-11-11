@@ -13,8 +13,8 @@ import Article from "./Component/Article/ArticleContainer";
 import UpdateBoard from "./Component/UpdateBoard/UpdateBoardContainer";
 import Center from "./Component/Center/CenterContainer";
 import OfficialGame from "./Component/OfficialGame/OfficialGameContainer";
-import AllGamePage from "./Component/AllGame/AllGamePageContainer";
-import GameInformationView from "./Component/GameInformationView/GameInformationViewContainer";
+import IndieGame from "./Component/IndieGame/IndieGamePageContainer";
+import Game from "./Component/Game/GameContainer";
 import GameUploadPage from "./Component/GameUploadPage/GameUploadPageContainer";
 import CpGdShopView from "./Component/CpGdShopView/CpGdShopViewContainer";
 import CpGdShop from "./Component/CpGdShop/CpGdShopPageContainer";
@@ -29,12 +29,12 @@ const Router = () => {
                     <Route path="/Board/:contentType" element={<Board />} />
                     <Route path="/" element={<Center />} />
                     <Route path="/Article/:writer/:regdate/:contentType" element={<Article />} />
-                    <Route path="/GameInformationView/:developer/:regdate/:contentType" element={<GameInformationView />} />
+                    <Route path="/Game/:developer/:regdate/:contentType" element={<Game />} />
                     <Route path="/CpGdShopView/:id" element={<CpGdShopView />} />
                     <Route path="/GameUploadPage/:contentType" element={<GameUploadPage />} />
                 </Route>
-                    <Route path="/OfficialGame" element={<OfficialGame />} />
-                    <Route path="/AllGamePage/:contentType" element={<AllGamePage />} />
+                    <Route path="/OfficialGame/:contentType" element={<OfficialGame />} />
+                    <Route path="/IndieGame/:contentType" element={<IndieGame />} />
                     <Route path="/CpGdShop/:View" element={<CpGdShop />} />
                     <Route path="/WriteBoard/:contentType" element={<WriteBoard />} />
                     <Route path="/UpdateBoard/:contentType" element={<UpdateBoard />} />

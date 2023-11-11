@@ -739,7 +739,7 @@ const GameUploadPage = () => {
 
                 if (pcfiles.length == 0 && mobilefiles.length == 0 && mainimgfiles.length == 0 && backgroundimgfiles.length == 0) {
                     dispatch(point(user.point + 5));
-                    navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
+                    navigate('/Game/' + developer + '/' + regdate+'/'+contentType)
                     return;
                 }
 
@@ -763,8 +763,8 @@ const GameUploadPage = () => {
                 }
 
                 dispatch(point(user.point + 10));
-                    navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
-                    return;
+                navigate('/Game/' + developer + '/' + regdate+'/'+contentType);
+                return;
 
 
 

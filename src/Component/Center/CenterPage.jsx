@@ -220,7 +220,7 @@ const CenterPage = () => {
                     <Slider {...swiperParams} ref={setSwiper}>
                         {Slide.length !== 0 && Slide.sort((a, b) => b.likecount - a.likecount).slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate }) => (
                             <SwiperSlide key={id}>
-                                <Link to={`/GameInformationView/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
+                                <Link to={`/Game/${developer}/${regdate}/indie`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
                                             <ImgBox src={mainImg} />

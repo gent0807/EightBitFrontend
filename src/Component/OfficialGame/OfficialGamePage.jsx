@@ -1,18 +1,17 @@
 import { useState, useEffect, useRef, useCallback, FC } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styled from "styled-components";
+import axios from "axios";
+import OfficialGameMainImg from './OfficialGameMainImg';
 import { Slide } from "../Game";
 
 const OfficialGamePage = () => {
 
-
-    const [GameInformaion, setGameInformation] = useState(Slide)
-    const { id } = useParams();
-
-    console.log(GameInformaion);
+    const { contentType } = useParams();
+    const [Games, setGames] = useState(Slide);
 
     useEffect(() => {
-        setGameInformation(Slide.filter((Game) => Game.game === "공식게임"))
+        setGames(Slide.filter((Game) => Game.game === "공식게임"))
     }, [Slide]);
 
     const ScrollTop = () => {
@@ -22,12 +21,10 @@ const OfficialGamePage = () => {
     return (
         <OfficialGameAllBox>
             <OfficialGameBox>
-
-
                 <OfficialGame1>
-                    <Link to={`/GameInformationView/${GameInformaion[0].developer}/${GameInformaion[0].regdate}/indie`} onClick={() => ScrollTop()}>
+                    <Link to={`/Game/${Games[0].developer}/${Games[0].regdate}/${contentType}`} onClick={() => ScrollTop()}>
                         <OfficialGame1imgBox>
-                            <OfficialGame1img src={GameInformaion[0].thumbnailImg} />
+                            <OfficialGameImg src={Games[0].thumbnailImg} />
 
                             <OfficialGame1InformaitonBox />
 
@@ -36,9 +33,9 @@ const OfficialGamePage = () => {
                 </OfficialGame1>
 
                 <OfficialGame2>
-                    <Link to={`/GameInformationView/${GameInformaion[1].developer}/${GameInformaion[1].regdate}/indie}`} onClick={() => ScrollTop()}>
+                    <Link to={`/Game/${Games[1].developer}/${Games[1].regdate}/${contentType}`} onClick={() => ScrollTop()}>
                         <OfficialGame2imgBox>
-                            <OfficialGame2img src={GameInformaion[1].thumbnailImg} />
+                            <OfficialGameImg src={Games[1].thumbnailImg} />
 
                             <OfficialGame2InformaitonBox />
 
@@ -47,16 +44,15 @@ const OfficialGamePage = () => {
                 </OfficialGame2>
 
                 <OfficialGame3>
-                    <Link to={`/GameInformationView/${GameInformaion[2].developer}/${GameInformaion[2].regdate}/indie}`} onClick={() => ScrollTop()}>
+                    <Link to={`/Game/${Games[2].developer}/${Games[2].regdate}/${contentType}`} onClick={() => ScrollTop()}>
                         <OfficialGame3imgBox>
-                            <OfficialGame3img src={GameInformaion[2].thumbnailImg} />
+                            <OfficialGameImg src={Games[2].thumbnailImg} />
 
                             <OfficialGame3InformaitonBox />
 
                         </OfficialGame3imgBox>
                     </Link>
                 </OfficialGame3>
-
 
             </OfficialGameBox>
 
@@ -117,29 +113,14 @@ const OfficialGame3InformaitonBox = styled.div
     transition: opacity 0.5s ease;
     opacity: 1;
 `
-const OfficialGame1img = styled.img
+const OfficialGameImg = styled.img
     `
     width: 100%;
-    height: 100%;
+    height: 100%;d
     transform: scale(1);
     transition: transform 0.5s;
 `
 
-const OfficialGame2img = styled.img
-    `
-    width: 100%;
-    height: 100%;
-    transform: scale(1);
-    transition: transform 0.5s;
-`
-
-const OfficialGame3img = styled.img
-    `
-    width: 100%;
-    height: 100%;
-    transform: scale(1);
-    transition: transform 0.5s;
-`
 
 const OfficialGame1 = styled.div
     `
@@ -155,7 +136,7 @@ const OfficialGame1 = styled.div
             transition: opacity 0.5s ease;
             opacity: 0;
         }
-        ${OfficialGame1img}{
+        ${OfficialGameImg}{
             transform: scale(1.1);
             transition: transform 0.5s;
         }
@@ -177,7 +158,7 @@ const OfficialGame2 = styled.div
             transition: opacity 0.5s ease;
             opacity: 0;
         }
-        ${OfficialGame2img}{
+        ${OfficialGameImg}{
             transform: scale(1.1);
             transition: transform 0.5s;
     }
@@ -197,7 +178,7 @@ const OfficialGame3 = styled.div
             transition: opacity 0.5s ease;
             opacity: 0;
         }
-        ${OfficialGame3img}{
+        ${OfficialGameImg}{
             transform: scale(1.1);
             transition: transform 0.5s;
     }

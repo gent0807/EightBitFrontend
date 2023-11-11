@@ -19,7 +19,7 @@ import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReplyPagination from "../Reply/ReplyPagination";
 import ReplyDeleteModal from "../Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
-import GameInformationViewReplyModal from "./GameInformationViewReplyModal";
+import GameReplyModal from "./GameReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
 import DownloadImgBtn from "../../Item/img/Button/Download.png";
 import MobileImgBtn from "../../Item/img/Button/MobileDownload.png";
@@ -31,7 +31,7 @@ import ArticleReplyModal from "../Article/ArticleReplyModal";
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const GameInformationView = () => {
+const Game = () => {
     const { developer } = useParams();
     const { regdate } = useParams();
     const { contentType } = useParams();
@@ -51,7 +51,7 @@ const GameInformationView = () => {
     const [likecount, setLikecount] = useState(0);
     const [email, setEmail] = useState("");
     const [type, setType] = useState("");
-    const [OfficialGameList, setOfficialGameList] = useState([]);
+    const [officialDevelopers, setOfficialDevelopers] = useState([]);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -276,7 +276,7 @@ const GameInformationView = () => {
 
             })
                 .then(res => {
-                    return res.data
+                    return res.data;
                 })
                 .then(data => {
                     if (storeType == "pcGame") {
@@ -292,11 +292,8 @@ const GameInformationView = () => {
                     else if (storeType == "gameBanner") {
                         setBanner(data[0]);
                     }
-
-                })
+                });
         }
-
-
 
         axios.get(`${ip}/Games/game?viewer=${loginMaintain == "true" ? userInfo.nickName : user.login_state == "allok" ? user.nickname : ""}&developer=${developer}&regdate=${regdate}&contentType=${contentType}`, {
 
@@ -306,6 +303,8 @@ const GameInformationView = () => {
             })
             .then(res => res.data)
             .then(data => {
+                console.log("모바일 게임 다운로드 개수--------------------------------------"+data.mobileGameCount);
+                console.log("PC 게임 다운로드 개수--------------------------------------"+data.pcGameCount);
                 setTitle(data.title);
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
@@ -338,10 +337,10 @@ const GameInformationView = () => {
                     getFileList(data.developer, data.regdate, data.contentType, "gameBanner");
                 }
 
-                if (data.developer == "eight_dev") {
+                if (contentType==="official") {
                     setType("공식");
                 }
-                else if (data.developer != "eight_dev") {
+                else if (contentType==="indie") {
                     setType("인디");
                 }
 
@@ -622,7 +621,7 @@ const GameInformationView = () => {
                         }}>
                     수정
                     </Link> */}
-                    <Delete
+                    {/* <Delete
                         LoginMaintain={loginMaintain}
                         User={user.login_state}
                         UserInfo={userInfo}
@@ -635,7 +634,7 @@ const GameInformationView = () => {
                             (user.login_state === "allok" ?
                                 user.role : null) : userInfo.role}
                         onClick={() => setDeleteMode(!deleteMode)}
-                    >삭제</Delete>
+                    >삭제</Delete> */}
                     <BackButton onClick={() => navigate(-1)}>
                         뒤로가기
                     </BackButton>
@@ -744,7 +743,7 @@ const GameInformationView = () => {
                                     />
                                 }
 
-                                {ModalReplyCommentOnOff ? <GameInformationViewReplyModal
+                                {ModalReplyCommentOnOff ? <GameReplyModal
                                     setModalReplyCommentOnOff={setModalReplyCommentOnOff}
                                     ModalReplyCommentOnOff={ModalReplyCommentOnOff}
                                 /> : <></>}
@@ -870,7 +869,7 @@ const GameInformationView = () => {
     );
 }
 
-export default GameInformationView;
+export default Game;
 
 const DefaultBackground = styled.div
     `

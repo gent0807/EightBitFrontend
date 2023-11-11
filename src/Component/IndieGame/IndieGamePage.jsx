@@ -11,10 +11,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import NotPage from "./NotPage";
 import { useSelector } from "react-redux";
 
-import GameMainImg from "./GameMainImg";
+import IndieGameMainImg from "./IndieGameMainImg";
 import axios from "axios";
 
-const AllGamePage = () => {
+const IndieGamePage = () => {
     const { contentType } = useParams();
     const [posts, setPosts] = useState([]);
     const [Search, setSearch] = useState("");
@@ -98,10 +98,10 @@ const AllGamePage = () => {
             )
             .then(data => {
                 console.log(data);
-                setPosts(data.filter((game)=>game.developer!="eight_dev"));
-                setSearchList(data.filter((game)=>game.developer!="eight_dev"));
+                setPosts(data);
+                setSearchList(data);
             })
-    }, [contentType]);
+    }, []);
 
     const SearchSubmit = (e) => {
         e.preventDefault();
@@ -116,8 +116,8 @@ const AllGamePage = () => {
                 )
                 .then(data => {
                     console.log(data);
-                    setPosts(data.filter((game)=>game.developer!="eight_dev"));
-                    setSearchList(data.filter((game)=>game.developer!="eight_dev"));
+                    setPosts(data);
+                    setSearchList(data);
                     setPage(1);
                 })
         } else {
@@ -129,8 +129,7 @@ const AllGamePage = () => {
                     SearchFillText === "내용" ?
                         board.content.toUpperCase().includes(Search.toUpperCase()) :
                         board.title.toUpperCase().includes(Search.toUpperCase())
-        );
-
+            );
             setSearchList(SearchResult);
             setSearch("");
             setPage(1);
@@ -250,16 +249,16 @@ const AllGamePage = () => {
                 <BoardContentAllBox View={SearchList.length}>
                     {SearchList.length !== 0 && SearchList.slice(offset, offset + limit).map(({ id, seq, title, content, developer, regdate, updatedate, genre, url, visitcnt, reply_count, likecount, pcGameCount, mobileGameCount, contentType, depth}) => (
                        <BoardContentBox key={id}>
-                           <Link to={`/GameInformationView/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
+                           <Link to={`/Game/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
                                <SlideAllBox>
                                    <SlideBox>
-                                      <GameMainImg 
+                                      <IndieGameMainImg 
                                         uploader={developer} 
                                         regdate={regdate}
                                         contentType={contentType}
                                         storeType="gameImage"
                                         depth={depth}
-                                      ></GameMainImg>
+                                      ></IndieGameMainImg>
                                    </SlideBox>
 
                                    <AllBox>
@@ -291,7 +290,7 @@ const AllGamePage = () => {
     );
 }
 
-export default AllGamePage;
+export default IndieGamePage;
 
 const AllBox = styled.div
     `
