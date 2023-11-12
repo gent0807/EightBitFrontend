@@ -59,8 +59,8 @@ const ReCommentDeleteModal = ({
                             </CompleteBtn>
                         </CompleteBtnBox>
                     </CompleteModalBox>
-                )
-            })
+                );
+            });
     }
 
     return (
