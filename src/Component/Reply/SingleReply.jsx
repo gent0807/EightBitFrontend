@@ -84,7 +84,7 @@ const SingleReply = ({
     const SettingRef = useRef(null);
 
     const location = useLocation();
-    const GameView = useMatch('/GameInformationView/:developer/:regdate/:contentType');
+    const GameView = useMatch('/Game/:developer/:regdate/:contentType');
 
     const navigate = useNavigate();
 
@@ -331,9 +331,6 @@ const SingleReply = ({
             })
     }
 
-
-
-
     const reduceLike = async (e) => {
         if (likecount > 0) {
             await axios.delete(`${ip}/Likes/like/${loginMaintain == "true" ? userInfo.nickName : user.nickname}/${replyer}/${regdate}/${contentType}/2`,
@@ -347,8 +344,7 @@ const SingleReply = ({
                     /* regenerateAccessTokenOrLogout(res, reduceLike, e); */
                     setLikecount(data.length);
                     likeMode.current = false;
-                })
-
+                });
         }
         else return;
     }
@@ -467,14 +463,13 @@ const SingleReply = ({
                     setReCommentCount(reCommentCount + 1);
                     dispatch(point(user.point + 5));
                     return;
-                })
+                });
 
         }
         else if (reCommentChangeValue === '<p><br></p>' && reCommentChangeValue.length === 11) {
             setModalReplyUpdateCommentOnOff(true);
             return;
         }
-
     }
 
     console.log(reCommentChangeValue, reCommentChangeValue.length, ModalReplyUpdateCommentOnOff)
@@ -640,7 +635,7 @@ const SingleReply = ({
                             신고
                             <SirenImg src={Siren}
                                 onClick={() => {
-                                    setReportMode(!reportMode)
+                                    setReportMode(!reportMode);
                                     setSelectedReportWriter(replyer);
                                     setSelectedReportRegdate(regdate);
                                     setSelectedReportContentType(contentType);

@@ -68,7 +68,7 @@ const SingleReComment = ({
     const [depth, setDepth] = useState(3);
     const location = useLocation();
 
-    const GameView = useMatch('/GameInformationView/:developer/:regdate/:contentType');
+    const GameView = useMatch('/Game/:developer/:regdate/:contentType');
 
     const [likecount, setLikecount] = useState(0);
     const [reCommenterRole, setReCommenterRole] = useState("");

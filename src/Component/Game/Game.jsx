@@ -790,6 +790,7 @@ const Game = () => {
                                     <GameIntroduceSubText>
                                         출시일 : {dayjs(GameInformaion[0].regdate).format("YY.MM.DD")}
                                     </GameIntroduceSubText>
+                                    
                                     <GameIntroduceSubText>
                                         추천수 : {likecount}
                                     </GameIntroduceSubText>
