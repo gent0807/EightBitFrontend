@@ -288,18 +288,18 @@ const Game = () => {
             })
             .then(res => res.data)
             .then(data => {
-                console.log("모바일 게임 다운로드 개수--------------------------------------"+data.mobileGameCount);
-                console.log("PC 게임 다운로드 개수--------------------------------------"+data.pcGameCount);
+                console.log("모바일 게임 다운로드 개수--------------------------------------" + data.mobileGameCount);
+                console.log("PC 게임 다운로드 개수--------------------------------------" + data.pcGameCount);
                 setTitle(data.title);
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
-                setVisitcnt(data.visitcnt);  
+                setVisitcnt(data.visitcnt);
                 setPCGameCount(data.pcGameCount);
                 setMobileGameCount(data.mobileGameCount);
                 setImgCount(data.imgCount);
                 setBannerCount(data.bannerCount);
                 setURL(data.url);
-                setContact(data.contact); 
+                setContact(data.contact);
                 setGenre(data.genre);
 
                 getRole(data.developer);
@@ -322,10 +322,10 @@ const Game = () => {
                     getFileList(data.developer, data.regdate, data.contentType, "gameBanner");
                 }
 
-                if (contentType==="official") {
+                if (contentType === "official") {
                     setType("공식");
                 }
-                else if (contentType==="indie") {
+                else if (contentType === "indie") {
                     setType("인디");
                 }
 
@@ -625,7 +625,7 @@ const Game = () => {
                     </BackButton>
                 </GameTitleAllBox>
 
-                
+
 
                 <GameInformaionAllBox>
                     <GameAllBox>
@@ -640,216 +640,292 @@ const Game = () => {
                             </GameExplanation>
                         </GameIntroduceBox>
 
-                        <SingleReplyBox>
-                            <ReplyFillAllBox>
-                                <ReplyCounterAllBox>
-                                    {Comments.length > 0 ?
-                                        <ReplyCountBox>
-                                            총 {totalCommentCount.current}개 댓글
-                                        </ReplyCountBox> : ""}
-                                </ReplyCounterAllBox>
+                        <GameInformaionMobileBox>
+                            <GameInformaionTextBox>
 
-                                <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
-                                    <FitterSelectBox show={FitterDropdown}>
-                                        <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
-                                        <FitterSelectList onClick={(e) => setPastValue(e)}>과거순</FitterSelectList>
-                                        <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
-                                        <FitterSelectList onClick={(e) => setReplyValue(e)}>댓글순</FitterSelectList>
-                                    </FitterSelectBox>
-                                    <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
-                                    <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
-                                </FitterSelectAllBox>
+                                <GameIntroduceSubTextBox>
+                                    <GameIntroduceTextBox>
+                                        <GameIntroduceText>게임정보</GameIntroduceText>
+                                    </GameIntroduceTextBox>
+                                    <GameIntroduceSubTextAllBox>
+                                        <GameIntroduceSubText>
+                                            장르 : {genre}
+                                        </GameIntroduceSubText>
+                                        <GameIntroduceSubText>
+                                            창작자 : {developer}
+                                        </GameIntroduceSubText>
+
+                                        <GameIntroduceSubText>
+                                            출시일 : {dayjs(GameInformaion[0].regdate).format("YY.MM.DD")}
+                                        </GameIntroduceSubText>
+                                        <GameIntroduceSubText>
+                                            추천수 : {likecount}
+                                        </GameIntroduceSubText>
+
+                                        <LikeCheckBtn
+                                            LoginMaintain={loginMaintain}
+                                            UserInfo={userInfo == null ? null : userInfo.loginState}
+                                            User={user.login_state}
+                                            onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
+                                            {likeMode.current === false ? <LikeImg src={LikeImgBtn} /> : <LikeImg src={LikeImgFillBtn} />}
+                                        </LikeCheckBtn>
+
+                                    </GameIntroduceSubTextAllBox>
+
+                                    <ButtonAllBox>
+
+                                        {PCGameCount === 0 ? <></> :
+                                            <DownloadBtn>
+                                                <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
+                                                    <DownloadImg src={DownloadImgBtn} />
+                                                </DownloadLink>
+                                            </DownloadBtn>}
 
 
-                            </ReplyFillAllBox>
+                                        {MobileGameCount === 0 ? <></> :
+                                            <MoblieBtn>
+                                                <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
+                                                    <MobileImg src={MobileImgBtn} />
+                                                </DownloadLink>
+                                            </MoblieBtn>}
 
-                            <ReplyDeleteModal
-                                setReplyDeleteMode={setReplyDeleteMode}
-                                ReplyDeleteMode={ReplyDeleteMode}
-                                loginMaintain={loginMaintain}
-                                userInfo={userInfo}
-                                user={user}
-                                deleteComment={deleteComment}
-                                regdate={ModalReplyDeleteRegdate}
-                                replyer={ModalReplyDeleteReplyer}
-                                setToggleState={setModalReplyDeleteSetToggleState}
-                                toggleState={ModalReplyDeleteToggleState}
-                                id={ModalReplyDeleteId}
-                                contentType={contentType}
-                            />
 
-                            <CommentBox>
-                                {Comments.length === 0 && <NotPage />}
-                                {Comments.length > 0 &&
-                                    Comments.slice(offset, offset + limit).map(Comment => {
-                                        const commentId = Comment.id;
+                                        {URL === "" ? <></> :
+                                            <PlayStorekBtn>
+                                                <DownloadLink href={URL}>
+                                                    <PlayStoreImg src={PlayStore} />
+                                                </DownloadLink>
+                                            </PlayStorekBtn>}
 
-                                        return (
-                                            <SingleReply
-                                                key={commentId}
-                                                Comment={Comment}
-                                                reCommentCount={reCommentCount}
-                                                isEditing={commentId === selectedCommentIndex ? true : false}
-                                                setReCommentCount={setReCommentCount}
-                                                setSelectedCommentIndex={setSelectedCommentIndex}
-                                                addComment={addComment}
-                                                editComment={editComment}
-                                                deleteComment={deleteComment}
+                                    </ButtonAllBox>
+                                </GameIntroduceSubTextBox>
 
-                                                setModalReplyDeleteRegdate={setModalReplyDeleteRegdate}
-                                                setModalReplyDeleteReplyer={setModalReplyDeleteReplyer}
+                            </GameInformaionTextBox>
 
-                                                setModalReplyDeleteSetToggleState={setModalReplyDeleteSetToggleState}
-                                                setModalReplyDeleteToggleState={setModalReplyDeleteToggleState}
+                            <DeveloperInformationBox>
+                                <DeveloperInformationText>개발자 연락처</DeveloperInformationText>
+                                <DeveloperInformationTextBox>
+                                    <DeveloperText>
+                                        업로더 : {developer}
+                                    </DeveloperText>
+                                    <DeveloperText>
+                                        contact : {contact == null ? "미등록" : contact}
+                                    </DeveloperText>
+                                </DeveloperInformationTextBox>
+                            </DeveloperInformationBox>
 
-                                                setModalReplyDeleteId={setModalReplyDeleteId}
+                    </GameInformaionMobileBox>
 
-                                                reportMode={reportMode}
-                                                setReportMode={setReportMode}
-                                                setSelectedReportWriter={setSelectedReportWriter}
-                                                setSelectedReportRegdate={setSelectedReportRegdate}
-                                                setSelectedReportContentType={setSelectedReportContentType}
-                                                setSelectedReportDepth={setSelectedReportDepth}
+                    <SingleReplyBox>
+                        <ReplyFillAllBox>
+                            <ReplyCounterAllBox>
+                                {Comments.length > 0 ?
+                                    <ReplyCountBox>
+                                        총 {totalCommentCount.current}개 댓글
+                                    </ReplyCountBox> : ""}
+                            </ReplyCounterAllBox>
 
-                                                setReplyDeleteMode={setReplyDeleteMode}
-                                                ReplyDeleteMode={ReplyDeleteMode}
+                            <FitterSelectAllBox ref={FillterRef} onClick={() => setFitterDropdown(!FitterDropdown)}>
+                                <FitterSelectBox show={FitterDropdown}>
+                                    <FitterSelectList onClick={(e) => setCurrentValue(e)}>최신순</FitterSelectList>
+                                    <FitterSelectList onClick={(e) => setPastValue(e)}>과거순</FitterSelectList>
+                                    <FitterSelectList onClick={(e) => setLikeValue(e)}>추천순</FitterSelectList>
+                                    <FitterSelectList onClick={(e) => setReplyValue(e)}>댓글순</FitterSelectList>
+                                </FitterSelectBox>
+                                <FitterSelectValue><FitterSelectText>{Fitter}</FitterSelectText></FitterSelectValue>
+                                <FitterArrowBox direction={FitterDropdown}>{FitterDropdown ? "▲" : "▼"}</FitterArrowBox>
+                            </FitterSelectAllBox>
 
-                                            />
-                                        );
-                                    })
-                                }
-                                {Comments.length > 0 &&
-                                    <ReplyPagination
-                                        total={Comments.length}
-                                        limit={limit}
-                                        page={page}
-                                        setPage={setPage}
-                                        offset={offset}
-                                    />
-                                }
 
-                                {ModalReplyCommentOnOff ? <GameReplyModal
-                                    setModalReplyCommentOnOff={setModalReplyCommentOnOff}
-                                    ModalReplyCommentOnOff={ModalReplyCommentOnOff}
-                                /> : <></>}
+                        </ReplyFillAllBox>
 
-                                {ModalFreeArticleReplyCommentOnOff ? <ArticleReplyModal
-                                    setModalFreeArticleReplyCommentOnOff={setModalFreeArticleReplyCommentOnOff}
-                                    ModalFreeArticleReplyCommentOnOff={ModalFreeArticleReplyCommentOnOff}
-                                /> : <></>}
+                        <ReplyDeleteModal
+                            setReplyDeleteMode={setReplyDeleteMode}
+                            ReplyDeleteMode={ReplyDeleteMode}
+                            loginMaintain={loginMaintain}
+                            userInfo={userInfo}
+                            user={user}
+                            deleteComment={deleteComment}
+                            regdate={ModalReplyDeleteRegdate}
+                            replyer={ModalReplyDeleteReplyer}
+                            setToggleState={setModalReplyDeleteSetToggleState}
+                            toggleState={ModalReplyDeleteToggleState}
+                            id={ModalReplyDeleteId}
+                            contentType={contentType}
+                        />
 
-                                <CommentForm
+                        <CommentBox>
+                            {Comments.length === 0 && <NotPage />}
+                            {Comments.length > 0 &&
+                                Comments.slice(offset, offset + limit).map(Comment => {
+                                    const commentId = Comment.id;
+
+                                    return (
+                                        <SingleReply
+                                            key={commentId}
+                                            Comment={Comment}
+                                            reCommentCount={reCommentCount}
+                                            isEditing={commentId === selectedCommentIndex ? true : false}
+                                            setReCommentCount={setReCommentCount}
+                                            setSelectedCommentIndex={setSelectedCommentIndex}
+                                            addComment={addComment}
+                                            editComment={editComment}
+                                            deleteComment={deleteComment}
+
+                                            setModalReplyDeleteRegdate={setModalReplyDeleteRegdate}
+                                            setModalReplyDeleteReplyer={setModalReplyDeleteReplyer}
+
+                                            setModalReplyDeleteSetToggleState={setModalReplyDeleteSetToggleState}
+                                            setModalReplyDeleteToggleState={setModalReplyDeleteToggleState}
+
+                                            setModalReplyDeleteId={setModalReplyDeleteId}
+
+                                            reportMode={reportMode}
+                                            setReportMode={setReportMode}
+                                            setSelectedReportWriter={setSelectedReportWriter}
+                                            setSelectedReportRegdate={setSelectedReportRegdate}
+                                            setSelectedReportContentType={setSelectedReportContentType}
+                                            setSelectedReportDepth={setSelectedReportDepth}
+
+                                            setReplyDeleteMode={setReplyDeleteMode}
+                                            ReplyDeleteMode={ReplyDeleteMode}
+
+                                        />
+                                    );
+                                })
+                            }
+                            {Comments.length > 0 &&
+                                <ReplyPagination
+                                    total={Comments.length}
+                                    limit={limit}
+                                    page={page}
+                                    setPage={setPage}
+                                    offset={offset}
+                                />
+                            }
+
+                            {ModalReplyCommentOnOff ? <GameReplyModal
+                                setModalReplyCommentOnOff={setModalReplyCommentOnOff}
+                                ModalReplyCommentOnOff={ModalReplyCommentOnOff}
+                            /> : <></>}
+
+                            {ModalFreeArticleReplyCommentOnOff ? <ArticleReplyModal
+                                setModalFreeArticleReplyCommentOnOff={setModalFreeArticleReplyCommentOnOff}
+                                ModalFreeArticleReplyCommentOnOff={ModalFreeArticleReplyCommentOnOff}
+                            /> : <></>}
+
+                            <CommentForm
+                                LoginMaintain={loginMaintain}
+                                UserInfo={userInfo} User={userInfo == null ?
+                                    null : userInfo.loginState}
+                                UserCheck={user.login_state}
+                                UserNicknameCheck={user.nickname}
+                                UserNickname={userInfo == null ?
+                                    null : userInfo.nickName}
+                                Writer={developer}
+                                onSubmit={registerReply}>
+                                <CommentArea>
+                                    <CommentProfile>
+                                        <CommentUserProfile src={loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : `${ip}/Users/profileImg/${user.nickname}`} />
+                                    </CommentProfile>
+                                    <CommentInputBox>
+                                        <Editer
+                                            placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
+                                            value={replyChangeValue}
+                                            onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
+                                            modules={modules}
+                                            formats={formats}>
+                                        </Editer>
+                                    </CommentInputBox>
+                                </CommentArea>
+
+                                <CommentBtnBox onClick={() => ScrollTop()}>
+                                    <CommentBtn>댓글 쓰기</CommentBtn>
+                                </CommentBtnBox>
+                            </CommentForm>
+
+                        </CommentBox>
+                    </SingleReplyBox>
+                </GameAllBox>
+
+                <GameInformaionBox>
+                    <GameInformaionTextBox>
+
+                        <GameIntroduceSubTextBox>
+                            <GameIntroduceTextBox>
+                                <GameIntroduceText>게임정보</GameIntroduceText>
+                            </GameIntroduceTextBox>
+                            <GameIntroduceSubTextAllBox>
+                                <GameIntroduceSubText>
+                                    장르 : {genre}
+                                </GameIntroduceSubText>
+                                <GameIntroduceSubText>
+                                    창작자 : {developer}
+                                </GameIntroduceSubText>
+
+                                <GameIntroduceSubText>
+                                    출시일 : {dayjs(GameInformaion[0].regdate).format("YY.MM.DD")}
+                                </GameIntroduceSubText>
+                                <GameIntroduceSubText>
+                                    추천수 : {likecount}
+                                </GameIntroduceSubText>
+
+                                <LikeCheckBtn
                                     LoginMaintain={loginMaintain}
-                                    UserInfo={userInfo} User={userInfo == null ?
-                                        null : userInfo.loginState}
-                                    UserCheck={user.login_state}
-                                    UserNicknameCheck={user.nickname}
-                                    UserNickname={userInfo == null ?
-                                        null : userInfo.nickName}
-                                    Writer={developer}
-                                    onSubmit={registerReply}>
-                                    <CommentArea>
-                                        <CommentProfile>
-                                            <CommentUserProfile src={loginMaintain == "true" ? `${ip}/Users/profileImg/${userInfo.nickName}` : `${ip}/Users/profileImg/${user.nickname}`} />
-                                        </CommentProfile>
-                                        <CommentInputBox>
-                                            <Editer
-                                                placeholder="여러분의 참신한 생각이 궁금해요. 댓글을 입력해 주세요!"
-                                                value={replyChangeValue}
-                                                onChange={(content, delta, source, editor) => setReplyChangeValue(editor.getHTML())}
-                                                modules={modules}
-                                                formats={formats}>
-                                            </Editer>
-                                        </CommentInputBox>
-                                    </CommentArea>
+                                    UserInfo={userInfo == null ? null : userInfo.loginState}
+                                    User={user.login_state}
+                                    onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
+                                    {likeMode.current === false ? <LikeImg src={LikeImgBtn} /> : <LikeImg src={LikeImgFillBtn} />}
+                                </LikeCheckBtn>
 
-                                    <CommentBtnBox onClick={() => ScrollTop()}>
-                                        <CommentBtn>댓글 쓰기</CommentBtn>
-                                    </CommentBtnBox>
-                                </CommentForm>
+                            </GameIntroduceSubTextAllBox>
 
-                            </CommentBox>
-                        </SingleReplyBox>
-                    </GameAllBox>
+                            <ButtonAllBox>
 
-                    <GameInformaionBox>
-                        <GameInformaionTextBox>
-
-                            <GameIntroduceSubTextBox>
-                                <GameIntroduceTextBox>
-                                    <GameIntroduceText>게임정보</GameIntroduceText>
-                                </GameIntroduceTextBox>
-                                <GameIntroduceSubTextAllBox>
-                                    <GameIntroduceSubText>
-                                        장르 : {genre}
-                                    </GameIntroduceSubText>
-                                    <GameIntroduceSubText>
-                                        창작자 : {developer}
-                                    </GameIntroduceSubText>
-
-                                    <GameIntroduceSubText>
-                                        출시일 : {dayjs(GameInformaion[0].regdate).format("YY.MM.DD")}
-                                    </GameIntroduceSubText>
-                                    <GameIntroduceSubText>
-                                        추천수 : {likecount}
-                                    </GameIntroduceSubText>
-
-                                    <LikeCheckBtn
-                                        LoginMaintain={loginMaintain}
-                                        UserInfo={userInfo == null ? null : userInfo.loginState}
-                                        User={user.login_state}
-                                        onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
-                                        {likeMode.current === false ? <LikeImg src={LikeImgBtn} /> : <LikeImg src={LikeImgFillBtn} />}
-                                    </LikeCheckBtn>
-
-                                </GameIntroduceSubTextAllBox>
-
-                                <ButtonAllBox>
-
-                                    {PCGameCount === 0 ? <></> :
-                                        <DownloadBtn>
-                                            <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
-                                                <DownloadImg src={DownloadImgBtn} />
-                                            </DownloadLink>
-                                        </DownloadBtn>}
+                                {PCGameCount === 0 ? <></> :
+                                    <DownloadBtn>
+                                        <DownloadLink href={`${ip}/Files/file/${PCGame.id}/${PCGame.uploader}/${PCGame.regdate}/${PCGame.contentType}/${PCGame.storeType}/${PCGame.depth}`}>
+                                            <DownloadImg src={DownloadImgBtn} />
+                                        </DownloadLink>
+                                    </DownloadBtn>}
 
 
-                                    {MobileGameCount === 0 ? <></> :
-                                        <MoblieBtn>
-                                            <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
-                                                <MobileImg src={MobileImgBtn} />
-                                            </DownloadLink>
-                                        </MoblieBtn>}
+                                {MobileGameCount === 0 ? <></> :
+                                    <MoblieBtn>
+                                        <DownloadLink href={`${ip}/Files/file/${mobileGame.id}/${mobileGame.uploader}/${mobileGame.regdate}/${mobileGame.contentType}/${mobileGame.storeType}/${mobileGame.depth}`}>
+                                            <MobileImg src={MobileImgBtn} />
+                                        </DownloadLink>
+                                    </MoblieBtn>}
 
 
-                                    {URL === "" ? <></> :
-                                        <PlayStorekBtn>
-                                            <DownloadLink href={URL}>
-                                                <PlayStoreImg src={PlayStore} />
-                                            </DownloadLink>
-                                        </PlayStorekBtn>}
+                                {URL === "" ? <></> :
+                                    <PlayStorekBtn>
+                                        <DownloadLink href={URL}>
+                                            <PlayStoreImg src={PlayStore} />
+                                        </DownloadLink>
+                                    </PlayStorekBtn>}
 
-                                </ButtonAllBox>
-                            </GameIntroduceSubTextBox>
+                            </ButtonAllBox>
+                        </GameIntroduceSubTextBox>
 
-                        </GameInformaionTextBox>
+                    </GameInformaionTextBox>
 
-                        <DeveloperInformationBox>
-                            <DeveloperInformationText>개발자 연락처</DeveloperInformationText>
-                            <DeveloperInformationTextBox>
-                                <DeveloperText>
-                                    업로더 : {developer}
-                                </DeveloperText>
-                                <DeveloperText>
-                                    contact : {contact==null ? "미등록" : contact}
-                                </DeveloperText>
-                            </DeveloperInformationTextBox>
-                        </DeveloperInformationBox>
+                    <DeveloperInformationBox>
+                        <DeveloperInformationText>개발자 연락처</DeveloperInformationText>
+                        <DeveloperInformationTextBox>
+                            <DeveloperText>
+                                업로더 : {developer}
+                            </DeveloperText>
+                            <DeveloperText>
+                                contact : {contact == null ? "미등록" : contact}
+                            </DeveloperText>
+                        </DeveloperInformationTextBox>
+                    </DeveloperInformationBox>
 
-                    </GameInformaionBox>
-                </GameInformaionAllBox>
+                </GameInformaionBox>
+            </GameInformaionAllBox>
 
-            </GameViewAllBox >
+        </GameViewAllBox >
         </GameViewBackground >
     );
 }
@@ -1300,6 +1376,13 @@ const GameInformaionAllBox = styled.div
     display: grid;
     grid-template-columns: 3fr 1fr;
     grid-gap: 40px;
+
+    @media (min-width:250px) and (max-width:500px)
+    {
+        display: flex;
+        flex-direction: column;
+        grid-gqp: 0px;
+    }
 `
 
 const GameInformaionImg = styled.img
@@ -1323,6 +1406,21 @@ const GameInformaionImgBox = styled.div
 
 const GameInformaionBox = styled.div
     `
+    @media (min-width:250px) and (max-width:500px)
+    {
+        display: none;
+    }
+`
+
+const GameInformaionMobileBox = styled.div
+    `
+    display: none;
+
+    @media (min-width:250px) and (max-width:500px)
+    {
+        display: block;
+        margin: 20px 0px 0px 0px;
+    }
 `
 
 const GameInformaionTextBox = styled.div
@@ -1366,7 +1464,7 @@ const GameTitleTextBox = styled.div
 
 
 const Delete = styled.div
-`
+    `
     display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
         (props.User === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
     cursor : pointer;
@@ -1397,6 +1495,11 @@ const GameViewAllBox = styled.div
     position: relative;
     z-index: 2;
     padding: 20px 20px 300px 20px;
+
+    @media (min-width:250px) and (max-width:500px)
+    {
+        margin: -20vw auto 0 auto;
+    }
 `
 
 const GameViewBackground = styled.div

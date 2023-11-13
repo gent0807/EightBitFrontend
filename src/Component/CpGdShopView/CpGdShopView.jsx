@@ -435,6 +435,56 @@ const CpGdShopView = () => {
                             </GameExplanation>
                         </GameIntroduceBox>
 
+                        <ShopInformaionMobileBox>
+                            <GameInformaionTextBox>
+
+                                <GameIntroduceSubTextBox>
+                                    <GameIntroduceTextBox>
+                                        <GameIntroduceText>게임정보</GameIntroduceText>
+                                    </GameIntroduceTextBox>
+                                    <GameIntroduceSubTextAllBox>
+                                        <GameIntroduceSubText>
+                                            상품 : {GoodsInformation[0].content}
+                                        </GameIntroduceSubText>
+
+                                        <GameIntroduceSubText>
+                                            가격 : ₩{GoodsInformation[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                        </GameIntroduceSubText>
+
+                                        <GameIntroduceSubText>
+                                            출시일 : {dayjs(GoodsInformation[0].regdate).format("YY.MM.DD")}
+                                        </GameIntroduceSubText>
+
+                                        <GameIntroduceSubText>
+                                            추천수 : {GoodsInformation[0].likecount}
+                                        </GameIntroduceSubText>
+
+                                        <LikeCheckBtn
+                                            LoginMaintain={loginMaintain}
+                                            UserInfo={userInfo == null ? null : userInfo.loginState}
+                                            User={user.login_state}
+                                            onClick={() => { likeMode.current === false ? addLike() : reduceLike() }}>
+                                            {likeMode.current === false ? <LikeImg src={LikeImgBtn} /> : <LikeImg src={LikeImgFillBtn} />}
+                                        </LikeCheckBtn>
+
+                                    </GameIntroduceSubTextAllBox>
+
+                                    <ButtonAllBox>
+
+                                        <PurchaseBtn>
+                                            <PurchaseImg src={PurchaseImgBtn} />
+                                        </PurchaseBtn>
+
+                                        <BasketBtn>
+                                            <BasketBtnImg src={BasketImgBtn} />
+                                        </BasketBtn>
+
+                                    </ButtonAllBox>
+                                </GameIntroduceSubTextBox>
+
+                            </GameInformaionTextBox>
+                        </ShopInformaionMobileBox>
+
                         <SingleReplyBox>
                             <ReplyFillAllBox>
                                 <ReplyCounterAllBox>
@@ -626,10 +676,21 @@ const CpGdShopView = () => {
 
 export default CpGdShopView;
 
+const ShopInformaionMobileBox = styled.div
+    `
+    display: none;
+
+    @media (min-width:250px) and (max-width:500px)
+    {
+        display: block;
+        margin: 20px 0px 0px 0px;
+    }
+`
+
 const DefaultBackground = styled.div
     `
     width: 100%;
-    height: 40vw;
+    height: 50vw;
 `
 
 const Editer = styled(ReactQuill)
@@ -1098,6 +1159,13 @@ const GameInformaionAllBox = styled.div
     display: grid;
     grid-template-columns: 3fr 1fr;
     grid-gap: 40px;
+
+    @media (min-width:250px) and (max-width:500px)
+    {
+        display: flex;
+        flex-direction: column;
+        grid-gqp: 0px;
+    }
 `
 
 const GameInformaionImg = styled.img
@@ -1121,6 +1189,10 @@ const GameInformaionImgBox = styled.div
 
 const GameInformaionBox = styled.div
     `
+    @media (min-width:250px) and (max-width:500px)
+    {
+        display: none;
+    }
 `
 
 const GameInformaionTextBox = styled.div
@@ -1179,10 +1251,15 @@ const GameText = styled(GameTitleText)
 const GameViewAllBox = styled.div
     `
     max-width: 1280px;
-    margin: -30vw auto 0 auto;
+    margin: -38vw auto 0 auto;
     position: relative;
     z-index: 2;
     padding: 20px 20px 300px 20px;
+
+    @media (min-width:250px) and (max-width:500px)
+    {
+        margin: -20vw auto 0 auto;
+    }
 `
 
 const GameViewBackground = styled.div
