@@ -269,7 +269,6 @@ const CpGdShopPage = () => {
                                 <SlideAllBox>
                                     <SlideBox>
                                         <CpGdShopMainImg
-                                            id={id}
                                             src={src}
                                         />
                                     </SlideBox>
@@ -324,7 +323,7 @@ const AllBox = styled.div
 
 const SlideAllBox = styled.div
     `
-    position: relative;
+        position: relative;
     `
 
 const SlideBox = styled.div

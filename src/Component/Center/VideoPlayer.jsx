@@ -114,7 +114,7 @@ const VideoPlayler = () => {
 
                     <VideoInformationDownLoadBtnBox>
 
-                        <Link to={`GameInformationView/${Slide[mainImageIndex].id}`}>
+                        <Link to={`Game/${Slide[mainImageIndex].developer}/${Slide[mainImageIndex].regdate}/${Slide[mainImageIndex].contentType}`}>
                             <VideoInformationBtn>
                                 <InformaionBoxImg src={InformationImgBtn} /> 
                             </VideoInformationBtn>
@@ -151,13 +151,15 @@ const VideoPlayler = () => {
             </VideoBox>
             <GameSlideBox>
                 <Slider {...swiperParams} ref={setSwiper}>
-                    {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, thumbnailImg }) => (
+                    {Slide.length !== 0 && Slide.slice(offset, limit).map(({ id, mainImg, information, title,developer, regdate, contentType, thumbnailImg }) => (
                         <SwiperSlide key={id}>
                             <VideoSlideBox>
-                                <Link to={`GameInformationView/${id}`} onClick={() => ScrollTop()}>
+                                <Link to={`/Game/${developer}/${regdate}/${contentType}`} onClick={() => ScrollTop()}>
                                     <SlideAllBox>
                                         <SlideBox>
-                                            <ImgBox src={thumbnailImg} />
+                                            <SlideImgBox>
+                                                <ImgBox src={thumbnailImg} />
+                                            </SlideImgBox>
                                         </SlideBox>
                                     </SlideAllBox>
                                 </Link>
@@ -176,6 +178,15 @@ const VideoPlayler = () => {
 }
 
 export default VideoPlayler
+
+const SlideImgBox = styled.div
+    `
+    position:absolute; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+`
 
 const InformaionBoxImg = styled.img
 `
@@ -315,7 +326,6 @@ const Slider = styled(Swiper)
     padding: 0;
     z-index: 1;
     margin-bottom: 20px;
-    height: 400px;
     max-width: 850px;
 
     a{
@@ -483,9 +493,11 @@ const InformaionBoxTextBox = styled.div
 const SlideBox = styled.div
     `
     border-radius: 10px;
+    position:relative; 
+    width:100%; 
+    height:0;
     overflow: hidden;
-    transition: border 0.5s;
-    height: 285px;
+    padding-bottom: 160%;
 `
 
 const VideoPlay = styled(ReactPlayer)
@@ -531,7 +543,6 @@ const ButtonBox = styled.div
     `
     display: flex;
     justify-content: center;
-    margin: -71px 0px 0px 0px;
 }
 `
 

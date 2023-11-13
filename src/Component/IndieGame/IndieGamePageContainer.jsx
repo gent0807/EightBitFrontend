@@ -1,4 +1,4 @@
-import AllGamePage from "./AllGamePage";
+import AllGamePage from "./IndieGamePage";
 import { useState, useRef, useEffect } from "react";
 import { styled } from "styled-components";
 

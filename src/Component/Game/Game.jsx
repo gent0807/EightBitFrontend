@@ -19,7 +19,7 @@ import { clearLoginState, accessToken, point } from "../../Redux/User";
 import ReplyPagination from "../Reply/ReplyPagination";
 import ReplyDeleteModal from "../Reply/ReplyDeleteModal";
 import NotPage from "./NotPage";
-import GameInformationViewReplyModal from "./GameInformationViewReplyModal";
+import GameReplyModal from "./GameReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
 import DownloadImgBtn from "../../Item/img/Button/Download.png";
 import MobileImgBtn from "../../Item/img/Button/MobileDownload.png";
@@ -31,7 +31,7 @@ import ArticleReplyModal from "../Article/ArticleReplyModal";
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
 
-const GameInformationView = () => {
+const Game = () => {
     const { developer } = useParams();
     const { regdate } = useParams();
     const { contentType } = useParams();
@@ -49,9 +49,9 @@ const GameInformationView = () => {
     const [banner, setBanner] = useState({});
     const [role, setRole] = useState("");
     const [likecount, setLikecount] = useState(0);
-    const [email, setEmail] = useState("");
+    const [contact, setContact] = useState("");
     const [type, setType] = useState("");
-    const [OfficialGameList, setOfficialGameList] = useState([]);
+    const [officialDevelopers, setOfficialDevelopers] = useState([]);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -155,21 +155,6 @@ const GameInformationView = () => {
     ];
 
     useEffect(() => {
-
-        const getUserEmail = (nickname) => {
-            axios.get(`${ip}/Users/email?nickname=${nickname}`, {
-
-            },
-                {
-
-                })
-                .then(res => {
-                    return res.data
-                })
-                .then(data => {
-                    setEmail(data);
-                })
-        }
 
 
         const getRole = (user) => {
@@ -276,7 +261,7 @@ const GameInformationView = () => {
 
             })
                 .then(res => {
-                    return res.data
+                    return res.data;
                 })
                 .then(data => {
                     if (storeType == "pcGame") {
@@ -292,11 +277,8 @@ const GameInformationView = () => {
                     else if (storeType == "gameBanner") {
                         setBanner(data[0]);
                     }
-
-                })
+                });
         }
-
-
 
         axios.get(`${ip}/Games/game?viewer=${loginMaintain == "true" ? userInfo.nickName : user.login_state == "allok" ? user.nickname : ""}&developer=${developer}&regdate=${regdate}&contentType=${contentType}`, {
 
@@ -306,19 +288,21 @@ const GameInformationView = () => {
             })
             .then(res => res.data)
             .then(data => {
+                console.log("모바일 게임 다운로드 개수--------------------------------------"+data.mobileGameCount);
+                console.log("PC 게임 다운로드 개수--------------------------------------"+data.pcGameCount);
                 setTitle(data.title);
                 setContent(data.content);
                 setUpdatedate(data.updatedate);
-                setVisitcnt(data.visitcnt);
+                setVisitcnt(data.visitcnt);  
                 setPCGameCount(data.pcGameCount);
                 setMobileGameCount(data.mobileGameCount);
                 setImgCount(data.imgCount);
                 setBannerCount(data.bannerCount);
                 setURL(data.url);
+                setContact(data.contact); 
                 setGenre(data.genre);
 
                 getRole(data.developer);
-                getUserEmail(data.developer);
                 getComments(data.developer, data.regdate, data.contentType, data.depth);
                 getLikers(data.developer, data.regdate, data.contentType, data.depth);
 
@@ -338,10 +322,10 @@ const GameInformationView = () => {
                     getFileList(data.developer, data.regdate, data.contentType, "gameBanner");
                 }
 
-                if (OfficialGameList.includes(data.title)) {
+                if (contentType==="official") {
                     setType("공식");
                 }
-                else if (!OfficialGameList.includes(data.title)) {
+                else if (contentType==="indie") {
                     setType("인디");
                 }
 
@@ -606,8 +590,42 @@ const GameInformationView = () => {
                         <GameText> {type} 게임</GameText>
                         <GameTitleText>{title}</GameTitleText>
                     </GameTitleTextBox>
-                    <BackButton onClick={() => navigate(-1)}>← 뒤로가기</BackButton>
+                    {/* <Link
+                    to={`/GameUpdatePage/${contentType}`} state={{ developer: developer, regdate: regdate, title: title, content: content, genre: genre, URL: URL, PCGame: PCGame, mobileGame: mobileGame, mainImg: mainImg, banner: banner}}
+                    style={{
+                        display: loginMaintain == null ? "none" : loginMaintain == "true" ?
+                            (userInfo == null ?
+                                "none" : (userInfo.loginState === "allok" ?
+                                    (userInfo.nickName == developer ? "block" : "none") : "none")) :
+                            (user.login_state === "allok" ?
+                                (user.nickname == developer ?
+                                    "block" : "none") : "none"),
+                        color: "white",
+                        fontSize: "21px",
+                        cursor: "pointer",
+                        }}>
+                    수정
+                    </Link> */}
+                    {/* <Delete
+                        LoginMaintain={loginMaintain}
+                        User={user.login_state}
+                        UserInfo={userInfo}
+                        UserInfoState={userInfo == null ?
+                            null : userInfo.loginState}
+                        UserInfoNickname={userInfo == null ?
+                            (user.login_state === "allok" ?
+                                user.nickname : null) : userInfo.nickName}
+                        UserInfoRole={userInfo == null ?
+                            (user.login_state === "allok" ?
+                                user.role : null) : userInfo.role}
+                        onClick={() => setDeleteMode(!deleteMode)}
+                    >삭제</Delete> */}
+                    <BackButton onClick={() => navigate(-1)}>
+                        뒤로가기
+                    </BackButton>
                 </GameTitleAllBox>
+
+                
 
                 <GameInformaionAllBox>
                     <GameAllBox>
@@ -710,7 +728,7 @@ const GameInformationView = () => {
                                     />
                                 }
 
-                                {ModalReplyCommentOnOff ? <GameInformationViewReplyModal
+                                {ModalReplyCommentOnOff ? <GameReplyModal
                                     setModalReplyCommentOnOff={setModalReplyCommentOnOff}
                                     ModalReplyCommentOnOff={ModalReplyCommentOnOff}
                                 /> : <></>}
@@ -823,7 +841,7 @@ const GameInformationView = () => {
                                     업로더 : {developer}
                                 </DeveloperText>
                                 <DeveloperText>
-                                    이메일 : {email}
+                                    contact : {contact==null ? "미등록" : contact}
                                 </DeveloperText>
                             </DeveloperInformationTextBox>
                         </DeveloperInformationBox>
@@ -836,7 +854,7 @@ const GameInformationView = () => {
     );
 }
 
-export default GameInformationView;
+export default Game;
 
 const DefaultBackground = styled.div
     `
@@ -1345,6 +1363,18 @@ const GameTitleTextBox = styled.div
     flex-direction: column;
     margin: 0px 0px 20px 0px;
 `
+
+
+const Delete = styled.div
+`
+    display: ${props => props.LoginMaintain == null ? "none" : props.LoginMaintain == "true" ? (props.UserInfo == null ? "none" : (props.UserInfoState === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")) :
+        (props.User === "allok" ? (props.UserInfoNickname == props.Writer || props.UserInfoRole == "ADMIN" ? "block" : "none") : "none")};
+    cursor : pointer;
+    color : white;
+    font-size: 21px;
+`
+
+
 
 const GameTitleText = styled.span
     `

@@ -30,7 +30,7 @@ const GameUploadPage = () => {
     const [TitleChangeValue, setTitleChangeValue] = useState("");
     const [URLChangeValue, setURLChangeValue] = useState("");
     const [GenreChangeValue, setGenreChangeValue] = useState("");
-    const [Contact, setContact] = useState("");
+    const [contact, setContact] = useState("");
     const [ExplanationValue, setExplanationValue] = useState('<p><br></p>');
     const [WordCountValue, setWordCountValue] = useState(0);
     const [MainImgURL, setMainImgURL] = useState("");
@@ -731,6 +731,7 @@ const GameUploadPage = () => {
             genre: GenreChangeValue,
             contentType: contentType,
             depth: 1,
+            contact: contact,
         },
             {
                 headers: { Authorization: loginMaintain == "true" ? `Bearer ${userInfo.accessToken}` : `Bearer ${user.access_token}` },
@@ -745,7 +746,7 @@ const GameUploadPage = () => {
 
                 if (pcfiles.length == 0 && mobilefiles.length == 0 && mainimgfiles.length == 0 && backgroundimgfiles.length == 0) {
                     dispatch(point(user.point + 5));
-                    navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
+                    navigate('/Game/' + developer + '/' + regdate+'/'+contentType)
                     return;
                 }
 
@@ -769,8 +770,8 @@ const GameUploadPage = () => {
                 }
 
                 dispatch(point(user.point + 10));
-                    navigate('/GameInformationView/' + developer + '/' + regdate+'/'+contentType)
-                    return;
+                navigate('/Game/' + developer + '/' + regdate+'/'+contentType);
+                return;
 
 
 
@@ -1002,7 +1003,7 @@ const GameUploadPage = () => {
                         <TagText>개발자 연락처</TagText>
                         <SubText>이메일, 전화번호 혹은 홈페이지 주소 등</SubText>
                     </TagTextBox>
-                    <WriterInput placeholder='비워둘 시 미등록으로 게재 됩니다.' maxLength={50} onChange={ContactChange} value={Contact} />
+                    <WriterInput placeholder='비워둘 시 미등록으로 게재 됩니다.' maxLength={50} onChange={ContactChange} value={contact} />
                 </ContactBox>
 
                 <MainImgBox>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import styled, { ThemeProvider } from "styled-components";
 
-const GameInformationViewReplyModal = ({
+const GameReplyModal = ({
     setModalReplyCommentOnOff,
     ModalReplyCommentOnOff,
 }) => {
@@ -32,7 +32,7 @@ const GameInformationViewReplyModal = ({
     );
 };
 
-export default GameInformationViewReplyModal;
+export default GameReplyModal;
 
 const ModalDeleteBtn = styled.div
     `

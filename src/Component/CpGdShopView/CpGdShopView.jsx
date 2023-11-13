@@ -22,10 +22,10 @@ import NotPage from "./NotPage";
 import CpGdShopReplyModal from "./CpGdShopReplyModal";
 import { ArrowBox } from "../Sign/Signinput";
 import DownloadImgBtn from "../../Item/img/Button/Download.png";
-import MobileImgBtn from "../../Item/img/Button/MobileDownload.png";
 import LikeImgBtn from "../../Item/img/Button/Like.png";
 import LikeImgFillBtn from "../../Item/img/Button/FillLike.png";
-import PlayStore from "../../Item/img/Button/PlayStore.png";
+import PurchaseImgBtn from "../../Item/img/Button/Purchase.png";
+import BasketImgBtn from "../../Item/img/Button/Basket.png";
 import ArticleReplyModal from "../Article/ArticleReplyModal";
 import { Goods } from "../CpGdShop/CpGdData";
 import { AiFillCreditCard } from "react-icons/ai";
@@ -425,13 +425,13 @@ const CpGdShopView = () => {
                 <GameInformaionAllBox>
                     <GameAllBox>
                         <GameInformaionImgBox>
-                            <GameInformaionImg src={GoodsInformation[0].src} />
+                            <GameInformaionImg src={GoodsInformation[0].informationImg} />
                         </GameInformaionImgBox>
 
                         <GameIntroduceBox>
-                            <GameExplanationText>게임 설명</GameExplanationText>
+                            <GameExplanationText>상품 설명</GameExplanationText>
                             <GameExplanation>
-                                <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(GoodsInformation[0].content) }} />
+                                <Information dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(GoodsInformation[0].introduce) }} />
                             </GameExplanation>
                         </GameIntroduceBox>
 
@@ -604,21 +604,11 @@ const CpGdShopView = () => {
                                 <ButtonAllBox>
 
                                     <PurchaseBtn>
-                                        <PuschaseIcon>
-                                            <AiFillCreditCard />
-                                        </PuschaseIcon>
-                                        <PurchaseBtnText>
-                                            즉시구매
-                                        </PurchaseBtnText>
+                                        <PurchaseImg src={PurchaseImgBtn} />
                                     </PurchaseBtn>
 
                                     <BasketBtn>
-                                        <BasketIcon>
-                                            <BsBasket2Fill />
-                                        </BasketIcon>
-                                        <BasketBtnText>
-                                            장바구니
-                                        </BasketBtnText>
+                                        <BasketBtnImg src={BasketImgBtn} />
                                     </BasketBtn>
 
                                 </ButtonAllBox>
@@ -998,19 +988,12 @@ const LikeBtn = styled.div
     `
     display: ${props => props.LoginMaintain == null ? "none" : (props.LoginMaintain == "true" ? (props.UserInfo === "allok" ? "block" : "none") : (props.User === "allok" ? "block" : "none"))};
 `
+
+
 const PurchaseBtn = styled.div
     `
     display: flex;
     box-sizing: border-box;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    align-items: center;
-    cursor: pointer;
-    background: #6A99DA;
-    padding: 15px 0px 15px 0px;
-    border-radius: 8px;
     &:not(:last-child){
         margin: 0px 0px 20px 0px;
     }
@@ -1049,21 +1032,18 @@ const PlayStorekBtn = styled(PurchaseBtn)
 
 `
 
-const DownloadImg = styled.img
+const PurchaseImg = styled.img
     `
     width: 100%;
     height: 100%;
 `
 
-const LikeImg = styled(DownloadImg)
+const BasketBtnImg = styled(PurchaseImg)
     `
 
 `
-const MobileImg = styled(DownloadImg)
-    `
 
-`
-const PlayStoreImg = styled(DownloadImg)
+const LikeImg = styled(PurchaseImg)
     `
 
 `

@@ -5,16 +5,12 @@ import styled from "styled-components";
 const ip = localStorage.getItem("ip");
 
 
-const GameMainImg = ({ uploader, regdate, contentType, storeType, depth }) => {
+const IndieGameMainImg = ({ uploader, regdate, contentType, storeType, depth }) => {
 
     const [id, setId] = useState("");
 
     useEffect(() => {
-        console.log("uploader : " + uploader);
-        console.log("regdate : " + regdate);
-        console.log("contentType : " + contentType);
-        console.log("storeType : " + storeType);
-        console.log("depth : " + depth);
+
         const getFileList = async (uploader, regdate, contentType, storeType, depth) => {
             await axios.get(`${ip}/Files/files/${uploader}/${regdate}/${contentType}/${storeType}/${depth}`, {
 
@@ -25,7 +21,6 @@ const GameMainImg = ({ uploader, regdate, contentType, storeType, depth }) => {
                     return res.data
                 })
                 .then(data => {
-                    console.log("메인 이미지 파일 1개 이상");
                     console.log(data);
                     setId(data[0].id);
                     uploader=data[0].uploader;
@@ -49,7 +44,7 @@ const GameMainImg = ({ uploader, regdate, contentType, storeType, depth }) => {
 
 }
 
-export default GameMainImg;
+export default IndieGameMainImg;
 
 const MainImg = styled.img
 `
