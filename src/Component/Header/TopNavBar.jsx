@@ -1141,7 +1141,7 @@ const BackgroudSubNav = styled.div
     display: ${props => props.LineCheck ? "block" : "none"};
     background: ${props => props.TopBack === 0 ? "rgba(25,25,25,0.4)" : "white"};
     border-bottom: ${props => props.LineCheck ? props.TopBack === 0 ? "none" : "solid 3px #3c3c3c" : "none"};
-
+    transition: background 0.5s;
     @media (min-width:250px) and (max-width:666px)
     {
         width: 100%;
